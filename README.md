@@ -1,1 +1,1 @@
-# SmartCredentials-SDK-and
+# SmartCredentials-SDK-ios
