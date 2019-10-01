@@ -1,0 +1,29 @@
+1.0.0 - December 30, 2017
+        Get Items By Type API method
+        Get Item Summary API method
+        Get Item Details API method
+        Put Item API method
+        Delete Item API method
+        Delete Items By Type API method
+        Root Checker API method
+        Authorization API method
+
+2.0.0 - March 15, 2018
+        QR Scanner API method
+        QR Login API method
+        OCR Scanner API method
+        Update Item API method
+
+3.0.0 - May 22, 2018
+        HOTP Generator API method
+        TOTP Generator API method
+        OTP Import Via QR API method
+
+4.0.0 - September 25, 2018
+        Call Service API method
+        Document Scanner API method
+        Biometric Authorization API method
+        Get Public Key API method
+        Encrypt Text API method
+
+4.1.0 - Modularisation Part 2 (decoupled functionalities and added scripts for building different configurations of SDK)
