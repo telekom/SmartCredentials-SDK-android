@@ -33,38 +33,43 @@ repositories {
 Add SmartCredentials dependency to your app gradle file.
 
 ```
-    implementation("de.telekom.smartcredentials:core:x.y.z")
-    implementation("de.telekom.smartcredentials:authentication:x.y.z")
-    implementation("de.telekom.smartcredentials:authorization:x.y.z")
-    implementation("de.telekom.smartcredentials:camera:$x.y.z")
-    implementation("de.telekom.smartcredentials:documentscanner:x.y.z")
-    implementation("de.telekom.smartcredentials:networking:x.y.z")
-    implementation("de.telekom.smartcredentials:otp:x.y.z")
-    implementation("de.telekom.smartcredentials:qrlogin:x.y.z")
-    implementation("de.telekom.smartcredentials:security:x.y.z")
-    implementation("de.telekom.smartcredentials:storage:x.y.z")
-    implementation("de.telekom.smartcredentials:wispr:x.y.z")
+implementation("de.telekom.smartcredentials:core:x.y.z")
+implementation("de.telekom.smartcredentials:authentication:x.y.z")
+implementation("de.telekom.smartcredentials:authorization:x.y.z")
+implementation("de.telekom.smartcredentials:camera:$x.y.z")
+implementation("de.telekom.smartcredentials:documentscanner:x.y.z")
+implementation("de.telekom.smartcredentials:networking:x.y.z")
+implementation("de.telekom.smartcredentials:otp:x.y.z")
+implementation("de.telekom.smartcredentials:qrlogin:x.y.z")
+implementation("de.telekom.smartcredentials:security:x.y.z")
+implementation("de.telekom.smartcredentials:storage:x.y.z")
+implementation("de.telekom.smartcredentials:wispr:x.y.z")
 ```
 
 Sync gradle files. You should be able now to use all SmartCredentials features.
 
-**Initialization of the core module.** 
+**Initialization of the SDK and Core module.**
+ 
 ```
-SmartCredentialsConfiguration scConfig = new SmartCredentialsConfiguration.Builder(getApplicationContext(), getString(R.string.current_user_id))
+SmartCredentialsConfiguration configuration = new SmartCredentialsConfiguration.Builder(getApplicationContext(), getString(R.string.current_user_id))
     .setLogger(DemoLogger.getLogger())
     .setRootCheckerEnabled(RootDetectionOption.ALL)
     .setAppAlias(getString(R.string.app_alias))
     .build();
-SmartCredentialsCoreFactory.initialize(scConfig);
+SmartCredentialsCoreFactory.initialize(configuration);
 CoreApi coreApi = SmartCredentialsCoreFactory.getSmartCredentialsCoreApi();
 ```
-In order to initialize the Smart Credentials SDK you need to provide a configuration containing the application contextand  the user ID. Additionally, you can set a logger, the root detection strategy and the application alias.
-The Core API is an instance of the core that is needed for the initialization of all the others Smart Credentials modules.
+In order to initialize the Smart Credentials SDK you need to provide a configuration containing the application contexta nd the user ID. Additionally, you can set a logger, the root detection strategy and the application alias. 
 
-**Initialization and usage of Smart Credentials modules**
+Some predefined root detection strategies can be found in the ```RootDetectionOption``` class, such as: ```NONE``` or ```ALL```. If they don't meet your needs, you are able to define your own root detection strategy, by creating a set of root detection strategies, using the available options from ```RootDetectionOption```. 
+
+Intercepting the SDK internal logging can be made by implementing the ```ApiLogger``` interface from the Smart Credentials SKD and providing it in the builder.
+
+A core module need to be initialized, because all other modules are dependent to it and they need a ```CoreApi``` instance for their initialization.
+
+**Initialization and usage of Smart Credentials SDK modules**
 
 Each module should be instantiated using their own factory classes either in the components in which they are used or on the application level. After their work is done, their instance should be destroyed by calling the 'clear' method which can be found in each factory.
-The core module need to be instantiated first because all other modules are dependent to it and they need a Core Api parameter at their initialization.
 
 Authentication Module
 ```
@@ -165,7 +170,7 @@ storageApi.deleteItem(filter);
 // Retrieve all items according to the filter
 List<ItemEnvelope> mItemsList = storageApi.getAllitemsByItemType(filter);
 ````
-If the items are stored in the  non-sensitive database, all operations from the storage api must be executed on a background thread.
+If the items are stored in the non-sensitive database, all operations from the storage api must be executed on a background thread.
 
 ## Support
 
@@ -178,7 +183,7 @@ Even more are we looking for partners who have an interest in adding their solut
 
 Pull requests for small improvements or bug fixing are welcomed. For major changes, please open an issue first to discuss what you would like to change.
 
-In case of contributing, please check the [contributing guidelines](https://gitlab.dol.telekom.de/SmartCredentials/SmartCredentialsLibrary/blob/develop/CONTRIBUTING.md) and [coding standards](https://gitlab.dol.telekom.de/SmartCredentials/SmartCredentialsLibrary/blob/develop/CODING-STANDARDS.md).
+In case of contributing, please check the [contributing guidelines](https://github.com/kreincke/SmartCredentials-SDK-android/blob/us_195_migrate_library/CONTRIBUTING.md) and [coding standards](https://github.com/kreincke/SmartCredentials-SDK-android/blob/us_195_migrate_library/CODING-STANDARDS.md).
 
 ## Extending
 Smart Credentials is an open and easily extendable library. In fact, it is so open and extendable that anyone can come with a parallel implementation of any module, except the core module.
@@ -231,5 +236,16 @@ If you followed all the steps above and provided a working implementation for th
 Main contributors to the vision, the architecture, and code of SmartCredentials were: Jochen Klaffer, Zhiyun Ren, Axel Nennker and several others from the wallet projects under the auspices of Jörg Heuer.
 
 ## License
+```
+The code in this repository is licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-[Apache](https://www.apache.org/licenses/LICENSE-2.0)
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
