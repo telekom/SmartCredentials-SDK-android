@@ -44,8 +44,6 @@
 -keep public class de.telekom.smartcredentials.persistence.api.** { *; }
 -keep public class de.telekom.smartcredentials.security.api.** { *; }
 -keep public class de.telekom.smartcredentials.otp.api.** { *; }
--keep public class de.telekom.smartcredentials.core.wispr.** { *; }
-
 
 #classes in authorization module
 -keep public interface de.telekom.smartcredentials.core.plugins.fingerprint.FingerprintView {
