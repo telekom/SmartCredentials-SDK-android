@@ -1,0 +1,71 @@
+{
+  "GENERAL_ROOT_APPLICATIONS_PACKAGES": [
+    "com.thirdparty.superuser",
+    "com.noshufou.android.su.elite",
+    "com.koushikdutta.superuser",
+    "com.noshufou.android.su",
+    "eu.chainfire.supersu",
+    "com.yellowes.su"
+  ],
+  "DANGEROUS_APPLICATIONS_PACKAGES": [
+    "com.dimonvideo.luckypatcher",
+    "com.koushikdutta.rommanager.license",
+    "com.ramdroid.appquarantine",
+    "com.chelpus.lackypatch",
+    "com.koushikdutta.rommanager",
+    "com.ramdroid.appquarantinepro"
+  ],
+  "SU_PATHS": [
+    "/su/bin/",
+    "/data/local/bin/",
+    "/data/local/xbin/",
+    "/sbin/",
+    "/system/usr/we-need-root/",
+    "/system/bin/",
+    "/system/bin/.ext/",
+    "/system/bin/failsafe/",
+    "/data/local/",
+    "/system/sd/xbin/",
+    "/system/xbin/"
+  ],
+  "PATHS_THAT_SHOULD_NOT_BE_WRITABLE": [
+    "/sbin",
+    "/system/bin",
+    "/system/sbin",
+    "/vendor/bin",
+    "/system/xbin",
+    "/system",
+    "/etc"
+  ],
+  "SUPER_USER_FILENAME": [
+    "su"
+  ],
+  "BUSY_BOX_FILENAME": [
+    "busybox"
+  ],
+  "READ_WRITE_OPTION": [
+    "rw"
+  ],
+  "TEST_KEYS_TAG": [
+    "test-keys"
+  ],
+  "WHICH_FILENAME" : [
+    "which"
+  ],
+  "SYSTEM_PROPS_COMMAND" : [
+    "getprop"
+  ],
+  "MOUNT_COMMAND" : [
+    "mount"
+  ],
+  "DANGEROUS_SYSTEM_PROPERTIES_MAP" : [
+    {
+      "package": "ro.secure",
+      "index" : "0"
+    },
+    {
+      "package" : "ro.debuggable",
+      "index" : "1"
+    }
+  ]
+}
