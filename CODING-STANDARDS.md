@@ -398,16 +398,15 @@ As a general rule you should try to group similar attributes together. A good wa
 ### 3.1 Javadoc
 Every file should have a copyright statement at the top, followed by package and import statements (each block separated by a blank line) and finally the class or interface declaration. In the Javadoc comments, describe what the class or interface does.
 
-//TODO: replace with real SmartCredentials license
 ```java
 /*
- * Copyright 2018 The Android Open Source Project
+ * Copyright (c) 2019 Telekom Deutschland AG
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
