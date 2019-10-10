@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 
 import org.json.JSONException;
 
+import java.util.Collections;
 import java.util.List;
 
 import de.telekom.smartcredentials.core.api.StorageApi;
@@ -46,6 +47,7 @@ import de.telekom.smartcredentials.core.responses.FeatureNotSupportedThrowable;
 import de.telekom.smartcredentials.core.responses.RootedThrowable;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsResponse;
+import de.telekom.smartcredentials.core.storage.ItemNotFoundException;
 import de.telekom.smartcredentials.core.storage.SecurityCompromisedObserver;
 import de.telekom.smartcredentials.core.storage.TokenRequest;
 import de.telekom.smartcredentials.core.strategies.EncryptionStrategy;
@@ -142,7 +144,7 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
         if (itemDomainModelList != null) {
             return decrypt(itemDomainModelList);
         }
-        return null;
+        return Collections.emptyList();
     }
 
     /**
@@ -162,21 +164,25 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
         }
 
         ItemDomainModel retrievedItemDomainModel = mRepository.retrieveFilteredItemSummaryByUniqueIdAndType(itemDomainModel);
+
         if (retrievedItemDomainModel != null) {
             return new SmartCredentialsResponse<>(decrypt(retrievedItemDomainModel));
         }
-        return null;
+        return new SmartCredentialsResponse<>(new ItemNotFoundException());
     }
 
     private ItemDomainModel retrieveItemDetailsByUniqueIdAndType(ItemDomainModel itemDomainModel) throws EncryptionException {
         ItemDomainModel retrievedItemDomainModel = mRepository.retrieveFilteredItemDetailsByUniqueIdAndType(itemDomainModel);
+
         if (retrievedItemDomainModel != null) {
             return decrypt(retrievedItemDomainModel);
         }
+
         return null;
     }
 
-    private int clearStorage() {
+    @SuppressWarnings("UnusedReturnValue")
+    public int clearStorage() {
         return mRepository.deleteAllData();
     }
 
@@ -253,7 +259,12 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
 
         try {
             List<ItemDomainModel> filteredItems = retrieveItemsFilteredByType(smartCredentialsFilter.toItemDomainModel(mCoreController.getUserId()));
-            return new SmartCredentialsResponse<>(de.telekom.smartcredentials.core.converters.ModelConverter.toItemEnvelopeList(filteredItems));
+
+            if (filteredItems != null) {
+                return new SmartCredentialsResponse<>(de.telekom.smartcredentials.core.converters.ModelConverter.toItemEnvelopeList(filteredItems));
+            } else {
+                return new SmartCredentialsResponse<>(new ItemNotFoundException());
+            }
         } catch (DomainModelException e) {
             return new SmartCredentialsResponse<>(new EnvelopeException(EnvelopeExceptionReason.map(e.getMessage())));
         } catch (EnvelopeException | RepositoryException | JSONException | EncryptionException e) {
@@ -279,7 +290,12 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
 
         try {
             ItemDomainModel filteredItem = retrieveItemSummaryByUniqueIdAndType(smartCredentialsFilter.toItemDomainModel(mCoreController.getUserId())).getData();
-            return new SmartCredentialsResponse<>(de.telekom.smartcredentials.core.converters.ModelConverter.toItemEnvelope(filteredItem));
+
+            if (filteredItem != null) {
+                return new SmartCredentialsResponse<>(de.telekom.smartcredentials.core.converters.ModelConverter.toItemEnvelope(filteredItem));
+            } else {
+                return new SmartCredentialsResponse<>(new ItemNotFoundException());
+            }
         } catch (DomainModelException e) {
             return new SmartCredentialsResponse<>(new EnvelopeException(EnvelopeExceptionReason.map(e.getMessage())));
         } catch (EnvelopeException | RepositoryException | JSONException | EncryptionException e) {
@@ -305,7 +321,13 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
 
         try {
             ItemDomainModel filteredItem = retrieveItemDetailsByUniqueIdAndType(smartCredentialsFilter.toItemDomainModel(mCoreController.getUserId()));
-            return new SmartCredentialsResponse<>(de.telekom.smartcredentials.core.converters.ModelConverter.toItemEnvelope(filteredItem));
+
+            if (filteredItem != null) {
+                return new SmartCredentialsResponse<>(de.telekom.smartcredentials.core.converters.ModelConverter.toItemEnvelope(filteredItem));
+            } else {
+                return new SmartCredentialsResponse<>(new ItemNotFoundException());
+            }
+
         } catch (DomainModelException e) {
             return new SmartCredentialsResponse<>(new EnvelopeException(EnvelopeExceptionReason.map(e.getMessage())));
         } catch (EnvelopeException | RepositoryException | JSONException | EncryptionException e) {
