@@ -43,7 +43,6 @@ implementation("de.telekom.smartcredentials:otp:x.y.z")
 implementation("de.telekom.smartcredentials:qrlogin:x.y.z")
 implementation("de.telekom.smartcredentials:security:x.y.z")
 implementation("de.telekom.smartcredentials:storage:x.y.z")
-implementation("de.telekom.smartcredentials:wispr:x.y.z")
 ```
 
 Sync gradle files. You should be able now to use all SmartCredentials features.
@@ -134,13 +133,6 @@ StorageApi storageApi = SmartCredentialsStorageFactory.getStorageApi();
 //use the Storage Api (see the example below)
 SmartCredentialsStorageFactory.clear()
 ````
-Wispr Module
-```
-SmartCredentialsWisprFactory.initSmartCredentialsWisprModule(CertificatePinner.DEFAULT);
-WisprApi wisprApi = SmartCredentialsWisprFactory.getWisprApi();
-//use the Wispr Api
-SmartCredentialsWisprFactory.clear()
-````
 
 Example of working with Smart Credentials Storage API
 ```
@@ -190,7 +182,7 @@ Smart Credentials is an open and easily extendable library. In fact, it is so op
 
 By using Smart Credentials to build your module, not only you save time and energy for your implementation by making use of the existing features, but the new created module can also be used by others in combination with any of Smart Credentials existing modules.
 
-Currently, there are 10 extendable modules:
+Currently, there are 9 extendable modules:
 
 1. Authentication
 2. Authorization
@@ -201,7 +193,6 @@ Currently, there are 10 extendable modules:
 7. QR login
 8. Security
 9. Storage
-10. Wispr
  
 In order to implement your own module you have to follow the next steps:
 
