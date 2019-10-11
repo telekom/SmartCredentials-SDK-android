@@ -24,37 +24,7 @@ apply from: "../gradle/task/auto-version.gradle"
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
     classifier = 'sources'
-
-    include("**/SmartCredentialsAuthorizationApi.java")
-    include("**/SmartCredentialsCameraApi.java")
-    include("**/SmartCredentialsDocumentScannerApi.java")
-    include("**/SmartCredentialsEncryptionApi.java")
-    include("**/SmartCredentialsAuthenticationApi.java")
-    include("**/SmartCredentialsNetworkingApi.java")
-    include("**/SmartCredentialsStorageApi.java")
-    include("**/SmartCredentialsQrLoginApi.java")
-    include("**/SmartCredentialsSecurityApi.java")
-    include("**/SmartCredentialsOtpApi.java")
-    include("**/SmartCredentialsCoreApi.java")
-    include("**/SmartCredentialsFilterFactory.java")
-    include("**/SmartCredentialsConfiguration.java")
-    include("**/SmartCredentialsApiFactory.java")
-    include("**/SmartCredentialsAction.java")
-    include("**/ItemContextFactory.java")
-    include("**/ItemEnvelopeFactory.java")
-    include("**/OTPImporterCallback.java")
-    include("**/HOTPHandler.java")
-    include("**/TOTPHandler.java")
-    include("**/OTPCallback.java")
-    include("**/HOTPCallback.java")
-    include("**/TOTPCallback.java")
-    include("**/CameraScannerLayout.java")
-    include("**/OcrCameraScannerLayout.java")
-    include("**/BarcodeCameraScannerLayout.java")
-    include("**/DocumentScannerCallback.java")
-    include("**/DocumentScanConfiguration.java")
-    include("**/DocumentScannerLayout.java")
-    include("**/SCAuthenticationService.java")
+    include("**")
 }
 
 publishing {
