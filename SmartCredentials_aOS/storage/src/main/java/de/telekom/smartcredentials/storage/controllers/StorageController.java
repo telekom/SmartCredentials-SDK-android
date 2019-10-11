@@ -289,12 +289,12 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
         }
 
         try {
-            ItemDomainModel filteredItem = retrieveItemSummaryByUniqueIdAndType(smartCredentialsFilter.toItemDomainModel(mCoreController.getUserId())).getData();
-
-            if (filteredItem != null) {
+            SmartCredentialsApiResponse<ItemDomainModel> response = retrieveItemSummaryByUniqueIdAndType(smartCredentialsFilter.toItemDomainModel(mCoreController.getUserId()));
+            if (response.isSuccessful()) {
+                ItemDomainModel filteredItem = response.getData();
                 return new SmartCredentialsResponse<>(de.telekom.smartcredentials.core.converters.ModelConverter.toItemEnvelope(filteredItem));
             } else {
-                return new SmartCredentialsResponse<>(new ItemNotFoundException());
+                return new SmartCredentialsResponse<>(response.getError());
             }
         } catch (DomainModelException e) {
             return new SmartCredentialsResponse<>(new EnvelopeException(EnvelopeExceptionReason.map(e.getMessage())));
