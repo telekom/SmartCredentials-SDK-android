@@ -41,9 +41,9 @@ import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
 /**
  * Created by Lucian Iacob on February 27, 2019.
  */
-class AuthClientConfiguration {
+public class AuthClientConfiguration {
 
-    static final String CONFIG_PREFS_NAME = "SmartCredentialsAuthConfig";
+    public static final String CONFIG_PREFS_NAME = "SmartCredentialsAuthConfig";
     private static final String TAG = "AuthClientConfiguration";
     private static final String KEY_LAST_HASH = "config_hash";
     private static final String CONFIG_KEY_CLIENT_ID = "client_id";
@@ -99,36 +99,36 @@ class AuthClientConfiguration {
      * @param authConfigResId Resource ID of configuration file stored in assets' raw folder
      * @return The instance of {@link AuthClientConfiguration} if already created or creates a new one
      */
-    static AuthClientConfiguration getInstance(Context context, int authConfigResId, String providerId) {
+    public static AuthClientConfiguration getInstance(Context context, int authConfigResId, String providerId) {
         return new AuthClientConfiguration(context.getApplicationContext(), authConfigResId, providerId);
     }
 
-    boolean hasConfigurationChanges() {
+    public boolean hasConfigurationChanges() {
         Integer lastConfig = getLastKnownConfigHash();
         return lastConfig == null || mConfigHash != lastConfig;
     }
 
-    boolean isValid() {
+    public boolean isValid() {
         return mConfigError == null;
     }
 
-    String getConfigError() {
+    public String getConfigError() {
         return mConfigError;
     }
 
-    void acceptConfiguration() {
+    public void acceptConfiguration() {
         mSharedPreferences.edit().putString(computeHashKey(), String.valueOf(mConfigHash)).apply();
     }
 
-    String getClientId() {
+    public String getClientId() {
         return mClientId;
     }
 
-    Uri getRedirectUri() {
+    public Uri getRedirectUri() {
         return mRedirectUri;
     }
 
-    String getScope() {
+    public String getScope() {
         return mScope;
     }
 
@@ -137,23 +137,23 @@ class AuthClientConfiguration {
         return mHttpsRequired;
     }
 
-    Uri getDiscoveryUri() {
+    public Uri getDiscoveryUri() {
         return mDiscoveryUri;
     }
 
-    Uri getAuthEndpointUri() {
+    public Uri getAuthEndpointUri() {
         return mAuthEndpointUri;
     }
 
-    Uri getTokenEndpointUri() {
+    public Uri getTokenEndpointUri() {
         return mTokenEndpointUri;
     }
 
-    Uri getRegistrationEndpointUri() {
+    public Uri getRegistrationEndpointUri() {
         return mRegistrationEndpointUri;
     }
 
-    Uri getUserInfoEndpointUri() {
+    public Uri getUserInfoEndpointUri() {
         return mUserInfoEndpointUri;
     }
 

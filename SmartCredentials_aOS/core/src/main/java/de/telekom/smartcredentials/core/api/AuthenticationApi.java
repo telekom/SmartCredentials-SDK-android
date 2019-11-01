@@ -16,7 +16,13 @@
 
 package de.telekom.smartcredentials.core.api;
 
-import de.telekom.smartcredentials.core.authentication.AuthenticationService;
+import android.content.Context;
+import android.content.Intent;
+import android.support.annotation.Nullable;
+
+import de.telekom.smartcredentials.core.authentication.AuthenticationServiceInitListener;
+import de.telekom.smartcredentials.core.authentication.OnFreshTokensRetrievedListener;
+import de.telekom.smartcredentials.core.authentication.TokenRefreshListener;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 
 /**
@@ -25,13 +31,80 @@ import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 public interface AuthenticationApi {
 
     /**
-     * Returns the authentication service response.
+     * Initializes all necessary dependencies for specified provider.
+     * This will fetch an OpenID Connect discovery document
+     * from the issuer in the configuration to configure this instance for use
+     * or will use the endpoints specified in the configuration document.
      *
-     * @return a {@link SmartCredentialsApiResponse}, containing an instance of
-     * {@link AuthenticationService}, if the security is not compromised or the
-     * service is not restricted. Contains an throwable otherwise.
+     * @param context           The application context
+     * @param customTabBarColor The color of the custom tab's action bar
+     * @param listener          An {@link AuthenticationServiceInitListener} that will be called
+     *                          once the initialization is complete or fail
      */
     @SuppressWarnings("unused")
-    SmartCredentialsApiResponse<AuthenticationService> getAuthenticationService();
+    SmartCredentialsApiResponse<Boolean> initialize(Context context,
+                    String identityProviderId,
+                    int authConfigFileResId,
+                    int customTabBarColor,
+                    AuthenticationServiceInitListener listener);
+
+    /**
+     * Logs in a user and acquires authorization tokens for that user. Uses the endpoints from
+     * configuration document.
+     *
+     * @param context          The application context
+     * @param completionIntent The intent that will be sent once the login is performed successfully
+     * @param cancelIntent     The intent that will be sent if something fails in login process
+     */
+    @SuppressWarnings("unused")
+    SmartCredentialsApiResponse<Boolean> login(Context context, Intent completionIntent, Intent cancelIntent);
+
+    /**
+     * Determines whether the current state represents a successful authorization,
+     * from which at least either an access token or an ID token have been retrieved.
+     *
+     * @return {@code true} if a user is logged in and the configuration hasn't changed;
+     * {@code false} otherwise
+     */
+    @SuppressWarnings("unused")
+    SmartCredentialsApiResponse<Boolean> isUserLoggedIn();
+
+    /**
+     * Refreshes the access token if a refresh token is available to do so. This method will
+     * do nothing if there is no refresh token.
+     *
+     * @param listener An {@link TokenRefreshListener} that will be called once the refresh is complete
+     */
+    @SuppressWarnings("unused")
+    SmartCredentialsApiResponse<Boolean> refreshAccessToken(TokenRefreshListener listener);
+
+    /**
+     * Performs an authorized action with a fresh access token.
+     */
+    @SuppressWarnings("unused")
+    SmartCredentialsApiResponse<Boolean> performActionWithFreshTokens(OnFreshTokensRetrievedListener listener);
+
+    /**
+     * Attempt to retrieve SDK's known user info endpoint
+     *
+     * @return {@link String} User info endpoint or null if no endpoint is known
+     */
+    @SuppressWarnings("unused")
+    @Nullable
+    SmartCredentialsApiResponse<String> getUserInfoEndpointUri();
+
+    /**
+     * Logs out the authenticated user
+     */
+    @SuppressWarnings("unused")
+    SmartCredentialsApiResponse<Boolean> logOut();
+
+    /**
+     * Disposes state that will not normally be handled by garbage collection. This should be
+     * called when this service is no longer required, including when any owning activity is
+     * paused or destroyed.
+     */
+    @SuppressWarnings("unused")
+    SmartCredentialsApiResponse<Boolean> destroy();
 
 }

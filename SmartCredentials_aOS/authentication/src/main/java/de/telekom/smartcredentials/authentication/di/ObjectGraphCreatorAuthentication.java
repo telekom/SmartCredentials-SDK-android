@@ -38,7 +38,7 @@ public class ObjectGraphCreatorAuthentication {
 
     @NonNull
     public AuthenticationController provideApiControllerAuthentication(CoreController coreController) {
-        return new AuthenticationController(coreController);
+        return AuthenticationController.getInstance(coreController);
     }
 
     public static void destroy() {

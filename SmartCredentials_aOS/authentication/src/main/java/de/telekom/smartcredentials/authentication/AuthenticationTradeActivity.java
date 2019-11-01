@@ -39,12 +39,12 @@ import de.telekom.smartcredentials.authentication.parser.BundleTransformer;
 import de.telekom.smartcredentials.core.logger.ApiLogger;
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
 
-import static de.telekom.smartcredentials.authentication.SmartCredentialsAuthenticationService.KEY_AUTH_CONFIG_FILE_ID;
-import static de.telekom.smartcredentials.authentication.SmartCredentialsAuthenticationService.KEY_CANCEL_INTENT_CLASS;
-import static de.telekom.smartcredentials.authentication.SmartCredentialsAuthenticationService.KEY_CANCEL_INTENT_EXTRAS;
-import static de.telekom.smartcredentials.authentication.SmartCredentialsAuthenticationService.KEY_COMPLETE_INTENT_CLASS;
-import static de.telekom.smartcredentials.authentication.SmartCredentialsAuthenticationService.KEY_COMPLETE_INTENT_EXTRAS;
-import static de.telekom.smartcredentials.authentication.SmartCredentialsAuthenticationService.KEY_IDENTITY_PROVIDER_ID;
+import static de.telekom.smartcredentials.authentication.controllers.AuthenticationController.KEY_AUTH_CONFIG_FILE_ID;
+import static de.telekom.smartcredentials.authentication.controllers.AuthenticationController.KEY_CANCEL_INTENT_CLASS;
+import static de.telekom.smartcredentials.authentication.controllers.AuthenticationController.KEY_CANCEL_INTENT_EXTRAS;
+import static de.telekom.smartcredentials.authentication.controllers.AuthenticationController.KEY_COMPLETE_INTENT_CLASS;
+import static de.telekom.smartcredentials.authentication.controllers.AuthenticationController.KEY_COMPLETE_INTENT_EXTRAS;
+import static de.telekom.smartcredentials.authentication.controllers.AuthenticationController.KEY_IDENTITY_PROVIDER_ID;
 
 /**
  * Activity responsible for trading authorization code for access, refresh, other tokens.
@@ -127,7 +127,7 @@ public class AuthenticationTradeActivity extends Activity {
      * @param applicationContext Application context
      * @return {@link PendingIntent} for starting the {@link AuthenticationTradeActivity)}
      */
-    static PendingIntent createStartIntent(Context applicationContext) {
+    public static PendingIntent createStartIntent(Context applicationContext) {
         Intent intent = new Intent(applicationContext, AuthenticationTradeActivity.class);
         return PendingIntent.getActivity(applicationContext, 0, intent, 0);
     }
