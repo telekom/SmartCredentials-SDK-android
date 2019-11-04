@@ -39,17 +39,19 @@ import static de.telekom.smartcredentials.security.encryption.StreamConverter.ge
 
 public class RSACipherManager {
 
-    private static final String CIPHER_ALGORITHM_MODE_EBC = "ECB";
+    private static final String CIPHER_ALGORITHM_MODE_ECB = "ECB";
     private static final String CIPHER_ALGORITHM_PADDING_PKCS1 = "PKCS1Padding";
     private static final String CIPHER_ALGORITHM = Constants.KEY_ALGORITHM_RSA + "/"
-            + CIPHER_ALGORITHM_MODE_EBC + "/" + CIPHER_ALGORITHM_PADDING_PKCS1;
+            + CIPHER_ALGORITHM_MODE_ECB + "/" + CIPHER_ALGORITHM_PADDING_PKCS1;
 
     private final Context mContext;
     private final KeyPairGeneratorWrapper mKeyPairGeneratorWrapper;
+    private final KeyStoreManager mKeyStoreManager;
 
     public RSACipherManager(Context context, KeyPairGeneratorWrapper keyPairGeneratorWrapper) {
         mContext = context;
         mKeyPairGeneratorWrapper = keyPairGeneratorWrapper;
+        mKeyStoreManager = new KeyStoreManager();
     }
 
     SmartCredentialsCipherWrapper getEncryptionCipherWrapper(String metaAlias) throws KeyStoreManagerException, EncryptionException {
@@ -60,15 +62,13 @@ public class RSACipherManager {
     }
 
     PublicKey getKeyStorePrivateEntryPublicKey(String metaAlias) throws KeyStoreManagerException, EncryptionException {
-        if (!KeyStoreManager.getInstance().checkKeyStoreContainsAlias(buildAlias(metaAlias))) {
+        if (!mKeyStoreManager.checkKeyStoreContainsAlias(buildAlias(metaAlias))) {
             mKeyPairGeneratorWrapper.generateEncryptionKeyPairWithRSA(mContext, buildAlias(metaAlias));
         }
 
-        if (KeyStoreManager.getInstance() != null) {
-            KeyStore.PrivateKeyEntry privateKeyEntry = getKeyStorePrivateEntry(buildAlias(metaAlias));
-            if (privateKeyEntry != null && privateKeyEntry.getCertificate() != null && privateKeyEntry.getCertificate().getPublicKey() != null) {
-                return privateKeyEntry.getCertificate().getPublicKey();
-            }
+        KeyStore.PrivateKeyEntry privateKeyEntry = getKeyStorePrivateEntry(buildAlias(metaAlias));
+        if (privateKeyEntry != null && privateKeyEntry.getCertificate() != null && privateKeyEntry.getCertificate().getPublicKey() != null) {
+            return privateKeyEntry.getCertificate().getPublicKey();
         }
         throw new KeyStoreManagerException("Could not get public key.");
     }
@@ -95,9 +95,7 @@ public class RSACipherManager {
     }
 
     private KeyStore.PrivateKeyEntry getKeyStorePrivateEntry(String alias) throws KeyStoreManagerException {
-        return KeyStoreManager
-                .getInstance()
-                .getPrivateKeyEntry(alias);
+        return mKeyStoreManager.getPrivateKeyEntry(alias);
     }
 
     private byte[] getBlockWithAppendedBytes(byte[] blockBytesToAppendTo, byte[] initialBytes,
@@ -121,11 +119,9 @@ public class RSACipherManager {
     }
 
     private PrivateKey getKeyStorePrivateEntryPrivateKey(String metaAlias) throws KeyStoreManagerException {
-        if (KeyStoreManager.getInstance() != null) {
-            KeyStore.PrivateKeyEntry privateKeyEntry = getKeyStorePrivateEntry(buildAlias(metaAlias));
-            if (privateKeyEntry != null && privateKeyEntry.getPrivateKey() != null) {
-                return privateKeyEntry.getPrivateKey();
-            }
+        KeyStore.PrivateKeyEntry privateKeyEntry = getKeyStorePrivateEntry(buildAlias(metaAlias));
+        if (privateKeyEntry != null && privateKeyEntry.getPrivateKey() != null) {
+            return privateKeyEntry.getPrivateKey();
         }
         throw new KeyStoreManagerException("Could not get private key.");
     }
