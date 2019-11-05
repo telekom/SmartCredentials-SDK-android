@@ -87,11 +87,11 @@ public class AuthStateManager {
         return getCurrent().getAccessTokenExpirationTime();
     }
 
-    AuthState getCurrent() {
+    public AuthState getCurrent() {
         return readState();
     }
 
-    void updateAfterTokenResponse(TokenResponse tokenResponse, AuthorizationException exception) {
+    public void updateAfterTokenResponse(TokenResponse tokenResponse, AuthorizationException exception) {
         AuthState authState = getCurrent();
         authState.update(tokenResponse, exception);
         replace(authState);
@@ -103,11 +103,11 @@ public class AuthStateManager {
         replace(state);
     }
 
-    void replace(AuthState authState) {
+    public void replace(AuthState authState) {
         writeState(authState);
     }
 
-    void updateAfterRegistration(RegistrationResponse registrationResponse, AuthorizationException ex) {
+    public void updateAfterRegistration(RegistrationResponse registrationResponse, AuthorizationException ex) {
         AuthState authState = getCurrent();
         if (ex != null) {
             return;
