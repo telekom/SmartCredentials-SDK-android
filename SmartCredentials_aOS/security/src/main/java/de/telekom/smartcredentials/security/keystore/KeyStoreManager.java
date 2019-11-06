@@ -32,16 +32,8 @@ import static de.telekom.smartcredentials.security.utils.Constants.ANDROID_KEY_S
 
 public class KeyStoreManager {
 
-    private static final KeyStoreManager KEY_STORE_MANAGER_INSTANCE = new KeyStoreManager();
+    public KeyStoreManager() {
 
-    private KeyStore mKeyStore;
-
-    private KeyStoreManager() {
-        // required empty constructor
-    }
-
-    public static KeyStoreManager getInstance() {
-        return KEY_STORE_MANAGER_INSTANCE;
     }
 
     public KeyStore.PrivateKeyEntry getPrivateKeyEntry(String alias) throws KeyStoreManagerException {
@@ -72,19 +64,13 @@ public class KeyStoreManager {
         getKeyStore().deleteEntry(keyAlias);
     }
 
-    private void init() throws KeyStoreManagerException {
+    private KeyStore getKeyStore() throws KeyStoreManagerException {
         try {
-            mKeyStore = KeyStore.getInstance(ANDROID_KEY_STORE);
-            mKeyStore.load(null);
+            KeyStore keyStore = KeyStore.getInstance(ANDROID_KEY_STORE);
+            keyStore.load(null);
+            return keyStore;
         } catch (KeyStoreException | CertificateException | NoSuchAlgorithmException | IOException e) {
             throw new KeyStoreManagerException(e);
         }
-    }
-
-    private KeyStore getKeyStore() throws KeyStoreManagerException {
-        if (mKeyStore == null) {
-            init();
-        }
-        return mKeyStore;
     }
 }

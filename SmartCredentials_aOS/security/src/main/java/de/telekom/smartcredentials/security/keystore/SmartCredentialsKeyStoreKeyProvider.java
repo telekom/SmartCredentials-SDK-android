@@ -43,25 +43,27 @@ public class SmartCredentialsKeyStoreKeyProvider implements KeyStoreKeyProvider 
     private static final String AES_ALGORITHM = "AES";
 
     private final Context mContext;
+    private final KeyStoreManager mKeyStoreManager;
 
     public SmartCredentialsKeyStoreKeyProvider(Context context) {
         mContext = context;
+        mKeyStoreManager = new KeyStoreManager();
     }
 
     @Override
     public SecretKey getKeyStoreSecretKey(String alias) throws KeyStoreManagerException, KeyStoreProviderException {
         generateKeyForAlias(alias);
-        return KeyStoreManager.getInstance().getKeyStoreSecretKey(alias);
+        return mKeyStoreManager.getKeyStoreSecretKey(alias);
     }
 
     @Override
     public void deleteEntry(String keyAlias) throws KeyStoreException, KeyStoreManagerException {
-        KeyStoreManager.getInstance().deleteEntry(keyAlias);
+        mKeyStoreManager.deleteEntry(keyAlias);
     }
 
     private void generateKeyForAlias(String alias) throws KeyStoreProviderException {
         try {
-            if (KeyStoreManager.getInstance().checkKeyStoreContainsAlias(alias)) {
+            if (mKeyStoreManager.checkKeyStoreContainsAlias(alias)) {
                 return;
             }
 
