@@ -14,14 +14,28 @@
  * limitations under the License.
  */
 
-include ':core'
-include ':authentication'
-include ':authorization'
-include ':camera'
-include ':eid'
-include ':networking'
-include ':storage'
-include ':security'
-include ':otp'
-include ':documentscanner'
-include ':qrlogin'
+package de.telekom.smartcredentials.eid.commands;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import de.telekom.smartcredentials.core.eid.commands.EidCommand;
+
+/**
+ * Created by Alex.Graur@endava.com at 11/11/2019
+ */
+public class RunAuthCommand extends EidCommand {
+
+    @SerializedName("tcTokenURL")
+    @Expose
+    private String mTokenUrl;
+
+    public RunAuthCommand(String tokenUrl) {
+        super(EidCommand.RUN_AUTH);
+        mTokenUrl = tokenUrl;
+    }
+
+    public String getTokenUrl() {
+        return mTokenUrl;
+    }
+}

@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-include ':core'
-include ':authentication'
-include ':authorization'
-include ':camera'
-include ':eid'
-include ':networking'
-include ':storage'
-include ':security'
-include ':otp'
-include ':documentscanner'
-include ':qrlogin'
+package de.telekom.smartcredentials.core.eid;
+
+/**
+ * Created by Alex.Graur@endava.com at 11/8/2019
+ */
+public interface EidUpdateTagCallback {
+
+    void onFailed(Exception e);
+}

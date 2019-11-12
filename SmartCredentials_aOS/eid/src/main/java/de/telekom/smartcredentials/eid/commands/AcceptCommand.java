@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-include ':core'
-include ':authentication'
-include ':authorization'
-include ':camera'
-include ':eid'
-include ':networking'
-include ':storage'
-include ':security'
-include ':otp'
-include ':documentscanner'
-include ':qrlogin'
+package de.telekom.smartcredentials.eid.commands;
+
+import de.telekom.smartcredentials.core.eid.commands.EidCommand;
+
+/**
+ * Created by Alex.Graur@endava.com at 11/11/2019
+ */
+@SuppressWarnings("unused")
+public class AcceptCommand extends EidCommand {
+
+    public AcceptCommand() {
+        super(EidCommand.ACCEPT);
+    }
+}
