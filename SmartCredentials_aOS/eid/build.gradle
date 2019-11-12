@@ -34,29 +34,14 @@ android {
     }
 
     buildTypes {
-        release {
-            minifyEnabled false
-            useProguard false
-        }
         debug {
             minifyEnabled false
             useProguard false
             testCoverageEnabled false
         }
-    }
-
-    externalNativeBuild {
-        cmake {
-            path 'src/main/jni/CMakeLists.txt'
-        }
-    }
-
-    libraryVariants.all { variant ->
-        if (variant.buildType.name == "debug") {
-            def aptOutputDir = new File(buildDir, "generated/source/apt/${variant.unitTestVariant.dirName}")
-            variant.unitTestVariant.addJavaSourceFoldersToModel(aptOutputDir)
-        } else if (variant.buildType.name.toLowerCase().contains("release")) {
-            artifactoryPublish.finalizedBy(incrementSdkVersion)
+        release {
+            minifyEnabled false
+            useProguard false
         }
     }
 
@@ -64,26 +49,12 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
-    packagingOptions {
-        pickFirst 'protobuf.meta'
-    }
 }
 
 dependencies {
-
-    implementation "com.android.support:appcompat-v7:${androidSupportLibVersion}"
+    implementation 'com.governikus:ausweisapp:1.16.2'
     implementation "com.google.code.gson:gson:${gsonVersion}"
+    implementation 'com.android.support:support-annotations:28.0.0'
 
-    testImplementation "org.hamcrest:hamcrest-library:${hamcrestVersion}"
-    testImplementation "junit:junit:${junitVersion}"
-    testImplementation "org.mockito:mockito-core:${mockitoVersion}"
-    testImplementation "org.hamcrest:hamcrest-core:${hamcrestVersion}"
-    testImplementation "org.json:json:${jsonVersion}"
-    testImplementation "org.powermock:powermock-api-mockito2:${powermockVersion}"
-    testImplementation "org.powermock:powermock-module-junit4:${powermockVersion}"
-    testImplementation "android.arch.core:core-testing:${architectureCoreTestingVersion}"
-
-    androidTestImplementation "com.android.support.test.espresso:espresso-core:${espressoLibVersion}"
-
+    api project(':core')
 }
