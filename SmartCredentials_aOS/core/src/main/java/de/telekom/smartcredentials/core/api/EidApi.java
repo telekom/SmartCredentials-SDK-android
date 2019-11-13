@@ -20,7 +20,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.nfc.Tag;
 
-import de.telekom.smartcredentials.core.eid.EidBindCallback;
 import de.telekom.smartcredentials.core.eid.EidMessageReceivedCallback;
 import de.telekom.smartcredentials.core.eid.EidSendCommandCallback;
 import de.telekom.smartcredentials.core.eid.EidUpdateTagCallback;
@@ -32,12 +31,7 @@ import de.telekom.smartcredentials.core.eid.commands.EidCommand;
 @SuppressWarnings("unused")
 public interface EidApi {
 
-    void enableDispatcher(Activity activity);
-
-    void disableDispatcher(Activity activity);
-
-    void bind(Context context, String appPackage, EidBindCallback bindCallback,
-              EidMessageReceivedCallback receiveMessageCallback);
+    void bind(Context context, String appPackage, EidMessageReceivedCallback receiveMessageCallback);
 
     void unbind(Context context);
 

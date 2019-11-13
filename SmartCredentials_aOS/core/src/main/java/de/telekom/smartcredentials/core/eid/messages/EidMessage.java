@@ -28,6 +28,7 @@ public class EidMessage {
     public static final String API_LEVEL = "API_LEVEL";
     public static final String AUTH = "AUTH";
     public static final String BAD_STATE = "BAD_STATE";
+    public static final String BINDED = "BINDED";
     public static final String CERTIFICATE = "CERTIFICATE";
     public static final String ENTER_CAN = "ENTER_CAN";
     public static final String ENTER_PIN = "ENTER_PIN";
@@ -36,30 +37,36 @@ public class EidMessage {
     public static final String INSERT_CARD = "INSERT_CARD";
     public static final String INTERNAL_ERROR = "INTERNAL_ERROR";
     public static final String INVALID = "INVALID";
+    public static final String NOT_BINDED = "NOT_BINDED";
     public static final String READER = "READER";
     public static final String READER_LIST = "READER_LIST";
+    public static final String SDK_NOT_INITIALIZED = "SDK_NOT_INITIALIZED";
     public static final String UNKNOWN_COMMAND = "UNKNOWN_COMMAND";
 
     @SerializedName("msg")
     @Expose
-    private String name;
+    private String mName;
 
     public EidMessage() {
 
     }
 
+    public EidMessage(String name) {
+        mName = name;
+    }
+
     public String getName() {
-        return name;
+        return mName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.mName = name;
     }
 
     @Override
     public String toString() {
         return "EidMessage{" +
-                "name='" + name + '\'' +
+                "name='" + mName + '\'' +
                 '}';
     }
 }

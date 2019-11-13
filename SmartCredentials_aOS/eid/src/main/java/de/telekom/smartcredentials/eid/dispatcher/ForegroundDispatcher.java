@@ -26,13 +26,10 @@ import android.nfc.tech.IsoDep;
 /**
  * Created by Alex.Graur@endava.com at 11/8/2019
  */
+@SuppressWarnings("unused")
 public class ForegroundDispatcher {
 
-    public ForegroundDispatcher() {
-
-    }
-
-    public void enable(Activity activity) {
+    public static void enable(Activity activity) {
         Intent intent = new Intent(activity, activity.getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(activity, 0, intent, 0);
         NfcAdapter mNfcAdapter = NfcAdapter.getDefaultAdapter(activity);
@@ -41,7 +38,7 @@ public class ForegroundDispatcher {
         mNfcAdapter.enableForegroundDispatch(activity, pendingIntent, filters, technologies);
     }
 
-    public void disable(Activity activity) {
+    public static void disable(Activity activity) {
         NfcAdapter mNfcAdapter = NfcAdapter.getDefaultAdapter(activity);
         mNfcAdapter.disableForegroundDispatch(activity);
     }
