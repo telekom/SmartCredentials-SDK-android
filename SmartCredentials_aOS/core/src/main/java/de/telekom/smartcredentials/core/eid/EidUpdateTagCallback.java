@@ -21,5 +21,7 @@ package de.telekom.smartcredentials.core.eid;
  */
 public interface EidUpdateTagCallback {
 
+    void onSuccess();
+
     void onFailed(Exception e);
 }

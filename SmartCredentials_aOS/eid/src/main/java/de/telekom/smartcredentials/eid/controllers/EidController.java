@@ -16,7 +16,6 @@
 
 package de.telekom.smartcredentials.eid.controllers;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.nfc.Tag;
@@ -25,15 +24,12 @@ import android.os.RemoteException;
 import com.google.gson.Gson;
 
 import de.telekom.smartcredentials.core.api.EidApi;
-import de.telekom.smartcredentials.core.eid.EidBindCallback;
 import de.telekom.smartcredentials.core.eid.EidMessageReceivedCallback;
 import de.telekom.smartcredentials.core.eid.EidSendCommandCallback;
 import de.telekom.smartcredentials.core.eid.EidUpdateTagCallback;
 import de.telekom.smartcredentials.core.eid.commands.EidCommand;
 import de.telekom.smartcredentials.eid.AusweisServiceConnection;
 import de.telekom.smartcredentials.eid.callback.AusweisCallback;
-import de.telekom.smartcredentials.eid.dispatcher.ForegroundDispatcher;
-import de.telekom.smartcredentials.eid.handlers.AusweisHandler;
 import de.telekom.smartcredentials.eid.messages.MessageManager;
 
 /**
@@ -46,31 +42,17 @@ public class EidController implements EidApi {
     private AusweisServiceConnection mServiceConnection;
     private AusweisCallback mAusweisCallback;
     private final Gson mGson;
-    private final ForegroundDispatcher mForegroundDispatcher;
 
     public EidController() {
         mGson = new Gson();
-        mForegroundDispatcher = new ForegroundDispatcher();
     }
 
     @Override
-    public void enableDispatcher(Activity activity) {
-        mForegroundDispatcher.enable(activity);
-    }
-
-    @Override
-    public void disableDispatcher(Activity activity) {
-        mForegroundDispatcher.disable(activity);
-    }
-
-    @Override
-    public void bind(Context context, String appPackage, EidBindCallback bindCallback,
-                     EidMessageReceivedCallback receiveMessageCallback) {
+    public void bind(Context context, String appPackage, EidMessageReceivedCallback callback) {
         Intent intent = new Intent(AUSWEIS_APP_ACTION);
         intent.setPackage(appPackage);
-        AusweisHandler handler = new AusweisHandler(receiveMessageCallback);
-        mAusweisCallback = new AusweisCallback(new MessageManager(receiveMessageCallback), handler, receiveMessageCallback);
-        mServiceConnection = new AusweisServiceConnection(mAusweisCallback, bindCallback);
+        mAusweisCallback = new AusweisCallback(new MessageManager(callback), callback);
+        mServiceConnection = new AusweisServiceConnection(mAusweisCallback, callback);
         context.bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
@@ -95,6 +77,7 @@ public class EidController implements EidApi {
     public void updateNfcTag(Tag tag, EidUpdateTagCallback callback) {
         try {
             mServiceConnection.getAusweisSdk().updateNfcTag(mAusweisCallback.mSessionId, tag);
+            callback.onSuccess();
         } catch (RemoteException e) {
             callback.onFailed(e);
         }

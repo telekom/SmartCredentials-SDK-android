@@ -23,7 +23,8 @@ import android.os.RemoteException;
 
 import com.governikus.ausweisapp2.IAusweisApp2Sdk;
 
-import de.telekom.smartcredentials.core.eid.EidBindCallback;
+import de.telekom.smartcredentials.core.eid.EidMessageReceivedCallback;
+import de.telekom.smartcredentials.core.eid.messages.EidMessage;
 import de.telekom.smartcredentials.eid.callback.AusweisCallback;
 
 /**
@@ -33,33 +34,32 @@ public class AusweisServiceConnection implements ServiceConnection {
 
     private IAusweisApp2Sdk mSdk;
     private AusweisCallback mAusweisCallback;
-    private EidBindCallback mBindCallback;
+    private EidMessageReceivedCallback mMessageReceivedCallback;
 
-    public AusweisServiceConnection(AusweisCallback ausweisCallback, EidBindCallback callback) {
+    public AusweisServiceConnection(AusweisCallback ausweisCallback, EidMessageReceivedCallback callback) {
         mAusweisCallback = ausweisCallback;
-        mBindCallback = callback;
+        mMessageReceivedCallback = callback;
     }
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
-        mBindCallback.onDebugged("onServiceConnected() was called");
+        mMessageReceivedCallback.onDebugged("onServiceConnected() was called");
         mSdk = IAusweisApp2Sdk.Stub.asInterface(service);
 
         if (mSdk != null) {
             try {
                 mSdk.connectSdk(mAusweisCallback);
-                mBindCallback.onSuccess();
+                mMessageReceivedCallback.onMessageReceived(new EidMessage(EidMessage.BINDED));
             } catch (RemoteException e) {
-                mBindCallback.onFailed(e);
+                mMessageReceivedCallback.onMessageReceived(new EidMessage(EidMessage.NOT_BINDED));
             }
         } else {
-            mBindCallback.onFailed(new Exception("Failed to retrieve the Ausweis SDK"));
+            mMessageReceivedCallback.onMessageReceived(new EidMessage(EidMessage.SDK_NOT_INITIALIZED));
         }
     }
 
     @Override
     public void onServiceDisconnected(ComponentName name) {
-        mBindCallback.onDebugged("onServiceDisconnected() was called");
         mSdk = null;
     }
 
