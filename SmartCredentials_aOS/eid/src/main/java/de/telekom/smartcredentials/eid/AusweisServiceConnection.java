@@ -49,9 +49,9 @@ public class AusweisServiceConnection implements ServiceConnection {
         if (mSdk != null) {
             try {
                 mSdk.connectSdk(mAusweisCallback);
-                mMessageReceivedCallback.onMessageReceived(new EidMessage(EidMessage.BINDED));
+                mMessageReceivedCallback.onMessageReceived(new EidMessage(EidMessage.CONNECTED));
             } catch (RemoteException e) {
-                mMessageReceivedCallback.onMessageReceived(new EidMessage(EidMessage.NOT_BINDED));
+                mMessageReceivedCallback.onMessageReceived(new EidMessage(EidMessage.NOT_CONNECTED));
             }
         } else {
             mMessageReceivedCallback.onMessageReceived(new EidMessage(EidMessage.SDK_NOT_INITIALIZED));
@@ -61,6 +61,7 @@ public class AusweisServiceConnection implements ServiceConnection {
     @Override
     public void onServiceDisconnected(ComponentName name) {
         mSdk = null;
+        mMessageReceivedCallback.onMessageReceived(new EidMessage(EidMessage.DISCONNECTED));
     }
 
     public IAusweisApp2Sdk getAusweisSdk() {
