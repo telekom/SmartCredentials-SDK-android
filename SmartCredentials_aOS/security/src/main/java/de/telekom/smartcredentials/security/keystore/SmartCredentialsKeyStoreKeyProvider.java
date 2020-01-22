@@ -31,6 +31,7 @@ import java.security.NoSuchProviderException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
+import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
 import de.telekom.smartcredentials.core.security.KeyStoreKeyProvider;
 import de.telekom.smartcredentials.core.security.KeyStoreManagerException;
 import de.telekom.smartcredentials.core.security.KeyStoreProviderException;
@@ -53,7 +54,8 @@ public class SmartCredentialsKeyStoreKeyProvider implements KeyStoreKeyProvider 
     @Override
     public SecretKey getKeyStoreSecretKey(String alias) throws KeyStoreManagerException, KeyStoreProviderException {
         generateKeyForAlias(alias);
-        return mKeyStoreManager.getKeyStoreSecretKey(alias);
+        ApiLoggerResolver.logEvent("alias is: " + alias);
+        return mKeyStoreManager.getKeyStoreSecretKey("AESSmartCredentialsGeneratedKeyStoredemoappbhvaullywm");
     }
 
     @Override

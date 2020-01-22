@@ -25,6 +25,7 @@ import de.telekom.smartcredentials.core.model.item.ItemDomainModel;
 import de.telekom.smartcredentials.core.repositories.Repository;
 import de.telekom.smartcredentials.storage.exceptions.RepositoryException;
 import de.telekom.smartcredentials.storage.prefs.SharedPreferencesRepo;
+import de.telekom.smartcredentials.storage.prefs.SharedPreferencesRepoFourTwo;
 
 import static de.telekom.smartcredentials.core.model.ModelValidator.checkParamNotNull;
 import static de.telekom.smartcredentials.core.model.ModelValidator.getValidatedMetadata;
@@ -34,9 +35,12 @@ class SensitiveDataRepository extends Repository {
     private static final String TAG = "SensitiveDataRepository";
 
     private final SharedPreferencesRepo mSharedPreferencesRepo;
+    private final SharedPreferencesRepoFourTwo mSharedPreferencesRepoFourTwo;
 
-    SensitiveDataRepository(SharedPreferencesRepo sharedPreferencesRepo) {
+    SensitiveDataRepository(SharedPreferencesRepo sharedPreferencesRepo,
+                            SharedPreferencesRepoFourTwo sharedPreferencesRepoFourTwo) {
         mSharedPreferencesRepo = sharedPreferencesRepo;
+        mSharedPreferencesRepoFourTwo = sharedPreferencesRepoFourTwo;
     }
 
     @Override
@@ -73,24 +77,30 @@ class SensitiveDataRepository extends Repository {
 
     @Override
     public ItemDomainModel retrieveFilteredItemSummaryByUniqueIdAndType(final ItemDomainModel itemDomainModel) {
-        return new JSONExceptionResolver<ItemDomainModel>() {
-            @Override
-            ItemDomainModel throwableMethod() throws JSONException {
-                checkParamNotNull(itemDomainModel);
-                return mSharedPreferencesRepo.retrieveFilteredItemSummary(itemDomainModel.getUniqueKey());
+        checkParamNotNull(itemDomainModel);
+        try {
+            return mSharedPreferencesRepo.retrieveFilteredItemSummary(itemDomainModel.getUniqueKey());
+        } catch (JSONException e) {
+            try {
+                return mSharedPreferencesRepoFourTwo.retrieveFilteredItemSummary(itemDomainModel.getUniqueKey());
+            } catch (JSONException ex) {
+                throw new RepositoryException(e);
             }
-        }.transformException();
+        }
     }
 
     @Override
     public ItemDomainModel retrieveFilteredItemDetailsByUniqueIdAndType(final ItemDomainModel itemDomainModel) {
-        return new JSONExceptionResolver<ItemDomainModel>() {
-            @Override
-            ItemDomainModel throwableMethod() throws JSONException {
-                checkParamNotNull(itemDomainModel);
-                return mSharedPreferencesRepo.retrieveFilteredItemDetails(itemDomainModel.getUniqueKey());
+        checkParamNotNull(itemDomainModel);
+        try {
+            return mSharedPreferencesRepo.retrieveFilteredItemDetails(itemDomainModel.getUniqueKey());
+        } catch (JSONException e) {
+            try {
+                return mSharedPreferencesRepoFourTwo.retrieveFilteredItemDetails(itemDomainModel.getUniqueKey());
+            } catch (JSONException ex) {
+                throw new RepositoryException(e);
             }
-        }.transformException();
+        }
     }
 
     @Override

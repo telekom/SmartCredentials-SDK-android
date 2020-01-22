@@ -26,6 +26,7 @@ import de.telekom.smartcredentials.core.di.Provides;
 import de.telekom.smartcredentials.storage.database.AppDatabase;
 import de.telekom.smartcredentials.storage.prefs.PreferencesManager;
 import de.telekom.smartcredentials.storage.prefs.SharedPreferencesRepo;
+import de.telekom.smartcredentials.storage.prefs.SharedPreferencesRepoFourTwo;
 
 /**
  * Created by Lucian Iacob on November 05, 2018.
@@ -47,7 +48,7 @@ public class RepositoryObjectCreator {
     @Provides
     @NonNull
     public SensitiveDataRepository provideSensitiveDataRepo() {
-        return new SensitiveDataRepository(provideSharedPreferencesRepo());
+        return new SensitiveDataRepository(provideSharedPreferencesRepo(), provideSharedPreferencesRepoFourTwo());
     }
 
     @Provides
@@ -60,6 +61,10 @@ public class RepositoryObjectCreator {
     @NonNull
     private SharedPreferencesRepo provideSharedPreferencesRepo() {
         return new SharedPreferencesRepo(mGson, providePreferenceManager());
+    }
+
+    private SharedPreferencesRepoFourTwo provideSharedPreferencesRepoFourTwo() {
+        return new SharedPreferencesRepoFourTwo(mGson, providePreferenceManager());
     }
 
     @Provides

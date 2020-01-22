@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Telekom Deutschland AG
+ * Copyright (c) 2020 Telekom Deutschland AG
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,27 @@
  * limitations under the License.
  */
 
-package de.telekom.smartcredentials.core.repositories;
+package de.telekom.smartcredentials.storage.repositories;
 
-public class AliasNative {
+/**
+ * Created by Alex.Graur@endava.com at 1/22/2020
+ */
+public class RepositoryAliasNative {
 
     private static boolean sIsLibraryLoaded;
 
-    public static String getAlias(String appAlias) {
-        String alias = sIsLibraryLoaded ? alias() : "";
-        return alias + appAlias;
+    public static String getRepositoryAlias(boolean isSensitive) {
+        return alias(isSensitive);
+    }
+
+    public static boolean isLibraryLoaded() {
+        return sIsLibraryLoaded;
     }
 
     static {
-        System.loadLibrary("alias");
+        System.loadLibrary("repo_alias");
         sIsLibraryLoaded = true;
     }
 
-    public static native String alias();
+    private static native String alias(boolean isSensitive);
 }

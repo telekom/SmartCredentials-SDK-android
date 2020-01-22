@@ -18,16 +18,9 @@ package de.telekom.smartcredentials.core.repositories;
 
 import java.util.List;
 
-import de.telekom.smartcredentials.core.exceptions.EncryptionException;
-import de.telekom.smartcredentials.core.model.item.ContentType;
-import de.telekom.smartcredentials.core.model.item.ItemDomainMetadata;
 import de.telekom.smartcredentials.core.model.item.ItemDomainModel;
 
-import static de.telekom.smartcredentials.core.model.ModelValidator.checkParamNotNull;
-
 public abstract class Repository {
-
-    private static final String REPO_ALIAS_NOT_AVAILABLE = "Repo alias native library not yet loaded.";
 
     public abstract int saveData(ItemDomainModel itemDomainModel);
 
@@ -46,15 +39,4 @@ public abstract class Repository {
     public abstract int deleteItemsByType(ItemDomainModel itemDomainModel);
 
     public abstract String getTag();
-
-    public String getAlias(ItemDomainMetadata metadata) throws EncryptionException {
-        if (!AliasNative.isLibraryLoaded()) {
-            throw new EncryptionException(REPO_ALIAS_NOT_AVAILABLE);
-        }
-
-        checkParamNotNull(metadata);
-
-        ContentType contentType = metadata.getContentType();
-        return AliasNative.getAlias(contentType == ContentType.SENSITIVE);
-    }
 }
