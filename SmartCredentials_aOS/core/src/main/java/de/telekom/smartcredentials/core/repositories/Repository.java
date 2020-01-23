@@ -18,43 +18,25 @@ package de.telekom.smartcredentials.core.repositories;
 
 import java.util.List;
 
-import de.telekom.smartcredentials.core.exceptions.EncryptionException;
-import de.telekom.smartcredentials.core.model.item.ContentType;
-import de.telekom.smartcredentials.core.model.item.ItemDomainMetadata;
 import de.telekom.smartcredentials.core.model.item.ItemDomainModel;
 
-import static de.telekom.smartcredentials.core.model.ModelValidator.checkParamNotNull;
+public interface Repository {
 
-public abstract class Repository {
+    int saveData(ItemDomainModel itemDomainModel);
 
-    private static final String REPO_ALIAS_NOT_AVAILABLE = "Repo alias native library not yet loaded.";
+    int updateItem(ItemDomainModel itemDomainModel);
 
-    public abstract int saveData(ItemDomainModel itemDomainModel);
+    List<ItemDomainModel> retrieveItemsFilteredByType(ItemDomainModel itemDomainModel);
 
-    public abstract int updateItem(ItemDomainModel itemDomainModel);
+    ItemDomainModel retrieveFilteredItemSummaryByUniqueIdAndType(ItemDomainModel itemDomainModel);
 
-    public abstract List<ItemDomainModel> retrieveItemsFilteredByType(ItemDomainModel itemDomainModel);
+    ItemDomainModel retrieveFilteredItemDetailsByUniqueIdAndType(ItemDomainModel itemDomainModel);
 
-    public abstract ItemDomainModel retrieveFilteredItemSummaryByUniqueIdAndType(ItemDomainModel itemDomainModel);
+    int deleteAllData();
 
-    public abstract ItemDomainModel retrieveFilteredItemDetailsByUniqueIdAndType(ItemDomainModel itemDomainModel);
+    int deleteItem(ItemDomainModel itemDomainModel);
 
-    public abstract int deleteAllData();
+    int deleteItemsByType(ItemDomainModel itemDomainModel);
 
-    public abstract int deleteItem(ItemDomainModel itemDomainModel);
-
-    public abstract int deleteItemsByType(ItemDomainModel itemDomainModel);
-
-    public abstract String getTag();
-
-    public String getAlias(ItemDomainMetadata metadata) throws EncryptionException {
-        if (!AliasNative.isLibraryLoaded()) {
-            throw new EncryptionException(REPO_ALIAS_NOT_AVAILABLE);
-        }
-
-        checkParamNotNull(metadata);
-
-        ContentType contentType = metadata.getContentType();
-        return AliasNative.getAlias(contentType == ContentType.SENSITIVE);
-    }
+    String getTag();
 }

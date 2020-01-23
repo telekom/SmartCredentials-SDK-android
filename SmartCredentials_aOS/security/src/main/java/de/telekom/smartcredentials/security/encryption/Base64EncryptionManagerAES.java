@@ -20,6 +20,7 @@ import android.text.TextUtils;
 import android.util.Base64;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -34,13 +35,13 @@ import de.telekom.smartcredentials.core.exceptions.InvalidAlgorithmException;
 import de.telekom.smartcredentials.core.security.KeyStoreManagerException;
 import de.telekom.smartcredentials.core.security.KeyStoreProviderException;
 
-import static de.telekom.smartcredentials.security.encryption.AESCipherManager.BASE64_FLAG;
 import static de.telekom.smartcredentials.core.security.EncryptionError.DECRYPTION_EXCEPTION_TEXT;
 import static de.telekom.smartcredentials.core.security.EncryptionError.ENCRYPTION_EXCEPTION_TEXT;
+import static de.telekom.smartcredentials.security.encryption.AESCipherManager.BASE64_FLAG;
 
 public class Base64EncryptionManagerAES implements EncryptionManager {
 
-    static final String BASE4_CHAR_SET = "UTF-8";
+    static final String BASE64_CHAR_SET = "UTF-8";
 
     static final String IV_SEPARATOR = "cipherIV=";
 
@@ -62,12 +63,11 @@ public class Base64EncryptionManagerAES implements EncryptionManager {
             AESCipherManager.AESCipher aesCipher = mAESCipherManager.obtainEncryptionCipher(metaAlias);
 
             String encodedIV = new String(Base64.encode(aesCipher.getIV(), BASE64_FLAG), Charset.defaultCharset());
-            byte[] cipherTextFinalBytes = aesCipher.getFinalBytes(toEncrypt.getBytes(BASE4_CHAR_SET));
+            byte[] cipherTextFinalBytes = aesCipher.getFinalBytes(toEncrypt.getBytes(BASE64_CHAR_SET));
 
             return new String(Base64.encode(cipherTextFinalBytes, BASE64_FLAG), Charset.defaultCharset())
                     + IV_SEPARATOR
                     + encodedIV;
-
         } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException
                 | IOException | KeyStoreManagerException | KeyStoreProviderException
                 | BadPaddingException | IllegalBlockSizeException e) {
@@ -83,23 +83,23 @@ public class Base64EncryptionManagerAES implements EncryptionManager {
 
         try {
             String[] textWithIV = encryptedText.split(IV_SEPARATOR);
-            String iv = textWithIV[textWithIV.length - 1];
-
             if (textWithIV.length < 2) {
                 throw new InvalidAlgorithmException(DECRYPTION_EXCEPTION_TEXT + "\n " + MISSING_IV_MESSAGE);
             }
 
-            String textToDecrypt = encryptedText
-                    .replace(IV_SEPARATOR, "")
-                    .replace(iv, "");
+            // text to be decrypted process
+            String textToDecrypt = textWithIV[0]
+                    .replace("\n", "");
+            byte[] bytesToDecrypt = textToDecrypt.getBytes(BASE64_CHAR_SET);
+
+            // IV process
+            String iv = textWithIV[1].replace("\n", "");
 
             AESCipherManager.AESCipher aesCipher = mAESCipherManager.obtainDecryptionCypher(iv, metaAlias);
-            byte[] cipherText = Base64.decode(textToDecrypt.getBytes(BASE4_CHAR_SET), BASE64_FLAG);
-
-            return new String(aesCipher.getFinalBytes(cipherText), BASE4_CHAR_SET);
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | IOException | KeyStoreManagerException
-                | InvalidKeyException | KeyStoreProviderException | InvalidAlgorithmParameterException
-                | IllegalBlockSizeException | BadPaddingException e) {
+            byte[] cipherText = Base64.decode(bytesToDecrypt, BASE64_FLAG);
+            byte[] bytesDecrypted = aesCipher.getFinalBytes(cipherText);
+            return new String(bytesDecrypted, BASE64_CHAR_SET);
+        } catch (NoSuchAlgorithmException | BadPaddingException | IllegalBlockSizeException | InvalidAlgorithmParameterException | KeyStoreProviderException | InvalidKeyException | KeyStoreManagerException | NoSuchPaddingException | UnsupportedEncodingException e) {
             throw new EncryptionException(DECRYPTION_EXCEPTION_TEXT + e.getMessage(), e);
         }
     }

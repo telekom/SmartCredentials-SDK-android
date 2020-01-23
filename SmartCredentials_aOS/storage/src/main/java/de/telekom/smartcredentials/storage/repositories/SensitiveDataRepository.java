@@ -24,19 +24,23 @@ import de.telekom.smartcredentials.core.model.item.ItemDomainMetadata;
 import de.telekom.smartcredentials.core.model.item.ItemDomainModel;
 import de.telekom.smartcredentials.core.repositories.Repository;
 import de.telekom.smartcredentials.storage.exceptions.RepositoryException;
-import de.telekom.smartcredentials.storage.prefs.SharedPreferencesRepo;
+import de.telekom.smartcredentials.storage.prefs.SharedPreferencesRepoFiveFourteen;
+import de.telekom.smartcredentials.storage.prefs.SharedPreferencesRepoFourTwo;
 
 import static de.telekom.smartcredentials.core.model.ModelValidator.checkParamNotNull;
 import static de.telekom.smartcredentials.core.model.ModelValidator.getValidatedMetadata;
 
-class SensitiveDataRepository extends Repository {
+class SensitiveDataRepository implements Repository {
 
     private static final String TAG = "SensitiveDataRepository";
 
-    private final SharedPreferencesRepo mSharedPreferencesRepo;
+    private final SharedPreferencesRepoFiveFourteen mSharedPreferencesRepoFiveFourteen;
+    private final SharedPreferencesRepoFourTwo mSharedPreferencesRepoFourTwo;
 
-    SensitiveDataRepository(SharedPreferencesRepo sharedPreferencesRepo) {
-        mSharedPreferencesRepo = sharedPreferencesRepo;
+    SensitiveDataRepository(SharedPreferencesRepoFiveFourteen sharedPreferencesRepoFiveFourteen,
+                            SharedPreferencesRepoFourTwo sharedPreferencesRepoFourTwo) {
+        mSharedPreferencesRepoFiveFourteen = sharedPreferencesRepoFiveFourteen;
+        mSharedPreferencesRepoFourTwo = sharedPreferencesRepoFourTwo;
     }
 
     @Override
@@ -44,7 +48,7 @@ class SensitiveDataRepository extends Repository {
         return new JSONExceptionResolver<Integer>() {
             @Override
             Integer throwableMethod() throws JSONException {
-                return mSharedPreferencesRepo.saveData(itemDomainModel);
+                return mSharedPreferencesRepoFiveFourteen.saveData(itemDomainModel);
             }
         }.transformException();
     }
@@ -54,7 +58,7 @@ class SensitiveDataRepository extends Repository {
         return new JSONExceptionResolver<Integer>() {
             @Override
             Integer throwableMethod() throws JSONException {
-                return mSharedPreferencesRepo.updateItem(itemDomainModel);
+                return mSharedPreferencesRepoFiveFourteen.updateItem(itemDomainModel);
             }
         }.transformException();
     }
@@ -66,41 +70,47 @@ class SensitiveDataRepository extends Repository {
             List<ItemDomainModel> throwableMethod() throws JSONException {
                 ItemDomainMetadata metadata = getValidatedMetadata(itemDomainModel);
 
-                return mSharedPreferencesRepo.retrieveItemsFilteredByType(metadata);
+                return mSharedPreferencesRepoFiveFourteen.retrieveItemsFilteredByType(metadata);
             }
         }.transformException();
     }
 
     @Override
     public ItemDomainModel retrieveFilteredItemSummaryByUniqueIdAndType(final ItemDomainModel itemDomainModel) {
-        return new JSONExceptionResolver<ItemDomainModel>() {
-            @Override
-            ItemDomainModel throwableMethod() throws JSONException {
-                checkParamNotNull(itemDomainModel);
-                return mSharedPreferencesRepo.retrieveFilteredItemSummary(itemDomainModel.getUniqueKey());
+        checkParamNotNull(itemDomainModel);
+        try {
+            return mSharedPreferencesRepoFiveFourteen.retrieveFilteredItemSummary(itemDomainModel.getUniqueKey());
+        } catch (JSONException e) {
+            try {
+                return mSharedPreferencesRepoFourTwo.retrieveFilteredItemSummary(itemDomainModel.getUniqueKey());
+            } catch (JSONException ex) {
+                throw new RepositoryException(e);
             }
-        }.transformException();
+        }
     }
 
     @Override
     public ItemDomainModel retrieveFilteredItemDetailsByUniqueIdAndType(final ItemDomainModel itemDomainModel) {
-        return new JSONExceptionResolver<ItemDomainModel>() {
-            @Override
-            ItemDomainModel throwableMethod() throws JSONException {
-                checkParamNotNull(itemDomainModel);
-                return mSharedPreferencesRepo.retrieveFilteredItemDetails(itemDomainModel.getUniqueKey());
+        checkParamNotNull(itemDomainModel);
+        try {
+            return mSharedPreferencesRepoFiveFourteen.retrieveFilteredItemDetails(itemDomainModel.getUniqueKey());
+        } catch (JSONException e) {
+            try {
+                return mSharedPreferencesRepoFourTwo.retrieveFilteredItemDetails(itemDomainModel.getUniqueKey());
+            } catch (JSONException ex) {
+                throw new RepositoryException(e);
             }
-        }.transformException();
+        }
     }
 
     @Override
     public int deleteAllData() {
-        return mSharedPreferencesRepo.deleteAllData();
+        return mSharedPreferencesRepoFiveFourteen.deleteAllData();
     }
 
     @Override
     public int deleteItem(ItemDomainModel itemDomainModel) {
-        return mSharedPreferencesRepo.deleteItem(itemDomainModel);
+        return mSharedPreferencesRepoFiveFourteen.deleteItem(itemDomainModel);
     }
 
     @Override
@@ -109,7 +119,7 @@ class SensitiveDataRepository extends Repository {
             @Override
             Integer throwableMethod() throws JSONException {
                 checkParamNotNull(itemDomainModel);
-                return mSharedPreferencesRepo.deleteItemByType(itemDomainModel);
+                return mSharedPreferencesRepoFiveFourteen.deleteItemByType(itemDomainModel);
             }
         }.transformException();
     }

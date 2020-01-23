@@ -159,7 +159,7 @@ public class SmartCredentialsConfiguration {
      * Checks if the root checker should block library operations for rooted devices or not.
      */
     public boolean isRootCheckerEnabled() {
-        return mRootDetectionOptions != null;
+        return mRootDetectionOptions != null && !mRootDetectionOptions.isEmpty();
     }
 
     public Set<RootDetectionOption> getRootDetectionOptions() {

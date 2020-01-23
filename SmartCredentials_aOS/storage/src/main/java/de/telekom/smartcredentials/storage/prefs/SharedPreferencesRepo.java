@@ -25,25 +25,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
 import de.telekom.smartcredentials.core.model.item.ItemDomainMetadata;
 import de.telekom.smartcredentials.core.model.item.ItemDomainModel;
-import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
 import de.telekom.smartcredentials.storage.database.models.ModelConverter;
 import de.telekom.smartcredentials.storage.repositories.RepositoryType;
 
 import static de.telekom.smartcredentials.core.model.ModelValidator.checkParamNotNull;
 import static de.telekom.smartcredentials.core.model.ModelValidator.getValidatedMetadata;
 
-public class SharedPreferencesRepo {
+public abstract class SharedPreferencesRepo {
 
     private static final String TAG = "SharedPreferencesRepo";
     private static final String ERR_CONVERTING_TO_JSON = "converting item domain model to JSON Object returns null";
-    private static final RepositoryType REPO_TYPE = RepositoryType.SENSITIVE;
+    static final RepositoryType REPO_TYPE = RepositoryType.SENSITIVE;
 
-    private final Gson mGson;
-    private final PreferencesManager mPreferencesManager;
+    final Gson mGson;
+    final PreferencesManager mPreferencesManager;
 
-    public SharedPreferencesRepo(Gson gson, PreferencesManager preferencesManager) {
+    SharedPreferencesRepo(Gson gson, PreferencesManager preferencesManager) {
         mGson = gson;
         mPreferencesManager = preferencesManager;
     }
@@ -83,13 +83,9 @@ public class SharedPreferencesRepo {
         return itemDomainModelList;
     }
 
-    public ItemDomainModel retrieveFilteredItemSummary(String uniqueKey) throws JSONException {
-        return ModelConverter.getItemSummaryFromJSONObject(mPreferencesManager.getItem(uniqueKey), mGson, REPO_TYPE);
-    }
+    public abstract ItemDomainModel retrieveFilteredItemSummary(String uniqueKey) throws JSONException;
 
-    public ItemDomainModel retrieveFilteredItemDetails(String uniqueKey) throws JSONException {
-        return ModelConverter.getItemDomainModelFromJSONObject(mPreferencesManager.getItem(uniqueKey), mGson, REPO_TYPE);
-    }
+    public abstract ItemDomainModel retrieveFilteredItemDetails(String uniqueKey) throws JSONException;
 
     public int deleteAllData() {
         int itemsCountBeforeDelete = mPreferencesManager.getItemsCount();

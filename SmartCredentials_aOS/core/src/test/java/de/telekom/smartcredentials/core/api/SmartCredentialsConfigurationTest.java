@@ -83,7 +83,7 @@ public class SmartCredentialsConfigurationTest {
         SmartCredentialsConfiguration config = new SmartCredentialsConfiguration.Builder(mContext, userId)
                 .setAppAlias(appAlias)
                 .setLogger(logger)
-                .setRootCheckerEnabled(RootDetectionOption.ALL)
+                .setRootCheckerEnabled(RootDetectionOption.NONE)
                 .build();
 
         assertEquals(userId, config.getUserId());

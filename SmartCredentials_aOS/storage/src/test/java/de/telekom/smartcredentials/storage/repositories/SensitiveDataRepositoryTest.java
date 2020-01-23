@@ -31,7 +31,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import de.telekom.smartcredentials.core.model.item.ItemDomainModel;
 import de.telekom.smartcredentials.storage.exceptions.RepositoryException;
-import de.telekom.smartcredentials.storage.prefs.SharedPreferencesRepo;
+import de.telekom.smartcredentials.storage.prefs.SharedPreferencesRepoFiveFourteen;
+import de.telekom.smartcredentials.storage.prefs.SharedPreferencesRepoFourTwo;
 import de.telekom.smartcredentials.storage.utils.ModelGenerator;
 
 import static org.mockito.Mockito.doThrow;
@@ -46,14 +47,16 @@ public class SensitiveDataRepositoryTest {
 
     private SensitiveDataRepository mSensitiveDataRepository;
     private ItemDomainModel mItemDomainModel;
-    private SharedPreferencesRepo mSharedPrefsRepo;
+    private SharedPreferencesRepoFiveFourteen mSharedPrefsRepoFiveFourteen;
 
     @Before
     public void setUp() {
         PowerMockito.mockStatic(TextUtils.class);
 
-        mSharedPrefsRepo = Mockito.mock(SharedPreferencesRepo.class);
-        mSensitiveDataRepository = new SensitiveDataRepository(mSharedPrefsRepo);
+        mSharedPrefsRepoFiveFourteen = Mockito.mock(SharedPreferencesRepoFiveFourteen.class);
+        SharedPreferencesRepoFourTwo mSharedPreferencesRepoFourTwo = Mockito.mock(SharedPreferencesRepoFourTwo.class);
+        mSensitiveDataRepository = new SensitiveDataRepository(mSharedPrefsRepoFiveFourteen,
+                mSharedPreferencesRepoFourTwo);
 
         mItemDomainModel = ModelGenerator.generateEncryptedSensitiveItemDomainModel();
     }
@@ -61,12 +64,12 @@ public class SensitiveDataRepositoryTest {
     @Test
     public void saveDataCallsSharedPreferencesRepoMethod() throws JSONException {
         mSensitiveDataRepository.saveData(mItemDomainModel);
-        verify(mSharedPrefsRepo).saveData(mItemDomainModel);
+        verify(mSharedPrefsRepoFiveFourteen).saveData(mItemDomainModel);
     }
 
     @Test
     public void saveDataThrowsRepoException() throws JSONException {
-        doThrow(new JSONException("")).when(mSharedPrefsRepo).saveData(mItemDomainModel);
+        doThrow(new JSONException("")).when(mSharedPrefsRepoFiveFourteen).saveData(mItemDomainModel);
         mExpectedException.expect(RepositoryException.class);
         mSensitiveDataRepository.saveData(mItemDomainModel);
     }
@@ -74,48 +77,48 @@ public class SensitiveDataRepositoryTest {
     @Test
     public void retrieveFilteredItemsCallsSharedPreferencesRepoMethod() throws JSONException {
         mSensitiveDataRepository.retrieveItemsFilteredByType(mItemDomainModel);
-        verify(mSharedPrefsRepo).retrieveItemsFilteredByType(mItemDomainModel.getMetadata());
+        verify(mSharedPrefsRepoFiveFourteen).retrieveItemsFilteredByType(mItemDomainModel.getMetadata());
     }
 
     @Test
     public void retrieveFilteredItemSummaryCallsSharedPreferencesRepoMethod() throws JSONException {
         mSensitiveDataRepository.retrieveFilteredItemSummaryByUniqueIdAndType(mItemDomainModel);
-        verify(mSharedPrefsRepo).retrieveFilteredItemSummary(mItemDomainModel.getUniqueKey());
+        verify(mSharedPrefsRepoFiveFourteen).retrieveFilteredItemSummary(mItemDomainModel.getUniqueKey());
     }
 
     @Test
     public void retrieveFilteredItemDetailsCallsSharedPreferencesRepoMethod() throws JSONException {
         mSensitiveDataRepository.retrieveFilteredItemDetailsByUniqueIdAndType(mItemDomainModel);
-        verify(mSharedPrefsRepo).retrieveFilteredItemDetails(mItemDomainModel.getUniqueKey());
+        verify(mSharedPrefsRepoFiveFourteen).retrieveFilteredItemDetails(mItemDomainModel.getUniqueKey());
     }
 
     @Test
     public void deleteAllDataCallsSharedPreferencesRepoMethod() {
         mSensitiveDataRepository.deleteAllData();
-        verify(mSharedPrefsRepo).deleteAllData();
+        verify(mSharedPrefsRepoFiveFourteen).deleteAllData();
     }
 
     @Test
     public void deleteItemCallsSharedPreferencesRepoMethod() {
         mSensitiveDataRepository.deleteItem(mItemDomainModel);
-        verify(mSharedPrefsRepo).deleteItem(mItemDomainModel);
+        verify(mSharedPrefsRepoFiveFourteen).deleteItem(mItemDomainModel);
     }
 
     @Test
     public void deleteItemByTypeCallsSharedPreferencesRepoMethod() throws JSONException {
         mSensitiveDataRepository.deleteItemsByType(mItemDomainModel);
-        verify(mSharedPrefsRepo).deleteItemByType(mItemDomainModel);
+        verify(mSharedPrefsRepoFiveFourteen).deleteItemByType(mItemDomainModel);
     }
 
     @Test
     public void updateItemCallsSharedPreferencesRepoMethod() throws JSONException {
         mSensitiveDataRepository.updateItem(mItemDomainModel);
-        verify(mSharedPrefsRepo).updateItem(mItemDomainModel);
+        verify(mSharedPrefsRepoFiveFourteen).updateItem(mItemDomainModel);
     }
 
     @Test
     public void updateItemThrowsRepoException() throws JSONException {
-        doThrow(new JSONException("")).when(mSharedPrefsRepo).updateItem(mItemDomainModel);
+        doThrow(new JSONException("")).when(mSharedPrefsRepoFiveFourteen).updateItem(mItemDomainModel);
         mExpectedException.expect(RepositoryException.class);
         mSensitiveDataRepository.updateItem(mItemDomainModel);
     }
