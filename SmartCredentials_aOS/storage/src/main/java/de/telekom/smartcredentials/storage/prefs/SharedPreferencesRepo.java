@@ -34,16 +34,16 @@ import de.telekom.smartcredentials.storage.repositories.RepositoryType;
 import static de.telekom.smartcredentials.core.model.ModelValidator.checkParamNotNull;
 import static de.telekom.smartcredentials.core.model.ModelValidator.getValidatedMetadata;
 
-public class SharedPreferencesRepo {
+public abstract class SharedPreferencesRepo {
 
     private static final String TAG = "SharedPreferencesRepo";
     private static final String ERR_CONVERTING_TO_JSON = "converting item domain model to JSON Object returns null";
     static final RepositoryType REPO_TYPE = RepositoryType.SENSITIVE;
 
-    private final Gson mGson;
+    final Gson mGson;
     final PreferencesManager mPreferencesManager;
 
-    public SharedPreferencesRepo(Gson gson, PreferencesManager preferencesManager) {
+    SharedPreferencesRepo(Gson gson, PreferencesManager preferencesManager) {
         mGson = gson;
         mPreferencesManager = preferencesManager;
     }
@@ -83,15 +83,9 @@ public class SharedPreferencesRepo {
         return itemDomainModelList;
     }
 
-    public ItemDomainModel retrieveFilteredItemSummary(String uniqueKey) throws JSONException {
-        return ModelConverter.getItemSummaryFromJSONObject(mPreferencesManager.getItem(uniqueKey),
-                mGson, REPO_TYPE);
-    }
+    public abstract ItemDomainModel retrieveFilteredItemSummary(String uniqueKey) throws JSONException;
 
-    public ItemDomainModel retrieveFilteredItemDetails(String uniqueKey) throws JSONException {
-        return ModelConverter.getItemDomainModelFromJSONObject(mPreferencesManager.getItem(uniqueKey),
-                mGson, REPO_TYPE);
-    }
+    public abstract ItemDomainModel retrieveFilteredItemDetails(String uniqueKey) throws JSONException;
 
     public int deleteAllData() {
         int itemsCountBeforeDelete = mPreferencesManager.getItemsCount();

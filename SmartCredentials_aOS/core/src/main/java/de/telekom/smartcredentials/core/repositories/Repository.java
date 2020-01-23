@@ -20,23 +20,23 @@ import java.util.List;
 
 import de.telekom.smartcredentials.core.model.item.ItemDomainModel;
 
-public abstract class Repository {
+public interface Repository {
 
-    public abstract int saveData(ItemDomainModel itemDomainModel);
+    int saveData(ItemDomainModel itemDomainModel);
 
-    public abstract int updateItem(ItemDomainModel itemDomainModel);
+    int updateItem(ItemDomainModel itemDomainModel);
 
-    public abstract List<ItemDomainModel> retrieveItemsFilteredByType(ItemDomainModel itemDomainModel);
+    List<ItemDomainModel> retrieveItemsFilteredByType(ItemDomainModel itemDomainModel);
 
-    public abstract ItemDomainModel retrieveFilteredItemSummaryByUniqueIdAndType(ItemDomainModel itemDomainModel);
+    ItemDomainModel retrieveFilteredItemSummaryByUniqueIdAndType(ItemDomainModel itemDomainModel);
 
-    public abstract ItemDomainModel retrieveFilteredItemDetailsByUniqueIdAndType(ItemDomainModel itemDomainModel);
+    ItemDomainModel retrieveFilteredItemDetailsByUniqueIdAndType(ItemDomainModel itemDomainModel);
 
-    public abstract int deleteAllData();
+    int deleteAllData();
 
-    public abstract int deleteItem(ItemDomainModel itemDomainModel);
+    int deleteItem(ItemDomainModel itemDomainModel);
 
-    public abstract int deleteItemsByType(ItemDomainModel itemDomainModel);
+    int deleteItemsByType(ItemDomainModel itemDomainModel);
 
-    public abstract String getTag();
+    String getTag();
 }

@@ -25,7 +25,7 @@ import com.google.gson.Gson;
 import de.telekom.smartcredentials.core.di.Provides;
 import de.telekom.smartcredentials.storage.database.AppDatabase;
 import de.telekom.smartcredentials.storage.prefs.PreferencesManager;
-import de.telekom.smartcredentials.storage.prefs.SharedPreferencesRepo;
+import de.telekom.smartcredentials.storage.prefs.SharedPreferencesRepoFiveFourteen;
 import de.telekom.smartcredentials.storage.prefs.SharedPreferencesRepoFourTwo;
 
 /**
@@ -48,7 +48,8 @@ public class RepositoryObjectCreator {
     @Provides
     @NonNull
     public SensitiveDataRepository provideSensitiveDataRepo() {
-        return new SensitiveDataRepository(provideSharedPreferencesRepo(), provideSharedPreferencesRepoFourTwo());
+        return new SensitiveDataRepository(provideSharedPreferencesRepoFiveFourteen(),
+                provideSharedPreferencesRepoFourTwo());
     }
 
     @Provides
@@ -59,8 +60,8 @@ public class RepositoryObjectCreator {
 
     @Provides
     @NonNull
-    private SharedPreferencesRepo provideSharedPreferencesRepo() {
-        return new SharedPreferencesRepo(mGson, providePreferenceManager());
+    private SharedPreferencesRepoFiveFourteen provideSharedPreferencesRepoFiveFourteen() {
+        return new SharedPreferencesRepoFiveFourteen(mGson, providePreferenceManager());
     }
 
     private SharedPreferencesRepoFourTwo provideSharedPreferencesRepoFourTwo() {

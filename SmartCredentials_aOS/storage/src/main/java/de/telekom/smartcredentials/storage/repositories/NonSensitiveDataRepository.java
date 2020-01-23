@@ -35,7 +35,7 @@ import de.telekom.smartcredentials.storage.exceptions.RepositoryException;
 import static de.telekom.smartcredentials.core.model.ModelValidator.checkParamNotNull;
 import static de.telekom.smartcredentials.core.model.ModelValidator.getValidatedMetadata;
 
-public class NonSensitiveDataRepository extends Repository {
+public class NonSensitiveDataRepository implements Repository {
 
     static final RepositoryType REPO_TYPE = RepositoryType.NONSENSITIVE;
     private static final String TAG = "NonSensitiveDataRepository";

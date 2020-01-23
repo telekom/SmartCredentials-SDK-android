@@ -33,7 +33,7 @@ import de.telekom.smartcredentials.storage.repositories.RepositoryType;
 public class ModelConverterFourTwo {
 
     private static final String ITEM_DESCRIPTION = "a";
-    private static final String ITEM_PRIVATE_DATA_DESCRIPTION = "a";
+    private static final String ITEM_PRIVATE_DATA_DESCRIPTION = "b";
 
     public static ItemDomainModel getItemSummaryFromJSONObject(String json, RepositoryType repositoryType) throws JSONException {
         if (json == null) {
