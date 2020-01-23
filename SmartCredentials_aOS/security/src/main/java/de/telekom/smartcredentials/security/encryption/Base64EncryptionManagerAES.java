@@ -41,7 +41,7 @@ import static de.telekom.smartcredentials.security.encryption.AESCipherManager.B
 
 public class Base64EncryptionManagerAES implements EncryptionManager {
 
-    static final String BASE4_CHAR_SET = "UTF-8";
+    static final String BASE64_CHAR_SET = "UTF-8";
 
     static final String IV_SEPARATOR = "cipherIV=";
 
@@ -63,7 +63,7 @@ public class Base64EncryptionManagerAES implements EncryptionManager {
             AESCipherManager.AESCipher aesCipher = mAESCipherManager.obtainEncryptionCipher(metaAlias);
 
             String encodedIV = new String(Base64.encode(aesCipher.getIV(), BASE64_FLAG), Charset.defaultCharset());
-            byte[] cipherTextFinalBytes = aesCipher.getFinalBytes(toEncrypt.getBytes(BASE4_CHAR_SET));
+            byte[] cipherTextFinalBytes = aesCipher.getFinalBytes(toEncrypt.getBytes(BASE64_CHAR_SET));
 
             return new String(Base64.encode(cipherTextFinalBytes, BASE64_FLAG), Charset.defaultCharset())
                     + IV_SEPARATOR
@@ -90,7 +90,7 @@ public class Base64EncryptionManagerAES implements EncryptionManager {
             // text to be decrypted process
             String textToDecrypt = textWithIV[0]
                     .replace("\n", "");
-            byte[] bytesToDecrypt = textToDecrypt.getBytes(BASE4_CHAR_SET);
+            byte[] bytesToDecrypt = textToDecrypt.getBytes(BASE64_CHAR_SET);
 
             // IV process
             String iv = textWithIV[1].replace("\n", "");
@@ -98,7 +98,7 @@ public class Base64EncryptionManagerAES implements EncryptionManager {
             AESCipherManager.AESCipher aesCipher = mAESCipherManager.obtainDecryptionCypher(iv, metaAlias);
             byte[] cipherText = Base64.decode(bytesToDecrypt, BASE64_FLAG);
             byte[] bytesDecrypted = aesCipher.getFinalBytes(cipherText);
-            return new String(bytesDecrypted, BASE4_CHAR_SET);
+            return new String(bytesDecrypted, BASE64_CHAR_SET);
         } catch (NoSuchAlgorithmException | BadPaddingException | IllegalBlockSizeException | InvalidAlgorithmParameterException | KeyStoreProviderException | InvalidKeyException | KeyStoreManagerException | NoSuchPaddingException | UnsupportedEncodingException e) {
             throw new EncryptionException(DECRYPTION_EXCEPTION_TEXT + e.getMessage(), e);
         }

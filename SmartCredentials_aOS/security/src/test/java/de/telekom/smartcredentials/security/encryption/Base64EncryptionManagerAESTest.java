@@ -36,7 +36,7 @@ import de.telekom.smartcredentials.core.exceptions.EncryptionException;
 import de.telekom.smartcredentials.core.exceptions.InvalidAlgorithmException;
 
 import static de.telekom.smartcredentials.security.encryption.AESCipherManager.BASE64_FLAG;
-import static de.telekom.smartcredentials.security.encryption.Base64EncryptionManagerAES.BASE4_CHAR_SET;
+import static de.telekom.smartcredentials.security.encryption.Base64EncryptionManagerAES.BASE64_CHAR_SET;
 import static de.telekom.smartcredentials.security.encryption.Base64EncryptionManagerAES.IV_SEPARATOR;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -88,7 +88,7 @@ public class Base64EncryptionManagerAESTest {
                 .thenReturn(mAESCipher);
         PowerMockito.when(Base64.encode(mAESCipher.getIV(), BASE64_FLAG))
                 .thenReturn(mEncodedCipherIVBytes);
-        when(mAESCipher.getFinalBytes(TO_ENCRYPT_TEXT.getBytes(BASE4_CHAR_SET)))
+        when(mAESCipher.getFinalBytes(TO_ENCRYPT_TEXT.getBytes(BASE64_CHAR_SET)))
                 .thenReturn(mCipherTextFinalBytes);
         PowerMockito.when(Base64.encode(mCipherTextFinalBytes, BASE64_FLAG))
                 .thenReturn(mEncodedCipherTextFinalBytes);
