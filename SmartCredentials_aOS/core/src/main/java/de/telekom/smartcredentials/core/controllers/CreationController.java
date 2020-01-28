@@ -34,7 +34,11 @@ public class CreationController {
         return mDefaultCreationHandler.createPublicKey(alias);
     }
 
-    public String encrypt(String toEncrypt, String alias, EncryptionAlgorithm algorithm) throws EncryptionException {
-        return mDefaultCreationHandler.encrypt(toEncrypt, alias, algorithm);
+    public String encrypt(String toEncrypt, EncryptionAlgorithm algorithm) throws EncryptionException {
+        return mDefaultCreationHandler.encrypt(toEncrypt, algorithm);
+    }
+
+    public String encrypt(String toEncrypt, boolean isSensitive, EncryptionAlgorithm algorithm) throws EncryptionException {
+        return mDefaultCreationHandler.encrypt(toEncrypt, isSensitive, algorithm);
     }
 }

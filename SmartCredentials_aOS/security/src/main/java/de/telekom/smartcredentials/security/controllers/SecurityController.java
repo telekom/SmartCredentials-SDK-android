@@ -82,7 +82,7 @@ public class SecurityController implements SecurityApi {
      * {@inheritDoc}
      */
     @Override
-    public SmartCredentialsApiResponse<String> encrypt(String toEncrypt, String alias, EncryptionAlgorithm algorithm) {
+    public SmartCredentialsApiResponse<String> encrypt(String toEncrypt, EncryptionAlgorithm algorithm) {
         ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "encrypt");
         if (mCoreController.isSecurityCompromised()) {
             mCoreController.handleSecurityCompromised();
@@ -95,7 +95,7 @@ public class SecurityController implements SecurityApi {
         }
 
         try {
-            String encryptedText = mCreationController.encrypt(toEncrypt, alias, algorithm);
+            String encryptedText = mCreationController.encrypt(toEncrypt, algorithm);
             return new SmartCredentialsResponse<>(encryptedText);
         } catch (EncryptionException e) {
             return new SmartCredentialsResponse<>(e);

@@ -29,14 +29,15 @@ public class SmartCredentialsTokenRequest implements TokenRequest {
     private final Gson mGson;
     private final String mType;
     private final EncryptionStrategy mEncryptionStrategy;
-    private final String mAlias;
+    private final boolean mIsSensitive;
     private String mEncryptedModel;
 
-    public SmartCredentialsTokenRequest(Gson gson, String type, EncryptionStrategy encryptionStrategy, String alias) {
+    public SmartCredentialsTokenRequest(Gson gson, String type,
+                                        EncryptionStrategy encryptionStrategy, boolean isSensitive) {
         mGson = gson;
         mType = type;
         mEncryptionStrategy = encryptionStrategy;
-        mAlias = alias;
+        mIsSensitive = isSensitive;
     }
 
     @Override
@@ -66,11 +67,11 @@ public class SmartCredentialsTokenRequest implements TokenRequest {
         getToken().setCounter(counter);
 
 
-        Token token = mGson.fromJson(mEncryptionStrategy.decrypt(mEncryptedModel, mAlias), Token.class);
+        Token token = mGson.fromJson(mEncryptionStrategy.decrypt(mEncryptedModel), Token.class);
         token = token == null ? new Token() : token;
         token.setCounter(counter);
 
-        mEncryptedModel = mEncryptionStrategy.encrypt(mGson.toJson(token), mAlias);
+        mEncryptedModel = mEncryptionStrategy.encrypt(mGson.toJson(token), mIsSensitive);
     }
 
     @Override
@@ -104,7 +105,7 @@ public class SmartCredentialsTokenRequest implements TokenRequest {
     }
 
     private Token getToken() throws EncryptionException {
-        Token token = mGson.fromJson(mEncryptionStrategy.decrypt(mEncryptedModel, mAlias), Token.class);
+        Token token = mGson.fromJson(mEncryptionStrategy.decrypt(mEncryptedModel), Token.class);
         return token == null ? new Token() : token;
     }
 }

@@ -69,27 +69,27 @@ public class ItemDomainModel {
         return this;
     }
 
-    public ItemDomainModel encryptData(EncryptionStrategy encryptionStrategy, String metaAlias)
+    public ItemDomainModel encryptData(EncryptionStrategy encryptionStrategy, boolean isSensitive)
             throws EncryptionException {
-        mData.encryptWith(encryptionStrategy, metaAlias);
+        mData.encryptWith(encryptionStrategy, isSensitive);
         return this;
     }
 
-    public ItemDomainModel partiallyEncrypt(EncryptionStrategy encryptionStrategy, String metaAlias)
+    public ItemDomainModel partiallyEncrypt(EncryptionStrategy encryptionStrategy, boolean isSensitive)
             throws EncryptionException {
-        mData.partiallyEncryptWith(encryptionStrategy, metaAlias);
+        mData.partiallyEncryptWith(encryptionStrategy, isSensitive);
         return this;
     }
 
-    public ItemDomainModel decryptData(EncryptionStrategy encryptionStrategy, String metaAlias)
+    public ItemDomainModel decryptData(EncryptionStrategy encryptionStrategy)
             throws EncryptionException {
-        mData.decryptWith(encryptionStrategy, metaAlias);
+        mData.decryptWith(encryptionStrategy);
         return this;
     }
 
-    public ItemDomainModel decryptData(EncryptionStrategy encryptionStrategy, String alias,
+    public ItemDomainModel decryptData(EncryptionStrategy encryptionStrategy,
                                        EncryptionAlgorithm algorithm) throws EncryptionException {
-        mData.decryptWith(encryptionStrategy, alias, algorithm);
+        mData.decryptWith(encryptionStrategy, algorithm);
         return this;
     }
 

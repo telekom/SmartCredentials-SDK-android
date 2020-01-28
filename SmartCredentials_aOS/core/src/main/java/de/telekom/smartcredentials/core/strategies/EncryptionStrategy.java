@@ -23,13 +23,17 @@ import de.telekom.smartcredentials.core.model.EncryptionAlgorithm;
 
 public interface EncryptionStrategy {
 
-    String encrypt(String toEncrypt, String metaAlias) throws EncryptionException;
+    String encrypt(String toEncrypt) throws EncryptionException;
 
-    String encrypt(String toEncrypt, String alias, EncryptionAlgorithm algorithm) throws EncryptionException;
+    String encrypt(String toEncrypt, EncryptionAlgorithm algorithm) throws EncryptionException;
 
-    String decrypt(String encryptedText, String metaAlias) throws EncryptionException;
+    String encrypt(String toEncrypt, boolean isSensitive) throws EncryptionException;
 
-    String decrypt(String encryptedText, String alias, EncryptionAlgorithm algorithm) throws EncryptionException;
+    String encrypt(String toEncrypt, boolean isSensitive, EncryptionAlgorithm algorithm) throws EncryptionException;
+
+    String decrypt(String encryptedText) throws EncryptionException;
+
+    String decrypt(String encryptedText, EncryptionAlgorithm algorithm) throws EncryptionException;
 
     PublicKey getPublicKey(String alias) throws EncryptionException;
 }

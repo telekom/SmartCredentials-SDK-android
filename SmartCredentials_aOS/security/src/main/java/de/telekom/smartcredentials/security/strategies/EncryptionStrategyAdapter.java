@@ -21,11 +21,11 @@ import java.security.PublicKey;
 import de.telekom.smartcredentials.core.exceptions.EncryptionException;
 import de.telekom.smartcredentials.core.exceptions.InvalidAlgorithmException;
 import de.telekom.smartcredentials.core.model.EncryptionAlgorithm;
+import de.telekom.smartcredentials.core.security.EncryptionError;
+import de.telekom.smartcredentials.core.strategies.EncryptionStrategy;
 import de.telekom.smartcredentials.security.encryption.Base64EncryptionManagerAES;
 import de.telekom.smartcredentials.security.encryption.Base64EncryptionManagerRSA;
-import de.telekom.smartcredentials.core.security.EncryptionError;
 import de.telekom.smartcredentials.security.encryption.EncryptionManager;
-import de.telekom.smartcredentials.core.strategies.EncryptionStrategy;
 
 public class EncryptionStrategyAdapter implements EncryptionStrategy {
 
@@ -42,38 +42,60 @@ public class EncryptionStrategyAdapter implements EncryptionStrategy {
     }
 
     @Override
-    public String encrypt(String toEncrypt, String metaAlias) throws EncryptionException {
-        return mBase64EncryptionManager.encrypt(toEncrypt, metaAlias);
+    public String encrypt(String toEncrypt) throws EncryptionException {
+        return mBase64EncryptionManager.encrypt(toEncrypt);
     }
 
     @Override
-    public String encrypt(String toEncrypt, String alias, EncryptionAlgorithm algorithm) throws EncryptionException {
+    public String encrypt(String toEncrypt, EncryptionAlgorithm algorithm) throws EncryptionException {
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M && algorithm == EncryptionAlgorithm.AES_256) {
             throw new InvalidAlgorithmException(EncryptionError.ALGORITHM_NOT_SUPPORTED);
         }
 
         switch (algorithm) {
             case RSA_2048:
-                return mBase64EncryptionManagerRSA.encrypt(toEncrypt, alias);
+                return mBase64EncryptionManagerRSA.encrypt(toEncrypt);
             case AES_256:
-                return mBase64EncryptionManagerAES.encrypt(toEncrypt, alias);
+                return mBase64EncryptionManagerAES.encrypt(toEncrypt);
             case DEFAULT:
             default:
-                return mBase64EncryptionManager.encrypt(toEncrypt, alias);
+                return mBase64EncryptionManager.encrypt(toEncrypt);
         }
     }
 
     @Override
-    public String decrypt(String encryptedText, String metaAlias) throws EncryptionException {
-        return mBase64EncryptionManager.decrypt(encryptedText, metaAlias);
+    public String encrypt(String toEncrypt, boolean isSensitive) throws EncryptionException {
+        return mBase64EncryptionManager.encrypt(toEncrypt, isSensitive);
     }
 
     @Override
-    public String decrypt(String encryptedText, String alias, EncryptionAlgorithm algorithm) throws EncryptionException {
+    public String encrypt(String toEncrypt, boolean isSensitive, EncryptionAlgorithm algorithm) throws EncryptionException {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M && algorithm == EncryptionAlgorithm.AES_256) {
+            throw new InvalidAlgorithmException(EncryptionError.ALGORITHM_NOT_SUPPORTED);
+        }
+
+        switch (algorithm) {
+            case RSA_2048:
+                return mBase64EncryptionManagerRSA.encrypt(toEncrypt, isSensitive);
+            case AES_256:
+                return mBase64EncryptionManagerAES.encrypt(toEncrypt, isSensitive);
+            case DEFAULT:
+            default:
+                return mBase64EncryptionManager.encrypt(toEncrypt, isSensitive);
+        }
+    }
+
+    @Override
+    public String decrypt(String encryptedText) throws EncryptionException {
+        return mBase64EncryptionManager.decrypt(encryptedText);
+    }
+
+    @Override
+    public String decrypt(String encryptedText, EncryptionAlgorithm algorithm) throws EncryptionException {
         if (algorithm == EncryptionAlgorithm.RSA_2048) {
-            return mBase64EncryptionManagerRSA.decrypt(encryptedText, alias);
+            return mBase64EncryptionManagerRSA.decrypt(encryptedText);
         }
-        return mBase64EncryptionManager.decrypt(encryptedText, alias);
+        return mBase64EncryptionManager.decrypt(encryptedText);
     }
 
     @Override

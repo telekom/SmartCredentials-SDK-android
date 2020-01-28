@@ -52,22 +52,22 @@ public class ItemDomainData {
         return mPrivateData;
     }
 
-    void encryptWith(EncryptionStrategy encryptionStrategy, String metaAlias) throws EncryptionException {
-        mIdentifier = encryptionStrategy.encrypt(mIdentifier, metaAlias);
-        mPrivateData = encryptionStrategy.encrypt(mPrivateData, metaAlias);
+    void encryptWith(EncryptionStrategy encryptionStrategy, boolean isSensitive) throws EncryptionException {
+        mIdentifier = encryptionStrategy.encrypt(mIdentifier, isSensitive);
+        mPrivateData = encryptionStrategy.encrypt(mPrivateData, isSensitive);
     }
 
-    void partiallyEncryptWith(EncryptionStrategy encryptionStrategy, String metaAlias) throws EncryptionException {
-        mIdentifier = encryptionStrategy.encrypt(mIdentifier, metaAlias);
+    void partiallyEncryptWith(EncryptionStrategy encryptionStrategy, boolean isSensitive) throws EncryptionException {
+        mIdentifier = encryptionStrategy.encrypt(mIdentifier, isSensitive);
     }
 
-    void decryptWith(EncryptionStrategy encryptionStrategy, String metaAlias) throws EncryptionException {
-        mIdentifier = encryptionStrategy.decrypt(mIdentifier, metaAlias);
-        mPrivateData = encryptionStrategy.decrypt(mPrivateData, metaAlias);
+    void decryptWith(EncryptionStrategy encryptionStrategy) throws EncryptionException {
+        mIdentifier = encryptionStrategy.decrypt(mIdentifier);
+        mPrivateData = encryptionStrategy.decrypt(mPrivateData);
     }
 
-    void decryptWith(EncryptionStrategy encryptionStrategy, String alias, EncryptionAlgorithm algorithm) throws EncryptionException {
-        mIdentifier = encryptionStrategy.decrypt(mIdentifier, alias, algorithm);
-        mPrivateData = encryptionStrategy.decrypt(mPrivateData, alias, algorithm);
+    void decryptWith(EncryptionStrategy encryptionStrategy, EncryptionAlgorithm algorithm) throws EncryptionException {
+        mIdentifier = encryptionStrategy.decrypt(mIdentifier, algorithm);
+        mPrivateData = encryptionStrategy.decrypt(mPrivateData, algorithm);
     }
 }
