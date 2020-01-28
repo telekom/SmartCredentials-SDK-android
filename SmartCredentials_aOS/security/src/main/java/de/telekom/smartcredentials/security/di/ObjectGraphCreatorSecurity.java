@@ -42,13 +42,13 @@ public class ObjectGraphCreatorSecurity {
 
     private final EncryptionObjectCreator mEncryptionObjectCreator;
 
-    private ObjectGraphCreatorSecurity(Context context, String appAlias) {
-        mEncryptionObjectCreator = new EncryptionObjectCreator(context, AliasNative.getAlias(appAlias));
+    private ObjectGraphCreatorSecurity(Context context, String alias) {
+        mEncryptionObjectCreator = new EncryptionObjectCreator(context, alias);
     }
 
-    public static ObjectGraphCreatorSecurity getInstance(Context context, String appAlias) {
+    public static ObjectGraphCreatorSecurity getInstance(Context context, String alias) {
         if (sInstance == null) {
-            sInstance = new ObjectGraphCreatorSecurity(context, appAlias);
+            sInstance = new ObjectGraphCreatorSecurity(context, alias);
         }
         return sInstance;
     }

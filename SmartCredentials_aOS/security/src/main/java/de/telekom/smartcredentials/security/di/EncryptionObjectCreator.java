@@ -23,7 +23,6 @@ import de.telekom.smartcredentials.security.encryption.AESCipherManager;
 import de.telekom.smartcredentials.security.encryption.Base64EncryptionManagerAES;
 import de.telekom.smartcredentials.security.encryption.Base64EncryptionManagerRSA;
 import de.telekom.smartcredentials.security.encryption.EncryptionManager;
-import de.telekom.smartcredentials.security.encryption.KeyPairGeneratorWrapper;
 import de.telekom.smartcredentials.security.encryption.RSACipherManager;
 import de.telekom.smartcredentials.security.keystore.SmartCredentialsKeyStoreKeyProvider;
 
@@ -33,11 +32,11 @@ import de.telekom.smartcredentials.security.keystore.SmartCredentialsKeyStoreKey
 public class EncryptionObjectCreator {
 
     private final Context mContext;
-    private final String mKeyStoreAlias;
+    private final String mAlias;
 
-    public EncryptionObjectCreator(Context context, String keyStoreAlias) {
+    public EncryptionObjectCreator(Context context, String alias) {
         mContext = context;
-        mKeyStoreAlias = keyStoreAlias;
+        mAlias = alias;
     }
 
     @Provides
@@ -62,7 +61,7 @@ public class EncryptionObjectCreator {
 
     @Provides
     private AESCipherManager provideAesCipherManager(Context context) {
-        return new AESCipherManager(provideKeyStoreKeyProvider(context), provideKeyPairGeneratorWrapper());
+        return new AESCipherManager(provideKeyStoreKeyProvider(context), mAlias);
     }
 
     @Provides
@@ -72,11 +71,6 @@ public class EncryptionObjectCreator {
 
     @Provides
     private RSACipherManager provideRsaCipherManager() {
-        return new RSACipherManager(mContext, provideKeyPairGeneratorWrapper());
-    }
-
-    @Provides
-    private KeyPairGeneratorWrapper provideKeyPairGeneratorWrapper() {
-        return new KeyPairGeneratorWrapper(mKeyStoreAlias);
+        return new RSACipherManager(mContext, mAlias);
     }
 }

@@ -28,6 +28,7 @@ import javax.crypto.NoSuchPaddingException;
 
 import de.telekom.smartcredentials.core.exceptions.EncryptionException;
 import de.telekom.smartcredentials.core.security.KeyStoreManagerException;
+import de.telekom.smartcredentials.security.repositories.RepositoryAliasNative;
 
 import static de.telekom.smartcredentials.core.security.EncryptionError.DECRYPTION_EXCEPTION_TEXT;
 import static de.telekom.smartcredentials.core.security.EncryptionError.ENCRYPTION_EXCEPTION_TEXT;
@@ -50,19 +51,23 @@ public class Base64EncryptionManagerRSA implements EncryptionManager {
         mRSACipherManager = rsaCipherManager;
     }
 
+    private String encrypt(String toEncrypt, String repositoryAlias) throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, KeyStoreManagerException, EncryptionException {
+        SmartCredentialsCipherWrapper smartCredentialsCipherWrapper = mRSACipherManager.getEncryptionCipherWrapper(repositoryAlias);
+
+        byte[] toEncryptBytes = toEncrypt.getBytes(BASE4_CHAR_SET);
+        byte[] encryptedBytes = mRSACipherManager.getMultiBlockBytes(toEncryptBytes, smartCredentialsCipherWrapper, MAX_BYTES_LENGTH_TO_ENCRYPT);
+
+        return Base64.encodeToString(encryptedBytes, Base64.DEFAULT);
+    }
+
     @Override
-    public String encrypt(String toEncrypt, String metaAlias) throws EncryptionException {
+    public String encrypt(String toEncrypt) throws EncryptionException {
         if (TextUtils.isEmpty(toEncrypt)) {
             return toEncrypt;
         }
 
         try {
-            SmartCredentialsCipherWrapper smartCredentialsCipherWrapper = mRSACipherManager.getEncryptionCipherWrapper(metaAlias);
-
-            byte[] toEncryptBytes = toEncrypt.getBytes(BASE4_CHAR_SET);
-            byte[] encryptedBytes = mRSACipherManager.getMultiBlockBytes(toEncryptBytes, smartCredentialsCipherWrapper, MAX_BYTES_LENGTH_TO_ENCRYPT);
-
-            return Base64.encodeToString(encryptedBytes, Base64.DEFAULT);
+            return encrypt(toEncrypt, RepositoryAliasNative.getAliasSensitive());
         } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IOException
                 | KeyStoreManagerException e) {
             throw new EncryptionException(ENCRYPTION_EXCEPTION_TEXT + e.getMessage(), e);
@@ -70,21 +75,42 @@ public class Base64EncryptionManagerRSA implements EncryptionManager {
     }
 
     @Override
-    public String decrypt(String encryptedText, String metaAlias) throws EncryptionException {
+    public String encrypt(String toEncrypt, boolean isSensitive) throws EncryptionException {
+        if (TextUtils.isEmpty(toEncrypt)) {
+            return toEncrypt;
+        }
+
+        try {
+            return encrypt(toEncrypt, isSensitive ? RepositoryAliasNative.getAliasSensitive() :
+                    RepositoryAliasNative.getAliasNonSensitive());
+        } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IOException
+                | KeyStoreManagerException e) {
+            throw new EncryptionException(ENCRYPTION_EXCEPTION_TEXT + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public String decrypt(String encryptedText) throws EncryptionException {
         if (TextUtils.isEmpty(encryptedText)) {
             return encryptedText;
         }
 
         try {
-            SmartCredentialsCipherWrapper smartCredentialsCipherWrapper = mRSACipherManager.getDecryptionCipherWrapper(metaAlias);
-
-            byte[] encryptedTextBytes = Base64.decode(encryptedText, Base64.DEFAULT);
-            byte[] decryptedBytes = mRSACipherManager.getMultiBlockBytes(encryptedTextBytes, smartCredentialsCipherWrapper, RSA_KEY_LENGTH);
-
-            return new String(decryptedBytes, 0, decryptedBytes.length, BASE4_CHAR_SET);
+            return decrypt(encryptedText, RepositoryAliasNative.getAliasSensitive());
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | IOException | KeyStoreManagerException | InvalidKeyException e) {
-            throw new EncryptionException(DECRYPTION_EXCEPTION_TEXT + e.getMessage(), e);
+            try {
+                return decrypt(encryptedText, RepositoryAliasNative.getAliasNonSensitive());
+            } catch (IOException | InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | KeyStoreManagerException ex) {
+                throw new EncryptionException(DECRYPTION_EXCEPTION_TEXT + e.getMessage(), e);
+            }
         }
+    }
+
+    private String decrypt(String encryptedText, String repositoryAlias) throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, KeyStoreManagerException {
+        SmartCredentialsCipherWrapper smartCredentialsCipherWrapper = mRSACipherManager.getDecryptionCipherWrapper(repositoryAlias);
+        byte[] encryptedTextBytes = Base64.decode(encryptedText, Base64.DEFAULT);
+        byte[] decryptedBytes = mRSACipherManager.getMultiBlockBytes(encryptedTextBytes, smartCredentialsCipherWrapper, RSA_KEY_LENGTH);
+        return new String(decryptedBytes, 0, decryptedBytes.length, BASE4_CHAR_SET);
     }
 
     public PublicKey getPublicKey(String alias) throws EncryptionException {

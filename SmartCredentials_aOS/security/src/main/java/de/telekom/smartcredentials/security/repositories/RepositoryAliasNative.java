@@ -14,20 +14,34 @@
  * limitations under the License.
  */
 
-package de.telekom.smartcredentials.storage.repositories;
+package de.telekom.smartcredentials.security.repositories;
+
+import de.telekom.smartcredentials.core.exceptions.EncryptionException;
 
 /**
  * Created by Alex.Graur@endava.com at 1/22/2020
  */
 public class RepositoryAliasNative {
 
+    private static final String REPO_ALIAS_NOT_AVAILABLE = "repo_alias library not yet loaded.";
+
     private static boolean sIsLibraryLoaded;
 
-    public static String getRepositoryAlias(boolean isSensitive) {
-        return alias(isSensitive);
+    public static String getAliasSensitive() throws EncryptionException {
+        if (!isLibraryLoaded()) {
+            throw new EncryptionException(REPO_ALIAS_NOT_AVAILABLE);
+        }
+        return aliasSensitive();
     }
 
-    public static boolean isLibraryLoaded() {
+    public static String getAliasNonSensitive() throws EncryptionException {
+        if (!isLibraryLoaded()) {
+            throw new EncryptionException(REPO_ALIAS_NOT_AVAILABLE);
+        }
+        return aliasNonSensitive();
+    }
+
+    private static boolean isLibraryLoaded() {
         return sIsLibraryLoaded;
     }
 
@@ -36,5 +50,7 @@ public class RepositoryAliasNative {
         sIsLibraryLoaded = true;
     }
 
-    private static native String alias(boolean isSensitive);
+    private static native String aliasSensitive();
+
+    private static native String aliasNonSensitive();
 }

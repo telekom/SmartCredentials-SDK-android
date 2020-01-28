@@ -30,35 +30,35 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 
-import de.telekom.smartcredentials.security.keystore.SmartCredentialsKeyStoreKeyProvider;
 import de.telekom.smartcredentials.core.security.KeyStoreManagerException;
 import de.telekom.smartcredentials.core.security.KeyStoreProviderException;
+import de.telekom.smartcredentials.security.keystore.SmartCredentialsKeyStoreKeyProvider;
 import de.telekom.smartcredentials.security.utils.Constants;
 
-public class AESCipherManager {
+public class AESCipherManager extends CipherManager {
 
     static final int BASE64_FLAG = Base64.DEFAULT;
     private static final String CIPHER_ALGORITHM = "AES/CBC/PKCS7Padding";
 
     private final SmartCredentialsKeyStoreKeyProvider mSmartCredentialsKeyStoreKeyProvider;
-    private final KeyPairGeneratorWrapper mKeyPairGeneratorWrapper;
 
-    public AESCipherManager(SmartCredentialsKeyStoreKeyProvider smartCredentialsKeyStoreKeyProvider, KeyPairGeneratorWrapper keyPairGeneratorWrapper) {
+    public AESCipherManager(SmartCredentialsKeyStoreKeyProvider smartCredentialsKeyStoreKeyProvider,
+                            String appAlias) {
+        super(appAlias);
         mSmartCredentialsKeyStoreKeyProvider = smartCredentialsKeyStoreKeyProvider;
-        mKeyPairGeneratorWrapper = keyPairGeneratorWrapper;
     }
 
-    AESCipher obtainEncryptionCipher(String metaAlias) throws InvalidKeyException, KeyStoreProviderException,
+    AESCipher obtainEncryptionCipher(String repositoryAlias) throws InvalidKeyException, KeyStoreProviderException,
             KeyStoreManagerException, NoSuchPaddingException, NoSuchAlgorithmException {
-        SecretKey secretKey = mSmartCredentialsKeyStoreKeyProvider.getKeyStoreSecretKey(buildAlias(metaAlias));
+        SecretKey secretKey = mSmartCredentialsKeyStoreKeyProvider.getKeyStoreSecretKey(buildAlias(repositoryAlias));
         Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
         cipher.init(Cipher.ENCRYPT_MODE, secretKey);
         return new AESCipher(cipher, cipher.getIV());
     }
 
-    AESCipher obtainDecryptionCypher(String iv, String metaAlias) throws NoSuchPaddingException, NoSuchAlgorithmException,
+    AESCipher obtainDecryptionCypher(String iv, String repositoryAlias) throws NoSuchPaddingException, NoSuchAlgorithmException,
             KeyStoreManagerException, InvalidKeyException, KeyStoreProviderException, InvalidAlgorithmParameterException {
-        SecretKey secretKey = mSmartCredentialsKeyStoreKeyProvider.getKeyStoreSecretKey(buildAlias(metaAlias));
+        SecretKey secretKey = mSmartCredentialsKeyStoreKeyProvider.getKeyStoreSecretKey(buildAlias(repositoryAlias));
 
         byte[] ivBytes = Base64.decode(iv, BASE64_FLAG);
 
@@ -68,8 +68,9 @@ public class AESCipherManager {
         return new AESCipher(cipher, iv.getBytes(Charset.defaultCharset()));
     }
 
-    private String buildAlias(String metaAlias) {
-        return Constants.KEY_ALGORITHM_AES + mKeyPairGeneratorWrapper.getAlias() + metaAlias;
+    @Override
+    String getAlgorithmAlias() {
+        return Constants.KEY_ALGORITHM_AES;
     }
 
     static class AESCipher {

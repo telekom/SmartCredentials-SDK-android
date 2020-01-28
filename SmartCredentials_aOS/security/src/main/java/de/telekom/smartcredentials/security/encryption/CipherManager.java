@@ -16,14 +16,19 @@
 
 package de.telekom.smartcredentials.security.encryption;
 
-import de.telekom.smartcredentials.core.exceptions.EncryptionException;
+import de.telekom.smartcredentials.core.repositories.AliasNative;
 
-public interface EncryptionManager {
+abstract class CipherManager {
 
-    String encrypt(String toEncrypt) throws EncryptionException;
+    private final String mAppAlias;
 
-    String encrypt(String toEncrypt, boolean isSensitive) throws EncryptionException;
+    CipherManager(String appAlias) {
+        mAppAlias = appAlias;
+    }
 
-    String decrypt(String toDecrypt) throws EncryptionException;
+    String buildAlias(String repositoryAlias) {
+        return getAlgorithmAlias() + AliasNative.getAlias(mAppAlias) + repositoryAlias;
+    }
 
+    abstract String getAlgorithmAlias();
 }

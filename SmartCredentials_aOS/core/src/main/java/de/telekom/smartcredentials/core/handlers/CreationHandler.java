@@ -25,5 +25,7 @@ public interface CreationHandler {
 
     PublicKey createPublicKey(String alias) throws EncryptionException;
 
-    String encrypt(String toEncrypt, String alias, EncryptionAlgorithm algorithm) throws EncryptionException;
+    String encrypt(String toEncrypt, EncryptionAlgorithm algorithm) throws EncryptionException;
+
+    String encrypt(String toEncrypt, boolean isSensitive, EncryptionAlgorithm algorithm) throws EncryptionException;
 }
