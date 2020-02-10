@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Telekom Deutschland AG
+ * Copyright (c) 2020 Telekom Deutschland AG
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,38 +22,27 @@ import com.google.gson.annotations.SerializedName;
 import de.telekom.smartcredentials.core.eid.messages.EidMessage;
 
 /**
- * Created by Alex.Graur@endava.com at 11/11/2019
+ * Created by Alex.Graur@endava.com at 2/10/2020
  */
-public class AuthMessage extends EidMessage {
+public class EnterPukMessage extends EidMessage {
 
-    @SerializedName("url")
-    @Expose
-    private String mUrl;
-    @SerializedName("result")
-    @Expose
-    private Result mResult;
     @SerializedName("error")
     @Expose
     private String mError;
+    @SerializedName("reader")
+    @Expose
+    private Reader mReader;
 
-    public AuthMessage() {
+    public EnterPukMessage() {
 
     }
 
-    public String getUrl() {
-        return mUrl;
+    public Reader getReader() {
+        return mReader;
     }
 
-    public void setUrl(String url) {
-        this.mUrl = url;
-    }
-
-    public Result getResult() {
-        return mResult;
-    }
-
-    public void setResult(Result result) {
-        this.mResult = result;
+    public void setReader(Reader reader) {
+        this.mReader = reader;
     }
 
     public String getError() {
@@ -66,10 +55,9 @@ public class AuthMessage extends EidMessage {
 
     @Override
     public String toString() {
-        return "AuthMessage{" +
-                "mUrl='" + mUrl + '\'' +
-                ", mResult=" + mResult +
-                ", mError='" + mError + '\'' +
+        return "EnterCanMessage{" +
+                "mError='" + mError + '\'' +
+                ", mReader=" + mReader +
                 '}';
     }
 }
