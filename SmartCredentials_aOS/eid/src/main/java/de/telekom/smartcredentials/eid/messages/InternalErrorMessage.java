@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Telekom Deutschland AG
+ * Copyright (c) 2020 Telekom Deutschland AG
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,39 +22,13 @@ import com.google.gson.annotations.SerializedName;
 import de.telekom.smartcredentials.core.eid.messages.EidMessage;
 
 /**
- * Created by Alex.Graur@endava.com at 11/11/2019
+ * Created by Alex.Graur@endava.com at 2/10/2020
  */
-public class AuthMessage extends EidMessage {
+public class InternalErrorMessage extends EidMessage {
 
-    @SerializedName("url")
-    @Expose
-    private String mUrl;
-    @SerializedName("result")
-    @Expose
-    private Result mResult;
     @SerializedName("error")
     @Expose
     private String mError;
-
-    public AuthMessage() {
-
-    }
-
-    public String getUrl() {
-        return mUrl;
-    }
-
-    public void setUrl(String url) {
-        this.mUrl = url;
-    }
-
-    public Result getResult() {
-        return mResult;
-    }
-
-    public void setResult(Result result) {
-        this.mResult = result;
-    }
 
     public String getError() {
         return mError;
@@ -62,14 +36,5 @@ public class AuthMessage extends EidMessage {
 
     public void setError(String error) {
         this.mError = error;
-    }
-
-    @Override
-    public String toString() {
-        return "AuthMessage{" +
-                "mUrl='" + mUrl + '\'' +
-                ", mResult=" + mResult +
-                ", mError='" + mError + '\'' +
-                '}';
     }
 }

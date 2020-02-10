@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Telekom Deutschland AG
+ * Copyright (c) 2020 Telekom Deutschland AG
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,41 +19,38 @@ package de.telekom.smartcredentials.eid.messages;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 import de.telekom.smartcredentials.core.eid.messages.EidMessage;
 
 /**
- * Created by Alex.Graur@endava.com at 11/11/2019
+ * Created by Alex.Graur@endava.com at 2/10/2020
  */
-public class AuthMessage extends EidMessage {
+public class ApiLevelMessage extends EidMessage {
 
-    @SerializedName("url")
+    @SerializedName("msg")
     @Expose
-    private String mUrl;
-    @SerializedName("result")
-    @Expose
-    private Result mResult;
+    private String mMsg;
     @SerializedName("error")
     @Expose
     private String mError;
+    @SerializedName("available")
+    @Expose
+    private List<Integer> mAvailable;
+    @SerializedName("current")
+    @Expose
+    private int mCurrent;
 
-    public AuthMessage() {
+    public ApiLevelMessage() {
 
     }
 
-    public String getUrl() {
-        return mUrl;
+    public String getMsg() {
+        return mMsg;
     }
 
-    public void setUrl(String url) {
-        this.mUrl = url;
-    }
-
-    public Result getResult() {
-        return mResult;
-    }
-
-    public void setResult(Result result) {
-        this.mResult = result;
+    public void setMsg(String msg) {
+        this.mMsg = msg;
     }
 
     public String getError() {
@@ -64,12 +61,19 @@ public class AuthMessage extends EidMessage {
         this.mError = error;
     }
 
-    @Override
-    public String toString() {
-        return "AuthMessage{" +
-                "mUrl='" + mUrl + '\'' +
-                ", mResult=" + mResult +
-                ", mError='" + mError + '\'' +
-                '}';
+    public List<Integer> getAvailable() {
+        return mAvailable;
+    }
+
+    public void setAvailable(List<Integer> available) {
+        this.mAvailable = available;
+    }
+
+    public int getCurrent() {
+        return mCurrent;
+    }
+
+    public void setCurrent(int current) {
+        this.mCurrent = current;
     }
 }
