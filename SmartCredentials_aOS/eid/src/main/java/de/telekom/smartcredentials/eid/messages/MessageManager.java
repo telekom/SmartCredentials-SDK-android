@@ -42,16 +42,62 @@ public class MessageManager {
                 AccessRightsMessage accessRightsMessage = mGson.fromJson(rawMessage, AccessRightsMessage.class);
                 mCallback.onMessageReceived(accessRightsMessage);
                 break;
-            case EidMessage.ENTER_CAN:
-                EnterCanMessage enterCanMessage = mGson.fromJson(rawMessage, EnterCanMessage.class);
-                mCallback.onMessageReceived(enterCanMessage);
+            case EidMessage.API_LEVEL:
+                ApiLevelMessage apiLevelMessage = mGson.fromJson(rawMessage, ApiLevelMessage.class);
+                mCallback.onMessageReceived(apiLevelMessage);
                 break;
             case EidMessage.AUTH:
                 AuthMessage authMessage = mGson.fromJson(rawMessage, AuthMessage.class);
                 mCallback.onMessageReceived(authMessage);
                 break;
+            case EidMessage.BAD_STATE:
+                BadStateMessage badStateMessage = mGson.fromJson(rawMessage, BadStateMessage.class);
+                mCallback.onMessageReceived(badStateMessage);
+                break;
+            case EidMessage.CERTIFICATE:
+                CertificateMessage certificateMessage = mGson.fromJson(rawMessage, CertificateMessage.class);
+                mCallback.onMessageReceived(certificateMessage);
+                break;
+            case EidMessage.ENTER_CAN:
+                EnterCanMessage enterCanMessage = mGson.fromJson(rawMessage, EnterCanMessage.class);
+                mCallback.onMessageReceived(enterCanMessage);
+                break;
+            case EidMessage.ENTER_PIN:
+                EnterPinMessage enterPinMessage = mGson.fromJson(rawMessage, EnterPinMessage.class);
+                mCallback.onMessageReceived(enterPinMessage);
+                break;
+            case EidMessage.ENTER_PUK:
+                EnterPukMessage enterPukMessage = mGson.fromJson(rawMessage, EnterPukMessage.class);
+                mCallback.onMessageReceived(enterPukMessage);
+                break;
+            case EidMessage.INFO:
+                InfoMessage infoMessage = mGson.fromJson(rawMessage, InfoMessage.class);
+                mCallback.onMessageReceived(infoMessage);
+                break;
             case EidMessage.INSERT_CARD:
+                InsertCardMessage insertCardMessage = mGson.fromJson(rawMessage, InsertCardMessage.class);
+                mCallback.onMessageReceived(insertCardMessage);
+                break;
+            case EidMessage.INTERNAL_ERROR:
+                InternalErrorMessage internalErrorMessage = mGson.fromJson(rawMessage, InternalErrorMessage.class);
+                mCallback.onMessageReceived(internalErrorMessage);
+                break;
+            case EidMessage.INVALID:
+                InvalidMessage invalidMessage = mGson.fromJson(rawMessage, InvalidMessage.class);
+                mCallback.onMessageReceived(invalidMessage);
+                break;
+            case EidMessage.READER:
+                ReaderMessage readerMessage = mGson.fromJson(rawMessage, ReaderMessage.class);
+                mCallback.onMessageReceived(readerMessage);
+                break;
+            case EidMessage.READER_LIST:
+                ReaderListMessage readerListMessage = mGson.fromJson(rawMessage, ReaderListMessage.class);
+                mCallback.onMessageReceived(readerListMessage);
+                break;
             case EidMessage.UNKNOWN_COMMAND:
+                UnknownCommandMessage unknownCommandMessage = mGson.fromJson(rawMessage, UnknownCommandMessage.class);
+                mCallback.onMessageReceived(unknownCommandMessage);
+                break;
             default:
                 mCallback.onMessageReceived(message);
                 break;
