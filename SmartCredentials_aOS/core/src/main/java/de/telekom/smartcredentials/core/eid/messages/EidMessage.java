@@ -46,28 +46,28 @@ public class EidMessage {
 
     @SerializedName("msg")
     @Expose
-    private String mName;
+    private String mMsg;
 
     public EidMessage() {
 
     }
 
-    public EidMessage(String name) {
-        mName = name;
+    public EidMessage(String msg) {
+        mMsg = msg;
     }
 
-    public String getName() {
-        return mName;
+    public String getMessageType() {
+        return mMsg;
     }
 
-    public void setName(String name) {
-        this.mName = name;
+    public void setMessageType(String msg) {
+        this.mMsg = msg;
     }
 
     @Override
     public String toString() {
         return "EidMessage{" +
-                "name='" + mName + '\'' +
+                "mMsg='" + mMsg + '\'' +
                 '}';
     }
 }

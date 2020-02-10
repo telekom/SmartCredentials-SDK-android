@@ -44,12 +44,10 @@ public class ReaderMessage extends EidMessage {
 
     }
 
-    @Override
     public String getName() {
         return mName;
     }
 
-    @Override
     public void setName(String name) {
         this.mName = name;
     }
