@@ -36,8 +36,8 @@ public class MessageManager {
 
     public void parseMessage(String rawMessage) {
         EidMessage message = mGson.fromJson(rawMessage, EidMessage.class);
-        mCallback.onDebugged("received message from SDK: " + message.getName());
-        switch (message.getName()) {
+        mCallback.onDebugged("received message from SDK: " + message.getMessageType());
+        switch (message.getMessageType()) {
             case EidMessage.ACCESS_RIGHTS:
                 AccessRightsMessage accessRightsMessage = mGson.fromJson(rawMessage, AccessRightsMessage.class);
                 mCallback.onMessageReceived(accessRightsMessage);
