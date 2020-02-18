@@ -16,13 +16,12 @@
 
 package de.telekom.smartcredentials.eid.messages;
 
-import de.telekom.smartcredentials.core.eid.messages.EidMessage;
-import de.telekom.smartcredentials.core.eid.messages.EidMessageType;
+import de.telekom.smartcredentials.eid.messages.types.EidMessageType;
 
 /**
  * Created by Alex.Graur@endava.com at 2/18/2020
  */
-public class SessionGeneratedMessage extends EidMessage {
+public class SessionGeneratedMessage extends SmartEidMessage {
 
     private String mSessionId;
 

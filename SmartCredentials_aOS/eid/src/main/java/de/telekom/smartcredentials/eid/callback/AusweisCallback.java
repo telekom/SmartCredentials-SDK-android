@@ -19,7 +19,7 @@ package de.telekom.smartcredentials.eid.callback;
 import com.governikus.ausweisapp2.IAusweisApp2SdkCallback;
 
 import de.telekom.smartcredentials.core.eid.callbacks.EidMessageReceivedCallback;
-import de.telekom.smartcredentials.eid.controllers.MessageManager;
+import de.telekom.smartcredentials.eid.messages.parser.MessageParser;
 import de.telekom.smartcredentials.eid.messages.SessionDisconnectedMessage;
 import de.telekom.smartcredentials.eid.messages.SessionGeneratedMessage;
 
@@ -28,13 +28,13 @@ import de.telekom.smartcredentials.eid.messages.SessionGeneratedMessage;
  */
 public class AusweisCallback extends IAusweisApp2SdkCallback.Stub {
 
-    private final MessageManager mMessageManager;
+    private final MessageParser mMessageParser;
     private final EidMessageReceivedCallback mCallback;
 
     public String mSessionId;
 
-    public AusweisCallback(MessageManager messageManager, EidMessageReceivedCallback callback) {
-        mMessageManager = messageManager;
+    public AusweisCallback(MessageParser messageParser, EidMessageReceivedCallback callback) {
+        mMessageParser = messageParser;
         mCallback = callback;
     }
 
@@ -46,7 +46,7 @@ public class AusweisCallback extends IAusweisApp2SdkCallback.Stub {
 
     @Override
     public void receive(String s) {
-        mMessageManager.parseMessage(s);
+        mMessageParser.parseMessage(s);
     }
 
     @Override

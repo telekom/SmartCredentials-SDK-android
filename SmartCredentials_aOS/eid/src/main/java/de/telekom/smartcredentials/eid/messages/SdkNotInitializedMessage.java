@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Telekom Deutschland AG
+ * Copyright (c) 2020 Telekom Deutschland AG
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package de.telekom.smartcredentials.eid.commands;
+package de.telekom.smartcredentials.eid.messages;
 
-import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
+import de.telekom.smartcredentials.eid.messages.types.EidMessageType;
 
 /**
- * Created by Alex.Graur@endava.com at 11/11/2019
+ * Created by Alex.Graur@endava.com at 2/18/2020
  */
-@SuppressWarnings("unused")
-public class AcceptCommand extends SmartEidCommand {
+public class SdkNotInitializedMessage extends SmartEidMessage {
 
-    public AcceptCommand() {
-        super(EidCommandType.ACCEPT.getCommandType());
+    public SdkNotInitializedMessage() {
+        super(EidMessageType.SDK_NOT_INITIALIZED.getMessageType());
     }
 }

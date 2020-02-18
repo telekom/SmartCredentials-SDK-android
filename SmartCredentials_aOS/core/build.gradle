@@ -73,7 +73,6 @@ android {
 dependencies {
 
     implementation "com.android.support:appcompat-v7:${androidSupportLibVersion}"
-    implementation "com.google.code.gson:gson:${gsonVersion}"
 
     testImplementation "org.hamcrest:hamcrest-library:${hamcrestVersion}"
     testImplementation "junit:junit:${junitVersion}"

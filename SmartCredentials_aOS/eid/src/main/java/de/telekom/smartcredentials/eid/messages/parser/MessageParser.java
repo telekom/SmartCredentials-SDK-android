@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package de.telekom.smartcredentials.eid.controllers;
+package de.telekom.smartcredentials.eid.messages.parser;
 
 import com.google.gson.Gson;
 
 import de.telekom.smartcredentials.core.eid.callbacks.EidMessageReceivedCallback;
-import de.telekom.smartcredentials.core.eid.messages.EidMessage;
-import de.telekom.smartcredentials.core.eid.messages.EidMessageType;
 import de.telekom.smartcredentials.eid.messages.AccessRightsMessage;
 import de.telekom.smartcredentials.eid.messages.ApiLevelMessage;
 import de.telekom.smartcredentials.eid.messages.AuthMessage;
@@ -35,23 +33,25 @@ import de.telekom.smartcredentials.eid.messages.InternalErrorMessage;
 import de.telekom.smartcredentials.eid.messages.InvalidMessage;
 import de.telekom.smartcredentials.eid.messages.ReaderListMessage;
 import de.telekom.smartcredentials.eid.messages.ReaderMessage;
+import de.telekom.smartcredentials.eid.messages.SmartEidMessage;
 import de.telekom.smartcredentials.eid.messages.UnknownCommandMessage;
+import de.telekom.smartcredentials.eid.messages.types.EidMessageType;
 
 /**
  * Created by Alex.Graur@endava.com at 11/11/2019
  */
-public class MessageManager {
+public class MessageParser {
 
     private final Gson mGson;
     private final EidMessageReceivedCallback mCallback;
 
-    MessageManager(EidMessageReceivedCallback callback) {
+    public MessageParser(EidMessageReceivedCallback callback) {
         mGson = new Gson();
         mCallback = callback;
     }
 
     public void parseMessage(String rawMessage) {
-        EidMessage message = mGson.fromJson(rawMessage, EidMessage.class);
+        SmartEidMessage message = mGson.fromJson(rawMessage, SmartEidMessage.class);
         EidMessageType messageType = EidMessageType.valueOf(message.getMessageType());
         switch (messageType) {
             case ACCESS_RIGHTS:

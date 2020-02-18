@@ -16,14 +16,13 @@
 
 package de.telekom.smartcredentials.eid.commands;
 
-import de.telekom.smartcredentials.core.eid.commands.EidCommand;
-import de.telekom.smartcredentials.core.eid.commands.EidCommandType;
+import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
 
 /**
  * Created by Alex.Graur@endava.com at 11/19/2019
  */
 @SuppressWarnings("unused")
-public class GetReaderListCommand extends EidCommand {
+public class GetReaderListCommand extends SmartEidCommand {
 
     public GetReaderListCommand() {
         super(EidCommandType.GET_READER_LIST.getCommandType());

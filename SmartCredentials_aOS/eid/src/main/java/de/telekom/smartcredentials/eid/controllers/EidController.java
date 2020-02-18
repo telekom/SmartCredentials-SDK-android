@@ -28,8 +28,9 @@ import de.telekom.smartcredentials.core.eid.callbacks.EidMessageReceivedCallback
 import de.telekom.smartcredentials.core.eid.callbacks.EidSendCommandCallback;
 import de.telekom.smartcredentials.core.eid.callbacks.EidUpdateTagCallback;
 import de.telekom.smartcredentials.core.eid.commands.EidCommand;
-import de.telekom.smartcredentials.eid.serviceconnection.AusweisServiceConnection;
 import de.telekom.smartcredentials.eid.callback.AusweisCallback;
+import de.telekom.smartcredentials.eid.messages.parser.MessageParser;
+import de.telekom.smartcredentials.eid.serviceconnection.AusweisServiceConnection;
 
 /**
  * Created by Alex.Graur@endava.com at 11/8/2019
@@ -50,7 +51,7 @@ public class EidController implements EidApi {
     public void bind(Context context, String appPackage, EidMessageReceivedCallback callback) {
         Intent intent = new Intent(AUSWEIS_APP_ACTION);
         intent.setPackage(appPackage);
-        mAusweisCallback = new AusweisCallback(new MessageManager(callback), callback);
+        mAusweisCallback = new AusweisCallback(new MessageParser(callback), callback);
         mServiceConnection = new AusweisServiceConnection(mAusweisCallback, callback);
         context.bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
     }
@@ -62,10 +63,9 @@ public class EidController implements EidApi {
     }
 
     @Override
-    public void sendCommand(EidCommand command, EidSendCommandCallback callback) {
+    public <T extends EidCommand> void sendCommand(T command, EidSendCommandCallback callback) {
         try {
-            String jsonString = mGson.toJson(command);
-            mServiceConnection.getAusweisSdk().send(mAusweisCallback.mSessionId, jsonString);
+            mServiceConnection.getAusweisSdk().send(mAusweisCallback.mSessionId, mGson.toJson(command));
         } catch (RemoteException e) {
             callback.onFailed(e);
         }
