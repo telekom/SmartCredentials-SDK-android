@@ -21,4 +21,5 @@ package de.telekom.smartcredentials.core.eid.commands;
  */
 public abstract class EidCommand {
 
+    public abstract String getName();
 }

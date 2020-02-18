@@ -24,7 +24,7 @@ import de.telekom.smartcredentials.core.eid.commands.EidCommand;
 /**
  * Created by Alex.Graur@endava.com at 11/11/2019
  */
-public abstract class SmartEidCommand extends EidCommand {
+public class SmartEidCommand extends EidCommand {
 
     @SerializedName("cmd")
     @Expose
@@ -38,6 +38,7 @@ public abstract class SmartEidCommand extends EidCommand {
         this.mName = mName;
     }
 
+    @Override
     public String getName() {
         return mName;
     }
