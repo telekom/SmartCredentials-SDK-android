@@ -21,13 +21,11 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-import de.telekom.smartcredentials.core.eid.messages.EidMessage;
-
 /**
  * Created by Alex.Graur@endava.com at 11/19/2019
  */
 @SuppressWarnings("unused")
-public class ReaderListMessage extends EidMessage {
+public class ReaderListMessage extends SmartEidMessage {
 
     @SerializedName("reader")
     @Expose

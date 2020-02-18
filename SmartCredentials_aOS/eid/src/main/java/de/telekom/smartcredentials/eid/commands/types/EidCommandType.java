@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.telekom.smartcredentials.core.eid.commands;
+package de.telekom.smartcredentials.eid.commands.types;
 
 /**
  * Created by Alex.Graur@endava.com at 2/18/2020

@@ -14,48 +14,38 @@
  * limitations under the License.
  */
 
-package de.telekom.smartcredentials.eid.messages;
+package de.telekom.smartcredentials.eid.commands;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import de.telekom.smartcredentials.core.eid.commands.EidCommand;
+
 /**
- * Created by Alex.Graur@endava.com at 2/10/2020
+ * Created by Alex.Graur@endava.com at 11/11/2019
  */
-public class EnterPinMessage extends SmartEidMessage {
+public abstract class SmartEidCommand extends EidCommand {
 
-    @SerializedName("error")
+    @SerializedName("cmd")
     @Expose
-    private String mError;
-    @SerializedName("reader")
-    @Expose
-    private Reader mReader;
+    private String mName;
 
-    public EnterPinMessage() {
-
+    public SmartEidCommand(String name) {
+        mName = name;
     }
 
-    public Reader getReader() {
-        return mReader;
+    public void setName(String mName) {
+        this.mName = mName;
     }
 
-    public void setReader(Reader reader) {
-        this.mReader = reader;
-    }
-
-    public String getError() {
-        return mError;
-    }
-
-    public void setError(String error) {
-        this.mError = error;
+    public String getName() {
+        return mName;
     }
 
     @Override
     public String toString() {
-        return "EnterCanMessage{" +
-                "mError='" + mError + '\'' +
-                ", mReader=" + mReader +
+        return "SmartEidCommand{" +
+                "mName='" + mName + '\'' +
                 '}';
     }
 }

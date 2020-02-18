@@ -24,9 +24,11 @@ import android.os.RemoteException;
 import com.governikus.ausweisapp2.IAusweisApp2Sdk;
 
 import de.telekom.smartcredentials.core.eid.callbacks.EidMessageReceivedCallback;
-import de.telekom.smartcredentials.core.eid.messages.EidMessage;
-import de.telekom.smartcredentials.core.eid.messages.EidMessageType;
 import de.telekom.smartcredentials.eid.callback.AusweisCallback;
+import de.telekom.smartcredentials.eid.messages.SdkConnectedMessage;
+import de.telekom.smartcredentials.eid.messages.SdkDisconnectedMessage;
+import de.telekom.smartcredentials.eid.messages.SdkNotConnectedMessage;
+import de.telekom.smartcredentials.eid.messages.SdkNotInitializedMessage;
 
 /**
  * Created by Alex.Graur@endava.com at 11/8/2019
@@ -49,19 +51,19 @@ public class AusweisServiceConnection implements ServiceConnection {
         if (mSdk != null) {
             try {
                 mSdk.connectSdk(mAusweisCallback);
-                mMessageReceivedCallback.onMessageReceived(new EidMessage(EidMessageType.SDK_CONNECTED.getMessageType()));
+                mMessageReceivedCallback.onMessageReceived(new SdkConnectedMessage());
             } catch (RemoteException e) {
-                mMessageReceivedCallback.onMessageReceived(new EidMessage(EidMessageType.SDK_NOT_CONNECTED.getMessageType()));
+                mMessageReceivedCallback.onMessageReceived(new SdkNotConnectedMessage());
             }
         } else {
-            mMessageReceivedCallback.onMessageReceived(new EidMessage(EidMessageType.SDK_NOT_INITIALIZED.getMessageType()));
+            mMessageReceivedCallback.onMessageReceived(new SdkNotInitializedMessage());
         }
     }
 
     @Override
     public void onServiceDisconnected(ComponentName name) {
         mSdk = null;
-        mMessageReceivedCallback.onMessageReceived(new EidMessage(EidMessageType.SDK_DISCONNECTED.getMessageType()));
+        mMessageReceivedCallback.onMessageReceived(new SdkDisconnectedMessage());
     }
 
     public IAusweisApp2Sdk getAusweisSdk() {

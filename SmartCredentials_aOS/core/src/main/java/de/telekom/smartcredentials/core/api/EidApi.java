@@ -34,7 +34,7 @@ public interface EidApi {
 
     void unbind(Context context);
 
-    void sendCommand(EidCommand command, EidSendCommandCallback callback);
+    <T extends EidCommand> void sendCommand(T command, EidSendCommandCallback callback);
 
     void updateNfcTag(Tag tag, EidUpdateTagCallback callback);
 }

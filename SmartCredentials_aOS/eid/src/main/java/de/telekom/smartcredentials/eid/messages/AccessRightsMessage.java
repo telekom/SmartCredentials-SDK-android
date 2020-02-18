@@ -19,12 +19,10 @@ package de.telekom.smartcredentials.eid.messages;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import de.telekom.smartcredentials.core.eid.messages.EidMessage;
-
 /**
  * Created by Alex.Graur@endava.com at 11/11/2019
  */
-public class AccessRightsMessage extends EidMessage {
+public class AccessRightsMessage extends SmartEidMessage {
 
     @SerializedName("chat")
     @Expose
