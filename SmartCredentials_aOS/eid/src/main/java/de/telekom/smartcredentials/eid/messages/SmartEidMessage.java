@@ -24,7 +24,7 @@ import de.telekom.smartcredentials.core.eid.messages.EidMessage;
 /**
  * Created by Alex.Graur@endava.com at 11/11/2019
  */
-public abstract class SmartEidMessage extends EidMessage {
+public class SmartEidMessage extends EidMessage {
 
     @SerializedName("msg")
     @Expose
