@@ -24,21 +24,6 @@ import com.google.gson.annotations.SerializedName;
  */
 public abstract class EidCommand {
 
-    public static final String GET_INFO = "GET_INFO";
-    public static final String GET_API_LEVEL = "GET_API_LEVEL";
-    public static final String SET_API_LEVEL = "SET_API_LEVEL";
-    public static final String GET_READER = "GET_READER";
-    public static final String GET_READER_LIST = "GET_READER_LIST";
-    public static final String RUN_AUTH = "RUN_AUTH";
-    public static final String GET_ACCESS_RIGHTS = "GET_ACCESS_RIGHTS";
-    public static final String SET_ACCESS_RIGHTS = "SET_ACCESS_RIGHTS";
-    public static final String GET_CERTIFICATE = "GET_CERTIFICATE";
-    public static final String CANCEL = "CANCEL";
-    public static final String ACCEPT = "ACCEPT";
-    public static final String SET_PIN = "SET_PIN";
-    public static final String SET_CAN = "SET_CAN";
-    public static final String SET_PUK = "SET_PUK";
-
     @SerializedName("cmd")
     @Expose
     private String mName;

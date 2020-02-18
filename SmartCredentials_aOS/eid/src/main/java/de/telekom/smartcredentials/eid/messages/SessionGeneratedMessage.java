@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Telekom Deutschland AG
+ * Copyright (c) 2020 Telekom Deutschland AG
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,25 @@
  * limitations under the License.
  */
 
-package de.telekom.smartcredentials.core.eid;
+package de.telekom.smartcredentials.eid.messages;
 
 import de.telekom.smartcredentials.core.eid.messages.EidMessage;
+import de.telekom.smartcredentials.core.eid.messages.EidMessageType;
 
 /**
- * Created by Alex.Graur@endava.com at 11/8/2019
+ * Created by Alex.Graur@endava.com at 2/18/2020
  */
-public interface EidMessageReceivedCallback {
+public class SessionGeneratedMessage extends EidMessage {
 
-    void onMessageReceived(EidMessage message);
+    private String mSessionId;
 
-    void onDebugged(String message);
+    public SessionGeneratedMessage(String sessionId) {
+        super(EidMessageType.SESSION_GENERATED.getMessageType());
+        mSessionId = sessionId;
+    }
+
+    @SuppressWarnings("unused")
+    public String getSessionId() {
+        return mSessionId;
+    }
 }

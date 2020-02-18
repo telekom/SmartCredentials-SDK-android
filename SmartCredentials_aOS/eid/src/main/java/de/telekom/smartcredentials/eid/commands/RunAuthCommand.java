@@ -20,6 +20,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import de.telekom.smartcredentials.core.eid.commands.EidCommand;
+import de.telekom.smartcredentials.core.eid.commands.EidCommandType;
 
 /**
  * Created by Alex.Graur@endava.com at 11/11/2019
@@ -31,8 +32,12 @@ public class RunAuthCommand extends EidCommand {
     private String mTokenUrl;
 
     public RunAuthCommand(String tokenUrl) {
-        super(EidCommand.RUN_AUTH);
+        super(EidCommandType.RUN_AUTH.getCommandType());
         mTokenUrl = tokenUrl;
+    }
+
+    public void setTokenUrl(String tokenUrl) {
+        this.mTokenUrl = tokenUrl;
     }
 
     public String getTokenUrl() {

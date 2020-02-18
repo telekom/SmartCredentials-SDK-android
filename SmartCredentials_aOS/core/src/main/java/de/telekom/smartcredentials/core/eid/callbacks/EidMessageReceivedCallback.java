@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Telekom Deutschland AG
+ * Copyright (c) 2020 Telekom Deutschland AG
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package de.telekom.smartcredentials.core.eid;
+package de.telekom.smartcredentials.core.eid.callbacks;
+
+import de.telekom.smartcredentials.core.eid.messages.EidMessage;
 
 /**
  * Created by Alex.Graur@endava.com at 11/8/2019
  */
-public interface EidUnbindCallback {
+public interface EidMessageReceivedCallback {
 
-    void onSuccess();
-
-    void onFailed();
+    void onMessageReceived(EidMessage message);
 }
