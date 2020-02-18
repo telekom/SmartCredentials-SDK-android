@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Telekom Deutschland AG
+ * Copyright (c) 2020 Telekom Deutschland AG
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.telekom.smartcredentials.eid;
+package de.telekom.smartcredentials.eid.serviceconnection;
 
 import android.content.ComponentName;
 import android.content.ServiceConnection;
@@ -23,8 +23,9 @@ import android.os.RemoteException;
 
 import com.governikus.ausweisapp2.IAusweisApp2Sdk;
 
-import de.telekom.smartcredentials.core.eid.EidMessageReceivedCallback;
+import de.telekom.smartcredentials.core.eid.callbacks.EidMessageReceivedCallback;
 import de.telekom.smartcredentials.core.eid.messages.EidMessage;
+import de.telekom.smartcredentials.core.eid.messages.EidMessageType;
 import de.telekom.smartcredentials.eid.callback.AusweisCallback;
 
 /**
@@ -43,25 +44,24 @@ public class AusweisServiceConnection implements ServiceConnection {
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
-        mMessageReceivedCallback.onDebugged("onServiceConnected() was called");
         mSdk = IAusweisApp2Sdk.Stub.asInterface(service);
 
         if (mSdk != null) {
             try {
                 mSdk.connectSdk(mAusweisCallback);
-                mMessageReceivedCallback.onMessageReceived(new EidMessage(EidMessage.CONNECTED));
+                mMessageReceivedCallback.onMessageReceived(new EidMessage(EidMessageType.SDK_CONNECTED.getMessageType()));
             } catch (RemoteException e) {
-                mMessageReceivedCallback.onMessageReceived(new EidMessage(EidMessage.NOT_CONNECTED));
+                mMessageReceivedCallback.onMessageReceived(new EidMessage(EidMessageType.SDK_NOT_CONNECTED.getMessageType()));
             }
         } else {
-            mMessageReceivedCallback.onMessageReceived(new EidMessage(EidMessage.SDK_NOT_INITIALIZED));
+            mMessageReceivedCallback.onMessageReceived(new EidMessage(EidMessageType.SDK_NOT_INITIALIZED.getMessageType()));
         }
     }
 
     @Override
     public void onServiceDisconnected(ComponentName name) {
         mSdk = null;
-        mMessageReceivedCallback.onMessageReceived(new EidMessage(EidMessage.DISCONNECTED));
+        mMessageReceivedCallback.onMessageReceived(new EidMessage(EidMessageType.SDK_DISCONNECTED.getMessageType()));
     }
 
     public IAusweisApp2Sdk getAusweisSdk() {

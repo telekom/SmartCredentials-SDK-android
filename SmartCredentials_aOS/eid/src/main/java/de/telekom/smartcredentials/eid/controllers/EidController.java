@@ -24,13 +24,12 @@ import android.os.RemoteException;
 import com.google.gson.Gson;
 
 import de.telekom.smartcredentials.core.api.EidApi;
-import de.telekom.smartcredentials.core.eid.EidMessageReceivedCallback;
-import de.telekom.smartcredentials.core.eid.EidSendCommandCallback;
-import de.telekom.smartcredentials.core.eid.EidUpdateTagCallback;
+import de.telekom.smartcredentials.core.eid.callbacks.EidMessageReceivedCallback;
+import de.telekom.smartcredentials.core.eid.callbacks.EidSendCommandCallback;
+import de.telekom.smartcredentials.core.eid.callbacks.EidUpdateTagCallback;
 import de.telekom.smartcredentials.core.eid.commands.EidCommand;
-import de.telekom.smartcredentials.eid.AusweisServiceConnection;
+import de.telekom.smartcredentials.eid.serviceconnection.AusweisServiceConnection;
 import de.telekom.smartcredentials.eid.callback.AusweisCallback;
-import de.telekom.smartcredentials.eid.messages.MessageManager;
 
 /**
  * Created by Alex.Graur@endava.com at 11/8/2019
@@ -66,7 +65,6 @@ public class EidController implements EidApi {
     public void sendCommand(EidCommand command, EidSendCommandCallback callback) {
         try {
             String jsonString = mGson.toJson(command);
-            callback.onDebugged("SDK command is: " + jsonString);
             mServiceConnection.getAusweisSdk().send(mAusweisCallback.mSessionId, jsonString);
         } catch (RemoteException e) {
             callback.onFailed(e);

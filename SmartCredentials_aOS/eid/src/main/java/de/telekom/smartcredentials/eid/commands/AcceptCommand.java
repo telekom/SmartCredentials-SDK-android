@@ -17,6 +17,7 @@
 package de.telekom.smartcredentials.eid.commands;
 
 import de.telekom.smartcredentials.core.eid.commands.EidCommand;
+import de.telekom.smartcredentials.core.eid.commands.EidCommandType;
 
 /**
  * Created by Alex.Graur@endava.com at 11/11/2019
@@ -25,6 +26,6 @@ import de.telekom.smartcredentials.core.eid.commands.EidCommand;
 public class AcceptCommand extends EidCommand {
 
     public AcceptCommand() {
-        super(EidCommand.ACCEPT);
+        super(EidCommandType.ACCEPT.getCommandType());
     }
 }

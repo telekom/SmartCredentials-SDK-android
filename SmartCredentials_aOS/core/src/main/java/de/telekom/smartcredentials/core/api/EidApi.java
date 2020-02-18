@@ -16,13 +16,12 @@
 
 package de.telekom.smartcredentials.core.api;
 
-import android.app.Activity;
 import android.content.Context;
 import android.nfc.Tag;
 
-import de.telekom.smartcredentials.core.eid.EidMessageReceivedCallback;
-import de.telekom.smartcredentials.core.eid.EidSendCommandCallback;
-import de.telekom.smartcredentials.core.eid.EidUpdateTagCallback;
+import de.telekom.smartcredentials.core.eid.callbacks.EidMessageReceivedCallback;
+import de.telekom.smartcredentials.core.eid.callbacks.EidSendCommandCallback;
+import de.telekom.smartcredentials.core.eid.callbacks.EidUpdateTagCallback;
 import de.telekom.smartcredentials.core.eid.commands.EidCommand;
 
 /**
