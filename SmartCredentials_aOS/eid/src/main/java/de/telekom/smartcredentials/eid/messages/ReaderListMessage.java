@@ -14,14 +14,32 @@
  * limitations under the License.
  */
 
-include ':core'
-include ':authentication'
-include ':authorization'
-include ':camera'
-include ':eid'
-include ':networking'
-include ':storage'
-include ':security'
-include ':otp'
-include ':documentscanner'
-include ':qrlogin'
+package de.telekom.smartcredentials.eid.messages;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
+/**
+ * Created by Alex.Graur@endava.com at 11/19/2019
+ */
+@SuppressWarnings("unused")
+public class ReaderListMessage extends SmartEidMessage {
+
+    @SerializedName("reader")
+    @Expose
+    private List<Reader> mReader;
+
+    public ReaderListMessage() {
+
+    }
+
+    public List<Reader> getReader() {
+        return mReader;
+    }
+
+    public void setReader(List<Reader> reader) {
+        this.mReader = reader;
+    }
+}

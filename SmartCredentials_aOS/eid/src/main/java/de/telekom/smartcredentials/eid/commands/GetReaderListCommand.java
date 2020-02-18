@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-include ':core'
-include ':authentication'
-include ':authorization'
-include ':camera'
-include ':eid'
-include ':networking'
-include ':storage'
-include ':security'
-include ':otp'
-include ':documentscanner'
-include ':qrlogin'
+package de.telekom.smartcredentials.eid.commands;
+
+import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
+
+/**
+ * Created by Alex.Graur@endava.com at 11/19/2019
+ */
+@SuppressWarnings("unused")
+public class GetReaderListCommand extends SmartEidCommand {
+
+    public GetReaderListCommand() {
+        super(EidCommandType.GET_READER_LIST.getCommandType());
+    }
+}

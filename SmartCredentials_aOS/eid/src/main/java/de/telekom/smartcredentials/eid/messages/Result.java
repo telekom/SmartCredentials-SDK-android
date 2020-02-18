@@ -14,14 +14,36 @@
  * limitations under the License.
  */
 
-include ':core'
-include ':authentication'
-include ':authorization'
-include ':camera'
-include ':eid'
-include ':networking'
-include ':storage'
-include ':security'
-include ':otp'
-include ':documentscanner'
-include ':qrlogin'
+package de.telekom.smartcredentials.eid.messages;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+/**
+ * Created by Alex.Graur@endava.com at 11/11/2019
+ */
+public class Result {
+
+    @SerializedName("major")
+    @Expose
+    private String mMajor;
+
+    public Result() {
+
+    }
+
+    public String getMajor() {
+        return mMajor;
+    }
+
+    public void setMajor(String major) {
+        this.mMajor = major;
+    }
+
+    @Override
+    public String toString() {
+        return "Result{" +
+                "mMajor='" + mMajor + '\'' +
+                '}';
+    }
+}

@@ -14,14 +14,28 @@
  * limitations under the License.
  */
 
-include ':core'
-include ':authentication'
-include ':authorization'
-include ':camera'
-include ':eid'
-include ':networking'
-include ':storage'
-include ':security'
-include ':otp'
-include ':documentscanner'
-include ':qrlogin'
+package de.telekom.smartcredentials.eid.commands;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
+
+/**
+ * Created by Alex.Graur@endava.com at 11/11/2019
+ */
+public class SetCanCommand extends SmartEidCommand {
+
+    @SerializedName("value")
+    @Expose
+    private String mValue;
+
+    public SetCanCommand(String can) {
+        super(EidCommandType.SET_CAN.getCommandType());
+        mValue = can;
+    }
+
+    public String getValue() {
+        return mValue;
+    }
+}
