@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.telekom.smartcredentials.core.eid.messages;
+package de.telekom.smartcredentials.eid.messages.types;
 
 /**
  * Created by Alex.Graur@endava.com at 2/18/2020

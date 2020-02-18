@@ -16,11 +16,9 @@
 
 package de.telekom.smartcredentials.eid.messages;
 
-import de.telekom.smartcredentials.core.eid.messages.EidMessage;
-
 /**
  * Created by Alex.Graur@endava.com at 2/10/2020
  */
-public class InsertCardMessage extends EidMessage {
+public class InsertCardMessage extends SmartEidMessage {
 
 }
