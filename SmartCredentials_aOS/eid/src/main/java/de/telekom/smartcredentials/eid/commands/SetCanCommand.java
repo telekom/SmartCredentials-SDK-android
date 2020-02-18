@@ -20,6 +20,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import de.telekom.smartcredentials.core.eid.commands.EidCommand;
+import de.telekom.smartcredentials.core.eid.commands.EidCommandType;
 
 /**
  * Created by Alex.Graur@endava.com at 11/11/2019
@@ -31,7 +32,7 @@ public class SetCanCommand extends EidCommand {
     private String mValue;
 
     public SetCanCommand(String can) {
-        super(EidCommand.SET_CAN);
+        super(EidCommandType.SET_CAN.getCommandType());
         mValue = can;
     }
 

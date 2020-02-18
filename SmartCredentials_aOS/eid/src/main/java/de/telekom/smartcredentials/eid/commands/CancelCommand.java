@@ -17,6 +17,7 @@
 package de.telekom.smartcredentials.eid.commands;
 
 import de.telekom.smartcredentials.core.eid.commands.EidCommand;
+import de.telekom.smartcredentials.core.eid.commands.EidCommandType;
 
 /**
  * Created by Alex.Graur@endava.com at 11/18/2019
@@ -25,6 +26,6 @@ import de.telekom.smartcredentials.core.eid.commands.EidCommand;
 public class CancelCommand extends EidCommand {
 
     public CancelCommand() {
-        super(EidCommand.CANCEL);
+        super(EidCommandType.CANCEL.getCommandType());
     }
 }

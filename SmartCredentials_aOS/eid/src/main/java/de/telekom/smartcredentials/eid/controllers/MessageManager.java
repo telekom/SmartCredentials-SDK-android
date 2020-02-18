@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Telekom Deutschland AG
+ * Copyright (c) 2020 Telekom Deutschland AG
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,28 @@
  * limitations under the License.
  */
 
-package de.telekom.smartcredentials.eid.messages;
+package de.telekom.smartcredentials.eid.controllers;
 
 import com.google.gson.Gson;
 
-import de.telekom.smartcredentials.core.eid.EidMessageReceivedCallback;
+import de.telekom.smartcredentials.core.eid.callbacks.EidMessageReceivedCallback;
 import de.telekom.smartcredentials.core.eid.messages.EidMessage;
+import de.telekom.smartcredentials.core.eid.messages.EidMessageType;
+import de.telekom.smartcredentials.eid.messages.AccessRightsMessage;
+import de.telekom.smartcredentials.eid.messages.ApiLevelMessage;
+import de.telekom.smartcredentials.eid.messages.AuthMessage;
+import de.telekom.smartcredentials.eid.messages.BadStateMessage;
+import de.telekom.smartcredentials.eid.messages.CertificateMessage;
+import de.telekom.smartcredentials.eid.messages.EnterCanMessage;
+import de.telekom.smartcredentials.eid.messages.EnterPinMessage;
+import de.telekom.smartcredentials.eid.messages.EnterPukMessage;
+import de.telekom.smartcredentials.eid.messages.InfoMessage;
+import de.telekom.smartcredentials.eid.messages.InsertCardMessage;
+import de.telekom.smartcredentials.eid.messages.InternalErrorMessage;
+import de.telekom.smartcredentials.eid.messages.InvalidMessage;
+import de.telekom.smartcredentials.eid.messages.ReaderListMessage;
+import de.telekom.smartcredentials.eid.messages.ReaderMessage;
+import de.telekom.smartcredentials.eid.messages.UnknownCommandMessage;
 
 /**
  * Created by Alex.Graur@endava.com at 11/11/2019
@@ -29,72 +45,72 @@ public class MessageManager {
     private final Gson mGson;
     private final EidMessageReceivedCallback mCallback;
 
-    public MessageManager(EidMessageReceivedCallback callback) {
+    MessageManager(EidMessageReceivedCallback callback) {
         mGson = new Gson();
         mCallback = callback;
     }
 
     public void parseMessage(String rawMessage) {
         EidMessage message = mGson.fromJson(rawMessage, EidMessage.class);
-        mCallback.onDebugged("received message from SDK: " + message.getMessageType());
-        switch (message.getMessageType()) {
-            case EidMessage.ACCESS_RIGHTS:
+        EidMessageType messageType = EidMessageType.valueOf(message.getMessageType());
+        switch (messageType) {
+            case ACCESS_RIGHTS:
                 AccessRightsMessage accessRightsMessage = mGson.fromJson(rawMessage, AccessRightsMessage.class);
                 mCallback.onMessageReceived(accessRightsMessage);
                 break;
-            case EidMessage.API_LEVEL:
+            case API_LEVEL:
                 ApiLevelMessage apiLevelMessage = mGson.fromJson(rawMessage, ApiLevelMessage.class);
                 mCallback.onMessageReceived(apiLevelMessage);
                 break;
-            case EidMessage.AUTH:
+            case AUTH:
                 AuthMessage authMessage = mGson.fromJson(rawMessage, AuthMessage.class);
                 mCallback.onMessageReceived(authMessage);
                 break;
-            case EidMessage.BAD_STATE:
+            case BAD_STATE:
                 BadStateMessage badStateMessage = mGson.fromJson(rawMessage, BadStateMessage.class);
                 mCallback.onMessageReceived(badStateMessage);
                 break;
-            case EidMessage.CERTIFICATE:
+            case CERTIFICATE:
                 CertificateMessage certificateMessage = mGson.fromJson(rawMessage, CertificateMessage.class);
                 mCallback.onMessageReceived(certificateMessage);
                 break;
-            case EidMessage.ENTER_CAN:
+            case ENTER_CAN:
                 EnterCanMessage enterCanMessage = mGson.fromJson(rawMessage, EnterCanMessage.class);
                 mCallback.onMessageReceived(enterCanMessage);
                 break;
-            case EidMessage.ENTER_PIN:
+            case ENTER_PIN:
                 EnterPinMessage enterPinMessage = mGson.fromJson(rawMessage, EnterPinMessage.class);
                 mCallback.onMessageReceived(enterPinMessage);
                 break;
-            case EidMessage.ENTER_PUK:
+            case ENTER_PUK:
                 EnterPukMessage enterPukMessage = mGson.fromJson(rawMessage, EnterPukMessage.class);
                 mCallback.onMessageReceived(enterPukMessage);
                 break;
-            case EidMessage.INFO:
+            case INFO:
                 InfoMessage infoMessage = mGson.fromJson(rawMessage, InfoMessage.class);
                 mCallback.onMessageReceived(infoMessage);
                 break;
-            case EidMessage.INSERT_CARD:
+            case INSERT_CARD:
                 InsertCardMessage insertCardMessage = mGson.fromJson(rawMessage, InsertCardMessage.class);
                 mCallback.onMessageReceived(insertCardMessage);
                 break;
-            case EidMessage.INTERNAL_ERROR:
+            case INTERNAL_ERROR:
                 InternalErrorMessage internalErrorMessage = mGson.fromJson(rawMessage, InternalErrorMessage.class);
                 mCallback.onMessageReceived(internalErrorMessage);
                 break;
-            case EidMessage.INVALID:
+            case INVALID:
                 InvalidMessage invalidMessage = mGson.fromJson(rawMessage, InvalidMessage.class);
                 mCallback.onMessageReceived(invalidMessage);
                 break;
-            case EidMessage.READER:
+            case READER:
                 ReaderMessage readerMessage = mGson.fromJson(rawMessage, ReaderMessage.class);
                 mCallback.onMessageReceived(readerMessage);
                 break;
-            case EidMessage.READER_LIST:
+            case READER_LIST:
                 ReaderListMessage readerListMessage = mGson.fromJson(rawMessage, ReaderListMessage.class);
                 mCallback.onMessageReceived(readerListMessage);
                 break;
-            case EidMessage.UNKNOWN_COMMAND:
+            case UNKNOWN_COMMAND:
                 UnknownCommandMessage unknownCommandMessage = mGson.fromJson(rawMessage, UnknownCommandMessage.class);
                 mCallback.onMessageReceived(unknownCommandMessage);
                 break;

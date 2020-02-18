@@ -18,8 +18,10 @@ package de.telekom.smartcredentials.eid.callback;
 
 import com.governikus.ausweisapp2.IAusweisApp2SdkCallback;
 
-import de.telekom.smartcredentials.core.eid.EidMessageReceivedCallback;
-import de.telekom.smartcredentials.eid.messages.MessageManager;
+import de.telekom.smartcredentials.core.eid.callbacks.EidMessageReceivedCallback;
+import de.telekom.smartcredentials.eid.controllers.MessageManager;
+import de.telekom.smartcredentials.eid.messages.SessionDisconnectedMessage;
+import de.telekom.smartcredentials.eid.messages.SessionGeneratedMessage;
 
 /**
  * Created by Alex.Graur@endava.com at 11/8/2019
@@ -38,18 +40,17 @@ public class AusweisCallback extends IAusweisApp2SdkCallback.Stub {
 
     @Override
     public void sessionIdGenerated(String s, boolean b) {
-        mCallback.onDebugged("Session generated: " + s + " / " + b);
+        mCallback.onMessageReceived(new SessionGeneratedMessage(s));
         mSessionId = s;
     }
 
     @Override
     public void receive(String s) {
-        mCallback.onDebugged("Message received: " + s);
         mMessageManager.parseMessage(s);
     }
 
     @Override
     public void sdkDisconnected() {
-
+        mCallback.onMessageReceived(new SessionDisconnectedMessage());
     }
 }
