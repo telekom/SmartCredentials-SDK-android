@@ -16,12 +16,9 @@
 
 package de.telekom.smartcredentials.persistentlogging.controllers;
 
-import android.content.Context;
-
 import java.io.File;
 
 import de.telekom.smartcredentials.core.api.LoggingApi;
-import de.telekom.smartcredentials.core.logger.FileLocation;
 import de.telekom.smartcredentials.persistentlogging.writer.LogWriter;
 
 /**
@@ -36,14 +33,8 @@ public class LoggingController implements LoggingApi {
     }
 
     @Override
-    public void persistLog(String directory, String filename, boolean appendDate, String extension, String log) {
-        File directoryFile = new File(FileLocation.SD_CARD + "/" + directory);
-        mLogWriter.write(directoryFile, filename, appendDate, extension, log);
-    }
-
-    @Override
-    public void persistLog(Context context, String directory, String filename, boolean appendDate, String extension, String log) {
-        File directoryFile = new File(context.getFilesDir(), directory);
+    public void persistLog(File rootDirectory, String directory, String filename, boolean appendDate, String extension, String log) {
+        File directoryFile = new File(rootDirectory, directory);
         mLogWriter.write(directoryFile, filename, appendDate, extension, log);
     }
 }
