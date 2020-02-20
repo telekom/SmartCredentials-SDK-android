@@ -16,7 +16,7 @@
 
 package de.telekom.smartcredentials.core.api;
 
-import android.content.Context;
+import java.io.File;
 
 /**
  * Created by Alex.Graur@endava.com at 2/19/2020
@@ -26,27 +26,14 @@ public interface LoggingApi {
     /**
      * Persist a log as a {@link String} in a {@link java.io.File} to external storage / SD card.
      *
-     * @param directory  ontaining the log file
-     * @param name       of the file
-     * @param appendDate <code>true</code> if you want to append the current date to the file name,
-     *                   <code>false</code> otherwise
-     * @param extension  of the file
-     * @param log        to be persisted in the file
+     * @param rootDirectory of the folder containing the file
+     * @param directory     containing the log file
+     * @param name          of the file
+     * @param appendDate    <code>true</code> if you want to append the current date to the file name,
+     *                      <code>false</code> otherwise
+     * @param extension     of the file
+     * @param log           to be persisted in the file
      */
     @SuppressWarnings("unused")
-    void persistLog(String directory, String name, boolean appendDate, String extension, String log);
-
-    /**
-     * Persist a log as a {@link String} in a {@link java.io.File} to internal storage.
-     *
-     * @param context    of the application
-     * @param directory  containing the log file
-     * @param name       of the file
-     * @param appendDate <code>true</code> if you want to append the current date to the file name,
-     *                   <code>false</code> otherwise
-     * @param extension  of the file
-     * @param log        to be persisted in the file
-     */
-    @SuppressWarnings("unused")
-    void persistLog(Context context, String directory, String name, boolean appendDate, String extension, String log);
+    void persistLog(File rootDirectory, String directory, String name, boolean appendDate, String extension, String log);
 }
