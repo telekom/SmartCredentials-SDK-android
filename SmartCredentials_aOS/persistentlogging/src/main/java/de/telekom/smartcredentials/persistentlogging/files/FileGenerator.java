@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Telekom Deutschland AG
+ * Copyright (c) 2020 Telekom Deutschland AG
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-include ':core'
-include ':authentication'
-include ':authorization'
-include ':camera'
-include ':eid'
-include ':networking'
-include ':storage'
-include ':security'
-include ':otp'
-include ':documentscanner'
-include ':qrlogin'
-include ':persistentlogging'
+package de.telekom.smartcredentials.persistentlogging.files;
+
+import java.io.File;
+
+/**
+ * Created by Alex.Graur@endava.com at 2/19/2020
+ */
+public abstract class FileGenerator {
+
+    public File generateFile(File directoryFile, String filename, String extension) {
+        return new File(directoryFile, provideFileName(filename, extension));
+    }
+
+    public abstract String provideFileName(String filename, String extension);
+}
