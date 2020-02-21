@@ -29,15 +29,21 @@ public class Base64EncryptionManager implements EncryptionManager {
     }
 
     @Override
-    public String encrypt(String encryptString, String metaAlias) throws EncryptionException {
+    public String encrypt(String toEncrypt) throws EncryptionException {
         EncryptionManager selectedEncryptionManager = getBase64EncryptionManager();
-        return selectedEncryptionManager.encrypt(encryptString, metaAlias);
+        return selectedEncryptionManager.encrypt(toEncrypt);
     }
 
     @Override
-    public String decrypt(String stringToDecrypt, String metaAlias) throws EncryptionException {
+    public String encrypt(String toEncrypt, boolean isSensitive) throws EncryptionException {
         EncryptionManager selectedEncryptionManager = getBase64EncryptionManager();
-        return selectedEncryptionManager.decrypt(stringToDecrypt, metaAlias);
+        return selectedEncryptionManager.encrypt(toEncrypt, isSensitive);
+    }
+
+    @Override
+    public String decrypt(String stringToDecrypt) throws EncryptionException {
+        EncryptionManager selectedEncryptionManager = getBase64EncryptionManager();
+        return selectedEncryptionManager.decrypt(stringToDecrypt);
     }
 
     private EncryptionManager getBase64EncryptionManager() {

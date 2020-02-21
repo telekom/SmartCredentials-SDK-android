@@ -26,7 +26,7 @@ import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
 
 import static de.telekom.smartcredentials.core.model.ModelValidator.checkParamNotNull;
 
-public class RepositoryProvider extends Repository {
+public class RepositoryProvider implements Repository {
 
     private static final String TAG = "RepositoryProvider";
 

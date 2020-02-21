@@ -41,11 +41,10 @@ public interface SecurityApi {
      * corresponding to a public key.
      *
      * @param toEncrypt represents the {@link String} to be encrypted
-     * @param alias     of the public key
      * @param algorithm used for the encryption
      * @return the encrypted {@link String}
      */
-    SmartCredentialsApiResponse<String> encrypt(String toEncrypt, String alias, EncryptionAlgorithm algorithm);
+    SmartCredentialsApiResponse<String> encrypt(String toEncrypt, EncryptionAlgorithm algorithm);
 
     /**
      * Method used to fetch the {@link CipherWrapper}.

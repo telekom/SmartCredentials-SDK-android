@@ -20,8 +20,10 @@ import de.telekom.smartcredentials.core.exceptions.EncryptionException;
 
 public interface EncryptionManager {
 
-    String encrypt(String toEncrypt, String metaAlias) throws EncryptionException;
+    String encrypt(String toEncrypt) throws EncryptionException;
 
-    String decrypt(String toDecrypt, String metaAlias) throws EncryptionException;
+    String encrypt(String toEncrypt, boolean isSensitive) throws EncryptionException;
+
+    String decrypt(String toDecrypt) throws EncryptionException;
 
 }

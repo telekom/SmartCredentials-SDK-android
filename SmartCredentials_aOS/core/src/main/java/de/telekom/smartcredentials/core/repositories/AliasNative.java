@@ -20,24 +20,15 @@ public class AliasNative {
 
     private static boolean sIsLibraryLoaded;
 
-    static {
-        System.loadLibrary("alias");
-        sIsLibraryLoaded = true;
-    }
-    static boolean isLibraryLoaded() {
-        return sIsLibraryLoaded;
-    }
-
-    static String getAlias(boolean isSensitive) {
-        return alias(isSensitive);
-    }
-
     public static String getAlias(String appAlias) {
         String alias = sIsLibraryLoaded ? alias() : "";
         return alias + appAlias;
     }
 
-    public static native String alias();
+    static {
+        System.loadLibrary("alias");
+        sIsLibraryLoaded = true;
+    }
 
-    public static native String alias(boolean isSensitive);
+    public static native String alias();
 }

@@ -27,11 +27,13 @@ import de.telekom.smartcredentials.storage.domain.model.token.SmartCredentialsTo
 
 public class ModelConverter {
 
-    public static SmartCredentialsTokenRequest toTokenRequest(ItemDomainModel itemDomainModel, Gson gson, EncryptionStrategy encryptionStrategy, String alias) {
+    public static SmartCredentialsTokenRequest toTokenRequest(ItemDomainModel itemDomainModel, Gson gson,
+                                                              EncryptionStrategy encryptionStrategy,
+                                                              boolean isSensitive) {
         SmartCredentialsTokenRequest tokenRequest = new SmartCredentialsTokenRequest(gson,
                 itemDomainModel.getMetadata().getItemType(),
                 encryptionStrategy,
-                alias);
+                isSensitive);
         if (itemDomainModel.getData() != null) {
             tokenRequest.setEncryptedModel(itemDomainModel.getData().getPrivateData());
         }

@@ -68,7 +68,7 @@ public class SharedPreferencesRepoTest {
 
         mGson = new GsonBuilder().create();
         mPreferencesManager = Mockito.mock(PreferencesManager.class);
-        mSharedPreferencesRepo = new SharedPreferencesRepo(mGson, mPreferencesManager);
+        mSharedPreferencesRepo = new SharedPreferencesRepoFiveFourteen(mGson, mPreferencesManager);
         mItemDomainModel = ModelGenerator.generateNonEncryptedNonSensitiveItemDomainModel();
     }
 

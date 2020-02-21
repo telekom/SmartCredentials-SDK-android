@@ -34,16 +34,13 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(AndroidJUnit4.class)
 public class Base64EncryptionManagerAESTest {
 
-    private final String mAlias = "KeyStoreKeyAlias";
     private Base64EncryptionManagerAES mEncryptionManagerAES;
 
     @Before
     public void setUp() {
         SmartCredentialsKeyStoreKeyProvider keystoreKeyProviderSmartCredentials =
                 new SmartCredentialsKeyStoreKeyProvider(InstrumentationRegistry.getContext());
-        KeyPairGeneratorWrapper keyPairGenerator =
-                new KeyPairGeneratorWrapper(InstrumentationRegistry.getContext(), mAlias);
-        AESCipherManager aesCipherManager = new AESCipherManager(keystoreKeyProviderSmartCredentials, keyPairGenerator);
+        AESCipherManager aesCipherManager = new AESCipherManager(keystoreKeyProviderSmartCredentials, "appAlias");
         mEncryptionManagerAES = new Base64EncryptionManagerAES(aesCipherManager);
     }
 
@@ -51,11 +48,11 @@ public class Base64EncryptionManagerAESTest {
     public void testEncryptDecryptShortText() throws EncryptionException {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             String toEncryptText = "test";
-            String encrypted = mEncryptionManagerAES.encrypt(toEncryptText, mAlias);
+            String encrypted = mEncryptionManagerAES.encrypt(toEncryptText, true);
             assertNotNull(encrypted);
             assertNotEquals(toEncryptText, encrypted);
 
-            String decrypted = mEncryptionManagerAES.decrypt(encrypted, mAlias);
+            String decrypted = mEncryptionManagerAES.decrypt(encrypted);
             assertNotNull(decrypted);
             assertNotEquals(decrypted, encrypted);
             assertEquals(toEncryptText, decrypted);
@@ -70,11 +67,11 @@ public class Base64EncryptionManagerAESTest {
                     "Raptures stanhill my greatest mistaken or exercise he on although. Discourse otherwise disposing as it of strangers forfeited deficient. " +
                     "Society excited by cottage private an it esteems. Fully begin on by wound an. Girl rich in do up or both. At declared in as rejoiced of together. " +
                     "He impression collecting delightful unpleasant by prosperous as on. End too talent she object mrs wanted remove giving.";
-            String encrypted = mEncryptionManagerAES.encrypt(toEncryptText, mAlias);
+            String encrypted = mEncryptionManagerAES.encrypt(toEncryptText, true);
             assertNotNull(encrypted);
             assertNotEquals(toEncryptText, encrypted);
 
-            String decrypted = mEncryptionManagerAES.decrypt(encrypted, mAlias);
+            String decrypted = mEncryptionManagerAES.decrypt(encrypted);
             assertNotNull(decrypted);
             assertNotEquals(decrypted, encrypted);
             assertEquals(toEncryptText, decrypted);

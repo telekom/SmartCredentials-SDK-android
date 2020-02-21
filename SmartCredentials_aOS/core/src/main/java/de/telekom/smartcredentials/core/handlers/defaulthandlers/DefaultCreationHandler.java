@@ -38,7 +38,12 @@ public class DefaultCreationHandler implements CreationHandler {
     }
 
     @Override
-    public String encrypt(String toEncrypt, String alias, EncryptionAlgorithm algorithm) throws EncryptionException {
-        return mEncryptionStrategy.encrypt(toEncrypt, alias, algorithm);
+    public String encrypt(String toEncrypt, EncryptionAlgorithm algorithm) throws EncryptionException {
+        return mEncryptionStrategy.encrypt(toEncrypt, algorithm);
+    }
+
+    @Override
+    public String encrypt(String toEncrypt, boolean isSensitive, EncryptionAlgorithm algorithm) throws EncryptionException {
+        return mEncryptionStrategy.encrypt(toEncrypt, isSensitive, algorithm);
     }
 }

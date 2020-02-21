@@ -16,9 +16,46 @@
 
 package de.telekom.smartcredentials.authentication.controllers;
 
-import de.telekom.smartcredentials.authentication.SmartCredentialsAuthenticationService;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.customtabs.CustomTabsIntent;
+
+import net.openid.appauth.AppAuthConfiguration;
+import net.openid.appauth.AuthState;
+import net.openid.appauth.AuthorizationException;
+import net.openid.appauth.AuthorizationRequest;
+import net.openid.appauth.AuthorizationService;
+import net.openid.appauth.AuthorizationServiceConfiguration;
+import net.openid.appauth.AuthorizationServiceDiscovery;
+import net.openid.appauth.ClientAuthentication;
+import net.openid.appauth.ClientSecretBasic;
+import net.openid.appauth.RegistrationRequest;
+import net.openid.appauth.RegistrationResponse;
+import net.openid.appauth.ResponseTypeValues;
+import net.openid.appauth.browser.BrowserSelector;
+
+import java.lang.ref.WeakReference;
+import java.util.Collections;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicReference;
+
+import de.telekom.smartcredentials.authentication.AuthClientConfiguration;
+import de.telekom.smartcredentials.authentication.AuthStateManager;
+import de.telekom.smartcredentials.authentication.AuthenticationTradeActivity;
+import de.telekom.smartcredentials.authentication.converter.Converter;
+import de.telekom.smartcredentials.authentication.model.SmartCredentialsAuthenticationTokenResponse;
+import de.telekom.smartcredentials.authentication.parser.BundleTransformer;
 import de.telekom.smartcredentials.core.api.AuthenticationApi;
-import de.telekom.smartcredentials.core.authentication.AuthenticationService;
+import de.telekom.smartcredentials.core.authentication.AuthenticationError;
+import de.telekom.smartcredentials.core.authentication.AuthenticationServiceInitListener;
+import de.telekom.smartcredentials.core.authentication.OnFreshTokensRetrievedListener;
+import de.telekom.smartcredentials.core.authentication.TokenRefreshListener;
 import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsFeatureSet;
 import de.telekom.smartcredentials.core.controllers.CoreController;
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
@@ -27,24 +64,57 @@ import de.telekom.smartcredentials.core.responses.RootedThrowable;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsResponse;
 
+import static de.telekom.smartcredentials.authentication.AuthClientConfiguration.CONFIG_PREFS_NAME;
+
+/**
+ * Created by Lucian Iacob on February 27, 2019.
+ */
 public class AuthenticationController implements AuthenticationApi {
 
-    private final CoreController mCoreController;
+    public static final String KEY_IDENTITY_PROVIDER_ID = "de.telekom.smartcredentials.auth.Provider";
+    public static final String KEY_AUTH_CONFIG_FILE_ID = "de.telekom.smartcredentials.auth.ConfigFileId";
+    public static final String KEY_COMPLETE_INTENT_CLASS = "de.telekom.smartcredentials.auth.CompleteIntentClass";
+    public static final String KEY_CANCEL_INTENT_CLASS = "de.telekom.smartcredentials.auth.CancelIntentClass";
+    public static final String KEY_CANCEL_INTENT_EXTRAS = "de.telekom.smartcredentials.auth.CancelIntentExtras";
+    public static final String KEY_COMPLETE_INTENT_EXTRAS = "de.telekom.smartcredentials.auth.CompleteIntentExtras";
+    private static final String TAG = "AuthenticationController";
+    private static final AtomicReference<AuthenticationController> INSTANCE_REF =
+            new AtomicReference<>(null);
 
-    public AuthenticationController(CoreController coreController) {
+    private final AtomicReference<AuthorizationService> mAuthService = new AtomicReference<>();
+    private final AtomicReference<AuthorizationRequest> mAuthRequest = new AtomicReference<>();
+    private WeakReference<AuthenticationServiceInitListener> mAuthInitListener;
+    private final AtomicReference<CustomTabsIntent> mAuthIntent = new AtomicReference<>();
+    private AuthStateManager mAuthStateManager;
+    private final AtomicReference<String> mClientId = new AtomicReference<>();
+    private AuthClientConfiguration mConfiguration;
+    private int mCustomTabColor;
+    private ExecutorService mExecutor;
+    private CoreController mCoreController;
+
+    private AuthenticationController(CoreController coreController) {
         mCoreController = coreController;
+        mExecutor = Executors.newSingleThreadExecutor();
     }
 
-    private Object getAuthenticationTool() {
-        return SmartCredentialsAuthenticationService.getInstance();
+    public static AuthenticationController getInstance(CoreController coreController) {
+        AuthenticationController authenticationService = INSTANCE_REF.get();
+        if (authenticationService == null) {
+            authenticationService = new AuthenticationController(coreController);
+            INSTANCE_REF.set(authenticationService);
+        }
+
+        return authenticationService;
     }
 
     /**
      * {@inheritDoc}
      */
+    @Nullable
     @Override
-    public SmartCredentialsApiResponse<AuthenticationService> getAuthenticationService() {
-        ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "getAuthenticationService");
+    public SmartCredentialsApiResponse<String> getUserInfoEndpointUri() {
+        ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "getUserInfoEndpointUri");
+
         if (mCoreController.isSecurityCompromised()) {
             mCoreController.handleSecurityCompromised();
             return new SmartCredentialsResponse<>(new RootedThrowable());
@@ -55,7 +125,398 @@ public class AuthenticationController implements AuthenticationApi {
             return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
         }
 
-        AuthenticationService authService = (AuthenticationService) getAuthenticationTool();
-        return new SmartCredentialsResponse<>(authService);
+        Uri userInfoEndpointUri = mConfiguration.getUserInfoEndpointUri();
+        if (userInfoEndpointUri != null) {
+            return new SmartCredentialsResponse<>(userInfoEndpointUri.toString());
+        }
+
+        AuthorizationServiceConfiguration authServiceConfig;
+        AuthorizationServiceDiscovery discoveryDoc;
+
+        if ((authServiceConfig =
+                mAuthStateManager.getCurrent().getAuthorizationServiceConfiguration()) != null
+                && (discoveryDoc = authServiceConfig.discoveryDoc) != null
+                && (userInfoEndpointUri = discoveryDoc.getUserinfoEndpoint()) != null) {
+            return new SmartCredentialsResponse<>(userInfoEndpointUri.toString());
+        }
+
+        return new SmartCredentialsResponse<>(null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SmartCredentialsApiResponse<Boolean> initialize(Context context,
+                                                           String identityProviderId,
+                                                           int authConfigFileResId,
+                                                           int customTabBarColor,
+                                                           AuthenticationServiceInitListener listener) {
+        ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "initialize");
+
+        if (mCoreController.isSecurityCompromised()) {
+            mCoreController.handleSecurityCompromised();
+            return new SmartCredentialsResponse<>(new RootedThrowable());
+        }
+
+        if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.AUTHENTICATION)) {
+            String errorMessage = SmartCredentialsFeatureSet.AUTHENTICATION.getNotSupportedDesc();
+            return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
+        }
+
+        if (!browserExists(context)) {
+            listener.onFailed(AuthenticationError.NO_INSTALLED_BROWSERS);
+            return new SmartCredentialsResponse<>(false);
+        }
+
+        SharedPreferences prefs = context.getSharedPreferences(CONFIG_PREFS_NAME, Context.MODE_PRIVATE);
+        prefs.edit().putString(KEY_IDENTITY_PROVIDER_ID, identityProviderId).apply();
+        prefs.edit().putInt(KEY_AUTH_CONFIG_FILE_ID, authConfigFileResId).apply();
+        mCustomTabColor = customTabBarColor;
+        mAuthInitListener = new WeakReference<>(listener);
+        if (mExecutor == null || mExecutor.isShutdown()) {
+            mExecutor = Executors.newSingleThreadExecutor();
+        }
+        mExecutor.submit(() -> doInit(context, identityProviderId, authConfigFileResId));
+        return new SmartCredentialsResponse<>(true);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SmartCredentialsApiResponse<Boolean> login(Context context, Intent completionIntent, Intent cancelIntent) {
+        ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "login");
+
+        if (mCoreController.isSecurityCompromised()) {
+            mCoreController.handleSecurityCompromised();
+            return new SmartCredentialsResponse<>(new RootedThrowable());
+        }
+
+        if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.AUTHENTICATION)) {
+            String errorMessage = SmartCredentialsFeatureSet.AUTHENTICATION.getNotSupportedDesc();
+            return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
+        }
+
+        if (mConfiguration.hasConfigurationChanges()) {
+            ApiLoggerResolver.logError(TAG, "Could not start login. Configuration has changed");
+            return new SmartCredentialsResponse<>(false);
+        }
+        if (mAuthStateManager.getCurrent().getAuthorizationServiceConfiguration() == null) {
+            ApiLoggerResolver.logError(TAG, "AuthenticationController must be " +
+                    "initialized first. Login aborted");
+            return new SmartCredentialsResponse<>(false);
+        }
+
+        SharedPreferences prefs = context.getSharedPreferences(CONFIG_PREFS_NAME, Context.MODE_PRIVATE);
+
+        saveIntentEndpointsToPrefs(prefs, completionIntent, cancelIntent);
+
+        PendingIntent intermediateIntent = AuthenticationTradeActivity
+                .createStartIntent(context.getApplicationContext());
+
+        PendingIntent cancelPendingIntent = PendingIntent.getActivity(context, 0, cancelIntent, 0);
+        mExecutor.submit(() -> doLogin(intermediateIntent, cancelPendingIntent));
+        return new SmartCredentialsResponse<>(true);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SmartCredentialsApiResponse<Boolean> performActionWithFreshTokens(OnFreshTokensRetrievedListener listener) {
+        ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "performActionWithFreshTokens");
+
+        if (mCoreController.isSecurityCompromised()) {
+            mCoreController.handleSecurityCompromised();
+            return new SmartCredentialsResponse<>(new RootedThrowable());
+        }
+
+        if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.AUTHENTICATION)) {
+            String errorMessage = SmartCredentialsFeatureSet.AUTHENTICATION.getNotSupportedDesc();
+            return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
+        }
+
+        mAuthStateManager.getCurrent().performActionWithFreshTokens(
+                mAuthService.get(),
+                (accessToken, idToken, ex) -> listener
+                        .onRefreshComplete(accessToken, idToken, Converter.convert(ex)));
+        return new SmartCredentialsResponse<>(true);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SmartCredentialsApiResponse<Boolean> logOut() {
+        ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "logOut");
+
+        if (mCoreController.isSecurityCompromised()) {
+            mCoreController.handleSecurityCompromised();
+            return new SmartCredentialsResponse<>(new RootedThrowable());
+        }
+
+        if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.AUTHENTICATION)) {
+            String errorMessage = SmartCredentialsFeatureSet.AUTHENTICATION.getNotSupportedDesc();
+            return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
+        }
+
+        AuthState currentState = mAuthStateManager.getCurrent();
+        AuthState clearState = new AuthState(currentState.getAuthorizationServiceConfiguration());
+        if (currentState.getLastRegistrationResponse() != null) {
+            clearState.update(currentState.getLastRegistrationResponse());
+        }
+
+        mAuthStateManager.replace(clearState);
+        return new SmartCredentialsResponse<>(true);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SmartCredentialsApiResponse<Boolean> isUserLoggedIn() {
+        ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "isUserLoggedIn");
+
+        if (mCoreController.isSecurityCompromised()) {
+            mCoreController.handleSecurityCompromised();
+            return new SmartCredentialsResponse<>(new RootedThrowable());
+        }
+
+        if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.AUTHENTICATION)) {
+            String errorMessage = SmartCredentialsFeatureSet.AUTHENTICATION.getNotSupportedDesc();
+            return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
+        }
+
+        return new SmartCredentialsResponse<>(mAuthStateManager.getCurrent().isAuthorized()
+                && !mConfiguration.hasConfigurationChanges()
+                && mAuthStateManager.getCurrent().getAuthorizationServiceConfiguration() != null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SmartCredentialsApiResponse<Boolean> refreshAccessToken(TokenRefreshListener listener) {
+        ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "refreshAccessToken");
+
+        if (mCoreController.isSecurityCompromised()) {
+            mCoreController.handleSecurityCompromised();
+            return new SmartCredentialsResponse<>(new RootedThrowable());
+        }
+
+        if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.AUTHENTICATION)) {
+            String errorMessage = SmartCredentialsFeatureSet.AUTHENTICATION.getNotSupportedDesc();
+            return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
+        }
+
+        if (mAuthStateManager.getCurrent().getRefreshToken() == null) {
+            listener.onFailed(AuthenticationError.ERROR_NULL_REFRESH_TOKEN);
+            return new SmartCredentialsResponse<>(false);
+        }
+
+        ClientAuthentication clientAuthentication;
+        try {
+            clientAuthentication = mAuthStateManager.getCurrent().getClientAuthentication();
+        } catch (ClientAuthentication.UnsupportedAuthenticationMethod unsupportedAuthenticationMethod) {
+            listener.onFailed(AuthenticationError.UNSUPPORTED_CLIENT_AUTH);
+            return new SmartCredentialsResponse<>(false);
+        }
+
+        mAuthService.get().performTokenRequest(
+                mAuthStateManager.getCurrent().createTokenRefreshRequest(),
+                clientAuthentication,
+                (response, exception) -> {
+                    mAuthStateManager.updateAfterTokenResponse(response, exception);
+                    SmartCredentialsAuthenticationTokenResponse tokenResponse = Converter.convert(response);
+                    listener.onTokenRequestCompleted(tokenResponse, Converter.convert(exception));
+                });
+        return new SmartCredentialsResponse<>(true);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SmartCredentialsApiResponse<Boolean> destroy() {
+        ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "destroy");
+
+        if (mCoreController.isSecurityCompromised()) {
+            mCoreController.handleSecurityCompromised();
+            return new SmartCredentialsResponse<>(new RootedThrowable());
+        }
+
+        if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.AUTHENTICATION)) {
+            String errorMessage = SmartCredentialsFeatureSet.AUTHENTICATION.getNotSupportedDesc();
+            return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
+        }
+
+        if (mAuthService.get() != null) {
+            mAuthService.get().dispose();
+            mAuthService.set(null);
+        }
+        mExecutor.shutdownNow();
+        return new SmartCredentialsResponse<>(true);
+    }
+
+    private void doInit(Context context, String identityProviderId, int authConfigFileResId) {
+        mAuthStateManager = AuthStateManager.getInstance(context, identityProviderId);
+        mConfiguration = AuthClientConfiguration.getInstance(context, authConfigFileResId, identityProviderId);
+        recreateAuthService(context);
+
+        if (mConfiguration.hasConfigurationChanges()) {
+            mAuthStateManager.replace(new AuthState());
+            if (!mConfiguration.isValid()) {
+                ApiLoggerResolver.logError(TAG, mConfiguration.getConfigError());
+                if (mAuthInitListener.get() != null) {
+                    mAuthInitListener.get().onFailed(AuthenticationError.INVALID_DISCOVERY_DOCUMENT);
+                }
+                return;
+            }
+            mConfiguration.acceptConfiguration();
+        }
+
+        if (mAuthStateManager.getCurrent().getAuthorizationServiceConfiguration() != null) {
+            initializeClient();
+            return;
+        }
+
+        if (mConfiguration.getDiscoveryUri() == null) {
+            ApiLoggerResolver.logInfo("Creating auth config from resources");
+            AuthorizationServiceConfiguration configuration = new AuthorizationServiceConfiguration(
+                    mConfiguration.getAuthEndpointUri(),
+                    mConfiguration.getTokenEndpointUri(),
+                    mConfiguration.getRegistrationEndpointUri());
+
+            mAuthStateManager.replace(new AuthState(configuration));
+            initializeClient();
+            return;
+        }
+
+        AuthorizationServiceConfiguration.fetchFromUrl(
+                mConfiguration.getDiscoveryUri(),
+                this::handleConfigurationRetrievalResult);
+    }
+
+    private void createAuthRequest() {
+        AuthorizationRequest.Builder authRequestBuilder =
+                new AuthorizationRequest.Builder(
+                        mAuthStateManager.getCurrent().getAuthorizationServiceConfiguration(),
+                        mClientId.get(),
+                        ResponseTypeValues.CODE,
+                        mConfiguration.getRedirectUri())
+                        .setScope(mConfiguration.getScope());
+
+        mAuthRequest.set(authRequestBuilder.build());
+        if (mAuthInitListener.get() != null) {
+            mAuthInitListener.get().onSuccess();
+        }
+    }
+
+    private void saveIntentEndpointsToPrefs(final SharedPreferences prefs, final Intent completionIntent,
+                                            final Intent cancelIntent) {
+        prefs.edit().putString(KEY_COMPLETE_INTENT_CLASS, completionIntent.getComponent().getClassName()).apply();
+        prefs.edit().putString(KEY_CANCEL_INTENT_CLASS, cancelIntent.getComponent().getClassName()).apply();
+
+        final Bundle completionExtras = completionIntent.getExtras();
+        if (completionExtras != null) {
+            final String encodedExtras = BundleTransformer.encodeToString(completionExtras);
+            prefs.edit().putString(KEY_COMPLETE_INTENT_EXTRAS, encodedExtras).apply();
+        }
+
+        final Bundle cancelExtras = completionIntent.getExtras();
+        if (cancelExtras != null) {
+            final String encodedExtras = BundleTransformer.encodeToString(cancelExtras);
+            prefs.edit().putString(KEY_CANCEL_INTENT_EXTRAS, encodedExtras).apply();
+        }
+    }
+
+    private void recreateAuthService(Context context) {
+        if (mAuthService.get() != null) {
+            mAuthService.get().dispose();
+            mAuthService.set(null);
+        }
+
+        mAuthService.set(new AuthorizationService(context, AppAuthConfiguration.DEFAULT));
+        mAuthRequest.set(null);
+        mAuthIntent.set(null);
+    }
+
+    private void doLogin(PendingIntent completionIntent, PendingIntent cancelIntent) {
+        AuthorizationRequest authRequest = mAuthRequest.get();
+        warmUpBrowser(authRequest.toUri());
+        mAuthService.get().performAuthorizationRequest(
+                authRequest,
+                completionIntent,
+                cancelIntent,
+                mAuthIntent.get());
+    }
+
+    private void handleConfigurationRetrievalResult(
+            AuthorizationServiceConfiguration authServiceConfiguration,
+            AuthorizationException ex) {
+        if (authServiceConfiguration == null) {
+            if (mAuthInitListener.get() != null) {
+                mAuthInitListener.get()
+                        .onFailed(AuthenticationError.ERROR_RETRIEVING_DISCOVERY_DOCUMENT);
+            }
+            return;
+        }
+
+        mAuthStateManager.replace(new AuthState(authServiceConfiguration));
+        mExecutor.submit(this::initializeClient);
+    }
+
+    private void warmUpBrowser(Uri uri) {
+        CustomTabsIntent.Builder builder = mAuthService.get().createCustomTabsIntentBuilder(uri);
+        builder.setToolbarColor(mCustomTabColor);
+        mAuthIntent.set(builder.build());
+    }
+
+    private void handleRegistrationResponse(RegistrationResponse registrationResponse,
+                                            AuthorizationException ex) {
+        mAuthStateManager.updateAfterRegistration(registrationResponse, ex);
+        if (registrationResponse == null) {
+            if (mAuthInitListener.get() != null) {
+                mAuthInitListener.get().onFailed(AuthenticationError.DYNAMIC_REGISTRATION_FAILED);
+            }
+            return;
+        }
+
+        mClientId.set(registrationResponse.clientId);
+        createAuthRequest();
+    }
+
+    private void initializeClient() {
+        if (mConfiguration.getClientId() != null) {
+            ApiLoggerResolver.logInfo("Using static client ID: " + mConfiguration.getClientId());
+            mClientId.set(mConfiguration.getClientId());
+            createAuthRequest();
+            return;
+        }
+
+        RegistrationResponse lastResponse =
+                mAuthStateManager.getCurrent().getLastRegistrationResponse();
+        if (lastResponse != null) {
+            ApiLoggerResolver.logInfo("Using dynamic client ID: " + lastResponse.clientId);
+            mClientId.set(lastResponse.clientId);
+            createAuthRequest();
+            return;
+        }
+
+        RegistrationRequest registrationRequest =
+                new RegistrationRequest.Builder(
+                        mAuthStateManager.getCurrent().getAuthorizationServiceConfiguration(),
+                        Collections.singletonList(mConfiguration.getRedirectUri()))
+                        .setTokenEndpointAuthenticationMethod(ClientSecretBasic.NAME)
+                        .build();
+
+        mAuthService.get().performRegistrationRequest(
+                registrationRequest,
+                this::handleRegistrationResponse);
+    }
+
+    private boolean browserExists(Context context) {
+        return !BrowserSelector.getAllBrowsers(context).isEmpty();
     }
 }

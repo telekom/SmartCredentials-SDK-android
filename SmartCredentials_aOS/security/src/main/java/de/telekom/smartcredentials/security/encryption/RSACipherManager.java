@@ -17,39 +17,50 @@
 package de.telekom.smartcredentials.security.encryption;
 
 import android.content.Context;
+import android.security.KeyPairGeneratorSpec;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
+import java.security.KeyPairGenerator;
 import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.Calendar;
 
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
+import javax.security.auth.x500.X500Principal;
 
 import de.telekom.smartcredentials.core.exceptions.EncryptionException;
-import de.telekom.smartcredentials.security.keystore.KeyStoreManager;
 import de.telekom.smartcredentials.core.security.KeyStoreManagerException;
+import de.telekom.smartcredentials.security.keystore.KeyStoreManager;
 import de.telekom.smartcredentials.security.utils.Constants;
 
 import static de.telekom.smartcredentials.security.encryption.StreamConverter.append;
 import static de.telekom.smartcredentials.security.encryption.StreamConverter.getByteArrayInputStream;
 import static de.telekom.smartcredentials.security.encryption.StreamConverter.getOutputStreamBytes;
+import static de.telekom.smartcredentials.security.utils.Constants.ANDROID_KEY_STORE;
+import static de.telekom.smartcredentials.security.utils.Constants.KEY_ALGORITHM_RSA;
 
-public class RSACipherManager {
+public class RSACipherManager extends CipherManager {
 
-    private static final String CIPHER_ALGORITHM_MODE_EBC = "ECB";
+    private static final String CIPHER_ALGORITHM_MODE_ECB = "ECB";
     private static final String CIPHER_ALGORITHM_PADDING_PKCS1 = "PKCS1Padding";
     private static final String CIPHER_ALGORITHM = Constants.KEY_ALGORITHM_RSA + "/"
-            + CIPHER_ALGORITHM_MODE_EBC + "/" + CIPHER_ALGORITHM_PADDING_PKCS1;
+            + CIPHER_ALGORITHM_MODE_ECB + "/" + CIPHER_ALGORITHM_PADDING_PKCS1;
+    private static final String X500_NAME = "CN=Sample Name, O=Android Authority";
 
     private final Context mContext;
-    private final KeyPairGeneratorWrapper mKeyPairGeneratorWrapper;
+    private final KeyStoreManager mKeyStoreManager;
 
-    public RSACipherManager(Context context, KeyPairGeneratorWrapper keyPairGeneratorWrapper) {
+    public RSACipherManager(Context context, String appAlias) {
+        super(appAlias);
         mContext = context;
-        mKeyPairGeneratorWrapper = keyPairGeneratorWrapper;
+        mKeyStoreManager = new KeyStoreManager();
     }
 
     SmartCredentialsCipherWrapper getEncryptionCipherWrapper(String metaAlias) throws KeyStoreManagerException, EncryptionException {
@@ -60,15 +71,13 @@ public class RSACipherManager {
     }
 
     PublicKey getKeyStorePrivateEntryPublicKey(String metaAlias) throws KeyStoreManagerException, EncryptionException {
-        if (!KeyStoreManager.getInstance().checkKeyStoreContainsAlias(buildAlias(metaAlias))) {
-            mKeyPairGeneratorWrapper.generateEncryptionKeyPairWithRSA(mContext, buildAlias(metaAlias));
+        if (!mKeyStoreManager.checkKeyStoreContainsAlias(buildAlias(metaAlias))) {
+            generateEncryptionKeyPairWithRSA(mContext, buildAlias(metaAlias));
         }
 
-        if (KeyStoreManager.getInstance() != null) {
-            KeyStore.PrivateKeyEntry privateKeyEntry = getKeyStorePrivateEntry(buildAlias(metaAlias));
-            if (privateKeyEntry != null && privateKeyEntry.getCertificate() != null && privateKeyEntry.getCertificate().getPublicKey() != null) {
-                return privateKeyEntry.getCertificate().getPublicKey();
-            }
+        KeyStore.PrivateKeyEntry privateKeyEntry = getKeyStorePrivateEntry(buildAlias(metaAlias));
+        if (privateKeyEntry != null && privateKeyEntry.getCertificate() != null && privateKeyEntry.getCertificate().getPublicKey() != null) {
+            return privateKeyEntry.getCertificate().getPublicKey();
         }
         throw new KeyStoreManagerException("Could not get public key.");
     }
@@ -90,14 +99,8 @@ public class RSACipherManager {
         return multiBlockBytes;
     }
 
-    private String buildAlias(String metaAlias) {
-        return Constants.KEY_ALGORITHM_RSA + mKeyPairGeneratorWrapper.getAlias() + metaAlias;
-    }
-
     private KeyStore.PrivateKeyEntry getKeyStorePrivateEntry(String alias) throws KeyStoreManagerException {
-        return KeyStoreManager
-                .getInstance()
-                .getPrivateKeyEntry(alias);
+        return mKeyStoreManager.getPrivateKeyEntry(alias);
     }
 
     private byte[] getBlockWithAppendedBytes(byte[] blockBytesToAppendTo, byte[] initialBytes,
@@ -121,12 +124,40 @@ public class RSACipherManager {
     }
 
     private PrivateKey getKeyStorePrivateEntryPrivateKey(String metaAlias) throws KeyStoreManagerException {
-        if (KeyStoreManager.getInstance() != null) {
-            KeyStore.PrivateKeyEntry privateKeyEntry = getKeyStorePrivateEntry(buildAlias(metaAlias));
-            if (privateKeyEntry != null && privateKeyEntry.getPrivateKey() != null) {
-                return privateKeyEntry.getPrivateKey();
-            }
+        KeyStore.PrivateKeyEntry privateKeyEntry = getKeyStorePrivateEntry(buildAlias(metaAlias));
+        if (privateKeyEntry != null && privateKeyEntry.getPrivateKey() != null) {
+            return privateKeyEntry.getPrivateKey();
         }
         throw new KeyStoreManagerException("Could not get private key.");
+    }
+
+    private void generateEncryptionKeyPairWithRSA(Context context, String metaAlias) throws EncryptionException {
+        try {
+            KeyPairGeneratorSpec spec = generateKeyPairGeneratorSpec(context, metaAlias);
+            KeyPairGenerator generator = KeyPairGenerator.getInstance(KEY_ALGORITHM_RSA, ANDROID_KEY_STORE);
+            generator.initialize(spec);
+            generator.generateKeyPair();
+        } catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException e) {
+            throw new EncryptionException(e);
+        }
+    }
+
+    private KeyPairGeneratorSpec generateKeyPairGeneratorSpec(Context context, String metaAlias) {
+        Calendar start = Calendar.getInstance();
+        Calendar end = Calendar.getInstance();
+        end.add(Calendar.YEAR, 1);
+
+        return new KeyPairGeneratorSpec.Builder(context)
+                .setAlias(metaAlias)
+                .setSubject(new X500Principal(X500_NAME))
+                .setSerialNumber(BigInteger.ONE)
+                .setStartDate(start.getTime())
+                .setEndDate(end.getTime())
+                .build();
+    }
+
+    @Override
+    String getAlgorithmAlias() {
+        return Constants.KEY_ALGORITHM_RSA;
     }
 }

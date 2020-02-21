@@ -20,6 +20,7 @@ import android.text.TextUtils;
 import android.util.Base64;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -33,14 +34,15 @@ import de.telekom.smartcredentials.core.exceptions.EncryptionException;
 import de.telekom.smartcredentials.core.exceptions.InvalidAlgorithmException;
 import de.telekom.smartcredentials.core.security.KeyStoreManagerException;
 import de.telekom.smartcredentials.core.security.KeyStoreProviderException;
+import de.telekom.smartcredentials.security.repositories.RepositoryAliasNative;
 
-import static de.telekom.smartcredentials.security.encryption.AESCipherManager.BASE64_FLAG;
 import static de.telekom.smartcredentials.core.security.EncryptionError.DECRYPTION_EXCEPTION_TEXT;
 import static de.telekom.smartcredentials.core.security.EncryptionError.ENCRYPTION_EXCEPTION_TEXT;
+import static de.telekom.smartcredentials.security.encryption.AESCipherManager.BASE64_FLAG;
 
 public class Base64EncryptionManagerAES implements EncryptionManager {
 
-    static final String BASE4_CHAR_SET = "UTF-8";
+    static final String BASE64_CHAR_SET = "UTF-8";
 
     static final String IV_SEPARATOR = "cipherIV=";
 
@@ -53,21 +55,13 @@ public class Base64EncryptionManagerAES implements EncryptionManager {
     }
 
     @Override
-    public String encrypt(String toEncrypt, String metaAlias) throws EncryptionException {
+    public String encrypt(String toEncrypt) throws EncryptionException {
         if (TextUtils.isEmpty(toEncrypt)) {
             return toEncrypt;
         }
 
         try {
-            AESCipherManager.AESCipher aesCipher = mAESCipherManager.obtainEncryptionCipher(metaAlias);
-
-            String encodedIV = new String(Base64.encode(aesCipher.getIV(), BASE64_FLAG), Charset.defaultCharset());
-            byte[] cipherTextFinalBytes = aesCipher.getFinalBytes(toEncrypt.getBytes(BASE4_CHAR_SET));
-
-            return new String(Base64.encode(cipherTextFinalBytes, BASE64_FLAG), Charset.defaultCharset())
-                    + IV_SEPARATOR
-                    + encodedIV;
-
+            return encrypt(toEncrypt, RepositoryAliasNative.getAliasSensitive());
         } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException
                 | IOException | KeyStoreManagerException | KeyStoreProviderException
                 | BadPaddingException | IllegalBlockSizeException e) {
@@ -76,31 +70,66 @@ public class Base64EncryptionManagerAES implements EncryptionManager {
     }
 
     @Override
-    public String decrypt(String encryptedText, String metaAlias) throws EncryptionException {
+    public String encrypt(String toEncrypt, boolean isSensitive) throws EncryptionException {
+        if (TextUtils.isEmpty(toEncrypt)) {
+            return toEncrypt;
+        }
+
+        try {
+            return encrypt(toEncrypt, isSensitive ? RepositoryAliasNative.getAliasSensitive() :
+                    RepositoryAliasNative.getAliasNonSensitive());
+        } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException
+                | IOException | KeyStoreManagerException | KeyStoreProviderException
+                | BadPaddingException | IllegalBlockSizeException e) {
+            throw new EncryptionException(ENCRYPTION_EXCEPTION_TEXT + e.getMessage(), e);
+        }
+    }
+
+    private String encrypt(String toEncrypt, String repositoryAlias) throws NoSuchAlgorithmException, NoSuchPaddingException, KeyStoreProviderException, KeyStoreManagerException, InvalidKeyException, UnsupportedEncodingException, BadPaddingException, IllegalBlockSizeException {
+        AESCipherManager.AESCipher aesCipher = mAESCipherManager.obtainEncryptionCipher(repositoryAlias);
+
+        String encodedIV = new String(Base64.encode(aesCipher.getIV(), BASE64_FLAG), Charset.defaultCharset());
+        byte[] cipherTextFinalBytes = aesCipher.getFinalBytes(toEncrypt.getBytes(BASE64_CHAR_SET));
+
+        return new String(Base64.encode(cipherTextFinalBytes, BASE64_FLAG), Charset.defaultCharset())
+                + IV_SEPARATOR
+                + encodedIV;
+    }
+
+    @Override
+    public String decrypt(String encryptedText) throws EncryptionException {
         if (TextUtils.isEmpty(encryptedText)) {
             return encryptedText;
         }
 
         try {
-            String[] textWithIV = encryptedText.split(IV_SEPARATOR);
-            String iv = textWithIV[textWithIV.length - 1];
-
-            if (textWithIV.length < 2) {
-                throw new InvalidAlgorithmException(DECRYPTION_EXCEPTION_TEXT + "\n " + MISSING_IV_MESSAGE);
+            return decrypt(encryptedText, RepositoryAliasNative.getAliasSensitive());
+        } catch (NoSuchAlgorithmException | BadPaddingException | IllegalBlockSizeException | InvalidAlgorithmParameterException | KeyStoreProviderException | InvalidKeyException | KeyStoreManagerException | NoSuchPaddingException | UnsupportedEncodingException e) {
+            try {
+                return decrypt(encryptedText, RepositoryAliasNative.getAliasNonSensitive());
+            } catch (UnsupportedEncodingException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException | InvalidAlgorithmParameterException | NoSuchAlgorithmException | KeyStoreManagerException | InvalidKeyException | KeyStoreProviderException ex) {
+                throw new EncryptionException(DECRYPTION_EXCEPTION_TEXT + e.getMessage(), e);
             }
-
-            String textToDecrypt = encryptedText
-                    .replace(IV_SEPARATOR, "")
-                    .replace(iv, "");
-
-            AESCipherManager.AESCipher aesCipher = mAESCipherManager.obtainDecryptionCypher(iv, metaAlias);
-            byte[] cipherText = Base64.decode(textToDecrypt.getBytes(BASE4_CHAR_SET), BASE64_FLAG);
-
-            return new String(aesCipher.getFinalBytes(cipherText), BASE4_CHAR_SET);
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | IOException | KeyStoreManagerException
-                | InvalidKeyException | KeyStoreProviderException | InvalidAlgorithmParameterException
-                | IllegalBlockSizeException | BadPaddingException e) {
-            throw new EncryptionException(DECRYPTION_EXCEPTION_TEXT + e.getMessage(), e);
         }
+    }
+
+    private String decrypt(String encryptedText, String repositoryAlias) throws InvalidAlgorithmException, UnsupportedEncodingException, BadPaddingException, IllegalBlockSizeException, NoSuchPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, KeyStoreManagerException, InvalidKeyException, KeyStoreProviderException {
+        String[] textWithIV = encryptedText.split(IV_SEPARATOR);
+        if (textWithIV.length < 2) {
+            throw new InvalidAlgorithmException(DECRYPTION_EXCEPTION_TEXT + "\n " + MISSING_IV_MESSAGE);
+        }
+
+        // text to be decrypted process
+        String textToDecrypt = textWithIV[0]
+                .replace("\n", "");
+        byte[] bytesToDecrypt = textToDecrypt.getBytes(BASE64_CHAR_SET);
+
+        // IV process
+        String iv = textWithIV[1].replace("\n", "");
+
+        AESCipherManager.AESCipher aesCipher = mAESCipherManager.obtainDecryptionCypher(iv, repositoryAlias);
+        byte[] cipherText = Base64.decode(bytesToDecrypt, BASE64_FLAG);
+        byte[] bytesDecrypted = aesCipher.getFinalBytes(cipherText);
+        return new String(bytesDecrypted, BASE64_CHAR_SET);
     }
 }

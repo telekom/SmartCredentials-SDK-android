@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 
 import org.json.JSONException;
 
+import java.util.Collections;
 import java.util.List;
 
 import de.telekom.smartcredentials.core.api.StorageApi;
@@ -46,6 +47,7 @@ import de.telekom.smartcredentials.core.responses.FeatureNotSupportedThrowable;
 import de.telekom.smartcredentials.core.responses.RootedThrowable;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsResponse;
+import de.telekom.smartcredentials.core.storage.ItemNotFoundException;
 import de.telekom.smartcredentials.core.storage.SecurityCompromisedObserver;
 import de.telekom.smartcredentials.core.storage.TokenRequest;
 import de.telekom.smartcredentials.core.strategies.EncryptionStrategy;
@@ -53,6 +55,7 @@ import de.telekom.smartcredentials.storage.domain.converters.ModelConverter;
 import de.telekom.smartcredentials.storage.exceptions.RepositoryException;
 
 import static de.telekom.smartcredentials.core.controllers.CoreController.UID_EXCEPTION_MESSAGE;
+import static de.telekom.smartcredentials.core.model.ModelValidator.checkParamNotNull;
 import static de.telekom.smartcredentials.core.model.ModelValidator.getValidatedMetadata;
 
 public class StorageController implements StorageApi, SecurityCompromisedObserver {
@@ -89,7 +92,7 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
         validateItemDomainModel(itemDomainModel);
         ItemDomainMetadata metadata = getValidatedMetadata(itemDomainModel);
         if (metadata.isDataEncrypted()) {
-            itemDomainModel.encryptData(mEncryptionStrategy, mRepository.getAlias(metadata));
+            itemDomainModel.encryptData(mEncryptionStrategy, isSensitive(metadata));
         }
         return new SmartCredentialsResponse<>(mRepository.saveData(itemDomainModel));
     }
@@ -120,7 +123,7 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
     private int savePartiallyEncData(ItemDomainModel itemDomainModel) throws EncryptionException {
         ItemDomainMetadata metadata = getValidatedMetadata(itemDomainModel);
         if (metadata.isDataEncrypted()) {
-            itemDomainModel.partiallyEncrypt(mEncryptionStrategy, mRepository.getAlias(metadata));
+            itemDomainModel.partiallyEncrypt(mEncryptionStrategy, isSensitive(metadata));
         }
         return mRepository.saveData(itemDomainModel);
     }
@@ -132,7 +135,7 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
         validateItemDomainModel(itemDomainModel);
         ItemDomainMetadata metadata = getValidatedMetadata(itemDomainModel);
         if (metadata.isDataEncrypted()) {
-            itemDomainModel.encryptData(mEncryptionStrategy, mRepository.getAlias(metadata));
+            itemDomainModel.encryptData(mEncryptionStrategy, isSensitive(metadata));
         }
         return mRepository.updateItem(itemDomainModel);
     }
@@ -142,7 +145,7 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
         if (itemDomainModelList != null) {
             return decrypt(itemDomainModelList);
         }
-        return null;
+        return Collections.emptyList();
     }
 
     /**
@@ -162,21 +165,25 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
         }
 
         ItemDomainModel retrievedItemDomainModel = mRepository.retrieveFilteredItemSummaryByUniqueIdAndType(itemDomainModel);
+
         if (retrievedItemDomainModel != null) {
             return new SmartCredentialsResponse<>(decrypt(retrievedItemDomainModel));
         }
-        return null;
+        return new SmartCredentialsResponse<>(new ItemNotFoundException());
     }
 
     private ItemDomainModel retrieveItemDetailsByUniqueIdAndType(ItemDomainModel itemDomainModel) throws EncryptionException {
         ItemDomainModel retrievedItemDomainModel = mRepository.retrieveFilteredItemDetailsByUniqueIdAndType(itemDomainModel);
+
         if (retrievedItemDomainModel != null) {
             return decrypt(retrievedItemDomainModel);
         }
+
         return null;
     }
 
-    private int clearStorage() {
+    @SuppressWarnings("UnusedReturnValue")
+    public int clearStorage() {
         return mRepository.deleteAllData();
     }
 
@@ -184,7 +191,7 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
      * {@inheritDoc}
      */
     @Override
-    public SmartCredentialsApiResponse<TokenRequest> retrieveTokenRequest(ItemDomainModel itemDomainModel) throws EncryptionException {
+    public SmartCredentialsApiResponse<TokenRequest> retrieveTokenRequest(ItemDomainModel itemDomainModel) {
         ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "retrieveTokenRequest");
         if (mCoreController.isSecurityCompromised()) {
             mCoreController.handleSecurityCompromised();
@@ -198,7 +205,7 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
 
         itemDomainModel.setMetadata(itemDomainModel.getMetadata().setContentType(ContentType.SENSITIVE));
         ItemDomainModel encryptedDataItemDomainModel = mRepository.retrieveFilteredItemDetailsByUniqueIdAndType(itemDomainModel);
-        return new SmartCredentialsResponse<>(ModelConverter.toTokenRequest(encryptedDataItemDomainModel, mGson, mEncryptionStrategy, mRepository.getAlias(itemDomainModel.getMetadata())));
+        return new SmartCredentialsResponse<>(ModelConverter.toTokenRequest(encryptedDataItemDomainModel, mGson, mEncryptionStrategy, isSensitive(itemDomainModel.getMetadata())));
     }
 
     private List<ItemDomainModel> decrypt(List<ItemDomainModel> itemDomainModelList) throws EncryptionException {
@@ -206,9 +213,9 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
             ItemDomainMetadata metadata = getValidatedMetadata(item);
             if (metadata.isDataEncrypted()) {
                 try {
-                    item.decryptData(mEncryptionStrategy, mRepository.getAlias(metadata));
+                    item.decryptData(mEncryptionStrategy);
                 } catch (InvalidAlgorithmException exception) {
-                    item.decryptData(mEncryptionStrategy, mRepository.getAlias(metadata), EncryptionAlgorithm.RSA_2048);
+                    item.decryptData(mEncryptionStrategy, EncryptionAlgorithm.RSA_2048);
                     updateItem(new ItemDomainModel(item));
                 }
             }
@@ -219,9 +226,9 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
     private ItemDomainModel decrypt(ItemDomainModel itemDomainModel) throws EncryptionException {
         if (getValidatedMetadata(itemDomainModel).isDataEncrypted()) {
             try {
-                return itemDomainModel.decryptData(mEncryptionStrategy, mRepository.getAlias(itemDomainModel.getMetadata()));
+                return itemDomainModel.decryptData(mEncryptionStrategy);
             } catch (InvalidAlgorithmException ex) {
-                itemDomainModel.decryptData(mEncryptionStrategy, mRepository.getAlias(itemDomainModel.getMetadata()), EncryptionAlgorithm.RSA_2048);
+                itemDomainModel.decryptData(mEncryptionStrategy, EncryptionAlgorithm.RSA_2048);
                 updateItem(new ItemDomainModel(itemDomainModel));
                 return itemDomainModel;
             }
@@ -253,7 +260,12 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
 
         try {
             List<ItemDomainModel> filteredItems = retrieveItemsFilteredByType(smartCredentialsFilter.toItemDomainModel(mCoreController.getUserId()));
-            return new SmartCredentialsResponse<>(de.telekom.smartcredentials.core.converters.ModelConverter.toItemEnvelopeList(filteredItems));
+
+            if (filteredItems != null) {
+                return new SmartCredentialsResponse<>(de.telekom.smartcredentials.core.converters.ModelConverter.toItemEnvelopeList(filteredItems));
+            } else {
+                return new SmartCredentialsResponse<>(new ItemNotFoundException());
+            }
         } catch (DomainModelException e) {
             return new SmartCredentialsResponse<>(new EnvelopeException(EnvelopeExceptionReason.map(e.getMessage())));
         } catch (EnvelopeException | RepositoryException | JSONException | EncryptionException e) {
@@ -278,8 +290,13 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
         }
 
         try {
-            ItemDomainModel filteredItem = retrieveItemSummaryByUniqueIdAndType(smartCredentialsFilter.toItemDomainModel(mCoreController.getUserId())).getData();
-            return new SmartCredentialsResponse<>(de.telekom.smartcredentials.core.converters.ModelConverter.toItemEnvelope(filteredItem));
+            SmartCredentialsApiResponse<ItemDomainModel> response = retrieveItemSummaryByUniqueIdAndType(smartCredentialsFilter.toItemDomainModel(mCoreController.getUserId()));
+            if (response.isSuccessful()) {
+                ItemDomainModel filteredItem = response.getData();
+                return new SmartCredentialsResponse<>(de.telekom.smartcredentials.core.converters.ModelConverter.toItemEnvelope(filteredItem));
+            } else {
+                return new SmartCredentialsResponse<>(response.getError());
+            }
         } catch (DomainModelException e) {
             return new SmartCredentialsResponse<>(new EnvelopeException(EnvelopeExceptionReason.map(e.getMessage())));
         } catch (EnvelopeException | RepositoryException | JSONException | EncryptionException e) {
@@ -305,7 +322,13 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
 
         try {
             ItemDomainModel filteredItem = retrieveItemDetailsByUniqueIdAndType(smartCredentialsFilter.toItemDomainModel(mCoreController.getUserId()));
-            return new SmartCredentialsResponse<>(de.telekom.smartcredentials.core.converters.ModelConverter.toItemEnvelope(filteredItem));
+
+            if (filteredItem != null) {
+                return new SmartCredentialsResponse<>(de.telekom.smartcredentials.core.converters.ModelConverter.toItemEnvelope(filteredItem));
+            } else {
+                return new SmartCredentialsResponse<>(new ItemNotFoundException());
+            }
+
         } catch (DomainModelException e) {
             return new SmartCredentialsResponse<>(new EnvelopeException(EnvelopeExceptionReason.map(e.getMessage())));
         } catch (EnvelopeException | RepositoryException | JSONException | EncryptionException e) {
@@ -426,5 +449,10 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
 
     public void detach() {
         mCoreController.detach(this);
+    }
+
+    private boolean isSensitive(ItemDomainMetadata metadata) {
+        checkParamNotNull(metadata);
+        return metadata.getContentType() == ContentType.SENSITIVE;
     }
 }
