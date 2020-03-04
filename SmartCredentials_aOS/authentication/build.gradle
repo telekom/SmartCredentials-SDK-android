@@ -40,8 +40,6 @@ android {
     buildTypes {
         debug {
             minifyEnabled false
-            useProguard false
-            testCoverageEnabled false
         }
         release {
             minifyEnabled false
