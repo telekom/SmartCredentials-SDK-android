@@ -23,7 +23,7 @@ apply from: "../gradle/task/auto-version.gradle"
 
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
+    archiveClassifier = 'sources'
     include("**")
 }
 
