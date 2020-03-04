@@ -34,14 +34,11 @@ android {
     }
 
     buildTypes {
-        release {
-            minifyEnabled false
-            useProguard false
-        }
         debug {
             minifyEnabled false
-            useProguard false
-            testCoverageEnabled false
+        }
+        release {
+            minifyEnabled false
         }
     }
 
