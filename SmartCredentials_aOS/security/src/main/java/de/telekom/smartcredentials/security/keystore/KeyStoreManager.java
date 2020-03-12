@@ -23,9 +23,13 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableEntryException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.util.Collections;
+import java.util.List;
 
 import javax.crypto.SecretKey;
 
+import de.telekom.smartcredentials.core.exceptions.EncryptionException;
+import de.telekom.smartcredentials.core.security.EncryptionError;
 import de.telekom.smartcredentials.core.security.KeyStoreManagerException;
 
 import static de.telekom.smartcredentials.security.utils.Constants.ANDROID_KEY_STORE;
@@ -41,6 +45,15 @@ public class KeyStoreManager {
             return (KeyStore.PrivateKeyEntry) getKeyStore().getEntry(alias, null);
         } catch (NoSuchAlgorithmException | UnrecoverableEntryException | KeyStoreException e) {
             throw new KeyStoreManagerException(e);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public List<String> getKeyStoreAliases() throws EncryptionException {
+        try {
+            return Collections.list(getKeyStore().aliases());
+        } catch (KeyStoreException | KeyStoreManagerException e) {
+            throw new EncryptionException(EncryptionError.SECRET_KEYS_EXCEPTION_TEXT, e);
         }
     }
 
