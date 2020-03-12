@@ -43,10 +43,9 @@ import static de.telekom.smartcredentials.security.encryption.AESCipherManager.B
 public class Base64EncryptionManagerAES implements EncryptionManager {
 
     static final String BASE64_CHAR_SET = "UTF-8";
-
     static final String IV_SEPARATOR = "cipherIV=";
-
     private static final String MISSING_IV_MESSAGE = "IV not set in encrypted text";
+    private static final String TEMPORARY_REPOSITORY_ALIAS = "SmartCredentialsGeneratedKeyStore";
 
     private final AESCipherManager mAESCipherManager;
 
@@ -103,12 +102,18 @@ public class Base64EncryptionManagerAES implements EncryptionManager {
         }
 
         try {
-            return decrypt(encryptedText, RepositoryAliasNative.getAliasSensitive());
+            String sensitiveAlias = RepositoryAliasNative.getAliasSensitive();
+            return decrypt(encryptedText, sensitiveAlias);
         } catch (NoSuchAlgorithmException | BadPaddingException | IllegalBlockSizeException | InvalidAlgorithmParameterException | KeyStoreProviderException | InvalidKeyException | KeyStoreManagerException | NoSuchPaddingException | UnsupportedEncodingException e) {
             try {
-                return decrypt(encryptedText, RepositoryAliasNative.getAliasNonSensitive());
+                String nonSensitiveAlias = RepositoryAliasNative.getAliasNonSensitive();
+                return decrypt(encryptedText, nonSensitiveAlias);
             } catch (UnsupportedEncodingException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException | InvalidAlgorithmParameterException | NoSuchAlgorithmException | KeyStoreManagerException | InvalidKeyException | KeyStoreProviderException ex) {
-                throw new EncryptionException(DECRYPTION_EXCEPTION_TEXT + e.getMessage(), e);
+                try {
+                    return decrypt(encryptedText, TEMPORARY_REPOSITORY_ALIAS);
+                } catch (UnsupportedEncodingException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException | InvalidAlgorithmParameterException | NoSuchAlgorithmException | KeyStoreManagerException | InvalidKeyException | KeyStoreProviderException ex1) {
+                    throw new EncryptionException(DECRYPTION_EXCEPTION_TEXT + e.getMessage(), e);
+                }
             }
         }
     }

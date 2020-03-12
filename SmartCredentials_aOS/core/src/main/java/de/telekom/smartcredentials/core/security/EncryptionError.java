@@ -18,9 +18,11 @@ package de.telekom.smartcredentials.core.security;
 
 
 public class EncryptionError {
-    public static final String ENCRYPTION_EXCEPTION_TEXT = "Could not encrypt text.";
-    public static final String DECRYPTION_EXCEPTION_TEXT = "Could not decrypt text.";
-    public static final String ENCODING_EXCEPTION_TEXT = "Could not encode text.";
-    public static final String PUBLIC_KEY_EXCEPTION_TEXT = "Could get public key.";
+
+    static final String ENCODING_EXCEPTION_TEXT = "Could not encode text: ";
+    public static final String ENCRYPTION_EXCEPTION_TEXT = "Could not encrypt text: ";
+    public static final String DECRYPTION_EXCEPTION_TEXT = "Could not decrypt text: ";
+    public static final String PUBLIC_KEY_EXCEPTION_TEXT = "Could get public key: ";
+    public static final String SECRET_KEYS_EXCEPTION_TEXT = "Failed to retrieve secret keys.";
     public static final String ALGORITHM_NOT_SUPPORTED = "Selected algorithm is not supported on this version of OS.";
 }
