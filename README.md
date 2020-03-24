@@ -79,12 +79,28 @@ A core module need to be initialized, because all other modules are dependent to
 Each module should be instantiated using their own factory classes either in the components in which they are used or on the application level. After their work is done, their instance should be destroyed by calling the 'clear' method which can be found in each factory.
 
 Authentication Module
+
+Java Code Snippet
 ```
 SmartCredentialsAuthenticationFactory.initSmartCredentialsAuthenticationModule(coreApi);
 AuthenticationApi authenticationApi= SmartCredentialsAuthenticationFactory.getAuthenticationApi();
 //use the Authentication Api
 SmartCredentialsAuthenticationFactory.clear()
 ````
+
+App build.gradle
+```groovy
+android {
+
+    defaultConfig {
+
+        manifestPlaceholders = [appAuthRedirectScheme:"your.globally.unique.redirect.scheme"]
+
+    }
+
+ 
+}
+```
 Authorization Module
 ```
 SmartCredentialsAuthorizationFactory.initSmartCredentialsAuthorizationModule(context, coreApi, securityApi, storageApi);
