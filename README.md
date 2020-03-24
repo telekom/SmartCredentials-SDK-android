@@ -30,19 +30,27 @@ repositories {
 }
 ```
 
+Add this to the project's build.gradle
+
+```groovy
+project.ext {
+        smartCredentialsVersion = "6.1.1"
+    }
+```
+
 Add SmartCredentials dependency to your app gradle file.
 
 ```
-implementation("de.telekom.smartcredentials:core:x.y.z")
-implementation("de.telekom.smartcredentials:authentication:x.y.z")
-implementation("de.telekom.smartcredentials:authorization:x.y.z")
-implementation("de.telekom.smartcredentials:camera:$x.y.z")
-implementation("de.telekom.smartcredentials:documentscanner:x.y.z")
-implementation("de.telekom.smartcredentials:networking:x.y.z")
-implementation("de.telekom.smartcredentials:otp:x.y.z")
-implementation("de.telekom.smartcredentials:qrlogin:x.y.z")
-implementation("de.telekom.smartcredentials:security:x.y.z")
-implementation("de.telekom.smartcredentials:storage:x.y.z")
+implementation("de.telekom.smartcredentials:core:$smartCredentialsVersion")
+implementation("de.telekom.smartcredentials:authentication:$smartCredentialsVersion")
+implementation("de.telekom.smartcredentials:authorization:$smartCredentialsVersion")
+implementation("de.telekom.smartcredentials:camera:$$smartCredentialsVersion")
+implementation("de.telekom.smartcredentials:documentscanner:$smartCredentialsVersion")
+implementation("de.telekom.smartcredentials:networking:$smartCredentialsVersion")
+implementation("de.telekom.smartcredentials:otp:$smartCredentialsVersion")
+implementation("de.telekom.smartcredentials:qrlogin:$smartCredentialsVersion")
+implementation("de.telekom.smartcredentials:security:$smartCredentialsVersion")
+implementation("de.telekom.smartcredentials:storage:$smartCredentialsVersion")
 ```
 
 Sync gradle files. You should be able now to use all SmartCredentials features.
@@ -198,7 +206,7 @@ In order to implement your own module you have to follow the next steps:
 
 ### 1. Add Smart Credentials core module as a dependency:
 ```
-implementation("de.telekom.smartcredentials:core:x.y.z")
+implementation("de.telekom.smartcredentials:core:$smartCredentialsVersion")
 ```
 
 ### 2. Implement the API interface from core module
