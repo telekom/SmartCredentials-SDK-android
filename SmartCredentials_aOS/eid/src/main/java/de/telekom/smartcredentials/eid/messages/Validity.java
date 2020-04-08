@@ -46,4 +46,12 @@ public class Validity {
     public void setExpirationDate(String expirationDate) {
         this.mExpirationDate = expirationDate;
     }
+
+    @Override
+    public String toString() {
+        return "Validity{" +
+                "mEffectiveDate='" + mEffectiveDate + '\'' +
+                ", mExpirationDate='" + mExpirationDate + '\'' +
+                '}';
+    }
 }
