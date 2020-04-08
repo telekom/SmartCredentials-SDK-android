@@ -46,4 +46,12 @@ public class CertificateMessage extends SmartEidMessage {
     public void setValidity(Validity validity) {
         this.mValidity = validity;
     }
+
+    @Override
+    public String toString() {
+        return "CertificateMessage{" +
+                "mDescription=" + mDescription +
+                ", mValidity=" + mValidity +
+                '}';
+    }
 }
