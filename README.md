@@ -72,7 +72,7 @@ Each module should be instantiated using their own factory classes either in the
 
 Authentication Module
 ```
-SmartCredentialsAuthenticationFactory.initSmartCredentialsAuthenticationModule(coreApi);
+SmartCredentialsAuthenticationFactory.initSmartCredentialsAuthenticationModule(coreApi, storageApi);
 AuthenticationApi authenticationApi= SmartCredentialsAuthenticationFactory.getAuthenticationApi();
 //use the Authentication Api
 SmartCredentialsAuthenticationFactory.clear()
