@@ -16,9 +16,8 @@
 
 package de.telekom.smartcredentials.otp.otp.totp;
 
-import de.telekom.smartcredentials.core.model.token.TokenResponse;
-import de.telekom.smartcredentials.core.model.utils.Time;
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
+import de.telekom.smartcredentials.core.model.token.TokenResponse;
 import de.telekom.smartcredentials.core.otp.TOTPCallback;
 import de.telekom.smartcredentials.core.otp.TOTPHandler;
 import de.telekom.smartcredentials.otp.otp.OTPHandler;
@@ -63,7 +62,7 @@ public class TOTPHandlerImpl extends OTPHandler implements TOTPHandler {
     @Override
     protected void performNextStep() {
         if (generateNextOTP()) {
-            long remainingValidPeriod = Math.max(getExpirationTime() - Time.millisWithBuffer(), 0);
+            long remainingValidPeriod = Math.max(getExpirationTime() - System.currentTimeMillis(), 0);
             runOTPRunnable(remainingValidPeriod);
             ApiLoggerResolver.logInfo("Scheduled OTPGenerator to run in " + remainingValidPeriod + " milliseconds.");
         } else {

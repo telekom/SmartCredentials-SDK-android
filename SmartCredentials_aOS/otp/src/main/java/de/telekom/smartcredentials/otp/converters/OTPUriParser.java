@@ -30,7 +30,7 @@ public class OTPUriParser {
 
     static final String ISSUER_QUERY_PARAM_KEY = "issuer";
     static final String ALGORITHM_QUERY_PARAM_KEY = "algorithm";
-    static final String DEFAULT_ALGORITHM = "SHA256";
+    static final String DEFAULT_ALGORITHM = "SHA1";
     static final String DIGITS_QUERY_PARAM_KEY = "digits";
     static final String PERIOD_QUERY_PARAM_KEY = "period";
     static final int DEFAULT_PERIOD = 30;
