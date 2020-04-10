@@ -20,7 +20,6 @@ import com.google.gson.Gson;
 
 import de.telekom.smartcredentials.core.exceptions.EncryptionException;
 import de.telekom.smartcredentials.core.model.otp.OTPType;
-import de.telekom.smartcredentials.core.model.utils.Time;
 import de.telekom.smartcredentials.core.storage.TokenRequest;
 import de.telekom.smartcredentials.core.strategies.EncryptionStrategy;
 
@@ -57,7 +56,7 @@ public class SmartCredentialsTokenRequest implements TokenRequest {
     @Override
     public long getCounter() throws EncryptionException {
         if (getOtpType() == OTPType.TOTP) {
-            return Time.millisWithBuffer() / getValidityPeriodMillis();
+            return System.currentTimeMillis() / getValidityPeriodMillis();
         }
         return getToken().getCounter();
     }
@@ -65,12 +64,9 @@ public class SmartCredentialsTokenRequest implements TokenRequest {
     @Override
     public void setCounter(long counter) throws EncryptionException {
         getToken().setCounter(counter);
-
-
         Token token = mGson.fromJson(mEncryptionStrategy.decrypt(mEncryptedModel), Token.class);
         token = token == null ? new Token() : token;
         token.setCounter(counter);
-
         mEncryptedModel = mEncryptionStrategy.encrypt(mGson.toJson(token), mIsSensitive);
     }
 

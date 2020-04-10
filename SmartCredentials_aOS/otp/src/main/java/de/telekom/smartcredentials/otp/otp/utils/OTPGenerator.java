@@ -32,7 +32,7 @@ public class OTPGenerator {
 
     private static final int[] DIGITS_POWER = {1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000};
     private static final List<String> ACCEPTED_MAC_ALGORITHMS = Collections.unmodifiableList(
-            Arrays.asList(MacAlgorithm.SHA256, MacAlgorithm.SHA384, MacAlgorithm.SHA512));
+            Arrays.asList(MacAlgorithm.SHA1, MacAlgorithm.SHA256, MacAlgorithm.SHA384, MacAlgorithm.SHA512));
 
     private final SecurityApi mSecurityApi;
     private final TokenRequest mTokenRequest;
@@ -50,8 +50,7 @@ public class OTPGenerator {
 
     public String getOTP() throws Base32String.DecodingException, EncryptionException {
         long counter = mCounter;
-        ByteBuffer text = ByteBuffer.allocate(8);
-        text.putLong(counter);
+        ByteBuffer text = ByteBuffer.allocate(8).putLong(0, counter);
 
         String result = Integer.toString(computeOtp(text));
         while (result.length() < mTokenRequest.getOtpValueDigitsCount()) {

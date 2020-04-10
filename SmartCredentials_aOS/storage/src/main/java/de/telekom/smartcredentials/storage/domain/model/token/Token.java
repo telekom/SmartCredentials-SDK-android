@@ -27,7 +27,7 @@ public class Token {
 
     static final int DEFAULT_DIGITS = 6;
     static final int DEFAULT_COUNTER = 0;
-    static final String DEFAULT_ALGORITHM = "SHA256";
+    static final String DEFAULT_ALGORITHM = "SHA1";
     static final int DEFAULT_VALIDITY_PERIOD = 30;
     static final int DEFAULT_TRUNCATION_OFFSET = 16;
     static final long MILLIS_PER_SECOND = 1000;
