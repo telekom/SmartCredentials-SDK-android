@@ -22,6 +22,7 @@ import de.telekom.smartcredentials.authentication.controllers.AuthenticationCont
 import de.telekom.smartcredentials.authentication.di.ObjectGraphCreatorAuthentication;
 import de.telekom.smartcredentials.core.api.AuthenticationApi;
 import de.telekom.smartcredentials.core.api.CoreApi;
+import de.telekom.smartcredentials.core.api.StorageApi;
 import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsModuleSet;
 import de.telekom.smartcredentials.core.controllers.CoreController;
 import de.telekom.smartcredentials.core.exceptions.InvalidCoreApiException;
@@ -39,7 +40,8 @@ public class SmartCredentialsAuthenticationFactory {
 
     @NonNull
     @SuppressWarnings("unused")
-    public static synchronized AuthenticationApi initSmartCredentialsAuthenticationModule(@NonNull CoreApi coreApi) {
+    public static synchronized AuthenticationApi initSmartCredentialsAuthenticationModule(@NonNull CoreApi coreApi,
+                                                                                          @NonNull final StorageApi storageApi) {
         CoreController coreController;
 
         if (coreApi instanceof CoreController) {
@@ -47,7 +49,9 @@ public class SmartCredentialsAuthenticationFactory {
         } else {
             throw new InvalidCoreApiException(SmartCredentialsModuleSet.AUTHENTICATION_MODULE.getModuleName());
         }
-        sAuthenticationController = ObjectGraphCreatorAuthentication.getInstance().provideApiControllerAuthentication(coreController);
+        ObjectGraphCreatorAuthentication objectGraphCreatorAuthentication = ObjectGraphCreatorAuthentication.getInstance();
+        objectGraphCreatorAuthentication.init(storageApi);
+        sAuthenticationController = objectGraphCreatorAuthentication.provideApiControllerAuthentication(coreController);
         return sAuthenticationController;
     }
 
