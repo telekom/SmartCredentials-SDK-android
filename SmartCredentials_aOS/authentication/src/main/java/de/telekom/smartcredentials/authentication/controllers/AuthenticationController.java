@@ -49,10 +49,10 @@ import de.telekom.smartcredentials.authentication.AuthStateManager;
 import de.telekom.smartcredentials.authentication.AuthenticationStorageRepository;
 import de.telekom.smartcredentials.authentication.AuthenticationTradeActivity;
 import de.telekom.smartcredentials.authentication.converter.Converter;
+import de.telekom.smartcredentials.authentication.di.ObjectGraphCreatorAuthentication;
 import de.telekom.smartcredentials.authentication.model.SmartCredentialsAuthenticationTokenResponse;
 import de.telekom.smartcredentials.authentication.parser.BundleTransformer;
 import de.telekom.smartcredentials.core.api.AuthenticationApi;
-import de.telekom.smartcredentials.core.api.StorageApi;
 import de.telekom.smartcredentials.core.authentication.AuthenticationError;
 import de.telekom.smartcredentials.core.authentication.AuthenticationServiceInitListener;
 import de.telekom.smartcredentials.core.authentication.OnFreshTokensRetrievedListener;
@@ -92,17 +92,16 @@ public class AuthenticationController implements AuthenticationApi {
     private ExecutorService mExecutor;
     private CoreController mCoreController;
 
-    public AuthenticationController(CoreController coreController, StorageApi storageApi) {
+    public AuthenticationController(CoreController coreController) {
         mCoreController = coreController;
         mExecutor = Executors.newSingleThreadExecutor();
-        mAuthenticationStorageRepository = AuthenticationStorageRepository.getInstance();
-        mAuthenticationStorageRepository.init(storageApi);
+        mAuthenticationStorageRepository = ObjectGraphCreatorAuthentication.getInstance().provideAuthenticationStorageRepository();
     }
 
-    public static AuthenticationController getInstance(CoreController coreController, StorageApi storageApi) {
+    public static AuthenticationController getInstance(CoreController coreController) {
         AuthenticationController authenticationService = INSTANCE_REF.get();
         if (authenticationService == null) {
-            authenticationService = new AuthenticationController(coreController, storageApi);
+            authenticationService = new AuthenticationController(coreController);
             INSTANCE_REF.set(authenticationService);
         }
 
