@@ -24,8 +24,10 @@ public interface TOTPHandler {
      *
      * @param otpCallback {@link TOTPCallback} implementation whose methods will be used to
      *                    notify and return the generated HOTP value
+     * @param defaultMacAlgorithm {String value of mac algorithm that will be used in case there is no
+     *                            algorithm retrieved from the Otp QR code. Ex. "SHA256"}
      */
-    void startGeneratingTOTP(TOTPCallback otpCallback);
+    void startGeneratingTOTP(TOTPCallback otpCallback, String defaultMacAlgorithm);
 
     /**
      * Stops the generation of TOTP items.

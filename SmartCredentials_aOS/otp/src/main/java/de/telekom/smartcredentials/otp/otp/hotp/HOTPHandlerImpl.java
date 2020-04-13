@@ -27,9 +27,9 @@ public class HOTPHandlerImpl extends OTPHandler implements HOTPHandler {
     HOTPCallback mOTPCallback;
 
     @Override
-    public void generateHOTP(HOTPCallback otpCallback) {
+    public void generateHOTP(HOTPCallback otpCallback, String defaultMacAlgorithm) {
         mOTPCallback = otpCallback;
-        startGeneratingOTP(otpCallback);
+        startGeneratingOTP(otpCallback, defaultMacAlgorithm);
     }
 
     @Override
