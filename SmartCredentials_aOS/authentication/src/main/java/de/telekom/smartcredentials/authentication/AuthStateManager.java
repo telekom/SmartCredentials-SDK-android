@@ -30,6 +30,7 @@ import org.json.JSONException;
 
 import java.util.Objects;
 
+import de.telekom.smartcredentials.authentication.di.ObjectGraphCreatorAuthentication;
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
 
 /**
@@ -45,7 +46,7 @@ public class AuthStateManager {
 
     private AuthStateManager(String identityProviderId) {
         mProviderId = identityProviderId;
-        mAuthenticationStorageRepository = AuthenticationStorageRepository.getInstance();
+        mAuthenticationStorageRepository = ObjectGraphCreatorAuthentication.getInstance().provideAuthenticationStorageRepository();
     }
 
     public static AuthStateManager getInstance(@NonNull Context context, @NonNull String providerId) {

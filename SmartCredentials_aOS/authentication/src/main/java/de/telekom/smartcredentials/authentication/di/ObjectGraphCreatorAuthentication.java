@@ -18,6 +18,7 @@ package de.telekom.smartcredentials.authentication.di;
 
 import android.support.annotation.NonNull;
 
+import de.telekom.smartcredentials.authentication.AuthenticationStorageRepository;
 import de.telekom.smartcredentials.authentication.controllers.AuthenticationController;
 import de.telekom.smartcredentials.core.api.StorageApi;
 import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsModuleSet;
@@ -45,7 +46,7 @@ public class ObjectGraphCreatorAuthentication {
 
     @NonNull
     public AuthenticationController provideApiControllerAuthentication(CoreController coreController) {
-        return AuthenticationController.getInstance(coreController, getStorageApi());
+        return AuthenticationController.getInstance(coreController);
     }
 
     private StorageApi getStorageApi() {
@@ -54,6 +55,10 @@ public class ObjectGraphCreatorAuthentication {
                     + SmartCredentialsModuleSet.OTP_MODULE + " has not been initialized");
         }
         return mStorageApi;
+    }
+
+    public AuthenticationStorageRepository provideAuthenticationStorageRepository(){
+        return AuthenticationStorageRepository.getInstance(getStorageApi());
     }
 
     public static void destroy() {

@@ -33,6 +33,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 
+import de.telekom.smartcredentials.authentication.di.ObjectGraphCreatorAuthentication;
 import de.telekom.smartcredentials.authentication.exception.InvalidConfigurationException;
 import de.telekom.smartcredentials.authentication.parser.JsonParser;
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
@@ -79,7 +80,7 @@ public class AuthClientConfiguration {
         mPackageName = context.getPackageName();
         mPackageManager = context.getPackageManager();
         mIdentityProviderId = providerId;
-        mAuthenticationStorageRepository = AuthenticationStorageRepository.getInstance();
+        mAuthenticationStorageRepository = ObjectGraphCreatorAuthentication.getInstance().provideAuthenticationStorageRepository();
 
         InputStream configInputStream = context.getResources().openRawResource(authConfigResId);
         try {

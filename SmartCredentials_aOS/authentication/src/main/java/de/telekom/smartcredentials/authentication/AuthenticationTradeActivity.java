@@ -34,6 +34,7 @@ import net.openid.appauth.ClientAuthentication;
 import net.openid.appauth.TokenRequest;
 import net.openid.appauth.TokenResponse;
 
+import de.telekom.smartcredentials.authentication.di.ObjectGraphCreatorAuthentication;
 import de.telekom.smartcredentials.authentication.parser.BundleTransformer;
 import de.telekom.smartcredentials.core.logger.ApiLogger;
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
@@ -77,7 +78,7 @@ public class AuthenticationTradeActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAuthenticationStorageRepository = AuthenticationStorageRepository.getInstance();
+        mAuthenticationStorageRepository = ObjectGraphCreatorAuthentication.getInstance().provideAuthenticationStorageRepository();
         mAuthService = new AuthorizationService(this, AppAuthConfiguration.DEFAULT);
         extractPrefs();
         validateInputs();
