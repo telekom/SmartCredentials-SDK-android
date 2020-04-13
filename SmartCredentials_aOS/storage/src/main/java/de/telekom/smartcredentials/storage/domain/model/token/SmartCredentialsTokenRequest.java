@@ -81,8 +81,8 @@ public class SmartCredentialsTokenRequest implements TokenRequest {
     }
 
     @Override
-    public String getAlgorithm() throws EncryptionException {
-        return getToken().getAlgorithm();
+    public String getAlgorithm(String defaultAlgorithm) throws EncryptionException {
+        return getToken().getAlgorithm(defaultAlgorithm);
     }
 
     @Override

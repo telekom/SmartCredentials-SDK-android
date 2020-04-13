@@ -17,7 +17,6 @@
 package de.telekom.smartcredentials.core.security;
 
 public class MacAlgorithm {
-    public static final String SHA1 = "SHA1";
     public static final String SHA256 = "SHA256";
     public static final String SHA384 = "SHA384";
     public static final String SHA512 = "SHA512";

@@ -27,13 +27,15 @@ public class TOTPHandlerImpl extends OTPHandler implements TOTPHandler {
     private static final String TAG = "TOTPHandler";
 
     private boolean mGenerateNextOTP;
+    private String mDefaultMacAlgorithm;
     private TOTPCallback mOTPCallback;
 
     @Override
-    public void startGeneratingTOTP(TOTPCallback otpCallback) {
+    public void startGeneratingTOTP(TOTPCallback otpCallback, String defaultMacAlgorithm) {
         mOTPCallback = otpCallback;
+        mDefaultMacAlgorithm = defaultMacAlgorithm;
         mGenerateNextOTP = true;
-        startGeneratingOTP(otpCallback);
+        startGeneratingOTP(otpCallback, defaultMacAlgorithm);
     }
 
     @Override
@@ -43,8 +45,8 @@ public class TOTPHandlerImpl extends OTPHandler implements TOTPHandler {
     }
 
     @Override
-    protected void runOTPRunnable(long delay) {
-        super.runOTPRunnable(delay);
+    protected void runOTPRunnable(long delay, String defaultAlgorithm) {
+        super.runOTPRunnable(delay, defaultAlgorithm);
     }
 
     @Override
@@ -63,7 +65,7 @@ public class TOTPHandlerImpl extends OTPHandler implements TOTPHandler {
     protected void performNextStep() {
         if (generateNextOTP()) {
             long remainingValidPeriod = Math.max(getExpirationTime() - System.currentTimeMillis(), 0);
-            runOTPRunnable(remainingValidPeriod);
+            runOTPRunnable(remainingValidPeriod, mDefaultMacAlgorithm);
             ApiLoggerResolver.logInfo("Scheduled OTPGenerator to run in " + remainingValidPeriod + " milliseconds.");
         } else {
             stop();

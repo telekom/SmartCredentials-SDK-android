@@ -24,10 +24,10 @@ import de.telekom.smartcredentials.core.exceptions.EncryptionException;
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
 import de.telekom.smartcredentials.core.otp.OTPCallback;
 import de.telekom.smartcredentials.core.otp.OTPPluginError;
-import de.telekom.smartcredentials.otp.otp.utils.OTPGenerator;
-import de.telekom.smartcredentials.otp.otp.utils.OTPTask;
 import de.telekom.smartcredentials.core.security.Base32String;
 import de.telekom.smartcredentials.core.storage.TokenRequest;
+import de.telekom.smartcredentials.otp.otp.utils.OTPGenerator;
+import de.telekom.smartcredentials.otp.otp.utils.OTPTask;
 
 public abstract class OTPHandler {
 
@@ -39,7 +39,8 @@ public abstract class OTPHandler {
     private OTPTask mOTPTask;
     private OTPCallback mOTPCallback;
 
-    public void init(SecurityApi securityApi, TokenRequest tokenRequest, OTPUpdateCallback otpUpdateCallback) throws EncryptionException {
+    public void init(SecurityApi securityApi, TokenRequest tokenRequest,
+                     OTPUpdateCallback otpUpdateCallback) throws EncryptionException {
         mOtpUpdateCallback = otpUpdateCallback;
         mHandler = new Handler(Looper.getMainLooper());
         mOTPGenerator = new OTPGenerator(securityApi, tokenRequest);
@@ -56,9 +57,9 @@ public abstract class OTPHandler {
         ApiLoggerResolver.logInfo("OTP generation stopped");
     }
 
-    public String getOTP() {
+    public String getOTP(String defaultAlgorithm) {
         try {
-            return mOTPGenerator.getOTP();
+            return mOTPGenerator.getOTP(defaultAlgorithm);
         } catch (Base32String.DecodingException e) {
             onFailed(OTPPluginError.DECODING_ERROR, e);
         } catch (EncryptionException e) {
@@ -73,14 +74,14 @@ public abstract class OTPHandler {
         performNextStep();
     }
 
-    protected void startGeneratingOTP(OTPCallback otpCallback) {
+    protected void startGeneratingOTP(OTPCallback otpCallback, String defaultAlgorithm) {
         mOTPCallback = otpCallback;
-        runOTPRunnable(0);
+        runOTPRunnable(0, defaultAlgorithm);
         ApiLoggerResolver.logInfo("OTP generation requested");
     }
 
-    protected void runOTPRunnable(long delay) {
-        mOTPRunnable = new OTPRunnable();
+    protected void runOTPRunnable(long delay, String defaultAlgorithm) {
+        mOTPRunnable = new OTPRunnable(defaultAlgorithm);
         mHandler.postDelayed(mOTPRunnable, delay);
     }
 
@@ -98,9 +99,16 @@ public abstract class OTPHandler {
     }
 
     private class OTPRunnable implements Runnable {
+
+        private String defaultAlgorithm;
+
+        public OTPRunnable(String defaultAlgorithm) {
+            this.defaultAlgorithm = defaultAlgorithm;
+        }
+
         @Override
         public void run() {
-            mOTPTask = new OTPTask(OTPHandler.this);
+            mOTPTask = new OTPTask(OTPHandler.this, defaultAlgorithm);
             mOTPTask.execute();
         }
     }

@@ -16,24 +16,20 @@
 
 package de.telekom.smartcredentials.otp.otp.utils;
 
-
 import java.nio.ByteBuffer;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 
 import de.telekom.smartcredentials.core.api.SecurityApi;
 import de.telekom.smartcredentials.core.exceptions.EncryptionException;
 import de.telekom.smartcredentials.core.security.Base32String;
-import de.telekom.smartcredentials.core.security.MacAlgorithm;
 import de.telekom.smartcredentials.core.storage.TokenRequest;
+import de.telekom.smartcredentials.otp.di.ObjectGraphCreatorOtp;
 
 public class OTPGenerator {
 
     private static final int[] DIGITS_POWER = {1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000};
-    private static final List<String> ACCEPTED_MAC_ALGORITHMS = Collections.unmodifiableList(
-            Arrays.asList(MacAlgorithm.SHA1, MacAlgorithm.SHA256, MacAlgorithm.SHA384, MacAlgorithm.SHA512));
 
+    private final Set<String> mAcceptedMacAlgorithms;
     private final SecurityApi mSecurityApi;
     private final TokenRequest mTokenRequest;
     private long mCounter;
@@ -42,17 +38,18 @@ public class OTPGenerator {
         mSecurityApi = securityApi;
         mTokenRequest = tokenRequest;
         mCounter = tokenRequest.getCounter();
+        mAcceptedMacAlgorithms = ObjectGraphCreatorOtp.getInstance().getAcceptedAlgorithms();
     }
 
     public long getCounter() {
         return mCounter;
     }
 
-    public String getOTP() throws Base32String.DecodingException, EncryptionException {
+    public String getOTP(String defaultMacAlgorithm) throws Base32String.DecodingException, EncryptionException {
         long counter = mCounter;
         ByteBuffer text = ByteBuffer.allocate(8).putLong(0, counter);
 
-        String result = Integer.toString(computeOtp(text));
+        String result = Integer.toString(computeOtp(text, defaultMacAlgorithm));
         while (result.length() < mTokenRequest.getOtpValueDigitsCount()) {
             result = "0".concat(result);
         }
@@ -67,19 +64,19 @@ public class OTPGenerator {
         return mTokenRequest;
     }
 
-    int computeOtp(ByteBuffer text) throws Base32String.DecodingException, EncryptionException {
-        int otp = getBinary(text) % DIGITS_POWER[mTokenRequest.getOtpValueDigitsCount()];
+    int computeOtp(ByteBuffer text, String defaultMacAlgorithm) throws Base32String.DecodingException, EncryptionException {
+        int otp = getBinary(text, defaultMacAlgorithm) % DIGITS_POWER[mTokenRequest.getOtpValueDigitsCount()];
         if (mTokenRequest.addChecksum()) {
             otp = (otp * 10) + mSecurityApi.calculateChecksum(otp, mTokenRequest.getOtpValueDigitsCount());
         }
         return otp;
     }
 
-    int getBinary(ByteBuffer text) throws Base32String.DecodingException, EncryptionException {
-        String algorithm = mTokenRequest.getAlgorithm();
+    int getBinary(ByteBuffer text, String defaultMacAlgorithm) throws Base32String.DecodingException, EncryptionException {
+        String algorithm = mTokenRequest.getAlgorithm(defaultMacAlgorithm);
 
-        if (ACCEPTED_MAC_ALGORITHMS.contains(algorithm)) {
-            byte[] hash = mSecurityApi.hmac_sha("Hmac" + algorithm, Base32String.decode(mTokenRequest.getKey()), text.array());
+        if (mAcceptedMacAlgorithms.contains(algorithm)) {
+            byte[] hash = mSecurityApi.hmac_sha("Hmac" + algorithm.toUpperCase(), Base32String.decode(mTokenRequest.getKey()), text.array());
             int offset = getOffset(hash);
 
             return ((hash[offset] & 0x7f) << 0x18)
