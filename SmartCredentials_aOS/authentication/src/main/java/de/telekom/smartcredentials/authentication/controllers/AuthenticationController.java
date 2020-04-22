@@ -238,8 +238,10 @@ public class AuthenticationController implements AuthenticationApi {
 
         mAuthStateManager.getCurrent().performActionWithFreshTokens(
                 mAuthService.get(),
-                (accessToken, idToken, ex) -> listener
-                        .onRefreshComplete(accessToken, idToken, Converter.convert(ex)));
+                (accessToken, idToken, ex) -> {
+                    mAuthStateManager.updateAfterActionWithFreshTokens();
+                    listener.onRefreshComplete(accessToken, idToken, Converter.convert(ex));
+                });
         return new SmartCredentialsResponse<>(true);
     }
 

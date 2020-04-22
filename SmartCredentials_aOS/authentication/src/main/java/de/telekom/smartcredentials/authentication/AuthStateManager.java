@@ -85,6 +85,11 @@ public class AuthStateManager {
         return readState();
     }
 
+    public void updateAfterActionWithFreshTokens() {
+        AuthState authState = getCurrent();
+        replace(authState);
+    }
+
     public void updateAfterTokenResponse(TokenResponse tokenResponse, AuthorizationException exception) {
         AuthState authState = getCurrent();
         authState.update(tokenResponse, exception);
