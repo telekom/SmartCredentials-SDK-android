@@ -49,16 +49,16 @@ android {
 
 dependencies {
 
-    implementation "com.android.support:appcompat-v7:${androidSupportLibVersion}"
-    implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"
-    implementation "com.google.code.gson:gson:${gsonVersion}"
+    implementation "com.android.support:appcompat-v7:28.0.0"
+    implementation "com.squareup.okhttp3:okhttp:4.5.0"
+    implementation "com.google.code.gson:gson:2.8.6"
 
-    testImplementation "junit:junit:${junitVersion}"
-    testImplementation "org.hamcrest:hamcrest-library:${hamcrestVersion}"
-    testImplementation "org.json:json:${jsonVersion}"
+    testImplementation "junit:junit:4.13"
+    testImplementation "org.hamcrest:hamcrest-library:2.2"
+    testImplementation "org.json:json:20190722"
     testImplementation "org.mockito:mockito-core:${mockitoVersion}"
-    testImplementation "org.powermock:powermock-module-junit4:${powermockVersion}"
-    testImplementation "org.powermock:powermock-api-mockito2:${powermockVersion}"
+    testImplementation "org.powermock:powermock-module-junit4:1.6.6"
+    testImplementation "org.powermock:powermock-api-mockito2:1.6.6"
 
     api project(':core')
 }

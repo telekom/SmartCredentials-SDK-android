@@ -34,8 +34,8 @@ allprojects {
 
     project.ext {
 
-        androidCompileSdkVersion = 28
-        androidTargetSdkVersion = 28
+        androidCompileSdkVersion = 29
+        androidTargetSdkVersion = 29
         androidMinSdkVersion = 21
         androidVersionCode = 4
         androidVersionName = "5.0.0"
