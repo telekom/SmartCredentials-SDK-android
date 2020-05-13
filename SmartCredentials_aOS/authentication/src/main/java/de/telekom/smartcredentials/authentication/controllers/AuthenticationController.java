@@ -55,6 +55,7 @@ import de.telekom.smartcredentials.authentication.parser.BundleTransformer;
 import de.telekom.smartcredentials.core.api.AuthenticationApi;
 import de.telekom.smartcredentials.core.authentication.AuthenticationError;
 import de.telekom.smartcredentials.core.authentication.AuthenticationServiceInitListener;
+import de.telekom.smartcredentials.core.authentication.AuthenticationTokenResponse;
 import de.telekom.smartcredentials.core.authentication.OnFreshTokensRetrievedListener;
 import de.telekom.smartcredentials.core.authentication.TokenRefreshListener;
 import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsFeatureSet;
@@ -92,7 +93,7 @@ public class AuthenticationController implements AuthenticationApi {
     private ExecutorService mExecutor;
     private CoreController mCoreController;
 
-    public AuthenticationController(CoreController coreController) {
+    private AuthenticationController(CoreController coreController) {
         mCoreController = coreController;
         mExecutor = Executors.newSingleThreadExecutor();
         mAuthenticationStorageRepository = ObjectGraphCreatorAuthentication.getInstance().provideAuthenticationStorageRepository();
@@ -236,10 +237,11 @@ public class AuthenticationController implements AuthenticationApi {
             return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
         }
 
-        mAuthStateManager.getCurrent().performActionWithFreshTokens(
+        AuthState authState = mAuthStateManager.getCurrent();
+        authState.performActionWithFreshTokens(
                 mAuthService.get(),
                 (accessToken, idToken, ex) -> {
-                    mAuthStateManager.updateAfterActionWithFreshTokens();
+                    mAuthStateManager.updateAfterActionWithFreshTokens(authState);
                     listener.onRefreshComplete(accessToken, idToken, Converter.convert(ex));
                 });
         return new SmartCredentialsResponse<>(true);
@@ -298,7 +300,7 @@ public class AuthenticationController implements AuthenticationApi {
      * {@inheritDoc}
      */
     @Override
-    public SmartCredentialsApiResponse<Boolean> refreshAccessToken(TokenRefreshListener listener) {
+    public SmartCredentialsApiResponse<Boolean> refreshAccessToken(TokenRefreshListener<AuthenticationTokenResponse> listener) {
         ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "refreshAccessToken");
 
         if (mCoreController.isSecurityCompromised()) {

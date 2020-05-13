@@ -62,6 +62,7 @@ public class AuthStateManager {
         return getCurrent().isAuthorized();
     }
 
+    @SuppressWarnings("unused")
     public String getRefreshToken() {
         return getCurrent().getRefreshToken();
     }
@@ -81,12 +82,12 @@ public class AuthStateManager {
         return getCurrent().getAccessTokenExpirationTime();
     }
 
+    @NonNull
     public AuthState getCurrent() {
         return readState();
     }
 
-    public void updateAfterActionWithFreshTokens() {
-        AuthState authState = getCurrent();
+    public void updateAfterActionWithFreshTokens(AuthState authState) {
         replace(authState);
     }
 
