@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 
 import de.telekom.smartcredentials.core.authentication.AuthenticationServiceInitListener;
+import de.telekom.smartcredentials.core.authentication.AuthenticationTokenResponse;
 import de.telekom.smartcredentials.core.authentication.OnFreshTokensRetrievedListener;
 import de.telekom.smartcredentials.core.authentication.TokenRefreshListener;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
@@ -76,7 +77,7 @@ public interface AuthenticationApi {
      * @param listener An {@link TokenRefreshListener} that will be called once the refresh is complete
      */
     @SuppressWarnings("unused")
-    SmartCredentialsApiResponse<Boolean> refreshAccessToken(TokenRefreshListener listener);
+    SmartCredentialsApiResponse<Boolean> refreshAccessToken(TokenRefreshListener<AuthenticationTokenResponse> listener);
 
     /**
      * Performs an authorized action with a fresh access token.
