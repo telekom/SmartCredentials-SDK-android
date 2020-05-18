@@ -28,7 +28,8 @@ public enum SmartCredentialsModuleSet {
     OTP_MODULE("OTP Module"),
     AUTHENTICATION_MODULE("Authentication Module"),
     EID("e-ID module"),
-    PERSISTENT_LOGGING("Persistent Logging Module");
+    PERSISTENT_LOGGING("Persistent Logging Module"),
+    PUSH_NOTIFICATIONS_MODULE("Push Notifications Module");
 
     private final String mModuleName;
 
