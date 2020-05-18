@@ -50,7 +50,19 @@ public enum SmartCredentialsFeatureSet {
     OTP_VIA_QR("OTP via QR", SmartCredentialsModuleSet.OTP_MODULE,
             "The OTP via QR feature is not supported on this device model."),
     AUTHENTICATION("OAuth2.0 & OpenID Connect Authentication", SmartCredentialsModuleSet.AUTHENTICATION_MODULE,
-            "The Authentication Service is not supported on this device model.");
+            "The Authentication Service is not supported on this device model."),
+    SUBSCRIBE("Subscribe", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
+            "The Subscribe feature is not supported on this device model."),
+    UNSUBSCRIBE("Unsubscribe", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
+            "The Unsubscribe feature is not supported on this device model."),
+    SUBSCRIBE_TO_TOPIC("Subscribe To Topic", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
+            "The Subscribe feature is not supported on this device model."),
+    UNSUBSCRIBE_TO_TOPIC("Unsubscribe To Topic", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
+            "The Unsubscribe feature is not supported on this device model."),
+    RETRIEVE_TOKEN("Retrieve Token", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
+            "The Retrieve Token feature is not supported on this device model."),
+    SEND_MESSAGE("Send Message", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
+            "The Send Message feature is not supported on this device model."),;
 
     private final SmartCredentialsModuleSet mModule;
     private final String mFeatureName;
