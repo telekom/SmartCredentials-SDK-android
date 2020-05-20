@@ -18,7 +18,6 @@ package de.telekom.smartcredentials.authentication;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 
@@ -34,6 +33,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 
+import de.telekom.smartcredentials.authentication.di.ObjectGraphCreatorAuthentication;
 import de.telekom.smartcredentials.authentication.exception.InvalidConfigurationException;
 import de.telekom.smartcredentials.authentication.parser.JsonParser;
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
@@ -43,7 +43,6 @@ import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
  */
 public class AuthClientConfiguration {
 
-    public static final String CONFIG_PREFS_NAME = "SmartCredentialsAuthConfig";
     private static final String TAG = "AuthClientConfiguration";
     private static final String KEY_LAST_HASH = "config_hash";
     private static final String CONFIG_KEY_CLIENT_ID = "client_id";
@@ -60,11 +59,9 @@ public class AuthClientConfiguration {
             "Ensure that the appAuthRedirectScheme in your build.gradle file is correctly configured, " +
             "or that an appropriate intent filter exists in your app manifest!";
 
-    private final SharedPreferences mSharedPreferences;
     private final PackageManager mPackageManager;
     private final String mPackageName;
     private final String mIdentityProviderId;
-
     private String mConfigError;
     private String mClientId;
     private String mScope;
@@ -76,12 +73,14 @@ public class AuthClientConfiguration {
     private Uri mRegistrationEndpointUri;
     private boolean mHttpsRequired;
     private int mConfigHash;
+    private AuthenticationStorageRepository mAuthenticationStorageRepository;
 
-    private AuthClientConfiguration(Context context, int authConfigResId, String providerId) {
+    private AuthClientConfiguration(Context context, int authConfigResId,
+                                    String providerId) {
         mPackageName = context.getPackageName();
         mPackageManager = context.getPackageManager();
         mIdentityProviderId = providerId;
-        mSharedPreferences = context.getSharedPreferences(CONFIG_PREFS_NAME, Context.MODE_PRIVATE);
+        mAuthenticationStorageRepository = ObjectGraphCreatorAuthentication.getInstance().provideAuthenticationStorageRepository();
 
         InputStream configInputStream = context.getResources().openRawResource(authConfigResId);
         try {
@@ -117,7 +116,7 @@ public class AuthClientConfiguration {
     }
 
     public void acceptConfiguration() {
-        mSharedPreferences.edit().putString(computeHashKey(), String.valueOf(mConfigHash)).apply();
+        mAuthenticationStorageRepository.saveAuthConfigValue(computeHashKey(), String.valueOf(mConfigHash));
     }
 
     public String getClientId() {
@@ -223,7 +222,7 @@ public class AuthClientConfiguration {
     }
 
     private Integer getLastKnownConfigHash() {
-        String hash = mSharedPreferences.getString(computeHashKey(), null);
+        String hash = mAuthenticationStorageRepository.getAuthConfig(computeHashKey());
         return hash == null ? null : Integer.valueOf(hash);
     }
 

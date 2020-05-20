@@ -28,13 +28,10 @@ import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
  */
 public class DocumentScannerLicenseManager {
 
-    private static final String BLINK_ID_LICENSE_KEY = "sRwAAAAQc21hcnRjcmVkZW50aWFsc6BaF390hlFc8SCyfdSr1zy6h+VBnUVQ6hEHez+BD5NuAsEc86kTK6NzvM9XPQcTYNGgXFwsit2wcp3ZMSZXNS3soQwo5fE1kyyOfrM2d12BhReCeqRGLrYc9IRoQDH4JhFDeXWQ5mYju0PNHwNn6dBWQ8UoG6LWWboK4EsCfEXk9FvsMNDGnx/DAazywTF6z+dddyotd2XB1VVR8jnWIBphnZf4enIJfVgcYv2Cgsab3vQUAA1nYUwI";
-    private static final String BLINK_ID_LICENSE_NAME = "smartcredentials";
-
-    public static void setLicense(Context context) {
+    public static void setLicense(String licenceKey, String licenceName, Context context) {
         MicroblinkSDK.setShowTimeLimitedLicenseWarning(false);
         try {
-            MicroblinkSDK.setLicenseKey(BLINK_ID_LICENSE_KEY, BLINK_ID_LICENSE_NAME, context);
+            MicroblinkSDK.setLicenseKey(licenceKey, licenceName, context);
         } catch (InvalidLicenceKeyException exception) {
             ApiLoggerResolver.logError("LicenseManager", exception.getMessage());
         }

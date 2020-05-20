@@ -16,9 +16,8 @@
 
 package de.telekom.smartcredentials.otp.otp.totp;
 
-import de.telekom.smartcredentials.core.model.token.TokenResponse;
-import de.telekom.smartcredentials.core.model.utils.Time;
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
+import de.telekom.smartcredentials.core.model.token.TokenResponse;
 import de.telekom.smartcredentials.core.otp.TOTPCallback;
 import de.telekom.smartcredentials.core.otp.TOTPHandler;
 import de.telekom.smartcredentials.otp.otp.OTPHandler;
@@ -28,13 +27,15 @@ public class TOTPHandlerImpl extends OTPHandler implements TOTPHandler {
     private static final String TAG = "TOTPHandler";
 
     private boolean mGenerateNextOTP;
+    private String mDefaultMacAlgorithm;
     private TOTPCallback mOTPCallback;
 
     @Override
-    public void startGeneratingTOTP(TOTPCallback otpCallback) {
+    public void startGeneratingTOTP(TOTPCallback otpCallback, String defaultMacAlgorithm) {
         mOTPCallback = otpCallback;
+        mDefaultMacAlgorithm = defaultMacAlgorithm;
         mGenerateNextOTP = true;
-        startGeneratingOTP(otpCallback);
+        startGeneratingOTP(otpCallback, defaultMacAlgorithm);
     }
 
     @Override
@@ -44,8 +45,8 @@ public class TOTPHandlerImpl extends OTPHandler implements TOTPHandler {
     }
 
     @Override
-    protected void runOTPRunnable(long delay) {
-        super.runOTPRunnable(delay);
+    protected void runOTPRunnable(long delay, String defaultAlgorithm) {
+        super.runOTPRunnable(delay, defaultAlgorithm);
     }
 
     @Override
@@ -63,8 +64,8 @@ public class TOTPHandlerImpl extends OTPHandler implements TOTPHandler {
     @Override
     protected void performNextStep() {
         if (generateNextOTP()) {
-            long remainingValidPeriod = Math.max(getExpirationTime() - Time.millisWithBuffer(), 0);
-            runOTPRunnable(remainingValidPeriod);
+            long remainingValidPeriod = Math.max(getExpirationTime() - System.currentTimeMillis(), 0);
+            runOTPRunnable(remainingValidPeriod, mDefaultMacAlgorithm);
             ApiLoggerResolver.logInfo("Scheduled OTPGenerator to run in " + remainingValidPeriod + " milliseconds.");
         } else {
             stop();

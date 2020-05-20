@@ -90,4 +90,16 @@ public class Description {
     public void setPurpose(String purpose) {
         this.mPurpose = purpose;
     }
+
+    @Override
+    public String toString() {
+        return "Description{" +
+                "mIssuerName='" + mIssuerName + '\'' +
+                ", mIssuerUrl='" + mIssuerUrl + '\'' +
+                ", mSubjectName='" + mSubjectName + '\'' +
+                ", mSubjectUrl='" + mSubjectUrl + '\'' +
+                ", mTermsOfUsage='" + mTermsOfUsage + '\'' +
+                ", mPurpose='" + mPurpose + '\'' +
+                '}';
+    }
 }

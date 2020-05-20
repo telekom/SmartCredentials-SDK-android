@@ -31,7 +31,7 @@ public interface TokenRequest {
 
     int getTruncationOffset() throws EncryptionException;
 
-    String getAlgorithm() throws EncryptionException;
+    String getAlgorithm(String defaultAlgorithm) throws EncryptionException;
 
     String getKey() throws EncryptionException;
 

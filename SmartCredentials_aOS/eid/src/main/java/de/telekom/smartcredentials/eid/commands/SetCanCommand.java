@@ -24,6 +24,7 @@ import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
 /**
  * Created by Alex.Graur@endava.com at 11/11/2019
  */
+@SuppressWarnings("unused")
 public class SetCanCommand extends SmartEidCommand {
 
     @SerializedName("value")
