@@ -16,6 +16,8 @@
 
 package de.telekom.smartcredentials.eid.messages;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -74,6 +76,7 @@ public class ReaderMessage extends SmartEidMessage {
         this.mCard = card;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "ReaderMessage{" +

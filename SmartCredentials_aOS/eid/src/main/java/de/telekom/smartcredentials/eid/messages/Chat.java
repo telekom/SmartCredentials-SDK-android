@@ -16,6 +16,8 @@
 
 package de.telekom.smartcredentials.eid.messages;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -65,6 +67,7 @@ public class Chat {
         this.mRequired = mRequired;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Chat{" +
