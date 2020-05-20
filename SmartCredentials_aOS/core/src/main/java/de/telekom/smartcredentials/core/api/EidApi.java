@@ -30,10 +30,6 @@ import de.telekom.smartcredentials.core.eid.commands.EidCommand;
 @SuppressWarnings("unused")
 public interface EidApi {
 
-    void bind(Context context, String appPackage);
-
-    void unbind(Context context);
-
     void setMessageReceiverCallback(EidMessageReceivedCallback callback);
 
     <T extends EidCommand> void sendCommand(T command, EidSendCommandCallback callback);

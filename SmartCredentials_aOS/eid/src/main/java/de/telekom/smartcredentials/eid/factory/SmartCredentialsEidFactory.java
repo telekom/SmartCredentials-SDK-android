@@ -16,6 +16,7 @@
 
 package de.telekom.smartcredentials.eid.factory;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import de.telekom.smartcredentials.core.api.EidApi;
@@ -36,8 +37,8 @@ public class SmartCredentialsEidFactory {
     }
 
     @NonNull
-    public static synchronized EidApi initSmartCredentialsEidModule() {
-        sEidController = new EidController();
+    public static synchronized EidApi initSmartCredentialsEidModule(Context context, String appPackage) {
+        sEidController = new EidController(context, appPackage);
         return sEidController;
     }
 
@@ -49,7 +50,8 @@ public class SmartCredentialsEidFactory {
         return sEidController;
     }
 
-    public static void clear() {
+    public static void clear(Context context) {
+        sEidController.close(context);
         sEidController = null;
     }
 }

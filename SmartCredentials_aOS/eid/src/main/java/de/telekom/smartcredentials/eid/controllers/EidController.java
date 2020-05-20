@@ -44,12 +44,13 @@ public class EidController implements EidApi {
     private AusweisCallback mAusweisCallback;
     private EidMessageReceivedCallback mMessageReceivedCallback;
 
-    public EidController() {
+    public EidController(Context context, String appPackage)
+    {
         mGson = new Gson();
+        bind(context, appPackage);
     }
 
-    @Override
-    public void bind(Context context, String appPackage) {
+    private void bind(Context context, String appPackage) {
         Intent intent = new Intent(AUSWEIS_APP_ACTION);
         intent.setPackage(appPackage);
         mAusweisCallback = new AusweisCallback(new MessageParser(mMessageReceivedCallback), mMessageReceivedCallback);
@@ -57,8 +58,7 @@ public class EidController implements EidApi {
         context.bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
-    @Override
-    public void unbind(Context context) {
+    public void close(Context context) {
         context.unbindService(mServiceConnection);
         mServiceConnection = null;
     }
