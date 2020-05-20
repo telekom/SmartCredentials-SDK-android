@@ -51,19 +51,28 @@ public class AusweisServiceConnection implements ServiceConnection {
         if (mSdk != null) {
             try {
                 mSdk.connectSdk(mAusweisCallback);
-                mMessageReceivedCallback.onMessageReceived(new SdkConnectedMessage());
+                if (mMessageReceivedCallback != null) {
+                    mMessageReceivedCallback.onMessageReceived(new SdkConnectedMessage());
+                }
             } catch (RemoteException e) {
-                mMessageReceivedCallback.onMessageReceived(new SdkNotConnectedMessage());
+                if (mMessageReceivedCallback != null) {
+                    mMessageReceivedCallback.onMessageReceived(new SdkNotConnectedMessage());
+                }
             }
         } else {
-            mMessageReceivedCallback.onMessageReceived(new SdkNotInitializedMessage());
+            if (mMessageReceivedCallback != null) {
+                mMessageReceivedCallback.onMessageReceived(new SdkNotInitializedMessage());
+            }
         }
     }
 
     @Override
     public void onServiceDisconnected(ComponentName name) {
         mSdk = null;
-        mMessageReceivedCallback.onMessageReceived(new SdkDisconnectedMessage());
+
+        if (mMessageReceivedCallback != null) {
+            mMessageReceivedCallback.onMessageReceived(new SdkDisconnectedMessage());
+        }
     }
 
     public IAusweisApp2Sdk getAusweisSdk() {

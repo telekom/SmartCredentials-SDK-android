@@ -20,7 +20,6 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
@@ -35,6 +34,7 @@ import net.openid.appauth.ClientAuthentication;
 import net.openid.appauth.TokenRequest;
 import net.openid.appauth.TokenResponse;
 
+import de.telekom.smartcredentials.authentication.di.ObjectGraphCreatorAuthentication;
 import de.telekom.smartcredentials.authentication.parser.BundleTransformer;
 import de.telekom.smartcredentials.core.logger.ApiLogger;
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
@@ -67,6 +67,7 @@ public class AuthenticationTradeActivity extends Activity {
     private int mConfigFileId;
     private String mProviderId;
     private AuthStateManager mStateManager;
+    private AuthenticationStorageRepository mAuthenticationStorageRepository;
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -77,35 +78,28 @@ public class AuthenticationTradeActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mAuthenticationStorageRepository = ObjectGraphCreatorAuthentication.getInstance().provideAuthenticationStorageRepository();
         mAuthService = new AuthorizationService(this, AppAuthConfiguration.DEFAULT);
-
         extractPrefs();
         validateInputs();
-
         mStateManager = AuthStateManager.getInstance(this, mProviderId);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
         AuthClientConfiguration config = AuthClientConfiguration.getInstance(this,
                 mConfigFileId,
                 mProviderId);
-
         if (config.hasConfigurationChanges()) {
             logOut();
             return;
         }
-
         AuthorizationResponse response = AuthorizationResponse.fromIntent(getIntent());
         AuthorizationException exception = AuthorizationException.fromIntent(getIntent());
-
         if (response != null || exception != null) {
             mStateManager.updateAfterAuthorization(response, exception);
         }
-
         if (response != null && response.authorizationCode != null) {
             tradeAuthorizationCodeForTokens(response, exception);
         } else if (exception != null) {
@@ -133,14 +127,12 @@ public class AuthenticationTradeActivity extends Activity {
     }
 
     private void extractPrefs() {
-        SharedPreferences prefs = getSharedPreferences(AuthClientConfiguration.CONFIG_PREFS_NAME, MODE_PRIVATE);
-
-        mProviderId = prefs.getString(KEY_IDENTITY_PROVIDER_ID, null);
-        mConfigFileId = prefs.getInt(KEY_AUTH_CONFIG_FILE_ID, -1);
-        final String completeIntentClass = prefs.getString(KEY_COMPLETE_INTENT_CLASS, null);
-        final String cancelIntentClass = prefs.getString(KEY_CANCEL_INTENT_CLASS, null);
-        final String completeIntentEncodedExtras = prefs.getString(KEY_COMPLETE_INTENT_EXTRAS, null);
-        final String cancelIntentEncodedExtras = prefs.getString(KEY_CANCEL_INTENT_EXTRAS, null);
+        mProviderId = mAuthenticationStorageRepository.getAuthConfig(KEY_IDENTITY_PROVIDER_ID);
+        mConfigFileId = Integer.parseInt(mAuthenticationStorageRepository.getAuthConfig(KEY_AUTH_CONFIG_FILE_ID));
+        final String completeIntentClass = mAuthenticationStorageRepository.getAuthConfig(KEY_COMPLETE_INTENT_CLASS);
+        final String cancelIntentClass = mAuthenticationStorageRepository.getAuthConfig(KEY_CANCEL_INTENT_CLASS);
+        final String completeIntentEncodedExtras = mAuthenticationStorageRepository.getAuthConfig(KEY_COMPLETE_INTENT_EXTRAS);
+        final String cancelIntentEncodedExtras = mAuthenticationStorageRepository.getAuthConfig(KEY_CANCEL_INTENT_EXTRAS);
 
         if (completeIntentClass != null && cancelIntentClass != null) {
             try {
@@ -179,7 +171,6 @@ public class AuthenticationTradeActivity extends Activity {
 
     private void logOut() {
         // discarding the authorization and token state
-
         AuthState currentState = mStateManager.getCurrent();
         AuthState clearedState = new AuthState(currentState.getAuthorizationServiceConfiguration());
         if (currentState.getLastRegistrationResponse() != null) {

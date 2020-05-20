@@ -23,6 +23,8 @@ public interface HOTPHandler {
      *
      * @param otpCallback {@link HOTPCallback} implementation whose methods will be used to
      *                    notify and return the generated HOTP value
+     * @param defaultMacAlgorithm {String value of mac algorithm that will be used in case there is no
+     *                            algorithm retrieved from the Otp QR code. Ex. "SHA256"}
      */
-    void generateHOTP(HOTPCallback otpCallback);
+    void generateHOTP(HOTPCallback otpCallback, String defaultMacAlgorithm);
 }

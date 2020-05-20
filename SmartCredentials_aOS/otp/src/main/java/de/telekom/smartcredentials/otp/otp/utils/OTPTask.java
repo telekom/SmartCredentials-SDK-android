@@ -24,14 +24,16 @@ import de.telekom.smartcredentials.otp.otp.OTPHandler;
 public class OTPTask extends AsyncTask<Object, String, String> {
 
     private OTPHandler mOTPHandler;
+    private String mDefaultAlgorithm;
 
-    public OTPTask(OTPHandler otpHandler) {
+    public OTPTask(OTPHandler otpHandler, String defaultAlgorithm) {
+        mDefaultAlgorithm = defaultAlgorithm;
         mOTPHandler = otpHandler;
     }
 
     @Override
     protected String doInBackground(Object[] objects) {
-        return mOTPHandler.getOTP();
+        return mOTPHandler.getOTP(mDefaultAlgorithm);
     }
 
     @Override

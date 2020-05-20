@@ -39,20 +39,21 @@ public class EidController implements EidApi {
 
     private static final String AUSWEIS_APP_ACTION = "com.governikus.ausweisapp2.START_SERVICE";
 
+    private final Gson mGson;
     private AusweisServiceConnection mServiceConnection;
     private AusweisCallback mAusweisCallback;
-    private final Gson mGson;
+    private EidMessageReceivedCallback mMessageReceivedCallback;
 
     public EidController() {
         mGson = new Gson();
     }
 
     @Override
-    public void bind(Context context, String appPackage, EidMessageReceivedCallback callback) {
+    public void bind(Context context, String appPackage) {
         Intent intent = new Intent(AUSWEIS_APP_ACTION);
         intent.setPackage(appPackage);
-        mAusweisCallback = new AusweisCallback(new MessageParser(callback), callback);
-        mServiceConnection = new AusweisServiceConnection(mAusweisCallback, callback);
+        mAusweisCallback = new AusweisCallback(new MessageParser(mMessageReceivedCallback), mMessageReceivedCallback);
+        mServiceConnection = new AusweisServiceConnection(mAusweisCallback, mMessageReceivedCallback);
         context.bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
@@ -60,6 +61,11 @@ public class EidController implements EidApi {
     public void unbind(Context context) {
         context.unbindService(mServiceConnection);
         mServiceConnection = null;
+    }
+
+    @Override
+    public void setMessageReceiverCallback(EidMessageReceivedCallback callback) {
+        mMessageReceivedCallback = callback;
     }
 
     @Override

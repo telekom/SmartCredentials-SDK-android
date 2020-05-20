@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019 Telekom Deutschland AG
+ * Copyright (c) 2020 Telekom Deutschland AG
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package de.telekom.smartcredentials.core.model.utils;
+package de.telekom.smartcredentials.eid.commands;
 
+import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
 
-public class Time {
+/**
+ * Created by Alex.Graur@endava.com at 4/8/2020
+ */
+@SuppressWarnings("unused")
+public class GetCertificateCommand extends SmartEidCommand {
 
-    private static final long BUFFER_MILLIS = 5000;
-
-    public static long millisWithBuffer() {
-        return System.currentTimeMillis() + BUFFER_MILLIS;
+    public GetCertificateCommand() {
+        super(EidCommandType.GET_CERTIFICATE.getCommandType());
     }
 }

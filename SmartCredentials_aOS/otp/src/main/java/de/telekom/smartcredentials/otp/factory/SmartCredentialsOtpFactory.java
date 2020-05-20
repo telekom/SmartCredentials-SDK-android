@@ -18,6 +18,8 @@ package de.telekom.smartcredentials.otp.factory;
 
 import android.support.annotation.NonNull;
 
+import java.util.List;
+
 import de.telekom.smartcredentials.core.api.CameraApi;
 import de.telekom.smartcredentials.core.api.CoreApi;
 import de.telekom.smartcredentials.core.api.OtpApi;
@@ -57,6 +59,10 @@ public class SmartCredentialsOtpFactory {
         objectGraphCreatorOtp.init(securityApi, storageApi, cameraApi);
         sOtpController = objectGraphCreatorOtp.provideApiControllerOtp(coreController);
         return sOtpController;
+    }
+
+    public static void addAcceptedAlgorithms(@NonNull final List<String> acceptedMacAlgorithms) {
+        ObjectGraphCreatorOtp.getInstance().addAcceptedMacAlgorithms(acceptedMacAlgorithms);
     }
 
     @NonNull

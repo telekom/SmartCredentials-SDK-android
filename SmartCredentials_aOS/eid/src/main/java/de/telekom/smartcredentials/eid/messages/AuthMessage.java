@@ -26,6 +26,8 @@ import com.google.gson.annotations.SerializedName;
  */
 public class AuthMessage extends SmartEidMessage {
 
+    public static final String AUTH_MESSAGE_CANCELED = "The process has been cancelled.";
+
     @SerializedName("url")
     @Expose
     private String mUrl;

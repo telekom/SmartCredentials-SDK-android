@@ -16,36 +16,15 @@
 
 package de.telekom.smartcredentials.eid.commands;
 
-import android.support.annotation.NonNull;
-
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
-import de.telekom.smartcredentials.core.eid.commands.EidCommand;
+import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
 
 /**
- * Created by Alex.Graur@endava.com at 11/11/2019
+ * Created by Alex.Graur@endava.com at 4/8/2020
  */
-public class SmartEidCommand extends EidCommand {
+@SuppressWarnings("unused")
+public class GetApiLevelCommand extends SmartEidCommand {
 
-    @SerializedName("cmd")
-    @Expose
-    private String mName;
-
-    public SmartEidCommand(String name) {
-        mName = name;
-    }
-
-    @Override
-    public String getName() {
-        return mName;
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return "SmartEidCommand{" +
-                "mName='" + mName + '\'' +
-                '}';
+    public GetApiLevelCommand() {
+        super(EidCommandType.GET_API_LEVEL.getCommandType());
     }
 }

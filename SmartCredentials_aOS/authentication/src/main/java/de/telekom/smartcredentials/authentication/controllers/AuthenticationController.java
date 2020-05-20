@@ -19,7 +19,6 @@ package de.telekom.smartcredentials.authentication.controllers;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -47,13 +46,16 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import de.telekom.smartcredentials.authentication.AuthClientConfiguration;
 import de.telekom.smartcredentials.authentication.AuthStateManager;
+import de.telekom.smartcredentials.authentication.AuthenticationStorageRepository;
 import de.telekom.smartcredentials.authentication.AuthenticationTradeActivity;
 import de.telekom.smartcredentials.authentication.converter.Converter;
+import de.telekom.smartcredentials.authentication.di.ObjectGraphCreatorAuthentication;
 import de.telekom.smartcredentials.authentication.model.SmartCredentialsAuthenticationTokenResponse;
 import de.telekom.smartcredentials.authentication.parser.BundleTransformer;
 import de.telekom.smartcredentials.core.api.AuthenticationApi;
 import de.telekom.smartcredentials.core.authentication.AuthenticationError;
 import de.telekom.smartcredentials.core.authentication.AuthenticationServiceInitListener;
+import de.telekom.smartcredentials.core.authentication.AuthenticationTokenResponse;
 import de.telekom.smartcredentials.core.authentication.OnFreshTokensRetrievedListener;
 import de.telekom.smartcredentials.core.authentication.TokenRefreshListener;
 import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsFeatureSet;
@@ -63,8 +65,6 @@ import de.telekom.smartcredentials.core.responses.FeatureNotSupportedThrowable;
 import de.telekom.smartcredentials.core.responses.RootedThrowable;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsResponse;
-
-import static de.telekom.smartcredentials.authentication.AuthClientConfiguration.CONFIG_PREFS_NAME;
 
 /**
  * Created by Lucian Iacob on February 27, 2019.
@@ -81,6 +81,7 @@ public class AuthenticationController implements AuthenticationApi {
     private static final AtomicReference<AuthenticationController> INSTANCE_REF =
             new AtomicReference<>(null);
 
+    private AuthenticationStorageRepository mAuthenticationStorageRepository;
     private final AtomicReference<AuthorizationService> mAuthService = new AtomicReference<>();
     private final AtomicReference<AuthorizationRequest> mAuthRequest = new AtomicReference<>();
     private WeakReference<AuthenticationServiceInitListener> mAuthInitListener;
@@ -95,6 +96,7 @@ public class AuthenticationController implements AuthenticationApi {
     private AuthenticationController(CoreController coreController) {
         mCoreController = coreController;
         mExecutor = Executors.newSingleThreadExecutor();
+        mAuthenticationStorageRepository = ObjectGraphCreatorAuthentication.getInstance().provideAuthenticationStorageRepository();
     }
 
     public static AuthenticationController getInstance(CoreController coreController) {
@@ -169,9 +171,9 @@ public class AuthenticationController implements AuthenticationApi {
             return new SmartCredentialsResponse<>(false);
         }
 
-        SharedPreferences prefs = context.getSharedPreferences(CONFIG_PREFS_NAME, Context.MODE_PRIVATE);
-        prefs.edit().putString(KEY_IDENTITY_PROVIDER_ID, identityProviderId).apply();
-        prefs.edit().putInt(KEY_AUTH_CONFIG_FILE_ID, authConfigFileResId).apply();
+        mAuthenticationStorageRepository.saveAuthConfigValue(KEY_IDENTITY_PROVIDER_ID, identityProviderId);
+        mAuthenticationStorageRepository.saveAuthConfigValue(KEY_AUTH_CONFIG_FILE_ID, String.valueOf(authConfigFileResId));
+
         mCustomTabColor = customTabBarColor;
         mAuthInitListener = new WeakReference<>(listener);
         if (mExecutor == null || mExecutor.isShutdown()) {
@@ -208,9 +210,7 @@ public class AuthenticationController implements AuthenticationApi {
             return new SmartCredentialsResponse<>(false);
         }
 
-        SharedPreferences prefs = context.getSharedPreferences(CONFIG_PREFS_NAME, Context.MODE_PRIVATE);
-
-        saveIntentEndpointsToPrefs(prefs, completionIntent, cancelIntent);
+        saveIntentEndpointsToPrefs(completionIntent, cancelIntent);
 
         PendingIntent intermediateIntent = AuthenticationTradeActivity
                 .createStartIntent(context.getApplicationContext());
@@ -237,10 +237,13 @@ public class AuthenticationController implements AuthenticationApi {
             return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
         }
 
-        mAuthStateManager.getCurrent().performActionWithFreshTokens(
+        AuthState authState = mAuthStateManager.getCurrent();
+        authState.performActionWithFreshTokens(
                 mAuthService.get(),
-                (accessToken, idToken, ex) -> listener
-                        .onRefreshComplete(accessToken, idToken, Converter.convert(ex)));
+                (accessToken, idToken, ex) -> {
+                    mAuthStateManager.updateAfterActionWithFreshTokens(authState);
+                    listener.onRefreshComplete(accessToken, idToken, Converter.convert(ex));
+                });
         return new SmartCredentialsResponse<>(true);
     }
 
@@ -297,7 +300,7 @@ public class AuthenticationController implements AuthenticationApi {
      * {@inheritDoc}
      */
     @Override
-    public SmartCredentialsApiResponse<Boolean> refreshAccessToken(TokenRefreshListener listener) {
+    public SmartCredentialsApiResponse<Boolean> refreshAccessToken(TokenRefreshListener<AuthenticationTokenResponse> listener) {
         ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "refreshAccessToken");
 
         if (mCoreController.isSecurityCompromised()) {
@@ -361,7 +364,8 @@ public class AuthenticationController implements AuthenticationApi {
 
     private void doInit(Context context, String identityProviderId, int authConfigFileResId) {
         mAuthStateManager = AuthStateManager.getInstance(context, identityProviderId);
-        mConfiguration = AuthClientConfiguration.getInstance(context, authConfigFileResId, identityProviderId);
+        mConfiguration = AuthClientConfiguration.getInstance(context, authConfigFileResId,
+                identityProviderId);
         recreateAuthService(context);
 
         if (mConfiguration.hasConfigurationChanges()) {
@@ -413,21 +417,20 @@ public class AuthenticationController implements AuthenticationApi {
         }
     }
 
-    private void saveIntentEndpointsToPrefs(final SharedPreferences prefs, final Intent completionIntent,
-                                            final Intent cancelIntent) {
-        prefs.edit().putString(KEY_COMPLETE_INTENT_CLASS, completionIntent.getComponent().getClassName()).apply();
-        prefs.edit().putString(KEY_CANCEL_INTENT_CLASS, cancelIntent.getComponent().getClassName()).apply();
+    private void saveIntentEndpointsToPrefs(final Intent completionIntent, final Intent cancelIntent) {
+        mAuthenticationStorageRepository.saveAuthConfigValue(KEY_COMPLETE_INTENT_CLASS, completionIntent.getComponent().getClassName());
+        mAuthenticationStorageRepository.saveAuthConfigValue(KEY_CANCEL_INTENT_CLASS, cancelIntent.getComponent().getClassName());
 
         final Bundle completionExtras = completionIntent.getExtras();
         if (completionExtras != null) {
             final String encodedExtras = BundleTransformer.encodeToString(completionExtras);
-            prefs.edit().putString(KEY_COMPLETE_INTENT_EXTRAS, encodedExtras).apply();
+            mAuthenticationStorageRepository.saveAuthConfigValue(KEY_COMPLETE_INTENT_EXTRAS, encodedExtras);
         }
 
         final Bundle cancelExtras = completionIntent.getExtras();
         if (cancelExtras != null) {
             final String encodedExtras = BundleTransformer.encodeToString(cancelExtras);
-            prefs.edit().putString(KEY_CANCEL_INTENT_EXTRAS, encodedExtras).apply();
+            mAuthenticationStorageRepository.saveAuthConfigValue(KEY_CANCEL_INTENT_EXTRAS, encodedExtras);
         }
     }
 

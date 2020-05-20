@@ -51,72 +51,74 @@ public class MessageParser {
     }
 
     public void parseMessage(String rawMessage) {
-        SmartEidMessage message = mGson.fromJson(rawMessage, SmartEidMessage.class);
-        EidMessageType messageType = EidMessageType.valueOf(message.getMessageType());
-        switch (messageType) {
-            case ACCESS_RIGHTS:
-                AccessRightsMessage accessRightsMessage = mGson.fromJson(rawMessage, AccessRightsMessage.class);
-                mCallback.onMessageReceived(accessRightsMessage);
-                break;
-            case API_LEVEL:
-                ApiLevelMessage apiLevelMessage = mGson.fromJson(rawMessage, ApiLevelMessage.class);
-                mCallback.onMessageReceived(apiLevelMessage);
-                break;
-            case AUTH:
-                AuthMessage authMessage = mGson.fromJson(rawMessage, AuthMessage.class);
-                mCallback.onMessageReceived(authMessage);
-                break;
-            case BAD_STATE:
-                BadStateMessage badStateMessage = mGson.fromJson(rawMessage, BadStateMessage.class);
-                mCallback.onMessageReceived(badStateMessage);
-                break;
-            case CERTIFICATE:
-                CertificateMessage certificateMessage = mGson.fromJson(rawMessage, CertificateMessage.class);
-                mCallback.onMessageReceived(certificateMessage);
-                break;
-            case ENTER_CAN:
-                EnterCanMessage enterCanMessage = mGson.fromJson(rawMessage, EnterCanMessage.class);
-                mCallback.onMessageReceived(enterCanMessage);
-                break;
-            case ENTER_PIN:
-                EnterPinMessage enterPinMessage = mGson.fromJson(rawMessage, EnterPinMessage.class);
-                mCallback.onMessageReceived(enterPinMessage);
-                break;
-            case ENTER_PUK:
-                EnterPukMessage enterPukMessage = mGson.fromJson(rawMessage, EnterPukMessage.class);
-                mCallback.onMessageReceived(enterPukMessage);
-                break;
-            case INFO:
-                InfoMessage infoMessage = mGson.fromJson(rawMessage, InfoMessage.class);
-                mCallback.onMessageReceived(infoMessage);
-                break;
-            case INSERT_CARD:
-                InsertCardMessage insertCardMessage = mGson.fromJson(rawMessage, InsertCardMessage.class);
-                mCallback.onMessageReceived(insertCardMessage);
-                break;
-            case INTERNAL_ERROR:
-                InternalErrorMessage internalErrorMessage = mGson.fromJson(rawMessage, InternalErrorMessage.class);
-                mCallback.onMessageReceived(internalErrorMessage);
-                break;
-            case INVALID:
-                InvalidMessage invalidMessage = mGson.fromJson(rawMessage, InvalidMessage.class);
-                mCallback.onMessageReceived(invalidMessage);
-                break;
-            case READER:
-                ReaderMessage readerMessage = mGson.fromJson(rawMessage, ReaderMessage.class);
-                mCallback.onMessageReceived(readerMessage);
-                break;
-            case READER_LIST:
-                ReaderListMessage readerListMessage = mGson.fromJson(rawMessage, ReaderListMessage.class);
-                mCallback.onMessageReceived(readerListMessage);
-                break;
-            case UNKNOWN_COMMAND:
-                UnknownCommandMessage unknownCommandMessage = mGson.fromJson(rawMessage, UnknownCommandMessage.class);
-                mCallback.onMessageReceived(unknownCommandMessage);
-                break;
-            default:
-                mCallback.onMessageReceived(message);
-                break;
+        if (mCallback != null) {
+            SmartEidMessage message = mGson.fromJson(rawMessage, SmartEidMessage.class);
+            EidMessageType messageType = EidMessageType.valueOf(message.getMessageType());
+            switch (messageType) {
+                case ACCESS_RIGHTS:
+                    AccessRightsMessage accessRightsMessage = mGson.fromJson(rawMessage, AccessRightsMessage.class);
+                    mCallback.onMessageReceived(accessRightsMessage);
+                    break;
+                case API_LEVEL:
+                    ApiLevelMessage apiLevelMessage = mGson.fromJson(rawMessage, ApiLevelMessage.class);
+                    mCallback.onMessageReceived(apiLevelMessage);
+                    break;
+                case AUTH:
+                    AuthMessage authMessage = mGson.fromJson(rawMessage, AuthMessage.class);
+                    mCallback.onMessageReceived(authMessage);
+                    break;
+                case BAD_STATE:
+                    BadStateMessage badStateMessage = mGson.fromJson(rawMessage, BadStateMessage.class);
+                    mCallback.onMessageReceived(badStateMessage);
+                    break;
+                case CERTIFICATE:
+                    CertificateMessage certificateMessage = mGson.fromJson(rawMessage, CertificateMessage.class);
+                    mCallback.onMessageReceived(certificateMessage);
+                    break;
+                case ENTER_CAN:
+                    EnterCanMessage enterCanMessage = mGson.fromJson(rawMessage, EnterCanMessage.class);
+                    mCallback.onMessageReceived(enterCanMessage);
+                    break;
+                case ENTER_PIN:
+                    EnterPinMessage enterPinMessage = mGson.fromJson(rawMessage, EnterPinMessage.class);
+                    mCallback.onMessageReceived(enterPinMessage);
+                    break;
+                case ENTER_PUK:
+                    EnterPukMessage enterPukMessage = mGson.fromJson(rawMessage, EnterPukMessage.class);
+                    mCallback.onMessageReceived(enterPukMessage);
+                    break;
+                case INFO:
+                    InfoMessage infoMessage = mGson.fromJson(rawMessage, InfoMessage.class);
+                    mCallback.onMessageReceived(infoMessage);
+                    break;
+                case INSERT_CARD:
+                    InsertCardMessage insertCardMessage = mGson.fromJson(rawMessage, InsertCardMessage.class);
+                    mCallback.onMessageReceived(insertCardMessage);
+                    break;
+                case INTERNAL_ERROR:
+                    InternalErrorMessage internalErrorMessage = mGson.fromJson(rawMessage, InternalErrorMessage.class);
+                    mCallback.onMessageReceived(internalErrorMessage);
+                    break;
+                case INVALID:
+                    InvalidMessage invalidMessage = mGson.fromJson(rawMessage, InvalidMessage.class);
+                    mCallback.onMessageReceived(invalidMessage);
+                    break;
+                case READER:
+                    ReaderMessage readerMessage = mGson.fromJson(rawMessage, ReaderMessage.class);
+                    mCallback.onMessageReceived(readerMessage);
+                    break;
+                case READER_LIST:
+                    ReaderListMessage readerListMessage = mGson.fromJson(rawMessage, ReaderListMessage.class);
+                    mCallback.onMessageReceived(readerListMessage);
+                    break;
+                case UNKNOWN_COMMAND:
+                    UnknownCommandMessage unknownCommandMessage = mGson.fromJson(rawMessage, UnknownCommandMessage.class);
+                    mCallback.onMessageReceived(unknownCommandMessage);
+                    break;
+                default:
+                    mCallback.onMessageReceived(message);
+                    break;
+            }
         }
     }
 }
