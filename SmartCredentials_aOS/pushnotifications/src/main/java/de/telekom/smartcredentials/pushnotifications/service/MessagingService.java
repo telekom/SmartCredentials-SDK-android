@@ -19,37 +19,54 @@ package de.telekom.smartcredentials.pushnotifications.service;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import de.telekom.smartcredentials.core.pushnotifications.SmartCredentialsSendError;
+import de.telekom.smartcredentials.core.pushnotifications.models.SmartCredentialsSendError;
+import de.telekom.smartcredentials.pushnotifications.handlers.PushNotificationsHandler;
 import de.telekom.smartcredentials.pushnotifications.di.ObjectGraphCreatorPushNotifications;
+import de.telekom.smartcredentials.pushnotifications.factory.SmartCredentialsPushNotificationsFactory;
 import de.telekom.smartcredentials.pushnotifications.models.FirebaseRemoteMessage;
+import de.telekom.smartcredentials.pushnotifications.repositories.PushNotificationsStorageRepository;
 
 /**
  * Created by gabriel.blaj@endava.com at 5/14/2020
  */
 public class MessagingService extends FirebaseMessagingService {
 
+    private PushNotificationsStorageRepository mStorageRepository;
+    private PushNotificationsHandler mHandler;
+
+    public MessagingService() {
+        mStorageRepository = ObjectGraphCreatorPushNotifications
+                .getInstance().providePushNotificationsStorageRepository();
+        mHandler = ObjectGraphCreatorPushNotifications.getInstance().providePushNotificationsHandler();
+    }
+
     @Override
     public void onNewToken(String token) {
-        if (ObjectGraphCreatorPushNotifications.getInstance().isSubscribed()) {
-            ObjectGraphCreatorPushNotifications.getInstance().setTokenData(token);
+        if (mStorageRepository.getPushNotificationsConfigBoolean(
+                PushNotificationsStorageRepository.KEY_AUTO_SUBSCRIBE)) {
+            SmartCredentialsPushNotificationsFactory.getPushNotificationsApi().subscribe(null);
+        }
+        if (mStorageRepository.getPushNotificationsConfigBoolean(
+                PushNotificationsStorageRepository.KEY_SUBSCRIPTION_STATE)) {
+            mHandler.onNewToken(token);
         }
     }
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        if (ObjectGraphCreatorPushNotifications.getInstance().isSubscribed()) {
-            ObjectGraphCreatorPushNotifications.getInstance().setRemoteMessageData(new FirebaseRemoteMessage(remoteMessage));
+        if (mStorageRepository.getPushNotificationsConfigBoolean(
+                PushNotificationsStorageRepository.KEY_SUBSCRIPTION_STATE)) {
+            mHandler.onMessageReceived(new FirebaseRemoteMessage(remoteMessage));
         }
     }
 
     @Override
     public void onMessageSent(String messageId) {
-        ObjectGraphCreatorPushNotifications.getInstance().setSentMessageId(messageId);
+        mHandler.onMessageSent(messageId);
     }
 
     @Override
     public void onSendError(String messageId, Exception exception) {
-        ObjectGraphCreatorPushNotifications.getInstance().setSendErrorData(
-                new SmartCredentialsSendError(messageId, exception));
+        mHandler.onSendError(new SmartCredentialsSendError(messageId, exception));
     }
 }

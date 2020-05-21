@@ -55,14 +55,22 @@ public enum SmartCredentialsFeatureSet {
             "The Subscribe feature is not supported on this device model."),
     UNSUBSCRIBE("Unsubscribe", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
             "The Unsubscribe feature is not supported on this device model."),
+    REGISTER_TO_TPNS("Register to TPNS", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
+            "Register to TPNS feature is not supported on this device model."),
+    UNREGISTER_TO_TPNS("Unregister to TPNS", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
+            "Unregister to TPNS feature is not supported on this device model."),
     SUBSCRIBE_TO_TOPIC("Subscribe To Topic", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
             "The Subscribe feature is not supported on this device model."),
     UNSUBSCRIBE_TO_TOPIC("Unsubscribe To Topic", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
             "The Unsubscribe feature is not supported on this device model."),
     RETRIEVE_TOKEN("Retrieve Token", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
             "The Retrieve Token feature is not supported on this device model."),
+    RETRIEVE_DEVICE_ID("Retrieve Device Id", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
+            "The Retrieve Device Id feature is not supported on this device model."),
     SEND_MESSAGE("Send Message", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
-            "The Send Message feature is not supported on this device model."),;
+            "The Send Message feature is not supported on this device model."),
+    DATA_GENERATOR("Push Notification Data Generator", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
+            "The Push Notification Data Generator feature is not supported on this device model.");
 
     private final SmartCredentialsModuleSet mModule;
     private final String mFeatureName;

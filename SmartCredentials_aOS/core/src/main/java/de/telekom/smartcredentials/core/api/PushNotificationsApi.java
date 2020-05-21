@@ -16,11 +16,9 @@
 
 package de.telekom.smartcredentials.core.api;
 
-import android.arch.lifecycle.LiveData;
-
-import de.telekom.smartcredentials.core.pushnotifications.SmartCredentialsSendError;
-import de.telekom.smartcredentials.core.pushnotifications.SmartCredentialsMessage;
-import de.telekom.smartcredentials.core.pushnotifications.SmartCredentialsRemoteMessage;
+import de.telekom.smartcredentials.core.pushnotifications.callbacks.PushNotificationsCallback;
+import de.telekom.smartcredentials.core.pushnotifications.callbacks.PushNotificationsDataCallback;
+import de.telekom.smartcredentials.core.pushnotifications.models.SmartCredentialsMessage;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsResponse;
 
@@ -29,23 +27,23 @@ import de.telekom.smartcredentials.core.responses.SmartCredentialsResponse;
  */
 public interface PushNotificationsApi {
 
-    SmartCredentialsApiResponse<Void> subscribe();
+    SmartCredentialsApiResponse<Void> subscribe(PushNotificationsCallback callback);
 
-    SmartCredentialsApiResponse<Void> unsubscribe();
+    SmartCredentialsApiResponse<Void> unsubscribe(PushNotificationsCallback callback);
 
-    SmartCredentialsApiResponse<Void> subscribeToTopic(String topic);
+    SmartCredentialsApiResponse<Void> subscribeToTopic(String topic, PushNotificationsCallback callback);
 
-    SmartCredentialsApiResponse<Void> unsubscribeToTopic(String topic);
+    SmartCredentialsApiResponse<Void> unsubscribeToTopic(String topic, PushNotificationsCallback callback);
+
+    SmartCredentialsApiResponse<Void> registerToTPNS(PushNotificationsCallback callback);
+
+    SmartCredentialsApiResponse<Void> unregisterToTPNS(PushNotificationsCallback callback);
 
     SmartCredentialsResponse<String> retrieveToken();
 
+    SmartCredentialsResponse<String> retrieveDeviceId();
+
     SmartCredentialsResponse<Void> sendMessage(SmartCredentialsMessage message);
 
-    LiveData<String> getTokenData();
-
-    LiveData<SmartCredentialsRemoteMessage> getMessageData();
-
-    LiveData<String> getSentMessageIdData();
-
-    LiveData<SmartCredentialsSendError> getSendErrorData();
+    SmartCredentialsResponse<Void> createDataGenerator(PushNotificationsDataCallback callback);
 }

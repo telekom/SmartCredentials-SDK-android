@@ -47,9 +47,11 @@ allprojects {
         gsonVersion = "2.8.5"
         mobileVisionVersion = "17.0.2"
 
+        retrofitVersion = "2.5.0"
         okHttpVersion = "3.14.0"
         blinkIDVersion = "4.6.0"
         appAuthVersion = "0.7.1"
+        rxJavaVersion = "2.1.1"
 
         junitVersion = "4.12"
         mockitoVersion = "2.23.4"

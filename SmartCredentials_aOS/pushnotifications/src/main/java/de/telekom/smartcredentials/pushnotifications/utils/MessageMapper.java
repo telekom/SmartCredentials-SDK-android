@@ -18,9 +18,7 @@ package de.telekom.smartcredentials.pushnotifications.utils;
 
 import com.google.firebase.messaging.RemoteMessage;
 
-import java.util.Map;
-
-import de.telekom.smartcredentials.core.pushnotifications.SmartCredentialsMessage;
+import de.telekom.smartcredentials.core.pushnotifications.models.SmartCredentialsMessage;
 
 /**
  * Created by gabriel.blaj@endava.com at 5/15/2020

@@ -52,7 +52,7 @@ public class ObjectGraphCreatorAuthentication {
     private StorageApi getStorageApi() {
         if (mStorageApi == null) {
             throw new RuntimeException(SmartCredentialsModuleSet.STORAGE_MODULE + " from "
-                    + SmartCredentialsModuleSet.OTP_MODULE + " has not been initialized");
+                    + SmartCredentialsModuleSet.STORAGE_MODULE + " has not been initialized");
         }
         return mStorageApi;
     }

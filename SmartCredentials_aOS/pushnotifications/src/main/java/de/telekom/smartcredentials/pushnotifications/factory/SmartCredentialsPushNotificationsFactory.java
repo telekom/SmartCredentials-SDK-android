@@ -20,10 +20,12 @@ import android.support.annotation.NonNull;
 
 import de.telekom.smartcredentials.core.api.CoreApi;
 import de.telekom.smartcredentials.core.api.PushNotificationsApi;
+import de.telekom.smartcredentials.core.api.StorageApi;
 import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsModuleSet;
-import de.telekom.smartcredentials.core.configurations.PushNotificationsConfiguration;
+import de.telekom.smartcredentials.core.pushnotifications.configuration.PushNotificationsConfiguration;
 import de.telekom.smartcredentials.core.controllers.CoreController;
 import de.telekom.smartcredentials.core.exceptions.InvalidCoreApiException;
+import de.telekom.smartcredentials.core.pushnotifications.enums.ServiceType;
 import de.telekom.smartcredentials.pushnotifications.utils.FirebaseManager;
 import de.telekom.smartcredentials.pushnotifications.controllers.PushNotificationsController;
 import de.telekom.smartcredentials.pushnotifications.di.ObjectGraphCreatorPushNotifications;
@@ -44,6 +46,7 @@ public class SmartCredentialsPushNotificationsFactory {
     @NonNull
     public static synchronized PushNotificationsApi initSmartCredentialsPushNotificationsModule(
             @NonNull final CoreApi coreApi,
+            @NonNull final StorageApi storageApi,
             @NonNull final PushNotificationsConfiguration configuration,
             final boolean autoSubscribe) {
 
@@ -55,9 +58,16 @@ public class SmartCredentialsPushNotificationsFactory {
             throw new InvalidCoreApiException(SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE.getModuleName());
         }
 
-        ObjectGraphCreatorPushNotifications objectGraphCreatorPushNotifications = ObjectGraphCreatorPushNotifications.getInstance();
-        objectGraphCreatorPushNotifications.setSubscriptionState(autoSubscribe);
         FirebaseManager.initializeFirebase(configuration);
+        ObjectGraphCreatorPushNotifications objectGraphCreatorPushNotifications =
+                ObjectGraphCreatorPushNotifications.getInstance();
+        objectGraphCreatorPushNotifications.init(storageApi);
+        if(configuration.getServiceType().equals(ServiceType.TPNS)){
+            objectGraphCreatorPushNotifications.setService(autoSubscribe,
+                    configuration.getServiceType(), configuration.getTpnsApplicationKey(), configuration.isTpnsInProduction());
+        } else {
+            objectGraphCreatorPushNotifications.setService(autoSubscribe, configuration.getServiceType());
+        }
         sPushNotificationsController = objectGraphCreatorPushNotifications.provideApiControllerPushNotifications(coreController);
         return sPushNotificationsController;
     }
