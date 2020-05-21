@@ -20,8 +20,8 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Map;
 
-import de.telekom.smartcredentials.core.pushnotifications.SmartCredentialsNotification;
-import de.telekom.smartcredentials.core.pushnotifications.SmartCredentialsRemoteMessage;
+import de.telekom.smartcredentials.core.pushnotifications.models.SmartCredentialsNotification;
+import de.telekom.smartcredentials.core.pushnotifications.models.SmartCredentialsRemoteMessage;
 
 /**
  * Created by gabriel.blaj@endava.com at 5/15/2020

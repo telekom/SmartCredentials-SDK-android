@@ -16,15 +16,21 @@
 
 package de.telekom.smartcredentials.pushnotifications.di;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
+import de.telekom.smartcredentials.core.api.StorageApi;
+import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsModuleSet;
 import de.telekom.smartcredentials.core.controllers.CoreController;
-import de.telekom.smartcredentials.core.pushnotifications.SmartCredentialsRemoteMessage;
-import de.telekom.smartcredentials.core.pushnotifications.SmartCredentialsSendError;
-import de.telekom.smartcredentials.pushnotifications.models.FirebaseRemoteMessage;
+import de.telekom.smartcredentials.core.pushnotifications.enums.ServiceType;
+import de.telekom.smartcredentials.pushnotifications.handlers.PushNotificationsHandler;
+import de.telekom.smartcredentials.pushnotifications.repositories.PushNotificationsStorageRepository;
 import de.telekom.smartcredentials.pushnotifications.controllers.PushNotificationsController;
+import de.telekom.smartcredentials.pushnotifications.rest.models.TpnsRequestBody;
+
+import static de.telekom.smartcredentials.pushnotifications.repositories.PushNotificationsStorageRepository.KEY_AUTO_SUBSCRIBE;
+import static de.telekom.smartcredentials.pushnotifications.repositories.PushNotificationsStorageRepository.KEY_SERVICE_TYPE;
+import static de.telekom.smartcredentials.pushnotifications.repositories.PushNotificationsStorageRepository.KEY_TPNS_APPLICATION_KEY;
+import static de.telekom.smartcredentials.pushnotifications.repositories.PushNotificationsStorageRepository.KEY_TPNS_PRODUCTION_STATE;
 
 /**
  * Created by gabriel.blaj@endava.com at 5/14/2020
@@ -32,18 +38,10 @@ import de.telekom.smartcredentials.pushnotifications.controllers.PushNotificatio
 public class ObjectGraphCreatorPushNotifications {
 
     private static ObjectGraphCreatorPushNotifications sInstance;
-
-    private boolean mSubscriptionState;
-    private MutableLiveData<String> mTokenData;
-    private MutableLiveData<SmartCredentialsRemoteMessage> mRemoteMessageData;
-    private MutableLiveData<String> mSentMessageIdData;
-    private MutableLiveData<SmartCredentialsSendError> mSendErrorData;
+    private StorageApi mStorageApi;
 
     private ObjectGraphCreatorPushNotifications() {
-        mTokenData = new MutableLiveData<>();
-        mRemoteMessageData = new MutableLiveData<>();
-        mSentMessageIdData = new MutableLiveData<>();
-        mSendErrorData = new MutableLiveData<>();
+        // required empty constructor
     }
 
     public static ObjectGraphCreatorPushNotifications getInstance() {
@@ -53,49 +51,55 @@ public class ObjectGraphCreatorPushNotifications {
         return sInstance;
     }
 
+    public void init(StorageApi storageApi) {
+        mStorageApi = storageApi;
+    }
+
     @NonNull
     public PushNotificationsController provideApiControllerPushNotifications(CoreController coreController) {
         return new PushNotificationsController(coreController);
     }
 
-    public MutableLiveData<String> getTokenData() {
-        return mTokenData;
+    public void setService(boolean autoSubscribe, ServiceType service) {
+        providePushNotificationsStorageRepository().saveConfigurationValue(
+                KEY_AUTO_SUBSCRIBE, autoSubscribe);
+        providePushNotificationsStorageRepository().saveConfigurationValue(
+                KEY_SERVICE_TYPE, service.name());
     }
 
-    public void setTokenData(String token) {
-        mTokenData.postValue(token);
+    public void setService(boolean autoSubscribe, ServiceType service,
+                           String applicationKey, boolean isInProduction) {
+        providePushNotificationsStorageRepository().saveConfigurationValue(
+                KEY_AUTO_SUBSCRIBE, autoSubscribe);
+        providePushNotificationsStorageRepository().saveConfigurationValue(
+                KEY_SERVICE_TYPE, service.name());
+        providePushNotificationsStorageRepository().saveConfigurationValue(
+                KEY_TPNS_PRODUCTION_STATE,isInProduction);
+        if(applicationKey == null) {
+            applicationKey = "";
+        }
+        providePushNotificationsStorageRepository().saveConfigurationValue(
+                KEY_TPNS_APPLICATION_KEY, applicationKey);
     }
 
-    public MutableLiveData<SmartCredentialsRemoteMessage> getRemoteMessageData() {
-        return mRemoteMessageData;
+    private StorageApi getStorageApi() {
+        if (mStorageApi == null) {
+            throw new RuntimeException(SmartCredentialsModuleSet.STORAGE_MODULE + " from "
+                    + SmartCredentialsModuleSet.STORAGE_MODULE + " has not been initialized");
+        }
+        return mStorageApi;
     }
 
-    public void setRemoteMessageData(FirebaseRemoteMessage firebaseRemoteMessage) {
-        mRemoteMessageData.postValue(firebaseRemoteMessage);
+    public PushNotificationsStorageRepository providePushNotificationsStorageRepository(){
+        return PushNotificationsStorageRepository.getInstance(getStorageApi());
     }
 
-    public void setSentMessageId(String messageId) {
-        mSentMessageIdData.postValue(messageId);
+    public TpnsRequestBody provideTpnsRequestBody(){
+        return new TpnsRequestBody();
     }
 
-    public MutableLiveData<String> getSentMessageIdData() {
-        return mSentMessageIdData;
-    }
-
-    public void setSendErrorData(SmartCredentialsSendError sendError){
-        mSendErrorData.postValue(sendError);
-    }
-
-    public LiveData<SmartCredentialsSendError> getSendErrorData() {
-        return mSendErrorData;
-    }
-
-    public void setSubscriptionState(boolean state) {
-        mSubscriptionState = state;
-    }
-
-    public boolean isSubscribed() {
-        return mSubscriptionState;
+    public PushNotificationsHandler providePushNotificationsHandler(){
+        return PushNotificationsHandler.getInstance();
     }
 
     public static void destroy() {

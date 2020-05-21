@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.telekom.smartcredentials.core.pushnotifications;
+package de.telekom.smartcredentials.core.pushnotifications.models;
 
 import android.net.Uri;
 

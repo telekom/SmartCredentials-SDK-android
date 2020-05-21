@@ -19,7 +19,7 @@ package de.telekom.smartcredentials.pushnotifications.utils;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 
-import de.telekom.smartcredentials.core.configurations.PushNotificationsConfiguration;
+import de.telekom.smartcredentials.core.pushnotifications.configuration.PushNotificationsConfiguration;
 
 /**
  * Created by gabriel.blaj@endava.com at 5/15/2020

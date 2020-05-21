@@ -14,26 +14,16 @@
  * limitations under the License.
  */
 
-package de.telekom.smartcredentials.core.pushnotifications;
+package de.telekom.smartcredentials.core.pushnotifications.models;
 
 /**
- * Created by gabriel.blaj@endava.com at 5/15/2020
+ * Created by gabriel.blaj@endava.com at 5/20/2020
  */
-public class SmartCredentialsSendError {
+public abstract class PushNotificationsError {
 
-    private String mMessageId;
-    private Exception mException;
+    public abstract String getField();
 
-    public SmartCredentialsSendError(String mMessageId, Exception mException) {
-        this.mMessageId = mMessageId;
-        this.mException = mException;
-    }
+    public abstract String getMessage();
 
-    public String getMessageId() {
-        return mMessageId;
-    }
-
-    public Exception getException() {
-        return mException;
-    }
+    public abstract String getErrorCode();
 }

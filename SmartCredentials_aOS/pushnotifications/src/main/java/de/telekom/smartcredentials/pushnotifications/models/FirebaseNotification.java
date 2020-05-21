@@ -20,7 +20,7 @@ import android.net.Uri;
 
 import com.google.firebase.messaging.RemoteMessage;
 
-import de.telekom.smartcredentials.core.pushnotifications.SmartCredentialsNotification;
+import de.telekom.smartcredentials.core.pushnotifications.models.SmartCredentialsNotification;
 
 /**
  * Created by gabriel.blaj@endava.com at 5/15/2020
