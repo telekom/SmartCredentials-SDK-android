@@ -69,7 +69,6 @@ public class SmartCredentialsStorageFactory {
 
     public static void clear() {
         ObjectGraphCreatorStorage.destroy();
-        sStorageController.clearStorage();
         sStorageController.detach();
         sStorageController = null;
     }
