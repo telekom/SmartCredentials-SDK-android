@@ -29,7 +29,6 @@ import de.telekom.smartcredentials.core.eid.callbacks.EidSendCommandCallback;
 import de.telekom.smartcredentials.core.eid.callbacks.EidUpdateTagCallback;
 import de.telekom.smartcredentials.core.eid.commands.EidCommand;
 import de.telekom.smartcredentials.eid.callback.AusweisCallback;
-import de.telekom.smartcredentials.eid.messages.parser.MessageParser;
 import de.telekom.smartcredentials.eid.serviceconnection.AusweisServiceConnection;
 
 /**
@@ -52,8 +51,8 @@ public class EidController implements EidApi {
     public void bind(Context context, String appPackage) {
         Intent intent = new Intent(AUSWEIS_APP_ACTION);
         intent.setPackage(appPackage);
-        mAusweisCallback = new AusweisCallback(new MessageParser(mMessageReceivedCallback), mMessageReceivedCallback);
-        mServiceConnection = new AusweisServiceConnection(mAusweisCallback, mMessageReceivedCallback);
+        mAusweisCallback = new AusweisCallback(mMessageReceivedCallback);
+        mServiceConnection = new AusweisServiceConnection(mAusweisCallback);
         context.bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
@@ -71,7 +70,11 @@ public class EidController implements EidApi {
     @Override
     public <T extends EidCommand> void sendCommand(T command, EidSendCommandCallback callback) {
         try {
-            mServiceConnection.getAusweisSdk().send(mAusweisCallback.mSessionId, mGson.toJson(command));
+            if (mServiceConnection != null) {
+                mServiceConnection.getAusweisSdk().send(mAusweisCallback.mSessionId, mGson.toJson(command));
+            } else {
+                callback.onFailed(new Exception("Service connection was lost."));
+            }
         } catch (RemoteException e) {
             callback.onFailed(e);
         }
@@ -80,8 +83,12 @@ public class EidController implements EidApi {
     @Override
     public void updateNfcTag(Tag tag, EidUpdateTagCallback callback) {
         try {
-            mServiceConnection.getAusweisSdk().updateNfcTag(mAusweisCallback.mSessionId, tag);
-            callback.onSuccess();
+            if (mServiceConnection != null) {
+                mServiceConnection.getAusweisSdk().updateNfcTag(mAusweisCallback.mSessionId, tag);
+                callback.onSuccess();
+            } else {
+                callback.onFailed(new Exception("Service connection was lost."));
+            }
         } catch (RemoteException e) {
             callback.onFailed(e);
         }
