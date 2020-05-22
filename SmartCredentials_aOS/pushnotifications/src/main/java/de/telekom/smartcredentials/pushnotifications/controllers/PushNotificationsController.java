@@ -32,10 +32,10 @@ import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsFeatureSet;
 import de.telekom.smartcredentials.core.controllers.CoreController;
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
 import de.telekom.smartcredentials.core.pushnotifications.callbacks.PushNotificationsCallback;
-import de.telekom.smartcredentials.core.pushnotifications.callbacks.PushNotificationsDataCallback;
+import de.telekom.smartcredentials.core.pushnotifications.callbacks.PushNotificationsMessageCallback;
+import de.telekom.smartcredentials.core.pushnotifications.callbacks.PushNotificationsTokenCallback;
 import de.telekom.smartcredentials.core.pushnotifications.models.PushNotificationsError;
 import de.telekom.smartcredentials.core.pushnotifications.enums.ServiceType;
-import de.telekom.smartcredentials.core.pushnotifications.models.SmartCredentialsMessage;
 import de.telekom.smartcredentials.core.responses.FeatureNotSupportedThrowable;
 import de.telekom.smartcredentials.core.responses.RootedThrowable;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
@@ -46,7 +46,6 @@ import de.telekom.smartcredentials.pushnotifications.repositories.PushNotificati
 import de.telekom.smartcredentials.pushnotifications.rest.RetrofitClient;
 import de.telekom.smartcredentials.pushnotifications.rest.http.HttpClientFactory;
 import de.telekom.smartcredentials.pushnotifications.rest.models.TpnsRequestBody;
-import de.telekom.smartcredentials.pushnotifications.utils.MessageMapper;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -57,14 +56,12 @@ import io.reactivex.schedulers.Schedulers;
 public class PushNotificationsController implements PushNotificationsApi {
 
     private final CoreController mCoreController;
-    private final MessageMapper mMessageMapper;
     private final RetrofitClient mRetrofitClient;
     private final PushNotificationsStorageRepository mStorageRepository;
     private final CompositeDisposable mCompositeDisposable;
 
     public PushNotificationsController(CoreController coreController) {
         mCoreController = coreController;
-        mMessageMapper = new MessageMapper();
         mRetrofitClient = new RetrofitClient(new HttpClientFactory());
         mCompositeDisposable = new CompositeDisposable();
         mStorageRepository = ObjectGraphCreatorPushNotifications.getInstance().providePushNotificationsStorageRepository();
@@ -126,18 +123,7 @@ public class PushNotificationsController implements PushNotificationsApi {
         return new SmartCredentialsResponse<>();
     }
 
-    @Override
-    public SmartCredentialsApiResponse<Void> registerToTPNS(PushNotificationsCallback callback) {
-        if (mCoreController.isSecurityCompromised()) {
-            mCoreController.handleSecurityCompromised();
-            return new SmartCredentialsResponse<>(new RootedThrowable());
-        }
-
-        if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.REGISTER_TO_TPNS)) {
-            String errorMessage = SmartCredentialsFeatureSet.REGISTER_TO_TPNS.getNotSupportedDesc();
-            return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
-        }
-
+    private void registerToTPNS(PushNotificationsCallback callback) {
         if (mStorageRepository.getPushNotificationsConfigString(PushNotificationsStorageRepository.KEY_SERVICE_TYPE)
                 .equals(ServiceType.TPNS.name())) {
             if (mStorageRepository.getPushNotificationsConfigBoolean(
@@ -175,7 +161,6 @@ public class PushNotificationsController implements PushNotificationsApi {
             ApiLoggerResolver.logError(getClass().getSimpleName(), PushNotificationsMessages.INVALID_TPNS_CONFIGURATION.getMessage());
             callback.onFailure(PushNotificationsMessages.INVALID_TPNS_CONFIGURATION.getMessage(), new ArrayList<>());
         }
-        return new SmartCredentialsResponse<>();
     }
 
     @Override
@@ -193,7 +178,7 @@ public class PushNotificationsController implements PushNotificationsApi {
         if (mStorageRepository.getPushNotificationsConfigString(PushNotificationsStorageRepository.KEY_SERVICE_TYPE)
                 .equals(ServiceType.TPNS.name())) {
 
-            unregisterToTPNS(new PushNotificationsCallback() {
+            unregisterFromTPNS(new PushNotificationsCallback() {
                 @Override
                 public void onSuccess(String message) {
                     mStorageRepository.saveConfigurationValue(
@@ -227,18 +212,7 @@ public class PushNotificationsController implements PushNotificationsApi {
         return new SmartCredentialsResponse<>();
     }
 
-    @Override
-    public SmartCredentialsApiResponse<Void> unregisterToTPNS(PushNotificationsCallback callback) {
-        if (mCoreController.isSecurityCompromised()) {
-            mCoreController.handleSecurityCompromised();
-            return new SmartCredentialsResponse<>(new RootedThrowable());
-        }
-
-        if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.UNREGISTER_TO_TPNS)) {
-            String errorMessage = SmartCredentialsFeatureSet.UNREGISTER_TO_TPNS.getNotSupportedDesc();
-            return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
-        }
-
+    private void unregisterFromTPNS(PushNotificationsCallback callback) {
         if (mStorageRepository.getPushNotificationsConfigString(PushNotificationsStorageRepository.KEY_SERVICE_TYPE)
                 .equals(ServiceType.TPNS.name())) {
             if (mStorageRepository.getPushNotificationsConfigBoolean(
@@ -276,7 +250,6 @@ public class PushNotificationsController implements PushNotificationsApi {
             ApiLoggerResolver.logError(getClass().getSimpleName(), PushNotificationsMessages.INVALID_TPNS_CONFIGURATION.getMessage());
             callback.onFailure(PushNotificationsMessages.INVALID_TPNS_CONFIGURATION.getMessage(), new ArrayList<>());
         }
-        return new SmartCredentialsResponse<>();
     }
 
     @Override
@@ -315,14 +288,14 @@ public class PushNotificationsController implements PushNotificationsApi {
     }
 
     @Override
-    public SmartCredentialsApiResponse<Void> unsubscribeToTopic(String topic, PushNotificationsCallback callback) {
+    public SmartCredentialsApiResponse<Void> unsubscribeFromTopic(String topic, PushNotificationsCallback callback) {
         if (mCoreController.isSecurityCompromised()) {
             mCoreController.handleSecurityCompromised();
             return new SmartCredentialsResponse<>(new RootedThrowable());
         }
 
-        if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.UNSUBSCRIBE_TO_TOPIC)) {
-            String errorMessage = SmartCredentialsFeatureSet.UNSUBSCRIBE_TO_TOPIC.getNotSupportedDesc();
+        if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.UNSUBSCRIBE_FROM_TOPIC)) {
+            String errorMessage = SmartCredentialsFeatureSet.UNSUBSCRIBE_FROM_TOPIC.getNotSupportedDesc();
             return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
         }
 
@@ -376,23 +349,7 @@ public class PushNotificationsController implements PushNotificationsApi {
     }
 
     @Override
-    public SmartCredentialsResponse<Void> sendMessage(SmartCredentialsMessage message) {
-        if (mCoreController.isSecurityCompromised()) {
-            mCoreController.handleSecurityCompromised();
-            return new SmartCredentialsResponse<>(new RootedThrowable());
-        }
-
-        if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.SEND_MESSAGE)) {
-            String errorMessage = SmartCredentialsFeatureSet.SEND_MESSAGE.getNotSupportedDesc();
-            return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
-        }
-
-        FirebaseMessaging.getInstance().send(mMessageMapper.mapToRemoteMessage(message));
-        return new SmartCredentialsResponse<>();
-    }
-
-    @Override
-    public SmartCredentialsResponse<Void> createDataGenerator(PushNotificationsDataCallback callback) {
+    public SmartCredentialsResponse<Void> setTokenRefreshedCallback(PushNotificationsTokenCallback callback) {
         if (mCoreController.isSecurityCompromised()) {
             mCoreController.handleSecurityCompromised();
             return new SmartCredentialsResponse<>(new RootedThrowable());
@@ -403,7 +360,23 @@ public class PushNotificationsController implements PushNotificationsApi {
             return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
         }
         ObjectGraphCreatorPushNotifications.getInstance().providePushNotificationsHandler()
-                .instantiateCallback(callback);
+                .instantiateTokenCallback(callback);
+        return new SmartCredentialsResponse<>();
+    }
+
+    @Override
+    public SmartCredentialsResponse<Void> setMessageReceivedCallback(PushNotificationsMessageCallback callback) {
+        if (mCoreController.isSecurityCompromised()) {
+            mCoreController.handleSecurityCompromised();
+            return new SmartCredentialsResponse<>(new RootedThrowable());
+        }
+
+        if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.DATA_GENERATOR)) {
+            String errorMessage = SmartCredentialsFeatureSet.DATA_GENERATOR.getNotSupportedDesc();
+            return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
+        }
+        ObjectGraphCreatorPushNotifications.getInstance().providePushNotificationsHandler()
+                .instantiateMessageCallback(callback);
         return new SmartCredentialsResponse<>();
     }
 }

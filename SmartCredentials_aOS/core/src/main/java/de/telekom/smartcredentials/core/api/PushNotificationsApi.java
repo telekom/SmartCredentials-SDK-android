@@ -17,8 +17,8 @@
 package de.telekom.smartcredentials.core.api;
 
 import de.telekom.smartcredentials.core.pushnotifications.callbacks.PushNotificationsCallback;
-import de.telekom.smartcredentials.core.pushnotifications.callbacks.PushNotificationsDataCallback;
-import de.telekom.smartcredentials.core.pushnotifications.models.SmartCredentialsMessage;
+import de.telekom.smartcredentials.core.pushnotifications.callbacks.PushNotificationsMessageCallback;
+import de.telekom.smartcredentials.core.pushnotifications.callbacks.PushNotificationsTokenCallback;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsResponse;
 
@@ -33,17 +33,13 @@ public interface PushNotificationsApi {
 
     SmartCredentialsApiResponse<Void> subscribeToTopic(String topic, PushNotificationsCallback callback);
 
-    SmartCredentialsApiResponse<Void> unsubscribeToTopic(String topic, PushNotificationsCallback callback);
-
-    SmartCredentialsApiResponse<Void> registerToTPNS(PushNotificationsCallback callback);
-
-    SmartCredentialsApiResponse<Void> unregisterToTPNS(PushNotificationsCallback callback);
+    SmartCredentialsApiResponse<Void> unsubscribeFromTopic(String topic, PushNotificationsCallback callback);
 
     SmartCredentialsResponse<String> retrieveToken();
 
     SmartCredentialsResponse<String> retrieveDeviceId();
 
-    SmartCredentialsResponse<Void> sendMessage(SmartCredentialsMessage message);
+    SmartCredentialsResponse<Void> setTokenRefreshedCallback(PushNotificationsTokenCallback callback);
 
-    SmartCredentialsResponse<Void> createDataGenerator(PushNotificationsDataCallback callback);
+    SmartCredentialsResponse<Void> setMessageReceivedCallback(PushNotificationsMessageCallback callback);
 }

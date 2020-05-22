@@ -21,18 +21,18 @@ package de.telekom.smartcredentials.pushnotifications.enums;
  */
 public enum PushNotificationsMessages {
     SUCCESSFULLY_SUBSCRIBED("Successfully subscribed to push notifications"),
-    UNSUCCESSFULLY_SUBSCRIBED("Could not subscribed to push notifications"),
+    UNSUCCESSFULLY_SUBSCRIBED("Could not subscribe to push notifications"),
     SUCCESSFULLY_REGISTERED("Successfully registered to TPNS"),
     ALREADY_SUBSCRIBED("Already subscribed to push notifications"),
     ALREADY_REGISTERED("Already registered to TPNS"),
     INVALID_TPNS_CONFIGURATION("Invalid configuration for TPNS"),
     NOT_REGISTERED_TO_TPNS("Not registered to TPNS"),
-    SUCCESSFULLY_UNREGISTERED("Successfully unregistered to TPNS"),
-    SUCCESSFULLY_UNSUBSCRIBED("Successfully unsubscribed to push notifications"),
-    UNSUCCESSFULLY_UNSUBSCRIBED("Could not unsubscribe to push notifications"),
+    SUCCESSFULLY_UNREGISTERED("Successfully unregistered from TPNS"),
+    SUCCESSFULLY_UNSUBSCRIBED("Successfully unsubscribed from push notifications"),
+    UNSUCCESSFULLY_UNSUBSCRIBED("Could not unsubscribe from push notifications"),
     NOT_SUBSCRIBED("Not Subscribed to push notifications"),
     SUCCESSFULLY_SUBSCRIBED_TO("Successfully subscribed to "),
-    SUCCESSFULLY_UNSUBSCRIBED_TO("Successfully unsubscribed to "),
+    SUCCESSFULLY_UNSUBSCRIBED_TO("Successfully unsubscribed from "),
     SUBSCRIBE_FOR_NOTIFICATIONS("Please use the subscribe method in order to receive notifications about this topic");
 
     String mMessage;

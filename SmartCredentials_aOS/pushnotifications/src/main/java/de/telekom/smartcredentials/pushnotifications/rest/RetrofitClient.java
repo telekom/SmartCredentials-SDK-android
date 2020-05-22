@@ -49,10 +49,6 @@ public class RetrofitClient {
     }
 
     public String getTpnsUrl(boolean isInProduction) {
-        if(isInProduction) {
-            return PRODUCTION_URL;
-        } else {
-            return TEST_URL;
-        }
+        return isInProduction ? PRODUCTION_URL : TEST_URL;
     }
 }

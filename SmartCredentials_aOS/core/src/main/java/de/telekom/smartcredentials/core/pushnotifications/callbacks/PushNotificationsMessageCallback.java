@@ -17,18 +17,11 @@
 package de.telekom.smartcredentials.core.pushnotifications.callbacks;
 
 import de.telekom.smartcredentials.core.pushnotifications.models.SmartCredentialsRemoteMessage;
-import de.telekom.smartcredentials.core.pushnotifications.models.SmartCredentialsSendError;
 
 /**
  * Created by gabriel.blaj@endava.com at 5/20/2020
  */
-public interface PushNotificationsDataCallback {
-
-    void onNewToken(String token);
+public interface PushNotificationsMessageCallback {
 
     void onMessageReceived(SmartCredentialsRemoteMessage remoteMessage);
-
-    void onMessageSent(String messageId);
-
-    void onSendError(SmartCredentialsSendError error);
 }
