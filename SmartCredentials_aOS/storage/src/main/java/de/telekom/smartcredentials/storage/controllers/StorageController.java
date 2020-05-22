@@ -25,6 +25,7 @@ import org.json.JSONException;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import de.telekom.smartcredentials.core.api.StorageApi;
 import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsFeatureSet;
@@ -53,6 +54,10 @@ import de.telekom.smartcredentials.core.storage.TokenRequest;
 import de.telekom.smartcredentials.core.strategies.EncryptionStrategy;
 import de.telekom.smartcredentials.storage.domain.converters.ModelConverter;
 import de.telekom.smartcredentials.storage.exceptions.RepositoryException;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static de.telekom.smartcredentials.core.controllers.CoreController.UID_EXCEPTION_MESSAGE;
 import static de.telekom.smartcredentials.core.model.ModelValidator.checkParamNotNull;
@@ -64,12 +69,14 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
     private final Repository mRepository;
     private final EncryptionStrategy mEncryptionStrategy;
     private final Gson mGson;
+    private final CompositeDisposable mCompositeDisposable;
 
     public StorageController(CoreController coreController, Repository repository, EncryptionStrategy encryptionStrategy, Gson gson) {
         mCoreController = coreController;
         mRepository = repository;
         mEncryptionStrategy = encryptionStrategy;
         mGson = gson;
+        mCompositeDisposable = new CompositeDisposable();
         mCoreController.attach(this);
     }
 
@@ -182,9 +189,13 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
         return null;
     }
 
-    @SuppressWarnings("UnusedReturnValue")
-    public int clearStorage() {
-        return mRepository.deleteAllData();
+    private void clearStorage() {
+        mCompositeDisposable.add(Observable.defer(() -> Observable.just(mRepository.deleteAllData()))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(count -> ApiLoggerResolver.logEvent(String.format(Locale.GERMANY, "Deleted %d rows", count)),
+                        throwable -> ApiLoggerResolver.logError(StorageController.class.getSimpleName(),
+                                "Failed to clear storage")));
     }
 
     /**
@@ -448,6 +459,7 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
     }
 
     public void detach() {
+        mCompositeDisposable.clear();
         mCoreController.detach(this);
     }
 

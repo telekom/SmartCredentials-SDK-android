@@ -73,6 +73,8 @@ dependencies {
 
     annotationProcessor "android.arch.persistence.room:compiler:${architectureComponentsVersion}"
 
+    implementation "io.reactivex.rxjava2:rxandroid:${rxJavaVersion}"
+
     androidTestImplementation "com.android.support.test.espresso:espresso-core:${espressoLibVersion}"
     androidTestImplementation "android.arch.persistence.room:testing:${architectureComponentsVersion}"
     androidTestImplementation "org.mockito:mockito-core:${mockitoVersion}"
