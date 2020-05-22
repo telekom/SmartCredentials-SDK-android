@@ -22,6 +22,8 @@ import de.telekom.smartcredentials.core.api.StorageApi;
 import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsModuleSet;
 import de.telekom.smartcredentials.core.controllers.CoreController;
 import de.telekom.smartcredentials.core.pushnotifications.enums.ServiceType;
+import de.telekom.smartcredentials.core.pushnotifications.enums.TpnsEnvironment;
+import de.telekom.smartcredentials.pushnotifications.controllers.rx.RxPushNotificationsController;
 import de.telekom.smartcredentials.pushnotifications.handlers.PushNotificationsHandler;
 import de.telekom.smartcredentials.pushnotifications.repositories.PushNotificationsStorageRepository;
 import de.telekom.smartcredentials.pushnotifications.controllers.PushNotificationsController;
@@ -38,6 +40,7 @@ import static de.telekom.smartcredentials.pushnotifications.repositories.PushNot
 public class ObjectGraphCreatorPushNotifications {
 
     private static ObjectGraphCreatorPushNotifications sInstance;
+    private PushNotificationsController mController;
     private StorageApi mStorageApi;
 
     private ObjectGraphCreatorPushNotifications() {
@@ -57,7 +60,18 @@ public class ObjectGraphCreatorPushNotifications {
 
     @NonNull
     public PushNotificationsController provideApiControllerPushNotifications(CoreController coreController) {
-        return new PushNotificationsController(coreController);
+        if(mController == null) {
+            mController = new PushNotificationsController(coreController);
+        }
+        return mController;
+    }
+
+    @NonNull
+    public RxPushNotificationsController provideRxApiControllerPushNotifications(CoreController coreController) {
+        if(mController == null) {
+            mController = new PushNotificationsController(coreController);
+        }
+        return new RxPushNotificationsController(mController);
     }
 
     public void setService(boolean autoSubscribe, ServiceType service) {
@@ -67,19 +81,20 @@ public class ObjectGraphCreatorPushNotifications {
                 KEY_SERVICE_TYPE, service.name());
     }
 
-    public void setService(boolean autoSubscribe, ServiceType service,
-                           String applicationKey, boolean isInProduction) {
-        providePushNotificationsStorageRepository().saveConfigurationValue(
-                KEY_AUTO_SUBSCRIBE, autoSubscribe);
-        providePushNotificationsStorageRepository().saveConfigurationValue(
-                KEY_SERVICE_TYPE, service.name());
-        providePushNotificationsStorageRepository().saveConfigurationValue(
-                KEY_TPNS_PRODUCTION_STATE,isInProduction);
-        if(applicationKey == null) {
-            applicationKey = "";
+    public void setTpnsService(String applicationKey, TpnsEnvironment environment) {
+        if(applicationKey != null) {
+            providePushNotificationsStorageRepository().saveConfigurationValue(
+                    KEY_TPNS_APPLICATION_KEY, applicationKey);
         }
-        providePushNotificationsStorageRepository().saveConfigurationValue(
-                KEY_TPNS_APPLICATION_KEY, applicationKey);
+        if(environment != null){
+            if(environment == TpnsEnvironment.TESTING){
+                providePushNotificationsStorageRepository().saveConfigurationValue(
+                        KEY_TPNS_PRODUCTION_STATE, false);
+            } else {
+                providePushNotificationsStorageRepository().saveConfigurationValue(
+                        KEY_TPNS_PRODUCTION_STATE, true);
+            }
+        }
     }
 
     private StorageApi getStorageApi() {

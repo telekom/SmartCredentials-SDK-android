@@ -70,7 +70,8 @@ android {
 dependencies {
 
     implementation "com.android.support:appcompat-v7:${androidSupportLibVersion}"
-
+    implementation "io.reactivex.rxjava2:rxandroid:${rxJavaVersion}"
+    
     testImplementation "org.hamcrest:hamcrest-library:${hamcrestVersion}"
     testImplementation "junit:junit:${junitVersion}"
     testImplementation "org.mockito:mockito-core:${mockitoVersion}"

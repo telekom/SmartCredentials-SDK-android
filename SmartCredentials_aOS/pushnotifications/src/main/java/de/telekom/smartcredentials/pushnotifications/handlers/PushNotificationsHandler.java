@@ -16,19 +16,19 @@
 
 package de.telekom.smartcredentials.pushnotifications.handlers;
 
-import de.telekom.smartcredentials.core.pushnotifications.callbacks.PushNotificationsDataCallback;
+import de.telekom.smartcredentials.core.pushnotifications.callbacks.PushNotificationsMessageCallback;
+import de.telekom.smartcredentials.core.pushnotifications.callbacks.PushNotificationsTokenCallback;
 import de.telekom.smartcredentials.core.pushnotifications.models.SmartCredentialsRemoteMessage;
-import de.telekom.smartcredentials.core.pushnotifications.models.SmartCredentialsSendError;
 
 /**
  * Created by gabriel.blaj@endava.com at 5/20/2020
  */
-public class PushNotificationsHandler implements PushNotificationsDataCallback {
+public class PushNotificationsHandler {
 
     private static PushNotificationsHandler INSTANCE;
 
-    private PushNotificationsDataCallback mCallback;
-    private boolean isInstantiated;
+    private PushNotificationsTokenCallback mTokenCallback;
+    private PushNotificationsMessageCallback mMessageCallback;
 
     private PushNotificationsHandler() {
     }
@@ -40,35 +40,23 @@ public class PushNotificationsHandler implements PushNotificationsDataCallback {
         return INSTANCE;
     }
 
-    public void instantiateCallback(PushNotificationsDataCallback callback) {
-        this.mCallback = callback;
-        isInstantiated = true;
+    public void instantiateTokenCallback(PushNotificationsTokenCallback callback) {
+        mTokenCallback = callback;
+    }
+
+    public void instantiateMessageCallback(PushNotificationsMessageCallback callback) {
+        mMessageCallback = callback;
     }
 
     public void onNewToken(String token) {
-        if (isInstantiated) {
-            mCallback.onNewToken(token);
+        if (mTokenCallback != null) {
+            mTokenCallback.onNewToken(token);
         }
     }
 
-    @Override
     public void onMessageReceived(SmartCredentialsRemoteMessage remoteMessage) {
-        if (isInstantiated) {
-            mCallback.onMessageReceived(remoteMessage);
-        }
-    }
-
-    @Override
-    public void onMessageSent(String messageId) {
-        if (isInstantiated) {
-            mCallback.onMessageSent(messageId);
-        }
-    }
-
-    @Override
-    public void onSendError(SmartCredentialsSendError error) {
-        if (isInstantiated) {
-            mCallback.onSendError(error);
+        if (mMessageCallback != null) {
+            mMessageCallback.onMessageReceived(remoteMessage);
         }
     }
 }

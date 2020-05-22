@@ -19,6 +19,7 @@ package de.telekom.smartcredentials.core.pushnotifications.configuration;
 import android.content.Context;
 
 import de.telekom.smartcredentials.core.pushnotifications.enums.ServiceType;
+import de.telekom.smartcredentials.core.pushnotifications.enums.TpnsEnvironment;
 
 /**
  * Created by gabriel.blaj@endava.com at 5/14/2020
@@ -34,7 +35,8 @@ public class PushNotificationsConfiguration {
     private final String mStorageBucket;
     private final ServiceType mServiceType;
     private final String mTpnsApplicationKey;
-    private final boolean mTpnsInProduction;
+    private final TpnsEnvironment mTpnsEnvironment;
+    private final boolean mAutoSubscribeState;
 
     private PushNotificationsConfiguration(ConfigurationBuilder builder) {
         mContext = builder.context;
@@ -46,7 +48,8 @@ public class PushNotificationsConfiguration {
         mStorageBucket = builder.storageBucket;
         mServiceType = builder.serviceType;
         mTpnsApplicationKey = builder.tpnsApplicationKey;
-        mTpnsInProduction = builder.isTpnsInProduction;
+        mTpnsEnvironment = builder.tpnsEnvironment;
+        mAutoSubscribeState = builder.autoSubscribeState;
     }
 
     public Context getContext() {
@@ -85,8 +88,12 @@ public class PushNotificationsConfiguration {
         return mTpnsApplicationKey;
     }
 
-    public boolean isTpnsInProduction() {
-        return mTpnsInProduction;
+    public TpnsEnvironment getTpnsEnvironment() {
+        return mTpnsEnvironment;
+    }
+
+    public boolean getAutoSubscribeState() {
+        return mAutoSubscribeState;
     }
 
     public static class ConfigurationBuilder {
@@ -99,7 +106,8 @@ public class PushNotificationsConfiguration {
         private String storageBucket;
         private String tpnsApplicationKey = "";
         private ServiceType serviceType;
-        private boolean isTpnsInProduction;
+        private TpnsEnvironment tpnsEnvironment = TpnsEnvironment.PRODUCTION;
+        private boolean autoSubscribeState = true;
 
         public ConfigurationBuilder(Context context, String apikey, String projectId,
                                     String databaseUrl, String applicationId, String gcmSenderId,
@@ -119,8 +127,13 @@ public class PushNotificationsConfiguration {
             return this;
         }
 
-        public ConfigurationBuilder isTpnsInProduction(boolean isInProduction) {
-            this.isTpnsInProduction = isInProduction;
+        public ConfigurationBuilder setTpnsEnvironment(TpnsEnvironment tpnsEnvironment) {
+            this.tpnsEnvironment = tpnsEnvironment;
+            return this;
+        }
+
+        public ConfigurationBuilder setAutoSubscribeState(boolean autoSubscribeState) {
+            this.autoSubscribeState = autoSubscribeState;
             return this;
         }
 

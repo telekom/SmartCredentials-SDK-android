@@ -19,10 +19,9 @@ package de.telekom.smartcredentials.pushnotifications.service;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import de.telekom.smartcredentials.core.pushnotifications.models.SmartCredentialsSendError;
-import de.telekom.smartcredentials.pushnotifications.handlers.PushNotificationsHandler;
 import de.telekom.smartcredentials.pushnotifications.di.ObjectGraphCreatorPushNotifications;
 import de.telekom.smartcredentials.pushnotifications.factory.SmartCredentialsPushNotificationsFactory;
+import de.telekom.smartcredentials.pushnotifications.handlers.PushNotificationsHandler;
 import de.telekom.smartcredentials.pushnotifications.models.FirebaseRemoteMessage;
 import de.telekom.smartcredentials.pushnotifications.repositories.PushNotificationsStorageRepository;
 
@@ -44,7 +43,7 @@ public class MessagingService extends FirebaseMessagingService {
     public void onNewToken(String token) {
         if (mStorageRepository.getPushNotificationsConfigBoolean(
                 PushNotificationsStorageRepository.KEY_AUTO_SUBSCRIBE)) {
-            SmartCredentialsPushNotificationsFactory.getPushNotificationsApi().subscribe(null);
+            SmartCredentialsPushNotificationsFactory.getRxPushNotificationsApi().subscribe().subscribe();
         }
         if (mStorageRepository.getPushNotificationsConfigBoolean(
                 PushNotificationsStorageRepository.KEY_SUBSCRIPTION_STATE)) {
@@ -58,15 +57,5 @@ public class MessagingService extends FirebaseMessagingService {
                 PushNotificationsStorageRepository.KEY_SUBSCRIPTION_STATE)) {
             mHandler.onMessageReceived(new FirebaseRemoteMessage(remoteMessage));
         }
-    }
-
-    @Override
-    public void onMessageSent(String messageId) {
-        mHandler.onMessageSent(messageId);
-    }
-
-    @Override
-    public void onSendError(String messageId, Exception exception) {
-        mHandler.onSendError(new SmartCredentialsSendError(messageId, exception));
     }
 }
