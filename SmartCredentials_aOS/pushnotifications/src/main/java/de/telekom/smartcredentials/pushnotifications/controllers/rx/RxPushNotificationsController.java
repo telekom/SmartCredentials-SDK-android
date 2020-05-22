@@ -43,12 +43,12 @@ public class RxPushNotificationsController implements RxPushNotificationsApi {
     }
 
     @Override
-    public Completable subscribe() {
+    public Completable subscribeAllNotifications() {
         return Completable.create(new SubscribeCompletable(controller));
     }
 
     @Override
-    public Completable unsubscribe() {
+    public Completable unsubscribeAllNotifications() {
         return Completable.create(new UnsubscribeCompletable(controller));
     }
 

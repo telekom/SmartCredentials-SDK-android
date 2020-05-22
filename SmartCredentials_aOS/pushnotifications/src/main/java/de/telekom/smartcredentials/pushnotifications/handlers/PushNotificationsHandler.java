@@ -40,11 +40,11 @@ public class PushNotificationsHandler {
         return INSTANCE;
     }
 
-    public void instantiateTokenCallback(PushNotificationsTokenCallback callback) {
+    public void addTokenCallback(PushNotificationsTokenCallback callback) {
         mTokenCallback = callback;
     }
 
-    public void instantiateMessageCallback(PushNotificationsMessageCallback callback) {
+    public void addMessageCallback(PushNotificationsMessageCallback callback) {
         mMessageCallback = callback;
     }
 
