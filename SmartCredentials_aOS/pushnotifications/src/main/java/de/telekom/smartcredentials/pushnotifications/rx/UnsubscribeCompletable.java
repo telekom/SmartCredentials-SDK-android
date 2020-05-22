@@ -37,7 +37,7 @@ public class UnsubscribeCompletable implements CompletableOnSubscribe {
 
     @Override
     public void subscribe(CompletableEmitter emitter) {
-        mController.unsubscribe(new PushNotificationsCallback() {
+        mController.unsubscribeAllNotifications(new PushNotificationsCallback() {
             @Override
             public void onSuccess(String message) {
                 emitter.onComplete();

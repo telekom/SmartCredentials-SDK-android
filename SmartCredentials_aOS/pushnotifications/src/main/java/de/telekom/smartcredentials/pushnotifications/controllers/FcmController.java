@@ -31,7 +31,7 @@ import de.telekom.smartcredentials.pushnotifications.repositories.PushNotificati
 public class FcmController extends BaseController {
 
     @Override
-    public SmartCredentialsApiResponse<Void> subscribe(PushNotificationsCallback callback) {
+    public SmartCredentialsApiResponse<Void> subscribeAllNotifications(PushNotificationsCallback callback) {
         if (mStorageRepository.getPushNotificationsConfigBoolean(
                 PushNotificationsStorageRepository.KEY_SUBSCRIPTION_STATE)) {
             ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), PushNotificationsMessages.ALREADY_SUBSCRIBED.getMessage());
@@ -51,7 +51,7 @@ public class FcmController extends BaseController {
     }
 
     @Override
-    public SmartCredentialsApiResponse<Void> unsubscribe(PushNotificationsCallback callback) {
+    public SmartCredentialsApiResponse<Void> unsubscribeAllNotifications(PushNotificationsCallback callback) {
         if (mStorageRepository.getPushNotificationsConfigBoolean(
                 PushNotificationsStorageRepository.KEY_SUBSCRIPTION_STATE)) {
             mStorageRepository.saveConfigurationValue(

@@ -37,7 +37,7 @@ public class SubscribeCompletable implements CompletableOnSubscribe {
 
     @Override
     public void subscribe(CompletableEmitter emitter) {
-        mController.subscribe(new PushNotificationsCallback() {
+        mController.subscribeAllNotifications(new PushNotificationsCallback() {
             @Override
             public void onSuccess(String message) {
                 emitter.onComplete();
