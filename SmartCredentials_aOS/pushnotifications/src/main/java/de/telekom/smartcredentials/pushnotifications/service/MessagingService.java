@@ -24,6 +24,9 @@ import de.telekom.smartcredentials.pushnotifications.factory.SmartCredentialsPus
 import de.telekom.smartcredentials.pushnotifications.handlers.PushNotificationsHandler;
 import de.telekom.smartcredentials.pushnotifications.models.FirebaseRemoteMessage;
 import de.telekom.smartcredentials.pushnotifications.repositories.PushNotificationsStorageRepository;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by gabriel.blaj@endava.com at 5/14/2020
@@ -32,6 +35,7 @@ public class MessagingService extends FirebaseMessagingService {
 
     private PushNotificationsStorageRepository mStorageRepository;
     private PushNotificationsHandler mHandler;
+    private CompositeDisposable mCompositeDisposable;
 
     public MessagingService() {
         mStorageRepository = ObjectGraphCreatorPushNotifications
@@ -40,10 +44,24 @@ public class MessagingService extends FirebaseMessagingService {
     }
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        mCompositeDisposable = new CompositeDisposable();
+    }
+
+    @Override
+    public void onDestroy() {
+        mCompositeDisposable.clear();
+        super.onDestroy();
+    }
+
+    @Override
     public void onNewToken(String token) {
-        if (mStorageRepository.getPushNotificationsConfigBoolean(
-                PushNotificationsStorageRepository.KEY_AUTO_SUBSCRIBE)) {
-            SmartCredentialsPushNotificationsFactory.getRxPushNotificationsApi().subscribe().subscribe();
+        if (mStorageRepository.getPushNotificationsConfigBoolean(PushNotificationsStorageRepository.KEY_AUTO_SUBSCRIBE)) {
+            mCompositeDisposable.add(SmartCredentialsPushNotificationsFactory.getRxPushNotificationsApi().subscribeAllNotifications()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe());
         }
         if (mStorageRepository.getPushNotificationsConfigBoolean(
                 PushNotificationsStorageRepository.KEY_SUBSCRIPTION_STATE)) {

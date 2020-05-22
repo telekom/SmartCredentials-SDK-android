@@ -26,9 +26,9 @@ import io.reactivex.Single;
  */
 public interface RxPushNotificationsApi {
 
-    Completable subscribe();
+    Completable subscribeAllNotifications();
 
-    Completable unsubscribe();
+    Completable unsubscribeAllNotifications();
 
     Completable subscribeToTopic(String topic);
 
