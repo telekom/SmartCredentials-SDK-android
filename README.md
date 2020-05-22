@@ -46,11 +46,13 @@ implementation("de.telekom.smartcredentials:authentication:$smartCredentialsVers
 implementation("de.telekom.smartcredentials:authorization:$smartCredentialsVersion")
 implementation("de.telekom.smartcredentials:camera:$$smartCredentialsVersion")
 implementation("de.telekom.smartcredentials:documentscanner:$smartCredentialsVersion")
+implementation("de.telekom.smartcredentials:eid:$smartCredentialsVersion")
 implementation("de.telekom.smartcredentials:networking:$smartCredentialsVersion")
 implementation("de.telekom.smartcredentials:otp:$smartCredentialsVersion")
 implementation("de.telekom.smartcredentials:qrlogin:$smartCredentialsVersion")
 implementation("de.telekom.smartcredentials:security:$smartCredentialsVersion")
 implementation("de.telekom.smartcredentials:storage:$smartCredentialsVersion")
+implementation("de.telekom.smartcredentials:pushnotifications:$smartCredentialsVersion")
 ```
 
 Sync gradle files. You should be able now to use all SmartCredentials features.
@@ -122,6 +124,13 @@ DocumentScannerApi documentScannerApi = SmartCredentialsDocumentScannerFactory.g
 //use the DocumentScanner Api
 SmartCredentialsDocumentScannerFactory.clear()
 ````
+Eid Module
+```
+SmartCredentialsEidFactory.initSmartCredentialsEidModule();
+EidApi eIdApi = SmartCredentialsEidFactory.getEidApi();
+//use the Eid Api
+SmartCredentialsEidFactory.clear()
+````
 Networking Module
 ```
 SmartCredentialsNetworkingFactory.initSmartCredentialsNetworkingModule(coreApi);
@@ -157,6 +166,13 @@ StorageApi storageApi = SmartCredentialsStorageFactory.getStorageApi();
 //use the Storage Api (see the example below)
 SmartCredentialsStorageFactory.clear()
 ````
+PushNotifications Module
+```
+SmartCredentialsPushNotificationsFactory.initSmartCredentialsPushNotificationsModule(coreApi,  storageApi, pushNotificationsConfiguration);
+PushNotificationsController pushNotificationsApi = SmartCredentialsPushNotificationsFactory.getPushNotificationsApi();
+//use the Push Notifications Api
+SmartCredentialsPushNotificationsFactory.clear()
+````
 
 Example of working with Smart Credentials Storage API
 ```
@@ -188,6 +204,8 @@ List<ItemEnvelope> mItemsList = storageApi.getAllitemsByItemType(filter);
 ````
 If the items are stored in the non-sensitive database, all operations from the storage api must be executed on a background thread.
 
+Example of working with [Smart Credentials Push Notifications API](https://github.com/telekom/SmartCredentials-SDK-android/blob/develop/USAGE-PUSH-NOTIFICATIONS-MODULE.md)
+
 ## Support
 
 Discussions about the SmartCredentials library take place on this [Slack](https://smartcredentialssdk.slack.com/) channel. Anybody is welcome to join these conversations. 
@@ -206,17 +224,19 @@ Smart Credentials is an open and easily extendable library. In fact, it is so op
 
 By using Smart Credentials to build your module, not only you save time and energy for your implementation by making use of the existing features, but the new created module can also be used by others in combination with any of Smart Credentials existing modules.
 
-Currently, there are 9 extendable modules:
+Currently, there are 11 extendable modules:
 
-1. Authentication
-2. Authorization
-3. Camera
-4. Document scanner
-5. Networking
-6. Otp
-7. QR login
-8. Security
-9. Storage
+1.  Authentication
+2.  Authorization
+3.  Camera
+4.  Document scanner
+5.  Eid
+6.  Networking
+7.  Otp
+8.  QR login
+9.  Security
+10. Storage
+11. Push notifications
  
 In order to implement your own module you have to follow the next steps:
 

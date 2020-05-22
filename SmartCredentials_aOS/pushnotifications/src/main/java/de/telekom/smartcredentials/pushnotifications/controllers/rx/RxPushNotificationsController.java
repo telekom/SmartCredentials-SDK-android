@@ -42,43 +42,67 @@ public class RxPushNotificationsController implements RxPushNotificationsApi {
         this.controller = controller;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Completable subscribeAllNotifications() {
         return Completable.create(new SubscribeCompletable(controller));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Completable unsubscribeAllNotifications() {
         return Completable.create(new UnsubscribeCompletable(controller));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Completable subscribeToTopic(String topic) {
         return Completable.create(new SubscribeToTopicCompletable(controller, topic));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Completable unsubscribeFromTopic(String topic) {
         return Completable.create(new UnsubscribeFromTopicCompletable(controller, topic));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Single<String> retrieveToken() {
         return Single.just(Objects.requireNonNull(controller.retrieveToken().getData()));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Single<String> retrieveDeviceId() {
         return Single.just(Objects.requireNonNull(controller.retrieveDeviceId().getData()));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Observable<String> setTokenRefreshedCallback() {
+    public Observable<String> observeTokenRefreshed() {
         return Observable.create(new TokenRefreshedObservable(controller)).share();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Observable<SmartCredentialsRemoteMessage> setMessageReceivedCallback() {
+    public Observable<SmartCredentialsRemoteMessage> observeMessageReceived() {
         return Observable.create(new MessageReceivedObservable(controller)).share();
     }
 }

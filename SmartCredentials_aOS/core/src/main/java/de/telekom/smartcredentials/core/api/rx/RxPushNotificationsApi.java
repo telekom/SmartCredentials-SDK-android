@@ -26,19 +26,69 @@ import io.reactivex.Single;
  */
 public interface RxPushNotificationsApi {
 
+    /**
+     * Method used to subscribe to notifications.
+     *
+     * @return {@link Completable} that emits the success or failure of the subscribe
+     */
+    @SuppressWarnings("unused")
     Completable subscribeAllNotifications();
 
+    /**
+     * Method used to unsubscribe from notifications.
+     *
+     * @return {@link Completable} that emits the success or failure of the unsubscribe
+     */
+    @SuppressWarnings("unused")
     Completable unsubscribeAllNotifications();
 
+    /**
+     * Method used to subscribe to a topic in order to receive notifications about it.
+     *
+     * @param topic the subscribe topic
+     * @return {@link Completable} that emits the success or failure of the subscribe
+     */
+    @SuppressWarnings("unused")
     Completable subscribeToTopic(String topic);
 
+    /**
+     * Method used to unsubscribe from a topic in order to stop receiving notifications about it.
+     *
+     * @param topic the subscribe topic
+     * @return {@link Completable} that emits the success or failure of the unsubscribe
+     */
+    @SuppressWarnings("unused")
     Completable unsubscribeFromTopic(String topic);
 
+    /**
+     * Method used to retrieve the token used for initializing the Firebase client.
+     *
+     * @return {@link Single} containing a {@link String} if the response was successful
+     */
+    @SuppressWarnings("unused")
     Single<String> retrieveToken();
 
+    /**
+     * Method used to retrieve the device id used for registering to TPNS.
+     *
+     * @return {@link Single} containing a {@link String} if the response was successful
+     */
+    @SuppressWarnings("unused")
     Single<String> retrieveDeviceId();
 
-    Observable<String> setTokenRefreshedCallback();
+    /**
+     * Method used to observe for refreshed tokens.
+     *
+     * @return {@link Observable} that emits {@link String} the refreshed tokens
+     */
+    @SuppressWarnings("unused")
+    Observable<String> observeTokenRefreshed();
 
-    Observable<SmartCredentialsRemoteMessage> setMessageReceivedCallback();
+    /**
+     * Method used to observe for remote messages.
+     *
+     * @return {@link Observable} that emits {@link String} the remote messages
+     */
+    @SuppressWarnings("unused")
+    Observable<SmartCredentialsRemoteMessage> observeMessageReceived();
 }

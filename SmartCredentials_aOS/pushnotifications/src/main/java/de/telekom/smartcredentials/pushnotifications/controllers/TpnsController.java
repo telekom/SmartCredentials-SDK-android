@@ -51,7 +51,7 @@ public class TpnsController extends BaseController {
     }
 
     @Override
-    public SmartCredentialsApiResponse<Void> subscribe(PushNotificationsCallback callback) {
+    public SmartCredentialsApiResponse<Void> subscribeAllNotifications(PushNotificationsCallback callback) {
         registerToTPNS(new PushNotificationsCallback() {
             @Override
             public void onSuccess(String message) {
@@ -77,7 +77,7 @@ public class TpnsController extends BaseController {
     }
 
     @Override
-    public SmartCredentialsApiResponse<Void> unsubscribe(PushNotificationsCallback callback) {
+    public SmartCredentialsApiResponse<Void> unsubscribeAllNotifications(PushNotificationsCallback callback) {
         unregisterFromTPNS(new PushNotificationsCallback() {
             @Override
             public void onSuccess(String message) {

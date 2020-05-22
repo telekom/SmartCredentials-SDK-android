@@ -40,8 +40,11 @@ public class PushNotificationsController implements PushNotificationsApi {
         mControllerFactory = new ControllerFactory();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public SmartCredentialsApiResponse<Void> subscribe(PushNotificationsCallback callback) {
+    public SmartCredentialsApiResponse<Void> subscribeAllNotifications(PushNotificationsCallback callback) {
         if (mCoreController.isSecurityCompromised()) {
             mCoreController.handleSecurityCompromised();
             return new SmartCredentialsResponse<>(new RootedThrowable());
@@ -52,11 +55,14 @@ public class PushNotificationsController implements PushNotificationsApi {
             return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
         }
 
-        return mControllerFactory.getController().subscribe(callback);
+        return mControllerFactory.getController().subscribeAllNotifications(callback);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public SmartCredentialsApiResponse<Void> unsubscribe(PushNotificationsCallback callback) {
+    public SmartCredentialsApiResponse<Void> unsubscribeAllNotifications(PushNotificationsCallback callback) {
         if (mCoreController.isSecurityCompromised()) {
             mCoreController.handleSecurityCompromised();
             return new SmartCredentialsResponse<>(new RootedThrowable());
@@ -67,9 +73,12 @@ public class PushNotificationsController implements PushNotificationsApi {
             return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
         }
 
-        return mControllerFactory.getController().unsubscribe(callback);
+        return mControllerFactory.getController().unsubscribeAllNotifications(callback);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SmartCredentialsApiResponse<Void> subscribeToTopic(String topic, PushNotificationsCallback callback) {
         if (mCoreController.isSecurityCompromised()) {
@@ -85,6 +94,9 @@ public class PushNotificationsController implements PushNotificationsApi {
         return mControllerFactory.getController().subscribeToTopic(topic, callback);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SmartCredentialsApiResponse<Void> unsubscribeFromTopic(String topic, PushNotificationsCallback callback) {
         if (mCoreController.isSecurityCompromised()) {
@@ -100,6 +112,9 @@ public class PushNotificationsController implements PushNotificationsApi {
         return mControllerFactory.getController().unsubscribeFromTopic(topic, callback);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SmartCredentialsResponse<String> retrieveToken() {
         if (mCoreController.isSecurityCompromised()) {
@@ -115,6 +130,9 @@ public class PushNotificationsController implements PushNotificationsApi {
         return mControllerFactory.getController().retrieveToken();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SmartCredentialsResponse<String> retrieveDeviceId() {
         if (mCoreController.isSecurityCompromised()) {
@@ -130,6 +148,9 @@ public class PushNotificationsController implements PushNotificationsApi {
         return mControllerFactory.getController().retrieveDeviceId();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SmartCredentialsResponse<Void> setTokenRefreshedCallback(PushNotificationsTokenCallback callback) {
         if (mCoreController.isSecurityCompromised()) {
@@ -137,14 +158,17 @@ public class PushNotificationsController implements PushNotificationsApi {
             return new SmartCredentialsResponse<>(new RootedThrowable());
         }
 
-        if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.DATA_GENERATOR)) {
-            String errorMessage = SmartCredentialsFeatureSet.DATA_GENERATOR.getNotSupportedDesc();
+        if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.SET_TOKEN_REFRESHED_CALLBACK)) {
+            String errorMessage = SmartCredentialsFeatureSet.SET_TOKEN_REFRESHED_CALLBACK.getNotSupportedDesc();
             return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
         }
 
         return mControllerFactory.getController().setTokenRefreshedCallback(callback);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SmartCredentialsResponse<Void> setMessageReceivedCallback(PushNotificationsMessageCallback callback) {
         if (mCoreController.isSecurityCompromised()) {
@@ -152,8 +176,8 @@ public class PushNotificationsController implements PushNotificationsApi {
             return new SmartCredentialsResponse<>(new RootedThrowable());
         }
 
-        if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.DATA_GENERATOR)) {
-            String errorMessage = SmartCredentialsFeatureSet.DATA_GENERATOR.getNotSupportedDesc();
+        if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.SET_MESSAGE_RECEIVED_CALLBACK)) {
+            String errorMessage = SmartCredentialsFeatureSet.SET_MESSAGE_RECEIVED_CALLBACK.getNotSupportedDesc();
             return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
         }
 

@@ -65,8 +65,10 @@ public enum SmartCredentialsFeatureSet {
             "The Retrieve Device Id feature is not supported on this device model."),
     SEND_MESSAGE("Send Message", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
             "The Send Message feature is not supported on this device model."),
-    DATA_GENERATOR("Push Notification Data Generator", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
-            "The Push Notification Data Generator feature is not supported on this device model.");
+    SET_MESSAGE_RECEIVED_CALLBACK("Set Message Received Callback", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
+            "The Set Message Received Callback feature is not supported on this device model."),
+    SET_TOKEN_REFRESHED_CALLBACK("Set Token Refreshed Callback", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
+            "The Set Token Refreshed Callback feature is not supported on this device model.");
 
     private final SmartCredentialsModuleSet mModule;
     private final String mFeatureName;
