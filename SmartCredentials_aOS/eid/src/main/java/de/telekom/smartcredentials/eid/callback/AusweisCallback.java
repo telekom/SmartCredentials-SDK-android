@@ -29,21 +29,21 @@ import de.telekom.smartcredentials.eid.messages.parser.MessageParser;
 public class AusweisCallback extends IAusweisApp2SdkCallback.Stub {
 
     private final MessageParser mMessageParser;
-    private final EidMessageReceivedCallback mCallback;
+    private final EidMessageReceivedCallback mMessageReceivedCallback;
 
     public String mSessionId;
 
-    public AusweisCallback(MessageParser messageParser, EidMessageReceivedCallback callback) {
-        mMessageParser = messageParser;
-        mCallback = callback;
+    public AusweisCallback(EidMessageReceivedCallback callback) {
+        mMessageParser = new MessageParser(callback);
+        mMessageReceivedCallback = callback;
     }
 
     @Override
     public void sessionIdGenerated(String s, boolean b) {
         mSessionId = s;
 
-        if (mCallback != null) {
-            mCallback.onMessageReceived(new SessionGeneratedMessage(s));
+        if (mMessageReceivedCallback != null) {
+            mMessageReceivedCallback.onMessageReceived(new SessionGeneratedMessage(s));
         }
     }
 
@@ -54,8 +54,12 @@ public class AusweisCallback extends IAusweisApp2SdkCallback.Stub {
 
     @Override
     public void sdkDisconnected() {
-        if (mCallback != null) {
-            mCallback.onMessageReceived(new SessionDisconnectedMessage());
+        if (mMessageReceivedCallback != null) {
+            mMessageReceivedCallback.onMessageReceived(new SessionDisconnectedMessage());
         }
+    }
+
+    public EidMessageReceivedCallback getMessageReceivedCallback() {
+        return mMessageReceivedCallback;
     }
 }

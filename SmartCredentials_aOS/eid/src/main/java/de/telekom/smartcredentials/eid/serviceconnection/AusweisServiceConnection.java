@@ -39,9 +39,9 @@ public class AusweisServiceConnection implements ServiceConnection {
     private AusweisCallback mAusweisCallback;
     private EidMessageReceivedCallback mMessageReceivedCallback;
 
-    public AusweisServiceConnection(AusweisCallback ausweisCallback, EidMessageReceivedCallback callback) {
+    public AusweisServiceConnection(AusweisCallback ausweisCallback) {
         mAusweisCallback = ausweisCallback;
-        mMessageReceivedCallback = callback;
+        mMessageReceivedCallback = ausweisCallback.getMessageReceivedCallback();
     }
 
     @Override
