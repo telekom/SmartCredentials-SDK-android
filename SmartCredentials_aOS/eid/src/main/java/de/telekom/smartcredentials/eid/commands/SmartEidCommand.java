@@ -16,6 +16,8 @@
 
 package de.telekom.smartcredentials.eid.commands;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -39,6 +41,7 @@ public class SmartEidCommand extends EidCommand {
         return mName;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "SmartEidCommand{" +

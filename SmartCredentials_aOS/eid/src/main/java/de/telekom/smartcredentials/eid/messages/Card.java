@@ -16,6 +16,8 @@
 
 package de.telekom.smartcredentials.eid.messages;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -62,6 +64,7 @@ public class Card {
         this.mRetryCounter = retryCounter;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Card{" +

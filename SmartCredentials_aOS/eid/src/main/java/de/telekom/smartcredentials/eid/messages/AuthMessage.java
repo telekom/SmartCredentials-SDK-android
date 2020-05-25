@@ -16,6 +16,8 @@
 
 package de.telekom.smartcredentials.eid.messages;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -64,6 +66,7 @@ public class AuthMessage extends SmartEidMessage {
         this.mError = error;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "AuthMessage{" +
