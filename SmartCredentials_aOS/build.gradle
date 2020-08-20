@@ -38,8 +38,8 @@ allprojects {
         androidCompileSdkVersion = 28
         androidTargetSdkVersion = 28
         androidMinSdkVersion = 21
-        androidVersionCode = 4
-        androidVersionName = "5.0.0"
+        androidVersionCode = 5
+        androidVersionName = "6.1.2"
 
         androidSupportLibVersion = "28.0.0"
         constraintLayoutVersion = "1.1.3"

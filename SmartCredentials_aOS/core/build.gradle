@@ -49,11 +49,8 @@ android {
     }
 
     libraryVariants.all { variant ->
-        if (variant.buildType.name == "debug") {
-            def aptOutputDir = new File(buildDir, "generated/source/apt/${variant.unitTestVariant.dirName}")
-            variant.unitTestVariant.addJavaSourceFoldersToModel(aptOutputDir)
-        } else if (variant.buildType.name.toLowerCase().contains("release")) {
-            artifactoryPublish.finalizedBy(incrementSdkVersion)
+        variant.outputs.all {
+            outputFileName = "${archivesBaseName}-${variant.name}-${defaultConfig.versionName}.aar"
         }
     }
 
