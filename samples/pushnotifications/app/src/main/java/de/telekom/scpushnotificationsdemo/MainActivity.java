@@ -54,12 +54,13 @@ public class MainActivity extends AppCompatActivity {
         subscribeButton.setOnClickListener(v -> pushNotificationsApi.subscribeAllNotifications(new PushNotificationsCallback() {
             @Override
             public void onSuccess(String message) {
-                subscriptionStateIcon.setImageDrawable(getDrawable(R.drawable.ic_subscribed));
+                setSubscribedState();
                 logMessage(message);
             }
 
             @Override
             public void onFailure(String message, List<PushNotificationsError> errors) {
+                setSubscribedState();
                 logMessage(message);
             }
         }));
@@ -67,12 +68,13 @@ public class MainActivity extends AppCompatActivity {
         unsubscribeButton.setOnClickListener(v -> pushNotificationsApi.unsubscribeAllNotifications(new PushNotificationsCallback() {
             @Override
             public void onSuccess(String message) {
-                subscriptionStateIcon.setImageDrawable(getDrawable(R.drawable.ic_unsubscribed));
+                setUnsubscribedState();
                 logMessage(message);
             }
 
             @Override
             public void onFailure(String message, List<PushNotificationsError> errors) {
+                setUnsubscribedState();
                 logMessage(message);
             }
         }));
@@ -83,6 +85,14 @@ public class MainActivity extends AppCompatActivity {
             tokenValue.setText(token);
             logMessage(String.format("%s%s",getResources().getString(R.string.registration_token_log_text),token));
         });
+    }
+
+    private void setSubscribedState(){
+        subscriptionStateIcon.setImageDrawable(getDrawable(R.drawable.ic_subscribed));
+    }
+
+    private void setUnsubscribedState(){
+        subscriptionStateIcon.setImageDrawable(getDrawable(R.drawable.ic_unsubscribed));
     }
 
     private void logMessage(String message) {
