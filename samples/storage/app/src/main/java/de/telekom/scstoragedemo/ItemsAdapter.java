@@ -9,9 +9,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONException;
+
 import java.util.List;
 
 import de.telekom.smartcredentials.core.itemdatamodel.ItemEnvelope;
+import timber.log.Timber;
 
 /**
  * Created by Alex.Graur@endava.com at 8/26/2020
@@ -46,20 +49,27 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
 
+        private View rootView;
         private TextView idTextView;
         private TextView identifierTextView;
         private ImageView deleteImageView;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
+            rootView = itemView;
             idTextView = itemView.findViewById(R.id.id_text_view);
-            identifierTextView = itemView.findViewById(R.id.identifier_text_view);
+            identifierTextView = itemView.findViewById(R.id.identifier_value_text_view);
             deleteImageView = itemView.findViewById(R.id.delete_image_view);
         }
 
         public void bind(ItemEnvelope item, OnItemInteractionListener listener) {
             idTextView.setText(item.getItemId());
-            identifierTextView.setText(item.getIdentifier().toString());
+            try {
+                identifierTextView.setText(item.getIdentifier().getString(AddItemActivity.ITEM_KEY_IDENTIFIER));
+            } catch (JSONException e) {
+                Timber.tag(DemoApplication.TAG).d("Failed to fetch identifier or details.");
+            }
+            rootView.setOnClickListener(view -> listener.onItemClicked(item));
             deleteImageView.setOnClickListener(view -> listener.onDeleteClicked(item));
         }
     }

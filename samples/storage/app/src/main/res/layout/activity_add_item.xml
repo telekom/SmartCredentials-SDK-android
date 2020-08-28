@@ -23,29 +23,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/type_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="@string/item_type"
-            android:hint="@string/item_type"
-            android:inputType="text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/id_edit_text" />
-
-        <EditText
-            android:id="@+id/key_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="@string/item_key"
-            android:hint="@string/item_key"
-            android:inputType="text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/type_edit_text" />
-
-        <EditText
-            android:id="@+id/identifier_edit_text"
+            android:id="@+id/identifier_key_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autofillHints="@string/item_identifier"
@@ -53,10 +31,10 @@
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/key_edit_text" />
+            app:layout_constraintTop_toBottomOf="@id/id_edit_text" />
 
         <EditText
-            android:id="@+id/details_edit_text"
+            android:id="@+id/details_key_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autofillHints="@string/item_details"
@@ -64,7 +42,27 @@
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/identifier_edit_text" />
+            app:layout_constraintTop_toBottomOf="@id/identifier_key_edit_text" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/sensitive_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/sensitive"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/details_key_edit_text" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/encrypted_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/encrypted"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sensitive_switch" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

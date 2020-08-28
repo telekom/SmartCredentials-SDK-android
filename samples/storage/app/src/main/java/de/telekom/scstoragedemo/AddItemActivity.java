@@ -6,6 +6,7 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,16 +21,16 @@ import timber.log.Timber;
 
 public class AddItemActivity extends AppCompatActivity {
 
-    private static final String ITEM_ID = "item_id";
-    public static final String ITEM_TYPE = "item_type";
-    private static final String ITEM_KEY = "item_key";
+    public static final String ITEM_TYPE = "test_type";
+    public static final String ITEM_KEY_IDENTIFIER = "test_identifier_key";
+    public static final String ITEM_KEY_DETAILS = "test_details_key";
 
     private StorageApi storageApi;
     private EditText idEditText;
-    private EditText typeEditText;
-    private EditText keyEditText;
     private EditText identifierEditText;
     private EditText detailsEditText;
+    private SwitchMaterial sensitiveSwitch;
+    private SwitchMaterial encryptedSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,28 +40,46 @@ public class AddItemActivity extends AppCompatActivity {
         storageApi = SmartCredentialsStorageFactory.getStorageApi();
 
         idEditText = findViewById(R.id.id_edit_text);
-        typeEditText = findViewById(R.id.type_edit_text);
-        keyEditText = findViewById(R.id.key_edit_text);
-        identifierEditText = findViewById(R.id.identifier_edit_text);
-        detailsEditText = findViewById(R.id.details_edit_text);
+        identifierEditText = findViewById(R.id.identifier_key_edit_text);
+        detailsEditText = findViewById(R.id.details_key_edit_text);
+        sensitiveSwitch = findViewById(R.id.sensitive_switch);
+        encryptedSwitch = findViewById(R.id.encrypted_switch);
         FloatingActionButton addButton = findViewById(R.id.add_button);
-        addButton.setOnClickListener(view -> {
-            addItem();
-        });
+        addButton.setOnClickListener(view -> addItem());
     }
 
     private void addItem() {
         String itemId = String.valueOf(idEditText.getText());
-
-        JSONObject jsonObject = new JSONObject();
+        String identifier = String.valueOf(identifierEditText.getText());
+        String details = String.valueOf(detailsEditText.getText());
+        JSONObject identifierJson = new JSONObject();
+        JSONObject detailsJson = new JSONObject();
         try {
-            jsonObject.put(ITEM_KEY, "test");
-            ItemEnvelope itemEnvelope = ItemEnvelopeFactory.createItemEnvelope(itemId, jsonObject);
-            ItemContext itemContext = ItemContextFactory.createEncryptedSensitiveItemContext(ITEM_TYPE);
-            storageApi.putItem(itemEnvelope, itemContext);
-            finish();
+            identifierJson.put(ITEM_KEY_IDENTIFIER, identifier);
+            detailsJson.put(ITEM_KEY_DETAILS, details);
+            new Thread(() -> {
+                ItemEnvelope itemEnvelope = ItemEnvelopeFactory.createItemEnvelope(itemId, identifierJson, detailsJson);
+                storageApi.putItem(itemEnvelope, getItemContext());
+                runOnUiThread(this::finish);
+            }).start();
         } catch (JSONException e) {
             Timber.tag(DemoApplication.TAG).d("Failed to create item envelope.");
+        }
+    }
+
+    private ItemContext getItemContext() {
+        if (sensitiveSwitch.isChecked()) {
+            if (encryptedSwitch.isChecked()) {
+                return ItemContextFactory.createEncryptedSensitiveItemContext(ITEM_TYPE);
+            } else {
+                return ItemContextFactory.createNonEncryptedSensitiveItemContext(ITEM_TYPE);
+            }
+        } else {
+            if (encryptedSwitch.isChecked()) {
+                return ItemContextFactory.createEncryptedNonSensitiveItemContext(ITEM_TYPE);
+            } else {
+                return ItemContextFactory.createNonEncryptedNonSensitiveItemContext(ITEM_TYPE);
+            }
         }
     }
 }

@@ -2,6 +2,8 @@ package de.telekom.scstoragedemo;
 
 import android.app.Application;
 
+import com.facebook.stetho.Stetho;
+
 import de.telekom.smartcredentials.core.api.CoreApi;
 import de.telekom.smartcredentials.core.api.SecurityApi;
 import de.telekom.smartcredentials.core.configurations.SmartCredentialsConfiguration;
@@ -21,6 +23,7 @@ public class DemoApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Stetho.initializeWithDefaults(this);
         Timber.plant(new Timber.DebugTree());
         SmartCredentialsConfiguration configuration = new SmartCredentialsConfiguration.Builder(getApplicationContext(), getString(R.string.current_user_id))
                 .setLogger(new DemoLogger())

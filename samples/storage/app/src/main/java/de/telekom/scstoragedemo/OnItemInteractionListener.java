@@ -7,5 +7,7 @@ import de.telekom.smartcredentials.core.itemdatamodel.ItemEnvelope;
  */
 public interface OnItemInteractionListener {
 
+    void onItemClicked(ItemEnvelope item);
+
     void onDeleteClicked(ItemEnvelope item);
 }

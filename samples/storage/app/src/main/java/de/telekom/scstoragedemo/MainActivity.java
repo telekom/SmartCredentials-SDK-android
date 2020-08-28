@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements OnItemInteraction
     @Override
     protected void onResume() {
         super.onResume();
+        setTitle();
         fetchItems();
     }
 
@@ -72,25 +73,37 @@ public class MainActivity extends AppCompatActivity implements OnItemInteraction
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.add_item) {
-            Intent intent = new Intent(this, AddItemActivity.class);
-            startActivity(intent);
-            return true;
+        switch (item.getItemId()) {
+            case R.id.filter_item:
+                Intent typeIntent = new Intent(this, StorageTypeActivity.class);
+                startActivity(typeIntent);
+                return true;
+            case R.id.add_item:
+                Intent addIntent = new Intent(this, AddItemActivity.class);
+                startActivity(addIntent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemClicked(ItemEnvelope item) {
+        Intent intent = new Intent(this, ItemDetailsActivity.class);
+        startActivity(intent);
     }
 
     @Override
     public void onDeleteClicked(ItemEnvelope item) {
-        SmartCredentialsFilter filter = SmartCredentialsFilterFactory.createSensitiveItemFilter(item.getItemId(), AddItemActivity.ITEM_TYPE);
-        storageApi.deleteItem(filter);
-        fetchItems();
+        new Thread(() -> {
+            storageApi.deleteItem(getFilter());
+//            runOnUiThread(this::fetchItems);
+        }).start();
     }
 
     private void fetchItems() {
         new Thread(() -> {
-            SmartCredentialsFilter filter = SmartCredentialsFilterFactory.createSensitiveItemFilter(AddItemActivity.ITEM_TYPE);
-            SmartCredentialsApiResponse<List<ItemEnvelope>> response = storageApi.getAllItemsByItemType(filter);
+            SmartCredentialsApiResponse<List<ItemEnvelope>> response = storageApi.getAllItemsByItemType(getFilter());
             runOnUiThread(() -> {
                 if (response.isSuccessful()) {
                     if (response.getData().size() > 0) {
@@ -109,5 +122,23 @@ public class MainActivity extends AppCompatActivity implements OnItemInteraction
                 }
             });
         }).start();
+    }
+
+    private void setTitle() {
+        PreferenceManager preferenceManager = new PreferenceManager(this);
+        if (preferenceManager.getStorageType().equals(StorageType.SENSITIVE)) {
+            setTitle(R.string.sensitive);
+        } else {
+            setTitle(R.string.non_sensitive);
+        }
+    }
+
+    private SmartCredentialsFilter getFilter() {
+        PreferenceManager preferenceManager = new PreferenceManager(this);
+        if (preferenceManager.getStorageType().equals(StorageType.SENSITIVE)) {
+            return SmartCredentialsFilterFactory.createSensitiveItemFilter(AddItemActivity.ITEM_TYPE);
+        } else {
+            return SmartCredentialsFilterFactory.createNonSensitiveItemFilter(AddItemActivity.ITEM_TYPE);
+        }
     }
 }
