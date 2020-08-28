@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     private PushNotificationsApi pushNotificationsApi;
 
     private ImageView subscriptionStateIcon;
-    private TextView notificationData;
     private TextView tokenValue;
 
     @Override
@@ -41,13 +40,13 @@ public class MainActivity extends AppCompatActivity {
         pushNotificationsApi = SmartCredentialsPushNotificationsFactory.getPushNotificationsApi();
 
         subscriptionStateIcon = findViewById(R.id.subscription_state_icon);
-        notificationData = findViewById(R.id.notification_data);
         tokenValue = findViewById(R.id.token_value);
 
         pushNotificationsApi.setMessageReceivedCallback(remoteMessage -> {
             String notificationTitle = remoteMessage.getNotification().getTitle();
             String notificationBody = remoteMessage.getNotification().getBody();
-            logNotification(notificationTitle, notificationBody);
+            logMessage(String.format("%s%s\n%s%s", getResources().getString(R.string.notification_title),
+                    notificationTitle, getResources().getString(R.string.notification_body), notificationBody));
             displayNotification(notificationTitle, notificationBody);
         });
 
@@ -82,13 +81,8 @@ public class MainActivity extends AppCompatActivity {
         {
             String token = pushNotificationsApi.retrieveToken().getData();
             tokenValue.setText(token);
-            logMessage(token);
+            logMessage(String.format("%s%s",getResources().getString(R.string.registration_token_log_text),token));
         });
-    }
-
-    private void logNotification(String notificationTitle, String notificationBody) {
-        runOnUiThread(() -> notificationData.setText(String.format("%s%s\n%s%s", getResources().getString(R.string.notification_title),
-                notificationTitle, getResources().getString(R.string.notification_body), notificationBody)));
     }
 
     private void logMessage(String message) {

@@ -32,28 +32,6 @@
             app:layout_constraintTop_toBottomOf="@id/subscription_text_view" />
 
         <TextView
-            android:id="@+id/notification_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginHorizontal="16dp"
-            android:text="@string/notification_data"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/subscription_layout" />
-
-        <include
-            android:id="@+id/notification_layout"
-            layout="@layout/item_notification"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/notification_text_view" />
-
-        <TextView
             android:id="@+id/token_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -62,7 +40,7 @@
             android:text="@string/registration_token"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/notification_layout" />
+            app:layout_constraintTop_toBottomOf="@id/subscription_layout" />
 
         <include
             android:id="@+id/token_layout"
