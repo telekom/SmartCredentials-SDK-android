@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">PushNotificationsDemo</string>
+    <string name="app_alias">scpushnotificationsdemo</string>
+    <string name="current_user_id">1234</string>
+    <string name="subscription_state">SUBSCRIPTION STATE</string>
+    <string name="notification_data">NOTIFICATION DATA</string>
+    <string name="registration_token">REGISTRATION TOKEN</string>
+    <string name="subscribe_button_text">SUBSCRIBE</string>
+    <string name="unsubscribe_button_state">UNSUBSCRIBE</string>
+    <string name="fcm_registration_token_value_hint">FCM Registration Token Value</string>
+    <string name="log_token_button_text">LOG TOKEN</string>
+    <string name="notification_title">Notification Title:</string>
+    <string name="notification_body">Notification Body:</string>
+    <string name="notification_channel_name">sc_pushnotifications_demo_notification_channel</string>
+    <string name="notification_channel_description">Basic notification channel</string>
+    <string name="subscription_state_text">Subscription State:</string>
+    <string name="registration_token_log_text">Registration Token:</string>
+    <string name="subscribed">Subscribed</string>
+    <string name="unsubscribed">Unsubscribed</string>
+</resources>
