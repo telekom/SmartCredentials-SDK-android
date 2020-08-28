@@ -14,6 +14,7 @@ import de.telekom.smartcredentials.core.rootdetector.RootDetectionOption;
 import de.telekom.smartcredentials.pushnotifications.factory.SmartCredentialsPushNotificationsFactory;
 import de.telekom.smartcredentials.security.factory.SmartCredentialsSecurityFactory;
 import de.telekom.smartcredentials.storage.factory.SmartCredentialsStorageFactory;
+import timber.log.Timber;
 
 /**
  * Created by gabriel.blaj@endava.com at 8/26/2020
@@ -24,6 +25,7 @@ public class DemoApplication extends Application {
     public void onCreate() {
         super.onCreate();
         createNotificationChannel();
+        Timber.plant(new Timber.DebugTree());
         initSmartCredentialsModules();
     }
 

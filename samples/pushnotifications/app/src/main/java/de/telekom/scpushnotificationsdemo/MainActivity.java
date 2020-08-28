@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,15 +18,18 @@ import de.telekom.smartcredentials.core.api.PushNotificationsApi;
 import de.telekom.smartcredentials.core.pushnotifications.callbacks.PushNotificationsCallback;
 import de.telekom.smartcredentials.core.pushnotifications.models.PushNotificationsError;
 import de.telekom.smartcredentials.pushnotifications.factory.SmartCredentialsPushNotificationsFactory;
+import timber.log.Timber;
 
 /**
  * Created by gabriel.blaj@endava.com at 8/26/2020
  */
 public class MainActivity extends AppCompatActivity {
 
+    public static final String TAG = "pushnotifications_tag";
+
     private PushNotificationsApi pushNotificationsApi;
 
-    private TextView subscriptionMessage;
+    private ImageView subscriptionStateIcon;
     private TextView notificationData;
     private TextView tokenValue;
 
@@ -36,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         pushNotificationsApi = SmartCredentialsPushNotificationsFactory.getPushNotificationsApi();
 
-        subscriptionMessage = findViewById(R.id.subscription_message);
+        subscriptionStateIcon = findViewById(R.id.subscription_state_icon);
         notificationData = findViewById(R.id.notification_data);
         tokenValue = findViewById(R.id.token_value);
 
@@ -51,28 +55,35 @@ public class MainActivity extends AppCompatActivity {
         subscribeButton.setOnClickListener(v -> pushNotificationsApi.subscribeAllNotifications(new PushNotificationsCallback() {
             @Override
             public void onSuccess(String message) {
-                logSubscriptionMessage(message);
+                subscriptionStateIcon.setImageDrawable(getDrawable(R.drawable.ic_subscribed));
+                logMessage(message);
             }
 
             @Override
             public void onFailure(String message, List<PushNotificationsError> errors) {
-                logSubscriptionMessage(message);
+                logMessage(message);
             }
         }));
         Button unsubscribeButton = findViewById(R.id.unsubscribe_button);
         unsubscribeButton.setOnClickListener(v -> pushNotificationsApi.unsubscribeAllNotifications(new PushNotificationsCallback() {
             @Override
             public void onSuccess(String message) {
-                logSubscriptionMessage(message);
+                subscriptionStateIcon.setImageDrawable(getDrawable(R.drawable.ic_unsubscribed));
+                logMessage(message);
             }
 
             @Override
             public void onFailure(String message, List<PushNotificationsError> errors) {
-                logSubscriptionMessage(message);
+                logMessage(message);
             }
         }));
         Button logTokenButton = findViewById(R.id.log_token_button);
-        logTokenButton.setOnClickListener(v -> tokenValue.setText(pushNotificationsApi.retrieveToken().getData()));
+        logTokenButton.setOnClickListener(v ->
+        {
+            String token = pushNotificationsApi.retrieveToken().getData();
+            tokenValue.setText(token);
+            logMessage(token);
+        });
     }
 
     private void logNotification(String notificationTitle, String notificationBody) {
@@ -80,8 +91,8 @@ public class MainActivity extends AppCompatActivity {
                 notificationTitle, getResources().getString(R.string.notification_body), notificationBody)));
     }
 
-    private void logSubscriptionMessage(String message) {
-        subscriptionMessage.setText(message);
+    private void logMessage(String message) {
+        Timber.tag(TAG).d(message);
     }
 
     private void displayNotification(String title, String body) {

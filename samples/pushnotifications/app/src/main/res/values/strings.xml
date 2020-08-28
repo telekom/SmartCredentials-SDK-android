@@ -15,4 +15,5 @@
     <string name="notification_body">Body:</string>
     <string name="notification_channel_name">sc_pushnotifications_demo_notification_channel</string>
     <string name="notification_channel_description">Basic notification channel</string>
+    <string name="subscription_state_text">Subscription State:</string>
 </resources>
