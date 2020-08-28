@@ -16,6 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autofillHints="@string/item_id"
+            android:enabled="false"
             android:hint="@string/item_id"
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
