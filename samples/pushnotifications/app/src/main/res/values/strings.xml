@@ -15,4 +15,6 @@
     <string name="notification_channel_description">Basic notification channel</string>
     <string name="subscription_state_text">Subscription State:</string>
     <string name="registration_token_log_text">Registration Token:</string>
+    <string name="subscribed">Subscribed</string>
+    <string name="unsubscribed">Unsubscribed</string>
 </resources>
