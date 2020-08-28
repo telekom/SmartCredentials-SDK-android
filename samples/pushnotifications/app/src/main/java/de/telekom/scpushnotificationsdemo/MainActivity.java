@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
     private void displayNotification(String title, String body) {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getApplicationContext(),
                 getString(R.string.notification_channel_name))
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setStyle(new NotificationCompat.BigTextStyle()
