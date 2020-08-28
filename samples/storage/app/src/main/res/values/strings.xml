@@ -16,4 +16,8 @@
     <string name="non_sensitive">Non-sensitive</string>
     <string name="filter">Filter</string>
     <string name="encrypted">Encrypted</string>
+    <string name="update">Update</string>
+    <string name="add_item">Add item</string>
+    <string name="storage_type">Storage type</string>
+    <string name="update_item">Update item</string>
 </resources>

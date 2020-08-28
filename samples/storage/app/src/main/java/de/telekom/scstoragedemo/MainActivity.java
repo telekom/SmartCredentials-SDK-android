@@ -89,21 +89,24 @@ public class MainActivity extends AppCompatActivity implements OnItemInteraction
 
     @Override
     public void onItemClicked(ItemEnvelope item) {
+        PreferenceManager preferenceManager = new PreferenceManager(this);
         Intent intent = new Intent(this, ItemDetailsActivity.class);
+        intent.putExtra(ItemDetailsActivity.EXTRA_ITEM_ID, item.getItemId());
+        intent.putExtra(ItemDetailsActivity.EXTRA_ITEM_SENSITIVE, preferenceManager.getStorageType().equals(StorageType.SENSITIVE));
         startActivity(intent);
     }
 
     @Override
     public void onDeleteClicked(ItemEnvelope item) {
         new Thread(() -> {
-            storageApi.deleteItem(getFilter());
-//            runOnUiThread(this::fetchItems);
+            storageApi.deleteItem(getDeleteItemsFilter(item.getItemId()));
+            runOnUiThread(this::fetchItems);
         }).start();
     }
 
     private void fetchItems() {
         new Thread(() -> {
-            SmartCredentialsApiResponse<List<ItemEnvelope>> response = storageApi.getAllItemsByItemType(getFilter());
+            SmartCredentialsApiResponse<List<ItemEnvelope>> response = storageApi.getAllItemsByItemType(getFetchItemsFilter());
             runOnUiThread(() -> {
                 if (response.isSuccessful()) {
                     if (response.getData().size() > 0) {
@@ -133,12 +136,21 @@ public class MainActivity extends AppCompatActivity implements OnItemInteraction
         }
     }
 
-    private SmartCredentialsFilter getFilter() {
+    private SmartCredentialsFilter getFetchItemsFilter() {
         PreferenceManager preferenceManager = new PreferenceManager(this);
         if (preferenceManager.getStorageType().equals(StorageType.SENSITIVE)) {
             return SmartCredentialsFilterFactory.createSensitiveItemFilter(AddItemActivity.ITEM_TYPE);
         } else {
             return SmartCredentialsFilterFactory.createNonSensitiveItemFilter(AddItemActivity.ITEM_TYPE);
+        }
+    }
+
+    private SmartCredentialsFilter getDeleteItemsFilter(String itemId) {
+        PreferenceManager preferenceManager = new PreferenceManager(this);
+        if (preferenceManager.getStorageType().equals(StorageType.SENSITIVE)) {
+            return SmartCredentialsFilterFactory.createSensitiveItemFilter(itemId, AddItemActivity.ITEM_TYPE);
+        } else {
+            return SmartCredentialsFilterFactory.createNonSensitiveItemFilter(itemId, AddItemActivity.ITEM_TYPE);
         }
     }
 }

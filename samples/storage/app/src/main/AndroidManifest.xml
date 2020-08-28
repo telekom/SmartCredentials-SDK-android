@@ -18,9 +18,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddItemActivity" />
-        <activity android:name=".ItemDetailsActivity" />
-        <activity android:name=".StorageTypeActivity" />
+        <activity
+            android:name=".AddItemActivity"
+            android:label="@string/add_item"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".ItemDetailsActivity"
+            android:label="@string/update_item"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".StorageTypeActivity"
+            android:label="@string/storage_type"
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>
