@@ -26,7 +26,7 @@
 
         <Button
             android:id="@+id/log_token_button"
-            android:layout_width="144dp"
+            android:layout_width="128dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/token_value"
             app:layout_constraintBottom_toBottomOf="parent"
