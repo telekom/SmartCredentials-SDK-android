@@ -11,53 +11,73 @@
         android:layout_height="match_parent"
         android:padding="16dp">
 
-        <EditText
-            android:id="@+id/id_edit_text"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/id_text_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints="@string/item_id"
             android:hint="@string/item_id"
-            android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <EditText
-            android:id="@+id/identifier_key_edit_text"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/id_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:textSize="@dimen/text_size" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/identifier_text_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints="@string/item_identifier"
             android:hint="@string/item_identifier"
-            android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/id_edit_text" />
+            app:layout_constraintTop_toBottomOf="@id/id_text_layout">
 
-        <EditText
-            android:id="@+id/details_key_edit_text"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/identifier_key_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:textSize="@dimen/text_size" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/details_text_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints="@string/item_details"
             android:hint="@string/item_details"
-            android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/identifier_key_edit_text" />
+            app:layout_constraintTop_toBottomOf="@id/identifier_text_layout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/details_key_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:textSize="@dimen/text_size" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/sensitive_switch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:checked="true"
             android:text="@string/sensitive"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/details_key_edit_text" />
+            app:layout_constraintTop_toBottomOf="@id/details_text_layout" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/encrypted_switch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:checked="true"
             android:text="@string/encrypted"
             app:layout_constraintEnd_toEndOf="parent"
