@@ -2,4 +2,12 @@
     <string name="app_name">Authentication Demo</string>
     <string name="app_alias">scauthenticationdemo</string>
     <string name="current_user_id">1234</string>
+    <string name="login">Login</string>
+    <string name="login_success">Login success</string>
+    <string name="login_failed">Login failed</string>
+    <string name="canceled">Canceled</string>
+    <string name="completed">Completed</string>
+    <string name="logout">Logout</string>
+    <string name="logout_failed">Logout failed</string>
+    <string name="logout_in_progress">Logout in progress …</string>
 </resources>
