@@ -16,6 +16,13 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven {
+            url "https://dol.telekom.de/artifactory/smartcredentials-test-maven"
+            credentials {
+                username = "smartcreds"
+                password = "AKCp5dLXHB1sBEQDcSSZfG5hxcCATd38NpWdJKRHn6JJNmCCpF7NugzbCm7ixAq5hUppKgmga"
+            }
+        }
     }
 }
 
