@@ -67,7 +67,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
                         Timber.tag(DemoApplication.TAG).d("Failed to fetch identifier or details.");
                     }
                 } else {
-
+                    Timber.tag(DemoApplication.TAG).d("Failed to fetch item details.");
                 }
             });
         }).start();

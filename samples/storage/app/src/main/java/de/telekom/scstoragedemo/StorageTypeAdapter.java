@@ -43,7 +43,7 @@ public class StorageTypeAdapter extends RecyclerView.Adapter<StorageTypeAdapter.
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView typeTextView;
+        private final TextView typeTextView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

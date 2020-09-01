@@ -25,7 +25,7 @@ public class DemoApplication extends Application {
         super.onCreate();
         Stetho.initializeWithDefaults(this);
         Timber.plant(new Timber.DebugTree());
-        SmartCredentialsConfiguration configuration = new SmartCredentialsConfiguration.Builder(getApplicationContext(), getString(R.string.current_user_id))
+        SmartCredentialsConfiguration configuration = new SmartCredentialsConfiguration.Builder(getApplicationContext(), getString(R.string.user_id))
                 .setLogger(new DemoLogger())
                 .setRootCheckerEnabled(RootDetectionOption.ALL)
                 .setAppAlias(getString(R.string.app_alias))

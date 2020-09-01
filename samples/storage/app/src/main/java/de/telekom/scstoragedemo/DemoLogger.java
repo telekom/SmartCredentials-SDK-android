@@ -1,6 +1,5 @@
 package de.telekom.scstoragedemo;
 
-import de.telekom.smartcredentials.core.api.LoggingApi;
 import de.telekom.smartcredentials.core.logger.ApiLogger;
 
 /**

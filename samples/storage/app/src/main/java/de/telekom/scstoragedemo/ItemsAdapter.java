@@ -21,8 +21,8 @@ import timber.log.Timber;
  */
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
 
-    private List<ItemEnvelope> items;
-    private OnItemInteractionListener listener;
+    private final List<ItemEnvelope> items;
+    private final OnItemInteractionListener listener;
 
     public ItemsAdapter(List<ItemEnvelope> items, OnItemInteractionListener listener) {
         this.items = items;
@@ -49,10 +49,10 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
 
-        private View rootView;
-        private TextView idTextView;
-        private TextView identifierTextView;
-        private ImageView deleteImageView;
+        private final View rootView;
+        private final TextView idTextView;
+        private final TextView identifierTextView;
+        private final ImageView deleteImageView;
 
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);

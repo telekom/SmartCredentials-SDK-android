@@ -17,10 +17,10 @@ allprojects {
         google()
         jcenter()
         maven {
-            url "https://dol.telekom.de/artifactory/smartcredentials-maven"
+            url getEnvOrProperty('SC_DOL_URL')
             credentials {
-                username = "smartcreds"
-                password = "AKCp5dLXHB1sBEQDcSSZfG5hxcCATd38NpWdJKRHn6JJNmCCpF7NugzbCm7ixAq5hUppKgmga"
+                username = getEnvOrProperty('SC_DOL_USERNAME')
+                password = getEnvOrProperty('SC_DOL_PASSWORD')
             }
         }
     }
@@ -28,4 +28,8 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+def getEnvOrProperty(String name, String fallback = null) {
+    return System.getenv(name) ?: project.hasProperty(name) ? project[name] : fallback
 }

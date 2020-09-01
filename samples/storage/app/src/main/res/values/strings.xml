@@ -1,14 +1,11 @@
 <resources>
     <string name="app_name">Storage Demo</string>
     <string name="app_alias">scstoragedemo</string>
-    <string name="current_user_id">1234</string>
+    <string name="user_id">1234</string>
 
-    <string name="hello_world">Hello Square World!</string>
     <string name="add_items">Click on the + icon to add new items.</string>
     <string name="add">Add</string>
     <string name="item_id">ID</string>
-    <string name="item_type">Type</string>
-    <string name="item_key">Key</string>
     <string name="item_identifier">Identifier</string>
     <string name="item_details">Details</string>
     <string name="failed_retrieve_items">Failed to retrieve items.</string>
@@ -20,4 +17,5 @@
     <string name="add_item">Add item</string>
     <string name="storage_type">Storage type</string>
     <string name="update_item">Update item</string>
+    <string name="delete">Delete</string>
 </resources>
