@@ -35,6 +35,7 @@ public class LoginActivity extends AppCompatActivity implements AuthenticationSe
             Intent completionIntent = new Intent(this, CompletionActivity.class);
             Intent cancelIntent = new Intent(this, CancelActivity.class);
             authenticationApi.login(this, completionIntent, cancelIntent);
+            finish();
         }).start());
     }
 
