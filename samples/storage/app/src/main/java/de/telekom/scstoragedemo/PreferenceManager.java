@@ -2,6 +2,8 @@ package de.telekom.scstoragedemo;
 
 import android.content.Context;
 
+import de.telekom.scstoragedemo.storagetype.StorageType;
+
 /**
  * Created by Alex.Graur@endava.com at 8/27/2020
  */

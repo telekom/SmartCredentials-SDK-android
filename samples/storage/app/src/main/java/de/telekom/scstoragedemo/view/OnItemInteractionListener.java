@@ -1,4 +1,4 @@
-package de.telekom.scstoragedemo;
+package de.telekom.scstoragedemo.view;
 
 import de.telekom.smartcredentials.core.itemdatamodel.ItemEnvelope;
 

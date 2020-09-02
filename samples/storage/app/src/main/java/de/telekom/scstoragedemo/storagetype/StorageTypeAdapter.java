@@ -1,4 +1,4 @@
-package de.telekom.scstoragedemo;
+package de.telekom.scstoragedemo.storagetype;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+
+import de.telekom.scstoragedemo.R;
 
 /**
  * Created by Alex.Graur@endava.com at 8/27/2020

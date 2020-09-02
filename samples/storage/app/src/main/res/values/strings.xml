@@ -3,7 +3,6 @@
     <string name="app_alias">scstoragedemo</string>
     <string name="user_id">1234</string>
 
-    <string name="add_items">Click on the + icon to add new items.</string>
     <string name="add">Add</string>
     <string name="item_id">ID</string>
     <string name="item_identifier">Identifier</string>

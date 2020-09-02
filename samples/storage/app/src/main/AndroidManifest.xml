@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,17 +19,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AddItemActivity"
+            android:name=".add.AddItemActivity"
             android:label="@string/add_item"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".view.MainActivity" />
         <activity
-            android:name=".ItemDetailsActivity"
+            android:name=".edit.ItemDetailsActivity"
             android:label="@string/update_item"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".view.MainActivity" />
         <activity
-            android:name=".StorageTypeActivity"
+            android:name=".storagetype.StorageTypeActivity"
             android:label="@string/storage_type"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".view.MainActivity" />
     </application>
 
 </manifest>

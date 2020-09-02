@@ -1,4 +1,4 @@
-package de.telekom.scstoragedemo;
+package de.telekom.scstoragedemo.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,7 +6,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -18,6 +17,13 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.telekom.scstoragedemo.PreferenceManager;
+import de.telekom.scstoragedemo.R;
+import de.telekom.scstoragedemo.add.AddItemActivity;
+import de.telekom.scstoragedemo.edit.ItemDetailsActivity;
+import de.telekom.scstoragedemo.storagetype.StorageType;
+import de.telekom.scstoragedemo.storagetype.StorageTypeActivity;
+import de.telekom.scstoragedemo.threading.SmartTask;
 import de.telekom.smartcredentials.core.api.StorageApi;
 import de.telekom.smartcredentials.core.filter.SmartCredentialsFilter;
 import de.telekom.smartcredentials.core.filter.SmartCredentialsFilterFactory;
@@ -29,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements OnItemInteraction
 
     private StorageApi storageApi;
     private View rootView;
-    private TextView noItemsTextView;
     private RecyclerView recyclerView;
     private List<ItemEnvelope> items;
     private ItemsAdapter adapter;
@@ -42,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements OnItemInteraction
         storageApi = SmartCredentialsStorageFactory.getStorageApi();
 
         rootView = findViewById(R.id.main_root_view);
-        noItemsTextView = findViewById(R.id.no_items_text_view);
         recyclerView = findViewById(R.id.items_recycler_view);
 
         items = new ArrayList<>();
@@ -53,8 +57,6 @@ public class MainActivity extends AppCompatActivity implements OnItemInteraction
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-        noItemsTextView.setVisibility(View.GONE);
-        recyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -105,26 +107,22 @@ public class MainActivity extends AppCompatActivity implements OnItemInteraction
     }
 
     private void fetchItems() {
-        new Thread(() -> {
-            SmartCredentialsApiResponse<List<ItemEnvelope>> response = storageApi.getAllItemsByItemType(getFetchItemsFilter());
-            runOnUiThread(() -> {
-                if (response.isSuccessful()) {
-                    if (response.getData().size() > 0) {
+        SmartTask.with(this).assign(() ->
+                storageApi.getAllItemsByItemType(getFetchItemsFilter()))
+                .finish(result -> {
+                    SmartCredentialsApiResponse<List<ItemEnvelope>> response =
+                            (SmartCredentialsApiResponse<List<ItemEnvelope>>) result;
+                    if (response != null && response.isSuccessful()) {
                         items.clear();
                         items.addAll(response.getData());
                         adapter.notifyDataSetChanged();
                         recyclerView.setAdapter(adapter);
-                        noItemsTextView.setVisibility(View.GONE);
-                        recyclerView.setVisibility(View.VISIBLE);
+
                     } else {
-                        noItemsTextView.setVisibility(View.VISIBLE);
-                        recyclerView.setVisibility(View.GONE);
+                        Snackbar.make(rootView, R.string.failed_retrieve_items, Snackbar.LENGTH_SHORT).show();
                     }
-                } else {
-                    Snackbar.make(rootView, R.string.failed_retrieve_items, Snackbar.LENGTH_SHORT).show();
-                }
-            });
-        }).start();
+                })
+                .execute();
     }
 
     private void setTitle() {

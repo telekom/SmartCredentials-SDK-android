@@ -1,4 +1,4 @@
-package de.telekom.scstoragedemo;
+package de.telekom.scstoragedemo.view;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +13,9 @@ import org.json.JSONException;
 
 import java.util.List;
 
+import de.telekom.scstoragedemo.DemoApplication;
+import de.telekom.scstoragedemo.R;
+import de.telekom.scstoragedemo.add.AddItemActivity;
 import de.telekom.smartcredentials.core.itemdatamodel.ItemEnvelope;
 import timber.log.Timber;
 

@@ -1,4 +1,4 @@
-package de.telekom.scstoragedemo;
+package de.telekom.scstoragedemo.edit;
 
 import android.os.Bundle;
 import android.widget.EditText;
@@ -12,6 +12,9 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import de.telekom.scstoragedemo.add.AddItemActivity;
+import de.telekom.scstoragedemo.DemoApplication;
+import de.telekom.scstoragedemo.R;
 import de.telekom.smartcredentials.core.api.StorageApi;
 import de.telekom.smartcredentials.core.context.ItemContext;
 import de.telekom.smartcredentials.core.context.ItemContextFactory;

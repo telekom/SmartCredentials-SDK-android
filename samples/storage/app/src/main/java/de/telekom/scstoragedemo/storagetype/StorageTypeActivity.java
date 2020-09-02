@@ -1,4 +1,4 @@
-package de.telekom.scstoragedemo;
+package de.telekom.scstoragedemo.storagetype;
 
 import android.os.Bundle;
 
@@ -9,6 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Arrays;
+
+import de.telekom.scstoragedemo.PreferenceManager;
+import de.telekom.scstoragedemo.R;
 
 /**
  * Created by Alex.Graur@endava.com at 8/27/2020
