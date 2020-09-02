@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="qr_corner_width">4dp</dimen>
+    <dimen name="qr_corner_length">60dp</dimen>
+    <dimen name="scanner_view_width">300dp</dimen>
+    <dimen name="scanner_view_height">300dp</dimen>
+    <dimen name="small_text_size">14sp</dimen>
+</resources>
