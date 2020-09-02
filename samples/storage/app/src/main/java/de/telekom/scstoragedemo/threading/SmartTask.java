@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Created by Alex.Graur@endava.com at 9/2/2020
  */
+@SuppressWarnings("All")
 public class SmartTask {
 
     public interface TaskDescription {

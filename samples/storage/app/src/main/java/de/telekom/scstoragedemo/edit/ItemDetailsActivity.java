@@ -12,9 +12,10 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import de.telekom.scstoragedemo.add.AddItemActivity;
 import de.telekom.scstoragedemo.DemoApplication;
 import de.telekom.scstoragedemo.R;
+import de.telekom.scstoragedemo.add.AddItemActivity;
+import de.telekom.scstoragedemo.threading.SmartTask;
 import de.telekom.smartcredentials.core.api.StorageApi;
 import de.telekom.smartcredentials.core.context.ItemContext;
 import de.telekom.smartcredentials.core.context.ItemContextFactory;
@@ -55,46 +56,51 @@ public class ItemDetailsActivity extends AppCompatActivity {
         updateButton.setOnClickListener(view -> updateItem());
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void onResume() {
         super.onResume();
-        new Thread(() -> {
-            SmartCredentialsApiResponse<ItemEnvelope> response = storageApi.getItemDetailsById(getFetchItemFilter());
-            runOnUiThread(() -> {
-                if (response.isSuccessful()) {
-                    idEditText.setText(response.getData().getItemId());
-                    try {
-                        identifierEditText.setText(response.getData().getIdentifier().getString(AddItemActivity.ITEM_KEY_IDENTIFIER));
-                        detailsEditText.setText(response.getData().getDetails().getString(AddItemActivity.ITEM_KEY_DETAILS));
-                    } catch (JSONException e) {
-                        Timber.tag(DemoApplication.TAG).d("Failed to fetch identifier or details.");
+        SmartTask.with(this)
+                .assign(() -> storageApi.getItemDetailsById(getFetchItemFilter()))
+                .finish(result -> {
+                    SmartCredentialsApiResponse<ItemEnvelope> response =
+                            (SmartCredentialsApiResponse<ItemEnvelope>) result;
+                    if (response != null && response.isSuccessful()) {
+                        idEditText.setText(response.getData().getItemId());
+                        try {
+                            identifierEditText.setText(response.getData().getIdentifier().getString(AddItemActivity.ITEM_KEY_IDENTIFIER));
+                            detailsEditText.setText(response.getData().getDetails().getString(AddItemActivity.ITEM_KEY_DETAILS));
+                        } catch (JSONException e) {
+                            Timber.tag(DemoApplication.TAG).d("Failed to fetch identifier or details.");
+                        }
+                    } else {
+                        Timber.tag(DemoApplication.TAG).d("Failed to fetch item details.");
                     }
-                } else {
-                    Timber.tag(DemoApplication.TAG).d("Failed to fetch item details.");
-                }
-            });
-        }).start();
+                })
+                .execute();
     }
 
     private void updateItem() {
-        new Thread(() -> {
-            String itemId = String.valueOf(idEditText.getText());
-            String identifier = String.valueOf(identifierEditText.getText());
-            String details = String.valueOf(detailsEditText.getText());
-            JSONObject identifierJson = new JSONObject();
-            JSONObject detailsJson = new JSONObject();
-            try {
-                identifierJson.put(AddItemActivity.ITEM_KEY_IDENTIFIER, identifier);
-                detailsJson.put(AddItemActivity.ITEM_KEY_DETAILS, details);
-                new Thread(() -> {
-                    ItemEnvelope itemEnvelope = ItemEnvelopeFactory.createItemEnvelope(itemId, identifierJson, detailsJson);
-                    storageApi.updateItem(itemEnvelope, getItemContext());
-                    runOnUiThread(this::finish);
-                }).start();
-            } catch (JSONException e) {
-                Timber.tag(DemoApplication.TAG).d("Failed to create item envelope.");
-            }
-        }).start();
+        SmartTask.with(this)
+                .assign(() -> {
+                    String itemId = String.valueOf(idEditText.getText());
+                    String identifier = String.valueOf(identifierEditText.getText());
+                    String details = String.valueOf(detailsEditText.getText());
+                    JSONObject identifierJson = new JSONObject();
+                    JSONObject detailsJson = new JSONObject();
+                    try {
+                        identifierJson.put(AddItemActivity.ITEM_KEY_IDENTIFIER, identifier);
+                        detailsJson.put(AddItemActivity.ITEM_KEY_DETAILS, details);
+
+                        ItemEnvelope itemEnvelope = ItemEnvelopeFactory.createItemEnvelope(itemId, identifierJson, detailsJson);
+                        return storageApi.updateItem(itemEnvelope, getItemContext());
+                    } catch (JSONException e) {
+                        Timber.tag(DemoApplication.TAG).d("Failed to create item envelope.");
+                    }
+                    return null;
+                })
+                .finish(result -> finish())
+                .execute();
     }
 
     public SmartCredentialsFilter getFetchItemFilter() {

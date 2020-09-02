@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 import de.telekom.scstoragedemo.DemoApplication;
 import de.telekom.scstoragedemo.R;
+import de.telekom.scstoragedemo.threading.SmartTask;
 import de.telekom.smartcredentials.core.api.StorageApi;
 import de.telekom.smartcredentials.core.context.ItemContext;
 import de.telekom.smartcredentials.core.context.ItemContextFactory;
@@ -59,11 +60,13 @@ public class AddItemActivity extends AppCompatActivity {
         try {
             identifierJson.put(ITEM_KEY_IDENTIFIER, identifier);
             detailsJson.put(ITEM_KEY_DETAILS, details);
-            new Thread(() -> {
-                ItemEnvelope itemEnvelope = ItemEnvelopeFactory.createItemEnvelope(itemId, identifierJson, detailsJson);
-                storageApi.putItem(itemEnvelope, getItemContext());
-                runOnUiThread(this::finish);
-            }).start();
+            SmartTask.with(this)
+                    .assign(() -> {
+                        ItemEnvelope itemEnvelope = ItemEnvelopeFactory.createItemEnvelope(itemId, identifierJson, detailsJson);
+                        return storageApi.putItem(itemEnvelope, getItemContext());
+                    })
+                    .finish(result -> finish())
+                    .execute();
         } catch (JSONException e) {
             Timber.tag(DemoApplication.TAG).d("Failed to create item envelope.");
         }

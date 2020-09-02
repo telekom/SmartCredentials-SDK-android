@@ -100,15 +100,16 @@ public class MainActivity extends AppCompatActivity implements OnItemInteraction
 
     @Override
     public void onDeleteClicked(ItemEnvelope item) {
-        new Thread(() -> {
-            storageApi.deleteItem(getDeleteItemsFilter(item.getItemId()));
-            runOnUiThread(this::fetchItems);
-        }).start();
+        SmartTask.with(this)
+                .assign(() -> storageApi.deleteItem(getDeleteItemsFilter(item.getItemId())))
+                .finish(result -> fetchItems())
+                .execute();
     }
 
+    @SuppressWarnings("unchecked")
     private void fetchItems() {
-        SmartTask.with(this).assign(() ->
-                storageApi.getAllItemsByItemType(getFetchItemsFilter()))
+        SmartTask.with(this)
+                .assign(() -> storageApi.getAllItemsByItemType(getFetchItemsFilter()))
                 .finish(result -> {
                     SmartCredentialsApiResponse<List<ItemEnvelope>> response =
                             (SmartCredentialsApiResponse<List<ItemEnvelope>>) result;
