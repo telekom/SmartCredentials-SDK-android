@@ -14,19 +14,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ProfileActivity"
+            android:name=".profile.ProfileActivity"
             android:label="@string/profile"
-            android:parentActivityName=".MainActivity" />
-        <activity android:name=".CancelActivity" />
-        <activity android:name=".CompletionActivity" />
-        <activity android:name=".LoginActivity">
+            android:parentActivityName=".tokens.TokensActivity" />
+        <activity android:name=".login.CancelActivity" />
+        <activity android:name=".login.CompletionActivity" />
+        <activity android:name=".login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name=".tokens.TokensActivity" />
         <activity
             android:name="net.openid.appauth.RedirectUriReceiverActivity"
             tools:node="replace">

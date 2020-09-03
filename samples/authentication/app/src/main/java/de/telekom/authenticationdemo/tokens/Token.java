@@ -1,4 +1,4 @@
-package de.telekom.authenticationdemo;
+package de.telekom.authenticationdemo.tokens;
 
 /**
  * Created by Alex.Graur@endava.com at 9/1/2020

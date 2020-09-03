@@ -20,7 +20,7 @@
     <string name="perform_action_failed">Failed to perform action with fresh tokens</string>
     <string name="perform_action_success">Successfully performed action with fresh tokens</string>
     <string name="view_profile_item">View user profile</string>
-    <string name="user_info_uri_failed">Failed to retrieve user information URI</string>
+    <string name="retrieve_profile_failed">Failed to retrieve profile</string>
     <string name="given_name">Given name</string>
     <string name="family_name">Family name</string>
     <string name="email">Email</string>

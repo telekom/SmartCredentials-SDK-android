@@ -1,4 +1,4 @@
-package de.telekom.authenticationdemo;
+package de.telekom.authenticationdemo.tokens;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
+import de.telekom.authenticationdemo.R;
 
 /**
  * Created by Alex.Graur@endava.com at 9/1/2020

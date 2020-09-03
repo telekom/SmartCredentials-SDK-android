@@ -1,4 +1,4 @@
-package de.telekom.authenticationdemo;
+package de.telekom.authenticationdemo.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import de.telekom.authenticationdemo.IdentityProvider;
+import de.telekom.authenticationdemo.R;
+import de.telekom.authenticationdemo.task.SmartTask;
+import de.telekom.authenticationdemo.tokens.TokensActivity;
 import de.telekom.smartcredentials.authentication.factory.SmartCredentialsAuthenticationFactory;
 import de.telekom.smartcredentials.core.api.AuthenticationApi;
 import de.telekom.smartcredentials.core.authentication.AuthenticationError;
@@ -26,17 +30,20 @@ public class LoginActivity extends AppCompatActivity implements AuthenticationSe
                 this);
 
         if (authenticationApi.isUserLoggedIn().isSuccessful() && authenticationApi.isUserLoggedIn().getData()) {
-            startActivity(new Intent(this, MainActivity.class));
+            startActivity(new Intent(this, TokensActivity.class));
             finish();
         }
 
         Button loginButton = findViewById(R.id.login_button);
-        loginButton.setOnClickListener(view -> new Thread(() -> {
-            Intent completionIntent = new Intent(this, CompletionActivity.class);
-            Intent cancelIntent = new Intent(this, CancelActivity.class);
-            authenticationApi.login(this, completionIntent, cancelIntent);
-            finish();
-        }).start());
+        loginButton.setOnClickListener(view ->
+                SmartTask.with(LoginActivity.this)
+                        .assign(() -> {
+                            Intent completionIntent = new Intent(this, CompletionActivity.class);
+                            Intent cancelIntent = new Intent(this, CancelActivity.class);
+                            return authenticationApi.login(this, completionIntent, cancelIntent);
+                        })
+                        .finish(result -> finish())
+                        .execute());
     }
 
     @Override

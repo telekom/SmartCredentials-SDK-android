@@ -1,4 +1,4 @@
-package de.telekom.authenticationdemo;
+package de.telekom.authenticationdemo.tokens;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Date;
 import java.util.List;
+
+import de.telekom.authenticationdemo.R;
 
 /**
  * Created by Alex.Graur@endava.com at 9/1/2020
