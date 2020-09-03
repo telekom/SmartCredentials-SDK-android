@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">AuthorizationDemo</string>
+    <string name="app_alias">scauthorizationdemo</string>
+    <string name="current_user_id">1234</string>
+</resources>
