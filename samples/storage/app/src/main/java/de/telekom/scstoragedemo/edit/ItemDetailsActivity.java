@@ -15,7 +15,7 @@ import org.json.JSONObject;
 import de.telekom.scstoragedemo.DemoApplication;
 import de.telekom.scstoragedemo.R;
 import de.telekom.scstoragedemo.add.AddItemActivity;
-import de.telekom.scstoragedemo.threading.SmartTask;
+import de.telekom.scstoragedemo.task.SmartTask;
 import de.telekom.smartcredentials.core.api.StorageApi;
 import de.telekom.smartcredentials.core.context.ItemContext;
 import de.telekom.smartcredentials.core.context.ItemContextFactory;

@@ -1,4 +1,4 @@
-package de.telekom.scstoragedemo.threading;
+package de.telekom.scstoragedemo.task;
 
 import android.os.Handler;
 import android.os.Looper;

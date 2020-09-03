@@ -23,7 +23,7 @@ import de.telekom.scstoragedemo.add.AddItemActivity;
 import de.telekom.scstoragedemo.edit.ItemDetailsActivity;
 import de.telekom.scstoragedemo.storagetype.StorageType;
 import de.telekom.scstoragedemo.storagetype.StorageTypeActivity;
-import de.telekom.scstoragedemo.threading.SmartTask;
+import de.telekom.scstoragedemo.task.SmartTask;
 import de.telekom.smartcredentials.core.api.StorageApi;
 import de.telekom.smartcredentials.core.filter.SmartCredentialsFilter;
 import de.telekom.smartcredentials.core.filter.SmartCredentialsFilterFactory;
