@@ -3,7 +3,6 @@
     android:layout_height="wrap_content"
     app:cardCornerRadius="8dp"
     app:cardElevation="4dp"
-    android:background="@android:color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -33,6 +32,7 @@
 
             <ImageView
                 android:id="@+id/subscription_state_icon"
+                android:contentDescription="@string/subscription_state_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="12dp"
@@ -62,6 +62,7 @@
                 android:layout_marginHorizontal="8dp"
                 android:text="@string/subscribe_button_text"
                 android:textColor="@android:color/white"
+                style="?android:attr/buttonBarButtonStyle"
                 android:background="@drawable/button_selector"/>
 
             <Button
@@ -74,6 +75,7 @@
                 android:layout_marginHorizontal="8dp"
                 android:text="@string/unsubscribe_button_state"
                 android:textColor="@android:color/white"
+                style="?android:attr/buttonBarButtonStyle"
                 android:background="@drawable/button_selector"/>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
