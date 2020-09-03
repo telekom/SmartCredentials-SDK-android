@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 
 import java.util.List;
 
@@ -54,42 +55,36 @@ public class MainActivity extends AppCompatActivity {
 
         Button subscribeButton = findViewById(R.id.subscribe_button);
         subscribeButton.setOnClickListener(v ->
-                new Thread(() -> pushNotificationsApi.subscribeAllNotifications(new PushNotificationsCallback() {
+                SmartTask.with(this).assign(() -> pushNotificationsApi.subscribeAllNotifications(new PushNotificationsCallback() {
                     @Override
                     public void onSuccess(String message) {
-                        runOnUiThread(() -> {
                             setSubscribedState();
                             logMessage(message);
-                        });
                     }
 
                     @Override
                     public void onFailure(String message, List<PushNotificationsError> errors) {
-                        runOnUiThread(() -> {
                             setSubscribedState();
                             logMessage(message);
-                        });
                     }
-                })).start());
+                })).finish(result -> {}).execute());
+
         Button unsubscribeButton = findViewById(R.id.unsubscribe_button);
         unsubscribeButton.setOnClickListener(v ->
-                new Thread(() -> pushNotificationsApi.unsubscribeAllNotifications(new PushNotificationsCallback() {
+                SmartTask.with(this).assign(() -> pushNotificationsApi.unsubscribeAllNotifications(new PushNotificationsCallback() {
                     @Override
                     public void onSuccess(String message) {
-                        runOnUiThread(() -> {
-                            setUnsubscribedState();
-                            logMessage(message);
-                        });
+                        setUnsubscribedState();
+                        logMessage(message);
                     }
 
                     @Override
                     public void onFailure(String message, List<PushNotificationsError> errors) {
-                        runOnUiThread(() -> {
-                            setUnsubscribedState();
-                            logMessage(message);
-                        });
+                        setUnsubscribedState();
+                        logMessage(message);
                     }
-                })).start());
+                })).finish(result -> {}).execute());
+
         Button logTokenButton = findViewById(R.id.log_token_button);
         logTokenButton.setOnClickListener(v ->
         {
@@ -100,12 +95,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setSubscribedState(){
-        subscriptionStateIcon.setImageDrawable(getDrawable(R.drawable.ic_subscribed));
+        subscriptionStateIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_subscribed));
         subscriptionMessage.setText(getString(R.string.subscribed));
     }
 
     private void setUnsubscribedState(){
-        subscriptionStateIcon.setImageDrawable(getDrawable(R.drawable.ic_unsubscribed));
+        subscriptionStateIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_unsubscribed));
         subscriptionMessage.setText(getString(R.string.unsubscribed));
     }
 
