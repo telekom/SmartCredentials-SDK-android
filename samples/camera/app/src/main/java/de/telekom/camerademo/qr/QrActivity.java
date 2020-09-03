@@ -1,4 +1,4 @@
-package de.telekom.camerademo;
+package de.telekom.camerademo.qr;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -16,6 +16,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.telekom.camerademo.R;
 import de.telekom.smartcredentials.camera.factory.SmartCredentialsCameraFactory;
 import de.telekom.smartcredentials.core.api.CameraApi;
 import de.telekom.smartcredentials.core.camera.BarcodeType;
@@ -24,7 +25,7 @@ import de.telekom.smartcredentials.core.camera.ScannerCallback;
 import de.telekom.smartcredentials.core.camera.ScannerPluginUnavailable;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 
-public class QrScanActivity extends AppCompatActivity implements QrResultDialogInteractionListener {
+public class QrActivity extends AppCompatActivity implements QrDialogInteractionListener {
 
     private static final int CAMERA_PERMISSION_RQ = 1234;
 
@@ -41,27 +42,27 @@ public class QrScanActivity extends AppCompatActivity implements QrResultDialogI
                     isProcessing = false;
                     qrAnimationView.pauseAnimation();
                     ArrayList<String> qrValues = new ArrayList<>(detectedValues);
-                    QrResultDialogFragment dialogFragment = QrResultDialogFragment.newInstance(qrValues);
-                    dialogFragment.show(getSupportFragmentManager(), QrResultDialogFragment.TAG);
+                    QrDialogFragment dialogFragment = QrDialogFragment.newInstance(qrValues);
+                    dialogFragment.show(getSupportFragmentManager(), QrDialogFragment.TAG);
                 }
             });
         }
 
         @Override
         public void onInitialized() {
-
+            // no implementation
         }
 
         @Override
         public void onScannerUnavailable(ScannerPluginUnavailable errorMessage) {
-
+            // no implementation
         }
     };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_qr_scan);
+        setContentView(R.layout.activity_camera);
 
         cameraWrapper = findViewById(R.id.camera_wrapper);
         qrAnimationView = findViewById(R.id.scan_qr_animation_view);

@@ -6,4 +6,9 @@
     <string name="camera_scanner_layout_failed">Failed to retrieve camera scanner layout!</string>
     <string name="ok">OK</string>
     <string name="qr_code_detected">QR code detected</string>
+    <string name="take_picture">Take picture</string>
+    <string name="ocr_detected">OCR detected</string>
+    <string name="qr">QR</string>
+    <string name="scan_qr">Scan QR code</string>
+    <string name="scan_ocr">Scan OCR</string>
 </resources>

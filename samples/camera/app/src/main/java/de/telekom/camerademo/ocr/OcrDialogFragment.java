@@ -1,4 +1,4 @@
-package de.telekom.camerademo;
+package de.telekom.camerademo.ocr;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -15,20 +15,22 @@ import androidx.fragment.app.DialogFragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.telekom.camerademo.R;
+
 /**
- * Created by Alex.Graur@endava.com at 9/2/2020
+ * Created by Alex.Graur@endava.com at 9/3/2020
  */
-public class QrResultDialogFragment extends DialogFragment {
+public class OcrDialogFragment extends DialogFragment {
 
-    public static final String TAG = "qr_result_dialog_tag";
-    private static final String ARG_QR_VALUES = "arg:qr_values";
+    public static final String TAG = "ocr_dialog_tag";
+    private static final String ARG_OCR_VALUES = "arg:ocr_values";
 
-    private QrResultDialogInteractionListener listener;
+    private OcrDialogInteractionListener listener;
 
-    public static QrResultDialogFragment newInstance(ArrayList<String> qrValues) {
-        QrResultDialogFragment dialogFragment = new QrResultDialogFragment();
+    public static OcrDialogFragment newInstance(ArrayList<String> ocrValues) {
+        OcrDialogFragment dialogFragment = new OcrDialogFragment();
         Bundle arguments = new Bundle();
-        arguments.putStringArrayList(ARG_QR_VALUES, qrValues);
+        arguments.putStringArrayList(ARG_OCR_VALUES, ocrValues);
         dialogFragment.setArguments(arguments);
         return dialogFragment;
     }
@@ -44,20 +46,20 @@ public class QrResultDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.dialog_qr_result, container, false);
+        return inflater.inflate(R.layout.dialog_ocr, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Button okButton = view.findViewById(R.id.ok_button);
-        TextView qrTextView = view.findViewById(R.id.qr_text_view);
+        TextView ocrTextView = view.findViewById(R.id.ocr_text_view);
 
         if (getArguments() != null) {
-            List<String> qrCodes = getArguments().getStringArrayList(ARG_QR_VALUES);
+            List<String> ocrValues = getArguments().getStringArrayList(ARG_OCR_VALUES);
 
-            if (qrCodes != null) {
-                qrTextView.setText(qrCodes.toString());
+            if (ocrValues != null) {
+                ocrTextView.setText(ocrValues.toString());
             }
         }
 
@@ -73,8 +75,8 @@ public class QrResultDialogFragment extends DialogFragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
-        if (context instanceof QrResultDialogInteractionListener) {
-            listener = (QrResultDialogInteractionListener) context;
+        if (context instanceof OcrDialogInteractionListener) {
+            listener = (OcrDialogInteractionListener) context;
         }
     }
 
