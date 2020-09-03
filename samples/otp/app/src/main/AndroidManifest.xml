@@ -4,19 +4,24 @@
 
     <application
         android:name=".DemoApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".view.MainActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".filter.OtpTypeActivity" android:label="@string/filter_otp_title" android:screenOrientation="portrait"/>
+        <activity android:name=".add.AddManualOtpActivity" android:label="@string/add_otp_title" android:screenOrientation="portrait"/>
+        <activity android:name=".add.AddOtpActivity" android:label="@string/add_otp_title" android:screenOrientation="portrait"/>
+        <activity android:name=".add.AddQrOtpActivity" android:label="@string/otp_via_qr_title" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

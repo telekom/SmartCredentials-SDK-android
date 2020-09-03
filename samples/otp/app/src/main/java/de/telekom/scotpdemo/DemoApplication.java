@@ -2,6 +2,8 @@ package de.telekom.scotpdemo;
 
 import android.app.Application;
 
+import com.facebook.stetho.Stetho;
+
 import de.telekom.smartcredentials.camera.factory.SmartCredentialsCameraFactory;
 import de.telekom.smartcredentials.core.api.CoreApi;
 import de.telekom.smartcredentials.core.configurations.SmartCredentialsConfiguration;
@@ -17,15 +19,17 @@ import timber.log.Timber;
  */
 public class DemoApplication extends Application {
 
+    public static final String TAG = "otp_tag";
+
     @Override
     public void onCreate() {
         super.onCreate();
         Timber.plant(new Timber.DebugTree());
+        Stetho.initializeWithDefaults(this);
         initSmartCredentialsModules();
     }
 
     private void initSmartCredentialsModules() {
-
         SmartCredentialsConfiguration configuration = new SmartCredentialsConfiguration.Builder(getApplicationContext(), getString(R.string.current_user_id))
                 .setLogger(new DemoLogger())
                 .setRootCheckerEnabled(RootDetectionOption.ALL)
@@ -40,7 +44,5 @@ public class DemoApplication extends Application {
                 SmartCredentialsSecurityFactory.getSecurityApi(),
                 SmartCredentialsStorageFactory.getStorageApi(),
                 SmartCredentialsCameraFactory.getCameraApi());
-
     }
-
 }
