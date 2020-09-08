@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">CoreDemo</string>
+    <string name="app_alias">sccoredemo</string>
+    <string name="current_user_id">1234</string>
+    <string name="root_status_icon">Root Status Icon</string>
+    <string name="root_status">ROOT STATUS</string>
+    <string name="your_device_is">Your device is</string>
+    <string name="rooted">rooted.</string>
+    <string name="not_rooted">not rooted.</string>
+</resources>
