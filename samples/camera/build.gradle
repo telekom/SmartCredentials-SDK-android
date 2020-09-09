@@ -1,0 +1,35 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:4.0.1"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven {
+            url getEnvOrProperty('SC_DOL_URL')
+            credentials {
+                username = getEnvOrProperty('SC_DOL_USERNAME')
+                password = getEnvOrProperty('SC_DOL_PASSWORD')
+            }
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+def getEnvOrProperty(String name, String fallback = null) {
+    return System.getenv(name) ?: project.hasProperty(name) ? project[name] : fallback
+}
