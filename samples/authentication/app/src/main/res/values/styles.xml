@@ -1,0 +1,27 @@
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="DialogTheme" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="BigTitletextStyle">
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textSize">@dimen/big_text_size</item>
+    </style>
+
+    <style name="SmallTitleTextStyle">
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textSize">@dimen/small_text_size</item>
+    </style>
+
+    <style name="SmallDescriptionTextStyle">
+        <item name="android:textColor">@color/lightTextColor</item>
+        <item name="android:textSize">@dimen/small_text_size</item>
+    </style>
+</resources>

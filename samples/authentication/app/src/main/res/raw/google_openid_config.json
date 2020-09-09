@@ -1,0 +1,6 @@
+{
+  "client_id": "1065878372659-arafja1ap6i3b6vs7d746pocdh6uu4o3.apps.googleusercontent.com",
+  "redirect_uri": "com.googleusercontent.apps.1065878372659-arafja1ap6i3b6vs7d746pocdh6uu4o3:/oauth2redirect",
+  "authorization_scope": "openid email profile",
+  "discovery_uri": "https://accounts.google.com/.well-known/openid-configuration"
+}

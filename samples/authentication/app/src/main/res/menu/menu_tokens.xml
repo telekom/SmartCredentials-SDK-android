@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/view_profile_item"
+        android:title="@string/view_profile_item"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/perform_action_item"
+        android:title="@string/performed_action_token"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/refresh_access_item"
+        android:title="@string/refresh_access_token"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/logout_item"
+        android:title="@string/logout"
+        app:showAsAction="never" />
+</menu>
