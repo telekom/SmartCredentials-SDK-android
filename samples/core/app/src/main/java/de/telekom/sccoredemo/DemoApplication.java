@@ -5,15 +5,19 @@ import android.app.Application;
 import de.telekom.smartcredentials.core.configurations.SmartCredentialsConfiguration;
 import de.telekom.smartcredentials.core.factory.SmartCredentialsCoreFactory;
 import de.telekom.smartcredentials.core.rootdetector.RootDetectionOption;
+import timber.log.Timber;
 
 /**
  * Created by gabriel.blaj@endava.com at 9/8/2020
  */
 public class DemoApplication extends Application {
 
+    public static final String TAG = "core_tag";
+
     @Override
     public void onCreate() {
         super.onCreate();
+        Timber.plant(new Timber.DebugTree());
         initSmartCredentialsModule();
     }
 

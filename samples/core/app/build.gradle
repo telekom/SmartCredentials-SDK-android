@@ -26,7 +26,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
-
+    implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation("de.telekom.smartcredentials:core:6.1.20")
     implementation 'androidx.cardview:cardview:1.0.0'
 
