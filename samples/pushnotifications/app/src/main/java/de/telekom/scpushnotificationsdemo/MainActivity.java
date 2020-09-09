@@ -26,8 +26,6 @@ import timber.log.Timber;
  */
 public class MainActivity extends AppCompatActivity {
 
-    public static final String TAG = "pushnotifications_tag";
-
     private PushNotificationsApi pushNotificationsApi;
 
     private ImageView subscriptionStateIcon;
@@ -105,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void logMessage(String message) {
-        Timber.tag(TAG).d(message);
+        Timber.tag(DemoApplication.TAG).d(message);
     }
 
     private void displayNotification(String title, String body) {
