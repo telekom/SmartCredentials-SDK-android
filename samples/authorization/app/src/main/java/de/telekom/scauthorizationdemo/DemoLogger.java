@@ -27,7 +27,7 @@ public class DemoLogger implements ApiLogger {
 
     @Override
     public void logFactoryMethod(String factoryClassName, String factoryMethodName, String instantiatedClassName) {
-        Timber.tag(DemoApplication.TAG).d("factory method called % s from class %s",
+        Timber.tag(DemoApplication.TAG).d("factory method called %s from class %s",
                 factoryMethodName, factoryClassName);
     }
 
