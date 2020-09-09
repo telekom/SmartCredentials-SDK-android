@@ -24,8 +24,6 @@ import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String TAG = "authorization_tag";
-
     private TextView authorizationStatus;
     private ImageView authorizationIcon;
     private AuthorizationApi api;
@@ -64,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .add(authorizationDialog, TAG)
+                        .add(authorizationDialog, DemoApplication.TAG)
                         .addToBackStack(null)
                         .commit();
             }

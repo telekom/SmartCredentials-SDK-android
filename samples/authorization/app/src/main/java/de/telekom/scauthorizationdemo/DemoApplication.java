@@ -16,6 +16,8 @@ import timber.log.Timber;
  */
 public class DemoApplication extends Application {
 
+    public static final String TAG = "authorization_tag";
+
     @Override
     public void onCreate() {
         super.onCreate();
