@@ -11,15 +11,19 @@ import de.telekom.smartcredentials.core.factory.SmartCredentialsCoreFactory;
 import de.telekom.smartcredentials.core.rootdetector.RootDetectionOption;
 import de.telekom.smartcredentials.security.factory.SmartCredentialsSecurityFactory;
 import de.telekom.smartcredentials.storage.factory.SmartCredentialsStorageFactory;
+import timber.log.Timber;
 
 /**
  * Created by Alex.Graur@endava.com at 8/31/2020
  */
 public class DemoApplication extends Application {
 
+    public static final String TAG = "authentication_tag";
+
     @Override
     public void onCreate() {
         super.onCreate();
+        Timber.plant(new Timber.DebugTree());
         SmartCredentialsConfiguration configuration = new SmartCredentialsConfiguration.Builder(getApplicationContext(), getString(R.string.current_user_id))
                 .setLogger(new DemoLogger())
                 .setRootCheckerEnabled(RootDetectionOption.ALL)
