@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="de.telekom.scstoragedemo">
+
+    <application
+        android:name=".DemoApplication"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <activity android:name=".view.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".add.AddItemActivity"
+            android:label="@string/add_item"
+            android:parentActivityName=".view.MainActivity" />
+        <activity
+            android:name=".edit.ItemDetailsActivity"
+            android:label="@string/update_item"
+            android:parentActivityName=".view.MainActivity" />
+        <activity
+            android:name=".storagetype.StorageTypeActivity"
+            android:label="@string/storage_type"
+            android:parentActivityName=".view.MainActivity" />
+    </application>
+
+</manifest>
