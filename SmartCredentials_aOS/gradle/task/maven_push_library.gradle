@@ -24,12 +24,12 @@ bintray {
     user = getEnvOrProperty('BINTRAY_SC_USERNAME')
     key = getEnvOrProperty('BINTRAY_SC_KEY')
     publications = ['maven']
+    publish = true
     pkg {
         repo = 'SmartCredentials'
         name = 'android'
         userOrg = getEnvOrProperty('BINTRAY_SC_USERNAME')
         licenses = ['Apache-2.0']
-        publish = true
         version {
             name = rootProject.ext.androidVersionName
             desc = 'Smart-Credentials Library'
