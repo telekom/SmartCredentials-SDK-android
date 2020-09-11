@@ -16,8 +16,6 @@
 
 package de.telekom.smartcredentials.eid.messages;
 
-import android.support.annotation.NonNull;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -29,6 +27,9 @@ public class Result {
     @SerializedName("major")
     @Expose
     private String mMajor;
+    @SerializedName("minor")
+    @Expose
+    private String mMinor;
 
     public Result() {
 
@@ -42,11 +43,19 @@ public class Result {
         this.mMajor = major;
     }
 
-    @NonNull
+    public String getMinor() {
+        return mMinor;
+    }
+
+    public void setMinor(String mMinor) {
+        this.mMinor = mMinor;
+    }
+
     @Override
     public String toString() {
         return "Result{" +
                 "mMajor='" + mMajor + '\'' +
+                ", mMinor='" + mMinor + '\'' +
                 '}';
     }
 }
