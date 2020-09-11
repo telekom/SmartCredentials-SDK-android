@@ -16,7 +16,7 @@
 
 package de.telekom.smartcredentials.documentscanner.controllers;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.microblink.util.RecognizerCompatibility;
 import com.microblink.util.RecognizerCompatibilityStatus;

@@ -18,7 +18,7 @@ package de.telekom.smartcredentials.storage.repositories;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
 

@@ -16,7 +16,7 @@
 
 package de.telekom.smartcredentials.pushnotifications.di;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import de.telekom.smartcredentials.core.api.StorageApi;
 import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsModuleSet;

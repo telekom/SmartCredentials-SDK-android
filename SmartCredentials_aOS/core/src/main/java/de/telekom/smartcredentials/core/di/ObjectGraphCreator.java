@@ -17,7 +17,7 @@
 package de.telekom.smartcredentials.core.di;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.util.Set;
 

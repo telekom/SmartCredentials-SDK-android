@@ -22,7 +22,7 @@
 
 package de.telekom.smartcredentials.documentscanner.utils;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.microblink.entities.Entity;
 import com.microblink.entities.recognizers.blinkid.austria.AustriaCombinedRecognizer;

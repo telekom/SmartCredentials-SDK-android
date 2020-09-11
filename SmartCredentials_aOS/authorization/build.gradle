@@ -30,7 +30,7 @@ android {
         versionCode rootProject.ext.androidVersionCode
         versionName rootProject.ext.androidVersionName
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -62,11 +62,11 @@ android {
 
 dependencies {
 
-    implementation "com.android.support:appcompat-v7:${androidSupportLibVersion}"
-    implementation "com.android.support.constraint:constraint-layout:${constraintLayoutVersion}"
+    implementation "androidx.appcompat:appcompat:1.2.0"
+    implementation "androidx.constraintlayout:constraintlayout:2.0.1"
 
-    androidTestImplementation "com.android.support.test.espresso:espresso-core:${espressoLibVersion}"
-    androidTestImplementation "com.android.support.test.espresso:espresso-intents:${espressoLibVersion}"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.3.0"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:3.3.0"
     androidTestImplementation "org.hamcrest:hamcrest-library:${hamcrestVersion}"
 
     testImplementation "org.powermock:powermock-module-junit4:${powermockVersion}"

@@ -17,7 +17,7 @@
 package de.telekom.smartcredentials.core.documentscanner;
 
 import android.graphics.Rect;
-import android.support.annotation.WorkerThread;
+import androidx.annotation.WorkerThread;
 
 import de.telekom.smartcredentials.core.callback.BaseScannerCallback;
 import de.telekom.smartcredentials.core.model.DocumentScannerResult;

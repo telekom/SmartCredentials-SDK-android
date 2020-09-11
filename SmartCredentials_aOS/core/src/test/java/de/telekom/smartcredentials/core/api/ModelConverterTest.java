@@ -16,7 +16,7 @@
 
 package de.telekom.smartcredentials.core.api;
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import android.content.Context;
 
 import org.json.JSONException;

@@ -30,7 +30,7 @@ android {
         versionCode rootProject.ext.androidVersionCode
         versionName rootProject.ext.androidVersionName
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -56,7 +56,7 @@ android {
 
 dependencies {
 
-    implementation "com.android.support:appcompat-v7:${androidSupportLibVersion}"
+    implementation "androidx.appcompat:appcompat:1.2.0"
 
     testImplementation "junit:junit:${junitVersion}"
     testImplementation "org.mockito:mockito-core:${mockitoVersion}"

@@ -16,7 +16,7 @@
 
 package de.telekom.smartcredentials.otp.di;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.util.Arrays;
 import java.util.Collections;

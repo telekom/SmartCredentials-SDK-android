@@ -16,7 +16,7 @@
 
 package de.telekom.smartcredentials.pushnotifications.factory;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import de.telekom.smartcredentials.core.api.CoreApi;
 import de.telekom.smartcredentials.core.api.PushNotificationsApi;
