@@ -16,7 +16,7 @@
 
 package de.telekom.smartcredentials.networking.di;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import de.telekom.smartcredentials.core.controllers.CoreController;
 import de.telekom.smartcredentials.networking.controllers.NetworkingController;

@@ -17,9 +17,9 @@
 package de.telekom.smartcredentials.authorization.fingerprint;
 
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.support.v4.os.CancellationSignal;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.core.os.CancellationSignal;
 
 import javax.crypto.Cipher;
 

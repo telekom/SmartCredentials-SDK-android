@@ -16,7 +16,7 @@
 
 package de.telekom.smartcredentials.core.context;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import de.telekom.smartcredentials.core.itemdatamodel.ItemType;
 import de.telekom.smartcredentials.core.itemdatamodel.ItemTypeFactory;

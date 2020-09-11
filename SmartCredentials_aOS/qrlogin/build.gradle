@@ -29,7 +29,7 @@ android {
         targetSdkVersion rootProject.ext.androidTargetSdkVersion
         versionCode rootProject.ext.androidVersionCode
         versionName rootProject.ext.androidVersionName
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -55,7 +55,7 @@ android {
 
 dependencies {
 
-    implementation "com.android.support:appcompat-v7:${androidSupportLibVersion}"
+    implementation "androidx.appcompat:appcompat:1.2.0"
     implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"
     implementation "com.google.code.gson:gson:${gsonVersion}"
 

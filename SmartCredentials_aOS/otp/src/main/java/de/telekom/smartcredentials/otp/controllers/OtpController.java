@@ -18,7 +18,7 @@ package de.telekom.smartcredentials.otp.controllers;
 
 import android.content.Context;
 import android.os.Looper;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import de.telekom.smartcredentials.core.api.CameraApi;
 import de.telekom.smartcredentials.core.api.OtpApi;

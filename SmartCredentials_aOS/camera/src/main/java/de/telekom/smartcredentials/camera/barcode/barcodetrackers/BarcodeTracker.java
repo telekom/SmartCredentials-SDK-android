@@ -16,7 +16,7 @@
 
 package de.telekom.smartcredentials.camera.barcode.barcodetrackers;
 
-import android.support.annotation.UiThread;
+import androidx.annotation.UiThread;
 
 import com.google.android.gms.vision.Tracker;
 import com.google.android.gms.vision.barcode.Barcode;

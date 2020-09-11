@@ -16,7 +16,7 @@
 
 package de.telekom.smartcredentials.networking.request.generic;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.io.IOException;
 

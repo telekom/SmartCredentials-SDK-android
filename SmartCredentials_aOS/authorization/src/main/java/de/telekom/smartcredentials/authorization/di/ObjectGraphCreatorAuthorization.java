@@ -19,8 +19,8 @@ package de.telekom.smartcredentials.authorization.di;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.v4.os.CancellationSignal;
+import androidx.annotation.NonNull;
+import androidx.core.os.CancellationSignal;
 
 import de.telekom.smartcredentials.authorization.biometric.BiometricPromptWrapper;
 import de.telekom.smartcredentials.authorization.controllers.AuthorizationController;

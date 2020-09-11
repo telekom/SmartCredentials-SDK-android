@@ -17,7 +17,7 @@
 package de.telekom.smartcredentials.camera.controllers;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import de.telekom.smartcredentials.camera.barcode.BarcodeCameraScannerLayoutImpl;
 import de.telekom.smartcredentials.camera.callback.PluginCallbackCameraConverter;

@@ -17,7 +17,7 @@
 package de.telekom.smartcredentials.networking.controllers;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import de.telekom.smartcredentials.core.api.NetworkingApi;
 import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsFeatureSet;

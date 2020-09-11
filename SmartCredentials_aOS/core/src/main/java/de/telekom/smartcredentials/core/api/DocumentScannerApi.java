@@ -16,7 +16,7 @@
 
 package de.telekom.smartcredentials.core.api;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import de.telekom.smartcredentials.core.documentscanner.DocumentScanConfiguration;
 import de.telekom.smartcredentials.core.documentscanner.DocumentScannerCallback;

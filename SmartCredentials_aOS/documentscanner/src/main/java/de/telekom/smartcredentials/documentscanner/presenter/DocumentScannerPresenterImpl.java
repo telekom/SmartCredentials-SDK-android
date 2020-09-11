@@ -18,7 +18,7 @@ package de.telekom.smartcredentials.documentscanner.presenter;
 
 import android.graphics.Rect;
 import android.os.Looper;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.microblink.entities.Entity;
 import com.microblink.entities.recognizers.Recognizer;

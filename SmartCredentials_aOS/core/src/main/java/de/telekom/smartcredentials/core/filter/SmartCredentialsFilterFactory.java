@@ -16,7 +16,7 @@
 
 package de.telekom.smartcredentials.core.filter;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import de.telekom.smartcredentials.core.itemdatamodel.ItemTypeFactory;
 

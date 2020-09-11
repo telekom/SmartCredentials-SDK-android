@@ -24,8 +24,8 @@ package de.telekom.smartcredentials.documentscanner.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.annotation.FloatRange;
-import android.support.annotation.NonNull;
+import androidx.annotation.FloatRange;
+import androidx.annotation.NonNull;
 import android.widget.LinearLayout;
 
 import com.microblink.entities.Entity;

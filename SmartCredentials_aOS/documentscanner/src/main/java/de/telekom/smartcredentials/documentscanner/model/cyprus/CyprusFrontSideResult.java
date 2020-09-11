@@ -16,7 +16,7 @@
 
 package de.telekom.smartcredentials.documentscanner.model.cyprus;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.microblink.entities.recognizers.Recognizer;
 

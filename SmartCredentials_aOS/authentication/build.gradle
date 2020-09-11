@@ -34,7 +34,7 @@ android {
                 appAuthRedirectScheme: "net.openid.appauth.test"
         ]
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {

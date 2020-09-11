@@ -16,7 +16,7 @@
 
 package de.telekom.smartcredentials.qrlogin.callback;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import de.telekom.smartcredentials.core.authorization.AuthorizationPluginError;
 import de.telekom.smartcredentials.core.authorization.AuthorizationPluginUnavailable;

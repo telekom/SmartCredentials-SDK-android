@@ -16,7 +16,7 @@
 
 package de.telekom.smartcredentials.otp.factory;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.util.List;
 
