@@ -62,7 +62,7 @@ android {
 
 dependencies {
 
-    implementation "androidx.appcompat:appcompat:1.2.0"
+    implementation "androidx.annotation:annotation:${androidXAnnotation}"
 
     testImplementation "junit:junit:${junitVersion}"
     testImplementation "org.hamcrest:hamcrest-library:${hamcrestVersion}"
