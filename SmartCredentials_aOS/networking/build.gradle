@@ -58,7 +58,7 @@ android {
 
 dependencies {
 
-    implementation "androidx.appcompat:appcompat:1.2.0"
+    implementation "androidx.appcompat:appcompat:${androidXAppcompat}"
     implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"
     implementation "com.google.code.gson:gson:${gsonVersion}"
 
