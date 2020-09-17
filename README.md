@@ -20,13 +20,6 @@ repositories {
     google()
     jcenter()
     ...
-    maven {
-        url "https://dol.telekom.de/artifactory/smartcredentials-test-maven"
-        credentials {
-            username = "a_username"
-            password = "a_password"
-        }
-    }
 }
 ```
 
