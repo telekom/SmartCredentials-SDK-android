@@ -68,7 +68,7 @@ public class DocumentScanConfigurationTest {
     @Test
     public void creatingScanConfigurationSetParametersAsProvided() {
         SmartCredentialsDocumentScanConfiguration configuration = new SmartCredentialsDocumentScanConfiguration.Builder(mContext)
-                .setScannerRecognizer(ScannerRecognizer.ROMANIA_ID_CARD_FRONT_SIDE)
+                .setScannerRecognizer(ScannerRecognizer.ID_SIMPLE_RECOGNIZER)
                 .setVideoResolution(VideoResolution.RESOLUTION_2160P)
                 .setZoomLevel(0.4f)
                 .setAspectMode(AspectMode.FIT)
@@ -80,7 +80,7 @@ public class DocumentScanConfigurationTest {
                 .build();
 
         assertNotNull(configuration);
-        assertEquals(ScannerRecognizer.ROMANIA_ID_CARD_FRONT_SIDE, configuration.getScannerRecognizer());
+        assertEquals(ScannerRecognizer.ID_SIMPLE_RECOGNIZER, configuration.getScannerRecognizer());
         assertEquals(configuration.getContext(), mContext);
         assertEquals(configuration.getZoomLevel(), 0.4f);
         assertEquals(configuration.getVideoResolution(), VideoResolution.RESOLUTION_2160P);
@@ -98,7 +98,7 @@ public class DocumentScanConfigurationTest {
 
         assertNotNull(configuration);
         assertEquals(configuration.getContext(), mContext);
-        assertEquals(ScannerRecognizer.MACHINE_READABLE_ZONE, configuration.getScannerRecognizer());
+        assertEquals(ScannerRecognizer.ID_COMBINED_RECOGNIZER, configuration.getScannerRecognizer());
         assertEquals(configuration.getZoomLevel(), 0f);
         assertEquals(configuration.getVideoResolution(), VideoResolution.DEFAULT);
         assertEquals(configuration.getAspectMode(), AspectMode.FILL);
