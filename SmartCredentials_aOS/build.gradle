@@ -44,7 +44,8 @@ allprojects {
 
         androidXAppcompat = "1.2.0"
         androidXAnnotation = "1.1.0"
-        constraintLayoutVersion = "1.1.3"
+        androidXFragment = "1.2.5"
+        constraintLayoutVersion = "2.0.1"
         architectureComponentsVersion = "1.1.1"
         gsonVersion = "2.8.5"
         mobileVisionVersion = "17.0.2"
@@ -52,7 +53,6 @@ allprojects {
         retrofitVersion = "2.5.0"
         okHttpVersion = "3.14.0"
         blinkIDVersion = "5.5.0"
-        appAuthVersion = "0.7.1"
         rxJavaVersion = "2.1.1"
 
         junitVersion = "4.12"
