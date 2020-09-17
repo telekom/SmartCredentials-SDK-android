@@ -47,7 +47,8 @@ public class DocumentScannerController implements DocumentScannerApi<SmartCreden
         mCoreController = coreController;
     }
 
-    private Object getDocumentScanner(SmartCredentialsDocumentScanConfiguration configuration, DocumentScannerPluginCallback pluginCallback) {
+    private Object getDocumentScanner(SmartCredentialsDocumentScanConfiguration configuration,
+                                      DocumentScannerPluginCallback pluginCallback) {
         return DocumentScannerLayoutImpl.getNewInstance(configuration, pluginCallback);
     }
 

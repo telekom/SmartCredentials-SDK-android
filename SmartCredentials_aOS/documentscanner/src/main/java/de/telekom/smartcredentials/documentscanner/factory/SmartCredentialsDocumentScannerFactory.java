@@ -17,16 +17,17 @@
 package de.telekom.smartcredentials.documentscanner.factory;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import de.telekom.smartcredentials.core.api.CoreApi;
 import de.telekom.smartcredentials.core.api.DocumentScannerApi;
 import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsModuleSet;
 import de.telekom.smartcredentials.core.controllers.CoreController;
-import de.telekom.smartcredentials.documentscanner.utils.DocumentScannerLicenseManager;
+import de.telekom.smartcredentials.core.exceptions.InvalidCoreApiException;
 import de.telekom.smartcredentials.documentscanner.controllers.DocumentScannerController;
 import de.telekom.smartcredentials.documentscanner.di.ObjectGraphCreatorDocumentScanner;
-import de.telekom.smartcredentials.core.exceptions.InvalidCoreApiException;
+import de.telekom.smartcredentials.documentscanner.utils.DocumentScannerLicenseManager;
 
 @SuppressWarnings("unused")
 public class SmartCredentialsDocumentScannerFactory {
