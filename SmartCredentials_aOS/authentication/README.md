@@ -3,7 +3,7 @@
 
 Smart Credentials Authentication Module handles the communication with OAuth 2.0 and OpenID Connect providers and store the data obtained in a secure manner.
 
-build.gradle dependencies
+### Add build.gradle dependencies
 ```
 implementation("de.telekom.smartcredentials:core:$sc_version")
 implementation("de.telekom.smartcredentials:security:$sc_version")
@@ -11,11 +11,10 @@ implementation("de.telekom.smartcredentials:storage:$sc_version")
 implementation("de.telekom.smartcredentials:authentication:$sc_version")
 ````
 
-## Module Initialization
-
 ### Modules initialization
 
-Core Module
+**Core Module**
+
 ``` 
 SmartCredentialsConfiguration coreConfig = new SmartCredentialsConfiguration.Builder(context, userId)
                 .setLogger(new Logger())
@@ -24,13 +23,16 @@ SmartCredentialsConfiguration coreConfig = new SmartCredentialsConfiguration.Bui
 CoreApi coreApi = SmartCredentialsCoreFactory.initialize(coreConfig);
 ````
 
-Security and Storage modules
+**Security and Storage modules**
+
 ``` 
 SmartCredentialsSecurityFactory.initSmartCredentialsSecurityModule(context, coreApi);
 SmartCredentialsStorageFactory.initSmartCredentialsStorageModule(context, 
 		coreApi, SmartCredentialsSecurityFactory.getSecurityApi());
 ```
-Authentication module
+
+**Authentication module**
+
 ```
 SmartCredentialsAuthenticationFactory.initSmartCredentialsAuthenticationModule(coreApi, storageApi);
 ```
