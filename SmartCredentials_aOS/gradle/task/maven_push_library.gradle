@@ -44,6 +44,27 @@ task sourcesJar(type: Jar) {
     include("**")
 }
 
+def pomConfig = {
+    licenses {
+        license {
+            name "The Apache Software License, Version 2.0"
+            url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            distribution "repo"
+        }
+    }
+    developers {
+        developer {
+            id "axelnennker"
+            name "Axel Nennker"
+            email "Axel.Nennker@telekom.de"
+        }
+    }
+
+    scm {
+        url "https://github.com/telekom/SmartCredentials-SDK-android"
+    }
+}
+
 publishing {
     group = "de.telekom.smartcredentials"
     version = rootProject.ext.androidVersionName
@@ -57,7 +78,13 @@ publishing {
             if (new File(aarFileName).exists()) {
                 artifact(aarFileName)
                 artifact sourcesJar
+
                 pom.withXml {
+                    def root = asNode()
+                    root.appendNode('description', 'SmartCredentials is a programmer’s library, presenting a unified interface for various solutions and protocols used to authenticate, authorize and conduct any kind of transactions between a user or a user-facing app and services. It uses the abstraction of a credential, which can handily be made available to the user for choosing the right identity/ entitlement and authenticating themselves for appropriate security. On the ‘other end’ actual technological functions are structured in modules that can be ‘plugged’ in to the SmartCredentials core to extend and alter its behavior behind the unifying credentialing APIs.')
+                    root.appendNode('name', 'Smart Credentials')
+                    root.appendNode('url', 'https://github.com/telekom/SmartCredentials-SDK-android')
+                    root.children().last() + pomConfig
                     def dependenciesNode = asNode().appendNode('dependencies')
                     configurations.implementation.allDependencies.each {
                         if (it.name != 'unspecified') {
