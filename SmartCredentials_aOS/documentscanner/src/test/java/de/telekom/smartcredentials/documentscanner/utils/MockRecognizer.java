@@ -17,20 +17,20 @@
 package de.telekom.smartcredentials.documentscanner.utils;
 
 import com.microblink.entities.recognizers.blinkid.imageoptions.FaceImageOptions;
+import com.microblink.entities.recognizers.blinkid.imageoptions.FullDocumentImageOptions;
 import com.microblink.entities.recognizers.blinkid.imageoptions.encode.EncodeFaceImageOptions;
 import com.microblink.entities.recognizers.blinkid.imageoptions.encode.EncodeFullDocumentImagesOptions;
-import com.microblink.entities.recognizers.blinkid.imageoptions.encode.EncodeSignatureImageOptions;
 
 /**
  * Created by Lucian Iacob on January 03, 2019.
  */
-public class MockRecognizer implements EncodeFullDocumentImagesOptions, EncodeSignatureImageOptions,
+public class MockRecognizer implements EncodeFullDocumentImagesOptions, FullDocumentImageOptions,
         EncodeFaceImageOptions, FaceImageOptions {
 
     private boolean mReturnFaceImage = false;
     private boolean mEncodeFaceImage = false;
     private boolean mEncodeFullDocumentImage = false;
-    private boolean mEncodeSignatureImage = false;
+    private boolean mFullDocumentImage = false;
 
     @Override
     public void setReturnFaceImage(boolean returnFaceImage) {
@@ -63,12 +63,12 @@ public class MockRecognizer implements EncodeFullDocumentImagesOptions, EncodeSi
     }
 
     @Override
-    public void setEncodeSignatureImage(boolean encodeSignatureImage) {
-        mEncodeSignatureImage = encodeSignatureImage;
+    public void setReturnFullDocumentImage(boolean fullDocumentImage) {
+        mFullDocumentImage = fullDocumentImage;
     }
 
     @Override
-    public boolean shouldEncodeSignatureImage() {
-        return mEncodeSignatureImage;
+    public boolean shouldReturnFullDocumentImage() {
+        return mFullDocumentImage;
     }
 }

@@ -19,15 +19,16 @@ package de.telekom.smartcredentials.documentscanner.presenter;
 import com.microblink.entities.recognizers.Recognizer;
 
 import de.telekom.smartcredentials.core.documentscanner.CompletionCallback;
+import de.telekom.smartcredentials.core.documentscanner.TorchState;
+import de.telekom.smartcredentials.core.plugins.callbacks.DocumentScannerPluginCallback;
 import de.telekom.smartcredentials.documentscanner.config.SmartCredentialsDocumentScanConfiguration;
 import de.telekom.smartcredentials.documentscanner.model.ScannerRecognizer;
-import de.telekom.smartcredentials.core.documentscanner.TorchState;
 import de.telekom.smartcredentials.documentscanner.view.DocumentScannerView;
-import de.telekom.smartcredentials.core.plugins.callbacks.DocumentScannerPluginCallback;
 
 public interface DocumentScannerPresenter {
 
-    void init(DocumentScannerView documentScannerLayout, SmartCredentialsDocumentScanConfiguration configuration, DocumentScannerPluginCallback pluginCallback);
+    void init(DocumentScannerView documentScannerLayout, SmartCredentialsDocumentScanConfiguration configuration,
+              DocumentScannerPluginCallback pluginCallback);
 
     void changeRecognizer(ScannerRecognizer recognizer);
 

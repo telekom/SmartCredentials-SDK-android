@@ -100,14 +100,14 @@ public class ScannerUtilsTest {
 
         assertFalse(imageRecognizer.shouldEncodeFaceImage());
         assertFalse(imageRecognizer.shouldEncodeFullDocumentImage());
-        assertFalse(imageRecognizer.shouldEncodeSignatureImage());
+        assertFalse(imageRecognizer.shouldReturnFullDocumentImage());
         assertFalse(imageRecognizer.shouldReturnFaceImage());
 
         ScannerUtils.enableImages(imageRecognizer);
 
         assertTrue(imageRecognizer.shouldEncodeFaceImage());
         assertTrue(imageRecognizer.shouldEncodeFullDocumentImage());
-        assertTrue(imageRecognizer.shouldEncodeSignatureImage());
+        assertTrue(imageRecognizer.shouldReturnFullDocumentImage());
         assertTrue(imageRecognizer.shouldReturnFaceImage());
     }
 }
