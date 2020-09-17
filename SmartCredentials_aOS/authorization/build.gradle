@@ -62,7 +62,7 @@ android {
 
 dependencies {
 
-    implementation "androidx.constraintlayout:constraintlayout:2.0.1"
+    implementation "androidx.constraintlayout:constraintlayout:${constraintLayoutVersion}"
 
     androidTestImplementation "androidx.test.espresso:espresso-core:3.3.0"
     androidTestImplementation "androidx.test.espresso:espresso-intents:3.3.0"
