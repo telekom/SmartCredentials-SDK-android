@@ -20,7 +20,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.4'
+        classpath 'com.android.tools.build:gradle:4.0.1'
         classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.8.1'
         classpath 'com.google.gms:google-services:4.3.3'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
@@ -47,15 +47,15 @@ allprojects {
         androidXFragment = "1.2.5"
         constraintLayoutVersion = "2.0.1"
         architectureComponentsVersion = "1.1.1"
-        gsonVersion = "2.8.5"
+        gsonVersion = "2.8.6"
         mobileVisionVersion = "17.0.2"
 
-        retrofitVersion = "2.5.0"
-        okHttpVersion = "3.14.0"
+        retrofitVersion = "2.9.0"
+        okHttpVersion = "4.7.2"
         blinkIDVersion = "5.5.0"
         rxJavaVersion = "2.1.1"
 
-        junitVersion = "4.12"
+        junitVersion = "4.13"
         mockitoVersion = "2.23.4"
         hamcrestVersion = "2.1"
         powermockVersion = "2.0.0-RC.4"

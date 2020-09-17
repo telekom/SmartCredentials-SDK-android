@@ -53,7 +53,7 @@ public class HttpClientBuilder {
                                                   CertificatePinner.Builder certificatePinnerBuilder) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 
-        if (params.keySet().contains(CERT_PINNER.name())) {
+        if (params.containsKey(CERT_PINNER.name())) {
             Map<String, List<String>> pins = new HashMap<>();
             // TODO: 6/27/2018 modify parameter that must be set
             pins.put(requestUrl, Collections.singletonList(params.get(CERT_PINNER.name())));

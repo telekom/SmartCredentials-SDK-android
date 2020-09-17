@@ -18,7 +18,6 @@ package de.telekom.smartcredentials.pushnotifications.rest;
 
 import com.google.gson.Gson;
 
-import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
 import de.telekom.smartcredentials.pushnotifications.rest.http.HttpClientFactory;
 import de.telekom.smartcredentials.pushnotifications.rest.service.TpnsService;
 import retrofit2.Retrofit;
