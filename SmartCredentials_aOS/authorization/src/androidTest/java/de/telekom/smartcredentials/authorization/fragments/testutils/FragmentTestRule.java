@@ -16,11 +16,11 @@
 
 package de.telekom.smartcredentials.authorization.fragments.testutils;
 
-import android.support.test.rule.ActivityTestRule;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import androidx.test.rule.ActivityTestRule;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import de.telekom.smartcredentials.authorization.R;
 import de.telekom.smartcredentials.authorization.fragments.TestActivity;

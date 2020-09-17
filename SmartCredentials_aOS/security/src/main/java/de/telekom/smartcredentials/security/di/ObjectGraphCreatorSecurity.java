@@ -17,14 +17,13 @@
 package de.telekom.smartcredentials.security.di;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import de.telekom.smartcredentials.core.controllers.CoreController;
 import de.telekom.smartcredentials.core.controllers.CreationController;
 import de.telekom.smartcredentials.core.di.Provides;
 import de.telekom.smartcredentials.core.handlers.CreationHandler;
 import de.telekom.smartcredentials.core.handlers.defaulthandlers.DefaultCreationHandler;
-import de.telekom.smartcredentials.core.repositories.AliasNative;
 import de.telekom.smartcredentials.security.controllers.SecurityController;
 import de.telekom.smartcredentials.security.encryption.Base64EncryptionManager;
 import de.telekom.smartcredentials.security.encryption.EncryptionManager;

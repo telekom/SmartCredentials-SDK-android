@@ -16,7 +16,7 @@
 
 package de.telekom.smartcredentials.eid.factory;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import de.telekom.smartcredentials.core.api.EidApi;
 import de.telekom.smartcredentials.eid.controllers.EidController;

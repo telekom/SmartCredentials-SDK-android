@@ -15,9 +15,6 @@
  */
 
 apply plugin: 'com.android.library'
-
-apply from: "../gradle/task/quality.gradle"
-apply from: "../gradle/task/code_coverage.gradle"
 apply from: "../gradle/task/maven_push_library.gradle"
 
 android {
@@ -30,7 +27,7 @@ android {
         versionCode rootProject.ext.androidVersionCode
         versionName rootProject.ext.androidVersionName
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -60,8 +57,7 @@ android {
 
 dependencies {
 
-    compile group: 'com.google.android.gms', name: 'play-services-vision-common', version: "${mobileVisionVersion}"
-    implementation "com.google.android.gms:play-services-vision:${mobileVisionVersion}"
+    implementation "com.google.android.gms:play-services-vision:20.1.2"
 
     testImplementation "junit:junit:${junitVersion}"
     testImplementation "org.mockito:mockito-core:${mockitoVersion}"

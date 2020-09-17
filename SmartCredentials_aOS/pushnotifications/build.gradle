@@ -15,9 +15,6 @@
  */
 
 apply plugin: 'com.android.library'
-
-apply from: "../gradle/task/quality.gradle"
-apply from: "../gradle/task/code_coverage.gradle"
 apply from: "../gradle/task/maven_push_library.gradle"
 
 android {
@@ -56,12 +53,9 @@ android {
 }
 
 dependencies {
-
-    implementation "com.android.support:appcompat-v7:${androidSupportLibVersion}"
-
     testImplementation "junit:junit:${junitVersion}"
 
-    implementation 'com.google.firebase:firebase-messaging:18.0.0'
+    implementation 'com.google.firebase:firebase-messaging:20.2.4'
     implementation "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}"
     implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"
     implementation "com.squareup.retrofit2:converter-gson:${retrofitVersion}"

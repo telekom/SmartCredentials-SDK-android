@@ -19,7 +19,7 @@ package de.telekom.smartcredentials.authorization.biometric;
 import android.annotation.TargetApi;
 import android.hardware.biometrics.BiometricPrompt;
 import android.os.Build;
-import android.support.v4.hardware.fingerprint.FingerprintManagerCompat;
+import androidx.core.hardware.fingerprint.FingerprintManagerCompat;
 
 import de.telekom.smartcredentials.core.authorization.AuthorizationPluginError;
 

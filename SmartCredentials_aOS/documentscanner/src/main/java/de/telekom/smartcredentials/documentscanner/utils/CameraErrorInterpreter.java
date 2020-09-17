@@ -22,7 +22,7 @@
 
 package de.telekom.smartcredentials.documentscanner.utils;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.microblink.hardware.camera.CameraResolutionTooSmallException;
 import com.microblink.recognition.FeatureNotSupportedException;

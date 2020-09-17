@@ -23,8 +23,8 @@
 package de.telekom.smartcredentials.documentscanner.config;
 
 import android.content.Context;
-import android.support.annotation.FloatRange;
-import android.support.annotation.NonNull;
+import androidx.annotation.FloatRange;
+import androidx.annotation.NonNull;
 
 import java.util.Objects;
 
@@ -51,9 +51,9 @@ public class SmartCredentialsDocumentScanConfiguration extends DocumentScanConfi
 
     private SmartCredentialsDocumentScanConfiguration(final Builder builder) {
         mContext = builder.context;
-        mScannerRecognizer = builder.scannerRecognizer;
         mCameraType = builder.cameraType;
         mAspectMode = builder.aspectMode;
+        mScannerRecognizer = builder.scannerRecognizer;
         mPinchToZoomAllowed = builder.pinchToZoomAllowed;
         mShouldFocusOnShakingStop = builder.shouldFocusOnShakingStop;
         mShouldOptimizeCameraForNearScan = builder.shouldOptimizeCamera;
@@ -108,7 +108,7 @@ public class SmartCredentialsDocumentScanConfiguration extends DocumentScanConfi
 
         private final Context context;
 
-        private ScannerRecognizer scannerRecognizer = ScannerRecognizer.MACHINE_READABLE_ZONE;
+        private ScannerRecognizer scannerRecognizer = ScannerRecognizer.ID_COMBINED_RECOGNIZER;
         private VideoResolution videoResolution = VideoResolution.DEFAULT;
         private CameraType cameraType = CameraType.DEFAULT;
         private AspectMode aspectMode = AspectMode.FILL;
@@ -132,7 +132,7 @@ public class SmartCredentialsDocumentScanConfiguration extends DocumentScanConfi
         /**
          * Sets a {@link ScannerRecognizer} that will be used by {@link DocumentScannerLayout}.
          * <p>
-         * Default is {@link ScannerRecognizer#MACHINE_READABLE_ZONE}
+         * Default is {@link ScannerRecognizer#ID_COMBINED_RECOGNIZER}
          *
          * @param scannerRecognizer recognizer that will be set in order to scan specific country's ID
          *                          or a payment card's side

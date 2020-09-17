@@ -22,9 +22,9 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.biometrics.BiometricPrompt;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.os.CancellationSignal;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.os.CancellationSignal;
 
 import javax.crypto.Cipher;
 

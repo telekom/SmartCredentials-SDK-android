@@ -17,7 +17,7 @@
 package de.telekom.smartcredentials.authorization.factory;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import de.telekom.smartcredentials.authorization.controllers.AuthorizationController;
 import de.telekom.smartcredentials.authorization.di.ObjectGraphCreatorAuthorization;

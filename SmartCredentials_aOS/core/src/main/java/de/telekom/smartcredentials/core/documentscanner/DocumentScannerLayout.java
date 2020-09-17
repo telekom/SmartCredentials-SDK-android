@@ -17,9 +17,9 @@
 package de.telekom.smartcredentials.core.documentscanner;
 
 import android.content.Context;
-import android.support.annotation.FloatRange;
-import android.support.annotation.NonNull;
-import android.support.annotation.UiThread;
+import androidx.annotation.FloatRange;
+import androidx.annotation.NonNull;
+import androidx.annotation.UiThread;
 import android.widget.FrameLayout;
 
 @SuppressWarnings({"JavaDoc", "unused"})

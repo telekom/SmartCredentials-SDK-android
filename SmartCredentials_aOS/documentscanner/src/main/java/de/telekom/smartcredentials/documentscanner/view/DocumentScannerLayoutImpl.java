@@ -24,9 +24,10 @@ package de.telekom.smartcredentials.documentscanner.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.annotation.FloatRange;
-import android.support.annotation.NonNull;
 import android.widget.LinearLayout;
+
+import androidx.annotation.FloatRange;
+import androidx.annotation.NonNull;
 
 import com.microblink.entities.Entity;
 import com.microblink.entities.recognizers.Recognizer;
@@ -37,15 +38,15 @@ import com.microblink.view.CameraEventsListener;
 import com.microblink.view.recognition.RecognizerRunnerView;
 import com.microblink.view.recognition.ScanResultListener;
 
-import de.telekom.smartcredentials.core.documentscanner.DocumentScannerLayout;
 import de.telekom.smartcredentials.core.documentscanner.CompletionCallback;
+import de.telekom.smartcredentials.core.documentscanner.DocumentScannerLayout;
+import de.telekom.smartcredentials.core.documentscanner.TorchState;
+import de.telekom.smartcredentials.core.plugins.callbacks.DocumentScannerPluginCallback;
 import de.telekom.smartcredentials.documentscanner.config.SmartCredentialsDocumentScanConfiguration;
 import de.telekom.smartcredentials.documentscanner.model.ScannerRecognizer;
-import de.telekom.smartcredentials.core.documentscanner.TorchState;
 import de.telekom.smartcredentials.documentscanner.presenter.DocumentScannerPresenter;
 import de.telekom.smartcredentials.documentscanner.presenter.DocumentScannerPresenterImpl;
 import de.telekom.smartcredentials.documentscanner.utils.ModelConverter;
-import de.telekom.smartcredentials.core.plugins.callbacks.DocumentScannerPluginCallback;
 
 
 @SuppressLint("ViewConstructor")
@@ -55,11 +56,13 @@ public class DocumentScannerLayoutImpl extends DocumentScannerLayout implements 
     private RecognizerRunnerView mRecognizerView;
     private Recognizer mRecognizer;
 
-    public static DocumentScannerLayoutImpl getNewInstance(SmartCredentialsDocumentScanConfiguration configuration, DocumentScannerPluginCallback pluginCallback) {
+    public static DocumentScannerLayoutImpl getNewInstance(SmartCredentialsDocumentScanConfiguration configuration,
+                                                           DocumentScannerPluginCallback pluginCallback) {
         return new DocumentScannerLayoutImpl(configuration, pluginCallback);
     }
 
-    private DocumentScannerLayoutImpl(SmartCredentialsDocumentScanConfiguration configuration, DocumentScannerPluginCallback pluginCallback) {
+    private DocumentScannerLayoutImpl(SmartCredentialsDocumentScanConfiguration configuration,
+                                      DocumentScannerPluginCallback pluginCallback) {
         super(configuration.getContext());
         mPresenter = new DocumentScannerPresenterImpl();
         mPresenter.init(this, configuration, pluginCallback);

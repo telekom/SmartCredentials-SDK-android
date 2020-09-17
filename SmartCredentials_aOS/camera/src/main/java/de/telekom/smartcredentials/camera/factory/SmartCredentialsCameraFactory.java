@@ -16,7 +16,7 @@
 
 package de.telekom.smartcredentials.camera.factory;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import de.telekom.smartcredentials.camera.controllers.CameraController;
 import de.telekom.smartcredentials.camera.di.ObjectGraphCreatorCamera;

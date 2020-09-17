@@ -26,9 +26,9 @@ import android.content.Context;
 
 import com.microblink.entities.recognizers.Recognizer;
 import com.microblink.entities.recognizers.blinkid.imageoptions.FaceImageOptions;
+import com.microblink.entities.recognizers.blinkid.imageoptions.FullDocumentImageOptions;
 import com.microblink.entities.recognizers.blinkid.imageoptions.encode.EncodeFaceImageOptions;
 import com.microblink.entities.recognizers.blinkid.imageoptions.encode.EncodeFullDocumentImagesOptions;
-import com.microblink.entities.recognizers.blinkid.imageoptions.encode.EncodeSignatureImageOptions;
 import com.microblink.util.RecognizerCompatibility;
 
 import de.telekom.smartcredentials.core.documentscanner.CameraType;
@@ -49,11 +49,11 @@ public class ScannerUtils {
     }
 
     public static void enableImages(Object recognizer) {
+        if (recognizer instanceof FullDocumentImageOptions) {
+            ((FullDocumentImageOptions) recognizer).setReturnFullDocumentImage(true);
+        }
         if (recognizer instanceof EncodeFullDocumentImagesOptions) {
             ((EncodeFullDocumentImagesOptions) recognizer).setEncodeFullDocumentImage(true);
-        }
-        if (recognizer instanceof EncodeSignatureImageOptions) {
-            ((EncodeSignatureImageOptions) recognizer).setEncodeSignatureImage(true);
         }
         if (recognizer instanceof FaceImageOptions) {
             ((FaceImageOptions) recognizer).setReturnFaceImage(true);

@@ -15,9 +15,6 @@
  */
 
 apply plugin: 'com.android.library'
-
-apply from: "../gradle/task/quality.gradle"
-apply from: "../gradle/task/code_coverage.gradle"
 apply from: "../gradle/task/maven_push_library.gradle"
 
 android {
@@ -29,7 +26,7 @@ android {
         targetSdkVersion rootProject.ext.androidTargetSdkVersion
         versionCode rootProject.ext.androidVersionCode
         versionName rootProject.ext.androidVersionName
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -55,7 +52,9 @@ android {
 
 dependencies {
 
-    implementation "com.android.support:appcompat-v7:${androidSupportLibVersion}"
+    implementation "androidx.annotation:annotation:${androidXAnnotation}"
+    implementation "androidx.fragment:fragment:${androidXFragment}"
+
     implementation "com.squareup.okhttp3:okhttp:${okHttpVersion}"
     implementation "com.google.code.gson:gson:${gsonVersion}"
 

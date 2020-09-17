@@ -17,9 +17,9 @@
 package de.telekom.smartcredentials.authorization.fragments;
 
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.Fragment;
 
 import de.telekom.smartcredentials.authorization.fingerprint.FingerprintManagerWrapper;
 import de.telekom.smartcredentials.authorization.keyguard.KeyguardManagerWrapper;

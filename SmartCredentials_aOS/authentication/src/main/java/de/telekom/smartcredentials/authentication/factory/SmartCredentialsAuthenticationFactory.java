@@ -16,7 +16,7 @@
 
 package de.telekom.smartcredentials.authentication.factory;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import de.telekom.smartcredentials.authentication.controllers.AuthenticationController;
 import de.telekom.smartcredentials.authentication.di.ObjectGraphCreatorAuthentication;
