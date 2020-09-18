@@ -17,10 +17,10 @@
 //import de.telekom.smartcredentials.core.handlers.TokenHandler;
 //import de.telekom.smartcredentials.core.model.item.ItemDomainModel;
 //import de.telekom.smartcredentials.core.model.otp.OTPType;
-//import de.telekom.smartcredentials.core.model.request.RequestParams;
+//import de.telekom.smartcredentials.qrlogin.RequestParams;
 //import de.telekom.smartcredentials.core.plugins.callbacks.DocumentScannerPluginCallback;
 //import de.telekom.smartcredentials.core.plugins.callbacks.ScannerPluginCallback;
-//import de.telekom.smartcredentials.core.plugins.callbacks.ServicePluginCallback;
+//import de.telekom.smartcredentials.qrlogin.ServicePluginCallback;
 //import de.telekom.smartcredentials.core.plugins.callbacks.TokenPluginCallback;
 //import de.telekom.smartcredentials.core.domain.utils.MocksProvider;
 //

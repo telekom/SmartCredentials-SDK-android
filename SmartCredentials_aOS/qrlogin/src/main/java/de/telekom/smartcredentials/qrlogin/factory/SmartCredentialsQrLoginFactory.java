@@ -20,7 +20,6 @@ import androidx.annotation.NonNull;
 
 import de.telekom.smartcredentials.core.api.AuthorizationApi;
 import de.telekom.smartcredentials.core.api.CoreApi;
-import de.telekom.smartcredentials.core.api.NetworkingApi;
 import de.telekom.smartcredentials.core.api.QrLoginApi;
 import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsModuleSet;
 import de.telekom.smartcredentials.core.controllers.CoreController;
@@ -41,8 +40,7 @@ public class SmartCredentialsQrLoginFactory {
 
     @NonNull
     public static synchronized QrLoginApi initSmartCredentialsQrLoginModule(@NonNull final CoreApi coreApi,
-                                                                            @NonNull final AuthorizationApi authorizationApi,
-                                                                            @NonNull final NetworkingApi networkingApi) {
+                                                                            @NonNull final AuthorizationApi authorizationApi) {
         CoreController coreController;
 
         if (coreApi instanceof CoreController) {
@@ -52,7 +50,7 @@ public class SmartCredentialsQrLoginFactory {
         }
 
         ObjectGraphCreatorQrLogin objectGraphCreatorQrLogin = ObjectGraphCreatorQrLogin.getInstance();
-        objectGraphCreatorQrLogin.init(authorizationApi, networkingApi);
+        objectGraphCreatorQrLogin.init(authorizationApi);
         sQrLoginController = objectGraphCreatorQrLogin.provideApiControllerQrLogin(coreController);
         return sQrLoginController;
     }

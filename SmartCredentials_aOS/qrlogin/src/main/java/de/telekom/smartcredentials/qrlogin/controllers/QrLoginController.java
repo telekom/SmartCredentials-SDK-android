@@ -22,15 +22,17 @@ import androidx.fragment.app.Fragment;
 import org.json.JSONObject;
 
 import de.telekom.smartcredentials.core.api.AuthorizationApi;
-import de.telekom.smartcredentials.core.api.NetworkingApi;
 import de.telekom.smartcredentials.core.api.QrLoginApi;
 import de.telekom.smartcredentials.core.authorization.AuthorizationCallback;
+import de.telekom.smartcredentials.core.authorization.AuthorizationPluginError;
+import de.telekom.smartcredentials.core.authorization.AuthorizationPluginUnavailable;
 import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsFeatureSet;
 import de.telekom.smartcredentials.core.controllers.CoreController;
 import de.telekom.smartcredentials.core.itemdatamodel.ItemEnvelope;
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
 import de.telekom.smartcredentials.core.plugins.callbacks.AuthenticationPluginCallback;
 import de.telekom.smartcredentials.core.qrlogin.AuthenticationCallback;
+import de.telekom.smartcredentials.core.qrlogin.TokenPluginError;
 import de.telekom.smartcredentials.core.responses.EnvelopeException;
 import de.telekom.smartcredentials.core.responses.EnvelopeExceptionReason;
 import de.telekom.smartcredentials.core.responses.FeatureNotSupportedThrowable;
@@ -39,19 +41,19 @@ import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsResponse;
 import de.telekom.smartcredentials.qrlogin.callback.PluginCallbackQrLoginCallback;
 import de.telekom.smartcredentials.qrlogin.callback.UserAuthorizedPluginCallback;
+import de.telekom.smartcredentials.qrlogin.websocket.ServerSocket;
+import okhttp3.CertificatePinner;
+import okhttp3.Request;
 
 public class QrLoginController implements QrLoginApi {
 
     private final CoreController mCoreController;
     private final AuthorizationApi mAuthorizationApi;
-    private final NetworkingApi mNetworkingApi;
 
     public QrLoginController(CoreController coreController,
-                             AuthorizationApi authorizationApi,
-                             NetworkingApi networkingApi) {
+                             AuthorizationApi authorizationApi) {
         mCoreController = coreController;
         mAuthorizationApi = authorizationApi;
-        mNetworkingApi = networkingApi;
     }
 
     /**
@@ -75,13 +77,14 @@ public class QrLoginController implements QrLoginApi {
         }
 
         JSONObject requestParams = itemEnvelope.getIdentifier();
-        Fragment authFragment = (Fragment) getLogInWithAuthorizationTool(PluginCallbackQrLoginCallback.convertToDomainPluginCallback(callback, getClass().getSimpleName()),
+        AuthenticationPluginCallback<AuthorizationPluginUnavailable, AuthorizationPluginError, TokenPluginError> authenticationPluginCallback = PluginCallbackQrLoginCallback.convertToDomainPluginCallback(callback, getClass().getSimpleName());
+        Fragment authFragment = (Fragment) getLogInWithAuthorizationTool(authenticationPluginCallback,
                 requestParams);
         return new SmartCredentialsResponse<>(authFragment);
     }
 
-    private Object getLogInWithAuthorizationTool(AuthenticationPluginCallback callback, JSONObject requestParams) {
-        AuthorizationCallback authorizationCallback = new UserAuthorizedPluginCallback(requestParams, callback, mNetworkingApi.getServerSocket());
+    private Object getLogInWithAuthorizationTool(AuthenticationPluginCallback<AuthorizationPluginUnavailable, AuthorizationPluginError, TokenPluginError> callback, JSONObject requestParams) {
+        AuthorizationCallback authorizationCallback = new UserAuthorizedPluginCallback(requestParams, callback, new ServerSocket(new Request.Builder(), new CertificatePinner.Builder()));
         return mAuthorizationApi.getAuthorizeUserFragment(authorizationCallback);
     }
 }

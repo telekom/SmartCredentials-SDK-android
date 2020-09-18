@@ -23,7 +23,7 @@
 //import de.telekom.smartcredentials.core.callback.ServiceCallback;
 //import de.telekom.smartcredentials.core.di.ObjectGraphCreator;
 //import de.telekom.smartcredentials.core.domain.controllers.ApiController;
-//import de.telekom.smartcredentials.core.model.request.RequestParams;
+//import de.telekom.smartcredentials.qrlogin.RequestParams;
 //import de.telekom.smartcredentials.core.responses.FeatureNotSupportedThrowable;
 //import de.telekom.smartcredentials.core.responses.RootedThrowable;
 //import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;

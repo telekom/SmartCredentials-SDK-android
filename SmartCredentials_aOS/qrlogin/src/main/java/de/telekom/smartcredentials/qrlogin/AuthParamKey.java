@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-include ':core'
-include ':authentication'
-include ':authorization'
-include ':camera'
-include ':eid'
-include ':storage'
-include ':security'
-include ':otp'
-include ':documentscanner'
-include ':qrlogin'
-include ':persistentlogging'
-include ':pushnotifications'
+package de.telekom.smartcredentials.qrlogin;
+
+public enum AuthParamKey {
+    QR_SERVER_URL,
+    REFRESH_TOKEN,
+    ID_TOKEN,
+    QR_CODE,
+    CERT_PINNER
+}

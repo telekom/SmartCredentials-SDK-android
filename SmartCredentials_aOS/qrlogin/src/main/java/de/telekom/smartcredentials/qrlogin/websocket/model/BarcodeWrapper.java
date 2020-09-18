@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-include ':core'
-include ':authentication'
-include ':authorization'
-include ':camera'
-include ':eid'
-include ':storage'
-include ':security'
-include ':otp'
-include ':documentscanner'
-include ':qrlogin'
-include ':persistentlogging'
-include ':pushnotifications'
+package de.telekom.smartcredentials.qrlogin.websocket.model;
+
+import com.google.gson.annotations.SerializedName;
+
+public class BarcodeWrapper {
+
+    @SerializedName("browserClient")
+    public String mBrowserClient;
+
+    @SerializedName("qr_uuid")
+    public String mQrID;
+
+}

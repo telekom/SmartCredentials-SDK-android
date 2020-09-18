@@ -25,9 +25,9 @@
 //import java.util.List;
 //import java.util.Map;
 //
-//import de.telekom.smartcredentials.core.model.request.Method;
-//import de.telekom.smartcredentials.core.model.request.NetworkConnectionType;
-//import de.telekom.smartcredentials.core.model.request.RequestParams;
+//import de.telekom.smartcredentials.qrlogin.Method;
+//import de.telekom.smartcredentials.qrlogin.NetworkConnectionType;
+//import de.telekom.smartcredentials.qrlogin.RequestParams;
 //import de.telekom.smartcredentials.core.responses.EnvelopeException;
 //import de.telekom.smartcredentials.core.responses.EnvelopeExceptionReason;
 //import okhttp3.Dns;

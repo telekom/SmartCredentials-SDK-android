@@ -14,15 +14,24 @@
  * limitations under the License.
  */
 
-include ':core'
-include ':authentication'
-include ':authorization'
-include ':camera'
-include ':eid'
-include ':storage'
-include ':security'
-include ':otp'
-include ':documentscanner'
-include ':qrlogin'
-include ':persistentlogging'
-include ':pushnotifications'
+package de.telekom.smartcredentials.qrlogin.websocket.model;
+
+import com.google.gson.annotations.SerializedName;
+
+public class ErrorAuthInfo {
+
+    @SerializedName("error")
+    public ErrorEnvelope mError;
+
+    public ErrorAuthInfo() {
+
+    }
+
+    public ErrorEnvelope getError() {
+        return mError;
+    }
+
+    public void setError(ErrorEnvelope mError) {
+        this.mError = mError;
+    }
+}

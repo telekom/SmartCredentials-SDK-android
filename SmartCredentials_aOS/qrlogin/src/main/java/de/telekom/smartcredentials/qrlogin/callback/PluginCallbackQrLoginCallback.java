@@ -31,7 +31,7 @@ import de.telekom.smartcredentials.core.qrlogin.TokenPluginError;
  */
 public class PluginCallbackQrLoginCallback {
 
-    public static AuthenticationPluginCallback convertToDomainPluginCallback(final AuthenticationCallback callback, final String tag) {
+    public static AuthenticationPluginCallback<AuthorizationPluginUnavailable, AuthorizationPluginError, TokenPluginError> convertToDomainPluginCallback(final AuthenticationCallback callback, final String tag) {
         return new AuthenticationPluginCallback<AuthorizationPluginUnavailable, AuthorizationPluginError, TokenPluginError>() {
             @Override
             public void onRetrievingAuthInfoFailed(TokenPluginError message) {

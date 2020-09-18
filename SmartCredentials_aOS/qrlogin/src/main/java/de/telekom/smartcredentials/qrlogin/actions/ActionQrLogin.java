@@ -31,11 +31,12 @@ import de.telekom.smartcredentials.core.itemdatamodel.ItemEnvelope;
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
 import de.telekom.smartcredentials.core.model.item.ItemDomainModel;
 import de.telekom.smartcredentials.core.model.token.TokenResponse;
-import de.telekom.smartcredentials.core.networking.AuthParamKey;
-import de.telekom.smartcredentials.core.networking.ServerSocket;
 import de.telekom.smartcredentials.core.plugins.callbacks.TokenPluginCallback;
 import de.telekom.smartcredentials.core.qrlogin.TokenPluginError;
-import de.telekom.smartcredentials.qrlogin.di.ObjectGraphCreatorQrLogin;
+import de.telekom.smartcredentials.qrlogin.AuthParamKey;
+import de.telekom.smartcredentials.qrlogin.websocket.ServerSocket;
+import okhttp3.CertificatePinner;
+import okhttp3.Request;
 
 @SuppressWarnings("unused")
 public class ActionQrLogin extends SmartCredentialsAction {
@@ -57,7 +58,7 @@ public class ActionQrLogin extends SmartCredentialsAction {
         } catch (JSONException e) {
             ApiLoggerResolver.logError(getClass().getSimpleName(), "Could not convert ItemDomain to ItemEnvelope");
         }
-        ServerSocket serverSocket = ObjectGraphCreatorQrLogin.getInstance().getNetworkingApi().getServerSocket();
+        ServerSocket serverSocket = new ServerSocket(new Request.Builder(), new CertificatePinner.Builder());
         try {
             serverSocket.startServer(generateRequestParameters(), getServicePluginCallback(callback));
         } catch (IllegalArgumentException e) {

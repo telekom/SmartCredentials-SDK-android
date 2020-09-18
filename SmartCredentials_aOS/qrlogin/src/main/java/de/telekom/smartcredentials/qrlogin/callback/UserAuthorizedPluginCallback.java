@@ -29,10 +29,10 @@ import de.telekom.smartcredentials.core.authorization.AuthorizationPluginError;
 import de.telekom.smartcredentials.core.authorization.AuthorizationPluginUnavailable;
 import de.telekom.smartcredentials.core.controllers.callbackimplementations.RefreshTokenPluginCallback;
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
-import de.telekom.smartcredentials.core.networking.ServerSocket;
 import de.telekom.smartcredentials.core.plugins.callbacks.AuthenticationPluginCallback;
 import de.telekom.smartcredentials.core.plugins.callbacks.AuthorizationPluginCallback;
 import de.telekom.smartcredentials.core.plugins.callbacks.TokenPluginCallback;
+import de.telekom.smartcredentials.qrlogin.websocket.ServerSocket;
 
 import static de.telekom.smartcredentials.core.qrlogin.TokenPluginError.ERROR_EXTRACTING_CONNECTION_PARAMS;
 
@@ -55,7 +55,7 @@ public class UserAuthorizedPluginCallback extends AuthorizationCallback {
     public void onAuthorized() {
         ApiLoggerResolver.logCallbackMethod(TAG, AuthorizationPluginCallback.TAG, "userAuthorized: onAuthorized");
         TokenPluginCallback pluginCallback = new RefreshTokenPluginCallback(mCallback);
-        mServerSocket.startServer(getConnectionParams(mRequestParams.toString(), pluginCallback), new RefreshTokenPluginCallback(mCallback));
+        mServerSocket.startServer(getConnectionParams(mRequestParams.toString(), pluginCallback), pluginCallback);
     }
 
     @Override

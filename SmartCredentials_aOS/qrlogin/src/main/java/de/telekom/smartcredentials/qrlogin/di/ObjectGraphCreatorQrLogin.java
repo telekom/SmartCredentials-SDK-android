@@ -19,7 +19,6 @@ package de.telekom.smartcredentials.qrlogin.di;
 import androidx.annotation.NonNull;
 
 import de.telekom.smartcredentials.core.api.AuthorizationApi;
-import de.telekom.smartcredentials.core.api.NetworkingApi;
 import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsModuleSet;
 import de.telekom.smartcredentials.core.controllers.CoreController;
 import de.telekom.smartcredentials.qrlogin.controllers.QrLoginController;
@@ -28,7 +27,6 @@ public class ObjectGraphCreatorQrLogin {
 
     private static ObjectGraphCreatorQrLogin sInstance;
 
-    private NetworkingApi mNetworkingApi;
     private AuthorizationApi mAuthorizationApi;
 
     public static ObjectGraphCreatorQrLogin getInstance() {
@@ -38,23 +36,13 @@ public class ObjectGraphCreatorQrLogin {
         return sInstance;
     }
 
-    public void init(AuthorizationApi authorizationApi, NetworkingApi networkingApi) {
+    public void init(AuthorizationApi authorizationApi) {
         mAuthorizationApi = authorizationApi;
-        mNetworkingApi = networkingApi;
     }
 
     @NonNull
     public QrLoginController provideApiControllerQrLogin(CoreController coreController) {
-        return new QrLoginController(coreController, getAuthorizationApi(),
-                getNetworkingApi());
-    }
-
-    public NetworkingApi getNetworkingApi() {
-        if (mNetworkingApi == null) {
-            throw new RuntimeException(SmartCredentialsModuleSet.NETWORKING_MODULE + " from "
-                    + SmartCredentialsModuleSet.QR_LOGIN_MODULE + " has not been initialized");
-        }
-        return mNetworkingApi;
+        return new QrLoginController(coreController, getAuthorizationApi());
     }
 
     public AuthorizationApi getAuthorizationApi() {

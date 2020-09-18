@@ -14,15 +14,22 @@
  * limitations under the License.
  */
 
-include ':core'
-include ':authentication'
-include ':authorization'
-include ':camera'
-include ':eid'
-include ':storage'
-include ':security'
-include ':otp'
-include ':documentscanner'
-include ':qrlogin'
-include ':persistentlogging'
-include ':pushnotifications'
+package de.telekom.smartcredentials.qrlogin.request.utils;
+
+import java.util.Map;
+
+import okhttp3.HttpUrl;
+
+public class UrlBuilder {
+
+    public static String getUrlWithQueryParams(HttpUrl httpUrl, Map<String, String> queryParams) {
+        HttpUrl.Builder urlBuilder = httpUrl.newBuilder();
+        if (queryParams != null && queryParams.size() > 0) {
+            for (String queryParamKey : queryParams.keySet()) {
+                urlBuilder.addQueryParameter(queryParamKey, queryParams.get(queryParamKey));
+            }
+        }
+
+        return urlBuilder.build().toString();
+    }
+}

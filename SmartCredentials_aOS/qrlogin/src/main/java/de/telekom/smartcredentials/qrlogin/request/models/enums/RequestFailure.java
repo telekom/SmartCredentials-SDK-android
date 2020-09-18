@@ -14,15 +14,9 @@
  * limitations under the License.
  */
 
-include ':core'
-include ':authentication'
-include ':authorization'
-include ':camera'
-include ':eid'
-include ':storage'
-include ':security'
-include ':otp'
-include ':documentscanner'
-include ':qrlogin'
-include ':persistentlogging'
-include ':pushnotifications'
+package de.telekom.smartcredentials.qrlogin.request.models.enums;
+
+public enum RequestFailure {
+    NULL_PARSED_URL,
+    GENERIC_FAILURE
+}
