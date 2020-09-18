@@ -50,7 +50,7 @@ import de.telekom.smartcredentials.documentscanner.utils.ModelConverter;
 
 
 @SuppressLint("ViewConstructor")
-public class DocumentScannerLayoutImpl extends DocumentScannerLayout implements DocumentScannerView {
+public class DocumentScannerLayoutImpl extends DocumentScannerLayout<ScannerRecognizer> implements DocumentScannerView {
 
     private final DocumentScannerPresenter mPresenter;
     private RecognizerRunnerView mRecognizerView;
@@ -116,7 +116,7 @@ public class DocumentScannerLayoutImpl extends DocumentScannerLayout implements 
     }
 
     @Override
-    public void swapRecognizer(@NonNull Object recognizer) {
+    public void swapRecognizer(@NonNull ScannerRecognizer recognizer) {
         mPresenter.changeRecognizer((ScannerRecognizer) recognizer);
     }
 
@@ -134,7 +134,7 @@ public class DocumentScannerLayoutImpl extends DocumentScannerLayout implements 
     }
 
     @Override
-    public boolean isRecognizerSupported(Object recognizer) {
+    public boolean isRecognizerSupported(ScannerRecognizer recognizer) {
         return mPresenter.isRecognizerSupported((ScannerRecognizer) recognizer);
     }
 

@@ -23,7 +23,7 @@ import androidx.annotation.UiThread;
 import android.widget.FrameLayout;
 
 @SuppressWarnings({"JavaDoc", "unused"})
-public abstract class DocumentScannerLayout<T> extends FrameLayout {
+public abstract class DocumentScannerLayout<R> extends FrameLayout {
 
     public DocumentScannerLayout(@NonNull Context context) {
         super(context);
@@ -58,7 +58,7 @@ public abstract class DocumentScannerLayout<T> extends FrameLayout {
      *
      * @param recognizer the new recognizer to be applied to scanning process
      */
-    public abstract void swapRecognizer(@NonNull T recognizer);
+    public abstract void swapRecognizer(@NonNull R recognizer);
 
     /**
      * Sets the torch state.
@@ -77,7 +77,7 @@ public abstract class DocumentScannerLayout<T> extends FrameLayout {
      * @return <code>true</code> if the scanner recognizer is supported on the device,
      * <code>false</code> otherwise
      */
-    public abstract boolean isRecognizerSupported(T recognizer);
+    public abstract boolean isRecognizerSupported(R recognizer);
 
     /**
      * Use this method to check whether camera has torch or not.
