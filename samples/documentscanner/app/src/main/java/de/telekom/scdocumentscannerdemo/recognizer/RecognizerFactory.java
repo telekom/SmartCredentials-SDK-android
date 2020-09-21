@@ -9,7 +9,6 @@ import com.microblink.entities.recognizers.blinkid.generic.BlinkIdRecognizer;
 import com.microblink.entities.recognizers.blinkid.idbarcode.IdBarcodeRecognizer;
 import com.microblink.entities.recognizers.blinkid.mrtd.MrtdCombinedRecognizer;
 import com.microblink.entities.recognizers.blinkid.mrtd.MrtdRecognizer;
-import com.microblink.entities.recognizers.blinkid.passport.PassportRecognizer;
 import com.microblink.entities.recognizers.blinkid.usdl.UsdlCombinedRecognizer;
 import com.microblink.entities.recognizers.blinkid.visa.VisaRecognizer;
 
@@ -23,7 +22,6 @@ import de.telekom.smartcredentials.documentscanner.model.results.IdCombinedRecog
 import de.telekom.smartcredentials.documentscanner.model.results.IdSimpleRecognizerResult;
 import de.telekom.smartcredentials.documentscanner.model.results.MrtdCombinedRecognizerResult;
 import de.telekom.smartcredentials.documentscanner.model.results.MrtdSimpleRecognizerResult;
-import de.telekom.smartcredentials.documentscanner.model.results.PassportRecognizerResult;
 import de.telekom.smartcredentials.documentscanner.model.results.UsdlCombinedRecognizerResult;
 import de.telekom.smartcredentials.documentscanner.model.results.UsdlSimpleRecognizerResult;
 import de.telekom.smartcredentials.documentscanner.model.results.VisaRecognizerResult;
@@ -31,9 +29,19 @@ import de.telekom.smartcredentials.documentscanner.model.results.VisaRecognizerR
 /**
  * Created by gabriel.blaj@endava.com at 9/16/2020
  */
-public class RecognizerFactory {
+public class RecognizerFactory implements RecognizerData {
 
-    public ScannerRecognizer getRecognizer(RecognizerType recognizerType) {
+    private RecognizerType recognizerType;
+
+    public RecognizerFactory(RecognizerType recognizerType) {
+        this.recognizerType = recognizerType;
+    }
+
+    public void setRecognizer(RecognizerType recognizerType) {
+        this.recognizerType = recognizerType;
+    }
+
+    public ScannerRecognizer getRecognizer() {
         switch (recognizerType) {
             case ID_SIMPLE_RECOGNIZER:
                 return ScannerRecognizer.ID_SIMPLE_RECOGNIZER;
@@ -58,73 +66,83 @@ public class RecognizerFactory {
 
     public Bundle getExtrasBundle(DocumentScannerResult result) {
         Bundle extraBundle = new Bundle();
-        if (result instanceof IdCombinedRecognizerResult) {
-            BlinkIdCombinedRecognizer.Result resultData = ((IdCombinedRecognizerResult) result).getResultData();
-            if (resultData.getFullName().isEmpty()) {
-                extraBundle.putString(ResultActivity.EXTRA_RESULT_NAME, resultData.getFirstName() + " " + resultData.getLastName());
-            } else {
-                extraBundle.putString(ResultActivity.EXTRA_RESULT_NAME, resultData.getFullName());
-            }
-            extraBundle.putString(ResultActivity.EXTRA_RESULT_MRZ, resultData.getMrzResult().getMrzText());
-            extraBundle.putByteArray(ResultActivity.EXTRA_RESULT_IMAGE,
-                    ImageUtils.transformImageToByteArray(resultData.getFullDocumentFrontImage()));
-        } else if (result instanceof IdSimpleRecognizerResult) {
-            BlinkIdRecognizer.Result resultData = ((IdSimpleRecognizerResult) result).getResultData();
-            if (resultData.getFullName().isEmpty()) {
-                extraBundle.putString(ResultActivity.EXTRA_RESULT_NAME, resultData.getFirstName() + " " + resultData.getLastName());
-            } else {
-                extraBundle.putString(ResultActivity.EXTRA_RESULT_NAME, resultData.getFullName());
-            }
-            extraBundle.putString(ResultActivity.EXTRA_RESULT_MRZ, resultData.getMrzResult().getMrzText());
-            extraBundle.putByteArray(ResultActivity.EXTRA_RESULT_IMAGE,
-                    ImageUtils.transformImageToByteArray(resultData.getFullDocumentImage()));
-        } else if (result instanceof DocumentFaceRecognizerResult) {
-            DocumentFaceRecognizer.Result resultData = ((DocumentFaceRecognizerResult) result).getResultData();
-            extraBundle.putByteArray(ResultActivity.EXTRA_RESULT_IMAGE,
-                    ImageUtils.transformImageToByteArray(resultData.getFullDocumentImage()));
-        } else if (result instanceof IdBarcodeRecognizerResult) {
-            IdBarcodeRecognizer.Result resultData = ((IdBarcodeRecognizerResult) result).getResultData();
-            if (resultData.getFullName().isEmpty()) {
-                extraBundle.putString(ResultActivity.EXTRA_RESULT_NAME, resultData.getFirstName() + " " + resultData.getLastName());
-            } else {
-                extraBundle.putString(ResultActivity.EXTRA_RESULT_NAME, resultData.getFullName());
-            }
-        } else if (result instanceof MrtdCombinedRecognizerResult) {
-            MrtdCombinedRecognizer.Result resultData = ((MrtdCombinedRecognizerResult) result).getResultData();
-            extraBundle.putString(ResultActivity.EXTRA_RESULT_MRZ, resultData.getMrzResult().getMrzText());
-            extraBundle.putByteArray(ResultActivity.EXTRA_RESULT_IMAGE,
-                    ImageUtils.transformImageToByteArray(resultData.getFullDocumentFrontImage()));
-        } else if (result instanceof MrtdSimpleRecognizerResult) {
-            MrtdRecognizer.Result resultData = ((MrtdSimpleRecognizerResult) result).getResultData();
-            extraBundle.putString(ResultActivity.EXTRA_RESULT_MRZ, resultData.getMrzResult().getMrzText());
-            extraBundle.putByteArray(ResultActivity.EXTRA_RESULT_IMAGE,
-                    ImageUtils.transformImageToByteArray(resultData.getFullDocumentImage()));
-        } else if (result instanceof PassportRecognizerResult) {
-            PassportRecognizer.Result resultData = ((PassportRecognizerResult) result).getResultData();
-            extraBundle.putString(ResultActivity.EXTRA_RESULT_MRZ, resultData.getMrzResult().getMrzText());
-            extraBundle.putByteArray(ResultActivity.EXTRA_RESULT_IMAGE,
-                    ImageUtils.transformImageToByteArray(resultData.getFullDocumentImage()));
-        } else if (result instanceof UsdlCombinedRecognizerResult) {
-            UsdlCombinedRecognizer.Result resultData = ((UsdlCombinedRecognizerResult) result).getResultData();
-            if (resultData.getFullName().isEmpty()) {
-                extraBundle.putString(ResultActivity.EXTRA_RESULT_NAME, resultData.getFirstName() + " " + resultData.getLastName());
-            } else {
-                extraBundle.putString(ResultActivity.EXTRA_RESULT_NAME, resultData.getFullName());
-            }
-            extraBundle.putByteArray(ResultActivity.EXTRA_RESULT_IMAGE,
-                    ImageUtils.transformImageToByteArray(resultData.getFullDocumentImage()));
-        } else if (result instanceof UsdlSimpleRecognizerResult) {
-            UsdlRecognizer.Result resultData = ((UsdlSimpleRecognizerResult) result).getResultData();
-            if (resultData.getFullName().isEmpty()) {
-                extraBundle.putString(ResultActivity.EXTRA_RESULT_NAME, resultData.getFirstName() + " " + resultData.getLastName());
-            } else {
-                extraBundle.putString(ResultActivity.EXTRA_RESULT_NAME, resultData.getFullName());
-            }
-        } else if (result instanceof VisaRecognizerResult) {
-            VisaRecognizer.Result resultData = ((VisaRecognizerResult) result).getResultData();
-            extraBundle.putString(ResultActivity.EXTRA_RESULT_MRZ, resultData.getMrzResult().getMrzText());
-            extraBundle.putByteArray(ResultActivity.EXTRA_RESULT_IMAGE,
-                    ImageUtils.transformImageToByteArray(resultData.getFullDocumentImage()));
+        switch (recognizerType) {
+            case ID_SIMPLE_RECOGNIZER:
+                BlinkIdRecognizer.Result idSimpleRecognizerResultData = ((IdSimpleRecognizerResult) result).getResultData();
+                if (idSimpleRecognizerResultData.getFullName().isEmpty()) {
+                    extraBundle.putString(ResultActivity.EXTRA_RESULT_NAME, idSimpleRecognizerResultData.getFirstName() +
+                            " " + idSimpleRecognizerResultData.getLastName());
+                } else {
+                    extraBundle.putString(ResultActivity.EXTRA_RESULT_NAME, idSimpleRecognizerResultData.getFullName());
+                }
+                extraBundle.putString(ResultActivity.EXTRA_RESULT_MRZ, idSimpleRecognizerResultData.getMrzResult().getMrzText());
+                extraBundle.putByteArray(ResultActivity.EXTRA_RESULT_IMAGE,
+                        ImageUtils.transformImageToByteArray(idSimpleRecognizerResultData.getFullDocumentImage()));
+                break;
+            case DOCUMENT_FACE_RECOGNIZER:
+                DocumentFaceRecognizer.Result documentFaceResultData = ((DocumentFaceRecognizerResult) result).getResultData();
+                extraBundle.putByteArray(ResultActivity.EXTRA_RESULT_IMAGE,
+                        ImageUtils.transformImageToByteArray(documentFaceResultData.getFullDocumentImage()));
+                break;
+            case ID_BARCODE_RECOGNIZER:
+                IdBarcodeRecognizer.Result idBarcodeResultData = ((IdBarcodeRecognizerResult) result).getResultData();
+                if (idBarcodeResultData.getFullName().isEmpty()) {
+                    extraBundle.putString(ResultActivity.EXTRA_RESULT_NAME, idBarcodeResultData.getFirstName() +
+                            " " + idBarcodeResultData.getLastName());
+                } else {
+                    extraBundle.putString(ResultActivity.EXTRA_RESULT_NAME, idBarcodeResultData.getFullName());
+                }
+                break;
+            case MRTD_COMBINED_RECOGNIZER:
+                MrtdCombinedRecognizer.Result mrtdCombinedResultData = ((MrtdCombinedRecognizerResult) result).getResultData();
+                extraBundle.putString(ResultActivity.EXTRA_RESULT_MRZ, mrtdCombinedResultData.getMrzResult().getMrzText());
+                extraBundle.putByteArray(ResultActivity.EXTRA_RESULT_IMAGE,
+                        ImageUtils.transformImageToByteArray(mrtdCombinedResultData.getFullDocumentFrontImage()));
+                break;
+            case MRTD_SIMPLE_RECOGNIZER:
+                MrtdRecognizer.Result mrtdSimpleResultData = ((MrtdSimpleRecognizerResult) result).getResultData();
+                extraBundle.putString(ResultActivity.EXTRA_RESULT_MRZ, mrtdSimpleResultData.getMrzResult().getMrzText());
+                extraBundle.putByteArray(ResultActivity.EXTRA_RESULT_IMAGE,
+                        ImageUtils.transformImageToByteArray(mrtdSimpleResultData.getFullDocumentImage()));
+                break;
+            case USDL_COMBINED_RECOGNIZER:
+                UsdlCombinedRecognizer.Result usdlCombinedResultData = ((UsdlCombinedRecognizerResult) result).getResultData();
+                if (usdlCombinedResultData.getFullName().isEmpty()) {
+                    extraBundle.putString(ResultActivity.EXTRA_RESULT_NAME, usdlCombinedResultData.getFirstName() +
+                            " " + usdlCombinedResultData.getLastName());
+                } else {
+                    extraBundle.putString(ResultActivity.EXTRA_RESULT_NAME, usdlCombinedResultData.getFullName());
+                }
+                extraBundle.putByteArray(ResultActivity.EXTRA_RESULT_IMAGE,
+                        ImageUtils.transformImageToByteArray(usdlCombinedResultData.getFullDocumentImage()));
+                break;
+            case USDL_SIMPLE_RECOGNIZER:
+                UsdlRecognizer.Result usdlSimpleResultData = ((UsdlSimpleRecognizerResult) result).getResultData();
+                if (usdlSimpleResultData.getFullName().isEmpty()) {
+                    extraBundle.putString(ResultActivity.EXTRA_RESULT_NAME, usdlSimpleResultData.getFirstName() +
+                            " " + usdlSimpleResultData.getLastName());
+                } else {
+                    extraBundle.putString(ResultActivity.EXTRA_RESULT_NAME, usdlSimpleResultData.getFullName());
+                }
+                break;
+            case VISA_RECOGNIZER:
+                VisaRecognizer.Result visaResultData = ((VisaRecognizerResult) result).getResultData();
+                extraBundle.putString(ResultActivity.EXTRA_RESULT_MRZ, visaResultData.getMrzResult().getMrzText());
+                extraBundle.putByteArray(ResultActivity.EXTRA_RESULT_IMAGE,
+                        ImageUtils.transformImageToByteArray(visaResultData.getFullDocumentImage()));
+                break;
+            default:
+                BlinkIdCombinedRecognizer.Result idCombinedResultData = ((IdCombinedRecognizerResult) result).getResultData();
+                if (idCombinedResultData.getFullName().isEmpty()) {
+                    extraBundle.putString(ResultActivity.EXTRA_RESULT_NAME, idCombinedResultData.getFirstName() +
+                            " " + idCombinedResultData.getLastName());
+                } else {
+                    extraBundle.putString(ResultActivity.EXTRA_RESULT_NAME, idCombinedResultData.getFullName());
+                }
+                extraBundle.putString(ResultActivity.EXTRA_RESULT_MRZ, idCombinedResultData.getMrzResult().getMrzText());
+                extraBundle.putByteArray(ResultActivity.EXTRA_RESULT_IMAGE,
+                        ImageUtils.transformImageToByteArray(idCombinedResultData.getFullDocumentFrontImage()));
+                break;
         }
         return extraBundle;
     }
