@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import de.telekom.scdocumentscannerdemo.recognizer.RecognizerData;
 import de.telekom.scdocumentscannerdemo.recognizer.RecognizerFactory;
 import de.telekom.scdocumentscannerdemo.recognizer.RecognizerTypeActivity;
 import de.telekom.scdocumentscannerdemo.result.ResultActivity;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private FrameLayout recognizerLayout;
     private DocumentScannerLayout<ScannerRecognizer> mDocumentScannerView;
     private PreferenceManager preferenceManager;
-    private RecognizerFactory recognizerFactory;
+    private RecognizerData recognizerData;
     private DocumentScannerApi<SmartCredentialsDocumentScanConfiguration, ScannerRecognizer> api;
 
     @Override
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         api = SmartCredentialsDocumentScannerFactory.getDocumentScannerApi();
         recognizerLayout = findViewById(R.id.recognizer_view_container);
         preferenceManager = new PreferenceManager(this);
-        recognizerFactory = new RecognizerFactory();
+        recognizerData = new RecognizerFactory(preferenceManager.getRecognizerType());
     }
 
     @Override
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         if (!hasCameraPermission()) {
             requestCameraPermission();
         } else {
+            recognizerData.setRecognizer(preferenceManager.getRecognizerType());
             startDocumentScanner();
         }
     }
@@ -113,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startDocumentScanner() {
-        ScannerRecognizer recognizer = recognizerFactory.getRecognizer(preferenceManager.getRecognizerType());
+        ScannerRecognizer recognizer = recognizerData.getRecognizer();
         SmartCredentialsDocumentScanConfiguration config = createScannerConfiguration(recognizer);
 
         SmartCredentialsApiResponse<DocumentScannerLayout<ScannerRecognizer>> response =
@@ -151,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
             Timber.tag(DemoApplication.TAG).d("DocumentScannerCallback:onDetected");
             mDocumentScannerView.pauseScanning();
             Intent intent = new Intent(MainActivity.this, ResultActivity.class);
-            intent.putExtra(ResultActivity.EXTRA_RESULT_BUNDLE, recognizerFactory.getExtrasBundle(result));
+            intent.putExtra(ResultActivity.EXTRA_RESULT_BUNDLE, recognizerData.getExtrasBundle(result));
             startActivity(intent);
         }
 
