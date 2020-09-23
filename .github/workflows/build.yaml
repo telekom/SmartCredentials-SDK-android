@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install NDK
-        run: echo "y" | sudo sdkmanager --install "ndk;21.0.6113669"
+        run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.0.6113669"
       - name: Checkout the code
         uses: actions/checkout@v2
       - name: Build the app
