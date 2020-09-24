@@ -57,7 +57,7 @@ allprojects {
 
         junitVersion = "4.13"
         mockitoVersion = "2.23.4"
-        hamcrestVersion = "2.1"
+        hamcrestVersion = "2.2"
         powermockVersion = "2.0.0-RC.4"
         jsonVersion = "20180813"
         espressoLibVersion = "3.0.2"
