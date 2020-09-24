@@ -10,5 +10,5 @@ jobs:
         uses: actions/checkout@v2
       - name: lint
         run: cd SmartCredentials_aOS && ./gradlew lint 
-      - name: Build the app
+      - name: Build all subproject aar files
         run: cd SmartCredentials_aOS && ./gradlew assembleDebug 
