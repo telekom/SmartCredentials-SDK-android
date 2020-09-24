@@ -69,26 +69,24 @@ public class CreationControllerTest {
     @Test
     public void encryptThrowsEncryptionExceptionWhenHandlerThrowsEncryptionException()
             throws EncryptionException {
-        String alias = "test";
         String err = "err";
         String toEncrypt = "toEncrypt";
-        when(mCreationHandler.encrypt(toEncrypt, alias, EncryptionAlgorithm.AES_256))
+        when(mCreationHandler.encrypt(toEncrypt, false, EncryptionAlgorithm.AES_256))
                 .thenThrow(new EncryptionException(err));
 
         thrown.expect(EncryptionException.class);
         thrown.expectMessage(err);
 
-        mCreationController.encrypt(toEncrypt, alias, EncryptionAlgorithm.AES_256);
+        mCreationController.encrypt(toEncrypt, false, EncryptionAlgorithm.AES_256);
     }
 
     @Test
     public void encryptCallsMethodOnCreationHandler() throws EncryptionException {
-        String alias = "test";
         String toEncrypt = "toEncrypt";
 
-        mCreationController.encrypt(toEncrypt, alias, EncryptionAlgorithm.RSA_2048);
+        mCreationController.encrypt(toEncrypt, false, EncryptionAlgorithm.RSA_2048);
 
         verify(mCreationHandler, times(1))
-                .encrypt(toEncrypt, alias, EncryptionAlgorithm.RSA_2048);
+                .encrypt(toEncrypt, false, EncryptionAlgorithm.RSA_2048);
     }
 }

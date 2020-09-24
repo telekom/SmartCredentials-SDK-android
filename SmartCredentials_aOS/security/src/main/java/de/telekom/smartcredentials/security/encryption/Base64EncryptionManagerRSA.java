@@ -106,7 +106,7 @@ public class Base64EncryptionManagerRSA implements EncryptionManager {
         }
     }
 
-    private String decrypt(String encryptedText, String repositoryAlias) throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, KeyStoreManagerException {
+    String decrypt(String encryptedText, String repositoryAlias) throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, KeyStoreManagerException {
         SmartCredentialsCipherWrapper smartCredentialsCipherWrapper = mRSACipherManager.getDecryptionCipherWrapper(repositoryAlias);
         byte[] encryptedTextBytes = Base64.decode(encryptedText, Base64.DEFAULT);
         byte[] decryptedBytes = mRSACipherManager.getMultiBlockBytes(encryptedTextBytes, smartCredentialsCipherWrapper, RSA_KEY_LENGTH);

@@ -51,7 +51,6 @@ public class ItemDomainModelTest {
     private ItemDomainMetadata mItemDomainMetadata;
     private ItemDomainData mItemDomainData;
     private EncryptionStrategy mEncryptionStrategy;
-    private String mAlias;
 
     @Rule
     public final ExpectedException mExpectedException = ExpectedException.none();
@@ -68,45 +67,44 @@ public class ItemDomainModelTest {
         mItemDomainModel
                 .setMetadata(mItemDomainMetadata)
                 .setData(mItemDomainData);
-        mAlias = "alias";
     }
 
     @Test
     public void encryptData() throws EncryptionException {
-        mItemDomainModel.encryptData(mEncryptionStrategy, mAlias);
+        mItemDomainModel.encryptData(mEncryptionStrategy, false);
 
-        verify(mItemDomainData).encryptWith(mEncryptionStrategy, mAlias);
+        verify(mItemDomainData).encryptWith(mEncryptionStrategy, false);
     }
 
     @Test
     public void encryptDataThrowsEncryptionException() throws EncryptionException {
         String expectedMessage = "could not encrypt text";
         doThrow(new EncryptionException(expectedMessage))
-                .when(mItemDomainData).encryptWith(mEncryptionStrategy, mAlias);
+                .when(mItemDomainData).encryptWith(mEncryptionStrategy, false);
 
         mExpectedException.expect(EncryptionException.class);
         mExpectedException.expectMessage(expectedMessage);
 
-        mItemDomainModel.encryptData(mEncryptionStrategy, mAlias);
+        mItemDomainModel.encryptData(mEncryptionStrategy, false);
     }
 
     @Test
     public void decryptData() throws EncryptionException {
-        mItemDomainModel.decryptData(mEncryptionStrategy, mAlias);
+        mItemDomainModel.decryptData(mEncryptionStrategy, EncryptionAlgorithm.AES_256);
 
-        verify(mItemDomainData).decryptWith(mEncryptionStrategy, mAlias);
+        verify(mItemDomainData).decryptWith(mEncryptionStrategy, EncryptionAlgorithm.AES_256);
     }
 
     @Test
     public void decryptDataThrowsEncryptionException() throws EncryptionException {
         String expectedMessage = "could not decrypt text";
         doThrow(new EncryptionException(expectedMessage))
-                .when(mItemDomainData).decryptWith(mEncryptionStrategy, mAlias);
+                .when(mItemDomainData).decryptWith(mEncryptionStrategy, EncryptionAlgorithm.AES_256);
 
         mExpectedException.expect(EncryptionException.class);
         mExpectedException.expectMessage(expectedMessage);
 
-        mItemDomainModel.decryptData(mEncryptionStrategy, mAlias);
+        mItemDomainModel.decryptData(mEncryptionStrategy, EncryptionAlgorithm.AES_256);
     }
 
     @Test
@@ -135,41 +133,41 @@ public class ItemDomainModelTest {
 
     @Test
     public void partiallyEncryptData() throws EncryptionException {
-        mItemDomainModel.partiallyEncrypt(mEncryptionStrategy, mAlias);
+        mItemDomainModel.partiallyEncrypt(mEncryptionStrategy, false);
 
         verify(mItemDomainData, times(1))
-                .partiallyEncryptWith(mEncryptionStrategy, mAlias);
+                .partiallyEncryptWith(mEncryptionStrategy, false);
     }
 
     @Test
     public void partiallyEncryptDataThrowsEncryptionException() throws EncryptionException {
         String expectedMessage = "could not decrypt text";
         doThrow(new EncryptionException(expectedMessage))
-                .when(mItemDomainData).partiallyEncryptWith(mEncryptionStrategy, mAlias);
+                .when(mItemDomainData).partiallyEncryptWith(mEncryptionStrategy, false);
 
         mExpectedException.expect(EncryptionException.class);
         mExpectedException.expectMessage(expectedMessage);
 
-        mItemDomainModel.partiallyEncrypt(mEncryptionStrategy, mAlias);
+        mItemDomainModel.partiallyEncrypt(mEncryptionStrategy, false);
     }
 
     @Test
     public void decryptDataWithAlgorithmCallsMethodOnDomainData() throws EncryptionException {
-        mItemDomainModel.decryptData(mEncryptionStrategy, mAlias, EncryptionAlgorithm.RSA_2048);
+        mItemDomainModel.decryptData(mEncryptionStrategy, EncryptionAlgorithm.RSA_2048);
 
         verify(mItemDomainData, times(1))
-                .decryptWith(mEncryptionStrategy, mAlias, EncryptionAlgorithm.RSA_2048);
+                .decryptWith(mEncryptionStrategy, EncryptionAlgorithm.RSA_2048);
     }
 
     @Test
     public void decryptDataWithAlgorithmThrowsEncryptionException() throws EncryptionException {
         String expectedMessage = "could not decrypt text";
         doThrow(new EncryptionException(expectedMessage))
-                .when(mItemDomainData).decryptWith(mEncryptionStrategy, mAlias, EncryptionAlgorithm.AES_256);
+                .when(mItemDomainData).decryptWith(mEncryptionStrategy, EncryptionAlgorithm.AES_256);
 
         mExpectedException.expect(EncryptionException.class);
         mExpectedException.expectMessage(expectedMessage);
 
-        mItemDomainModel.decryptData(mEncryptionStrategy, mAlias, EncryptionAlgorithm.AES_256);
+        mItemDomainModel.decryptData(mEncryptionStrategy, EncryptionAlgorithm.AES_256);
     }
 }

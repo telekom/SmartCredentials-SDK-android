@@ -24,6 +24,7 @@ import de.telekom.smartcredentials.authorization.AuthorizationManagerWrapper;
 import de.telekom.smartcredentials.authorization.fingerprint.AuthHandler;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class BiometricPresenterTest {
 
