@@ -1,0 +1,14 @@
+name: Build
+on: [pull_request, push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install NDK
+        run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.0.6113669"
+      - name: Checkout the code
+        uses: actions/checkout@v2
+      - name: lint
+        run: cd SmartCredentials_aOS && ./gradlew lint 
+      - name: Build all subproject aar files
+        run: cd SmartCredentials_aOS && ./gradlew assembleDebug 
