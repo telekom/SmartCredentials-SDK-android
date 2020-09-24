@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">DocumentScannerDemo</string>
+    <string name="app_alias">scdocumentscannerdemo</string>
+    <string name="current_user_id">1234</string>
+    <string name="camera_permission_not_granted">Camera permission not granted!</string>
+    <string name="turn_card">Please turn the card</string>
+    <string name="filter">Filter</string>
+    <string name="recognizer_type_title">Recognizer Type</string>
+    <string name="document_scanner_layout_failed">Failed to retrieve document scanner layout!</string>
+    <string name="result_activity_title">Scan Result</string>
+    <string name="document_image">DOCUMENT IMAGE</string>
+    <string name="name">NAME</string>
+    <string name="result_image_content_description">Scanned Document Image</string>
+    <string name="mrz_text">MRZ TEXT</string>
+</resources>

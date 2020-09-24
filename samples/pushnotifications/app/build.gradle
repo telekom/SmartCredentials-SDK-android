@@ -41,10 +41,10 @@ dependencies {
     implementation "androidx.cardview:cardview:1.0.0"
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
-    implementation("de.telekom.smartcredentials:core:6.1.20")
-    implementation("de.telekom.smartcredentials:security:6.1.20")
-    implementation("de.telekom.smartcredentials:storage:6.1.20")
-    implementation("de.telekom.smartcredentials:pushnotifications:6.1.20")
+    implementation("de.telekom.smartcredentials:core:6.2.1")
+    implementation("de.telekom.smartcredentials:security:6.2.1")
+    implementation("de.telekom.smartcredentials:storage:6.2.1")
+    implementation("de.telekom.smartcredentials:pushnotifications:6.2.1")
 
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

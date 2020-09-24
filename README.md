@@ -27,7 +27,7 @@ Add this to the project's build.gradle
 
 ```groovy
 project.ext {
-        smartCredentialsVersion = "6.1.4"
+        smartCredentialsVersion = "6.2.1"
     }
 ```
 
