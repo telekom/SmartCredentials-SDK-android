@@ -8,5 +8,7 @@ jobs:
         run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.0.6113669"
       - name: Checkout the code
         uses: actions/checkout@v2
+      - name: lint
+        run: cd SmartCredentials_aOS && ./gradlew lint 
       - name: Build the app
-        run: env && ls && cd SmartCredentials_aOS && ./gradlew assembleDebug 
+        run: cd SmartCredentials_aOS && ./gradlew assembleDebug 
