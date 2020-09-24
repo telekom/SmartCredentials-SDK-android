@@ -54,7 +54,7 @@ public class FingerprintDialogFragment extends DialogFragment implements Fingerp
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        setStyle(android.app.DialogFragment.STYLE_NORMAL, android.R.style.Theme_Material_Light_Dialog);
+        setStyle(DialogFragment.STYLE_NORMAL, android.R.style.Theme_Material_Light_Dialog);
 
         mPluginCallback = getArguments() != null
                 ? (AuthorizationPluginCallback) getArguments().getParcelable(AUTH_CALLBACK_ARGS)
