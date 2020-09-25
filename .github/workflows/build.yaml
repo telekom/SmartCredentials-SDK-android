@@ -1,5 +1,5 @@
-name: Build all aar files
-on: pull_request
+name: Build
+on: [pull_request, push]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -9,8 +9,13 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v2
       - name: lint
-        run: cd SmartCredentials_aOS && bash ./gradlew lint 
+        run: cd SmartCredentials_aOS && ./gradlew lint 
       - name: test
-        run: cd SmartCredentials_aOS && bash ./gradlew test 
+        run: cd SmartCredentials_aOS && ./gradlew test 
       - name: Build all subproject aar files
-        run: cd SmartCredentials_aOS && bash ./gradlew assembleDebug 
+        run: cd SmartCredentials_aOS && ./gradlew assembleRelease
+      - name: Upload APK
+        uses: actions/upload-artifact@v2
+        with:
+            name: authentication
+            path: ${{ github.workspace }}/SmartCredentials_aOS/authentication/build/outputs/aar/authentication-release-6.2.1
