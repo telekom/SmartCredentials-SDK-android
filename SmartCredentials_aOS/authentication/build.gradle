@@ -18,6 +18,7 @@ apply plugin: 'com.android.library'
 apply from: "../gradle/task/maven_push_library.gradle"
 
 android {
+    ndkVersion '21.3.6528147'
 
     compileSdkVersion rootProject.ext.androidCompileSdkVersion
 
