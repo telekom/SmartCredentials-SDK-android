@@ -9,6 +9,8 @@ jobs:
         run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.0.6113669"
       - name: Checkout the code
         uses: actions/checkout@v2
+      - change permission
+	chmod a+x ./gradlew
       - name: lint
         run: cd samples/authentication && ./gradlew lint 
       - name: Build authentication apk
