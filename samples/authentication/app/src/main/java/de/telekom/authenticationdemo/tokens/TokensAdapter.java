@@ -9,10 +9,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.nimbusds.jose.Payload;
+import com.nimbusds.jwt.JWT;
+import com.nimbusds.jwt.JWTParser;
+import com.nimbusds.jwt.PlainJWT;
+import com.nimbusds.jwt.SignedJWT;
+
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
 import de.telekom.authenticationdemo.R;
+
 
 /**
  * Created by Alex.Graur@endava.com at 9/1/2020
@@ -60,10 +68,29 @@ public class TokensAdapter extends RecyclerView.Adapter<TokensAdapter.ViewHolder
             tokenValidityTextView = itemView.findViewById(R.id.token_validity_text_view);
         }
 
-        public void bind(Context context, Token token) {
+        public void bind(@NonNull Context context, @NonNull Token token) {
             tokenLabelTextView.setText(context.getString(token.getResId()));
-            tokenValueTextView.setText(token.getToken());
+            if (token.getResId() == R.string.id_token) {
+                try {
+                    JWT id_token = JWTParser.parse(token.getToken());
+                    if (id_token instanceof SignedJWT) {
+                        SignedJWT jwt = (SignedJWT)id_token;
+                        Payload payload = jwt.getPayload();
+                        tokenValueTextView.setText(payload.toString());
+                    } else if (id_token instanceof PlainJWT) {
+                        PlainJWT jwt = (PlainJWT)id_token;
+                        Payload payload = jwt.getPayload();
+                        tokenValueTextView.setText(payload.toString());
+                    } else {
+                        tokenValueTextView.setText("unsupported id_token type " + token.getToken());
+                    }
+                } catch (ParseException e) {
+                    tokenValueTextView.setText("could not parse:\n" + token.getToken());
+                }
 
+            } else {
+                tokenValueTextView.setText(token.getToken());
+            }
             if (token.getValidity() != Token.DEFAULT_VALIDITY) {
                 expiresTextView.setVisibility(View.VISIBLE);
                 tokenValidityTextView.setVisibility(View.VISIBLE);
