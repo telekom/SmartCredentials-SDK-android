@@ -1,5 +1,6 @@
 name: Build
-pull_request:
+on:
+  pull_request:
     branches:
       - develop
 jobs:
