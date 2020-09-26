@@ -9,8 +9,8 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v2
       - name: lint
-        run: cd SmartCredentials_aOS && ./gradlew lint 
+        run: cd SmartCredentials_aOS && bash ./gradlew lint 
       - name: test
-        run: cd SmartCredentials_aOS && ./gradlew test 
+        run: cd SmartCredentials_aOS && bash ./gradlew test 
       - name: Build all subproject aar files
-        run: cd SmartCredentials_aOS && ./gradlew assembleDebug 
+        run: cd SmartCredentials_aOS && bash ./gradlew assembleDebug 
