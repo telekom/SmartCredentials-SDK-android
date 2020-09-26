@@ -7,7 +7,7 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v2
       - change permission
-	run: chmod a+x ./gradlew
+        run: chmod a+x ./gradlew
       - name: lint
         run: cd samples/authentication && ./gradlew lint 
       - name: Build authentication apk
