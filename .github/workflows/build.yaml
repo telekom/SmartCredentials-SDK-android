@@ -1,4 +1,4 @@
-name: Build
+name: Build all aar files
 on: pull_request
 jobs:
   build:
