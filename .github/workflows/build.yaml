@@ -8,15 +8,69 @@ jobs:
         run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.0.6113669"
       - name: Checkout the code
         uses: actions/checkout@v2
+      - name: lint
+        run: cd SmartCredentials_aOS && ./gradlew lint 
+      - name: test
+        run: cd SmartCredentials_aOS && ./gradlew test   
       - name: Build all subproject aar files
         run: cd SmartCredentials_aOS && ./gradlew assembleRelease
-      - name: Upload Authentication AAR
-        uses: actions/upload-artifact@v2
-        with:
-            name: authentication
-            path: SmartCredentials_aOS/authentication/build/outputs/aar/
       - name: Upload Authorization AAR
         uses: actions/upload-artifact@v2
         with:
             name: authorization
             path: SmartCredentials_aOS/authorization/build/outputs/aar/
+      - name: Upload Camera AAR
+        uses: actions/upload-artifact@v2
+        with:
+            name: camera
+            path: SmartCredentials_aOS/camera/build/outputs/aar/
+      - name: Upload Core AAR
+        uses: actions/upload-artifact@v2
+        with:
+            name: core
+            path: SmartCredentials_aOS/core/build/outputs/aar/               
+      - name: Upload Document Scanner AAR
+        uses: actions/upload-artifact@v2
+        with:
+            name: documentscanner
+            path: SmartCredentials_aOS/documentscanner/build/outputs/aar/
+      - name: Upload eID AAR
+        uses: actions/upload-artifact@v2
+        with:
+            name: eid
+            path: SmartCredentials_aOS/eid/build/outputs/aar/     
+      - name: Upload Networking AAR
+        uses: actions/upload-artifact@v2
+        with:
+            name: networking
+            path: SmartCredentials_aOS/networking/build/outputs/aar/
+      - name: Upload OTP AAR
+        uses: actions/upload-artifact@v2
+        with:
+            name: otp
+            path: SmartCredentials_aOS/otp/build/outputs/aar/          
+      - name: Upload Persistent Logging AAR
+        uses: actions/upload-artifact@v2
+        with:
+            name: persistentlogging
+            path: SmartCredentials_aOS/persistentlogging/build/outputs/aar/              
+      - name: Upload Push Notifications AAR
+        uses: actions/upload-artifact@v2
+        with:
+            name: pushnotifications
+            path: SmartCredentials_aOS/pushnotifications/build/outputs/aar/     
+      - name: Upload QR Login AAR
+        uses: actions/upload-artifact@v2
+        with:
+            name: qrlogin
+            path: SmartCredentials_aOS/qrlogin/build/outputs/aar/                
+      - name: Upload Security AAR
+        uses: actions/upload-artifact@v2
+        with:
+            name: security
+            path: SmartCredentials_aOS/security/build/outputs/aar/            
+      - name: Upload Storage AAR
+        uses: actions/upload-artifact@v2
+        with:
+            name: storage
+            path: SmartCredentials_aOS/storage/build/outputs/aar/                     
