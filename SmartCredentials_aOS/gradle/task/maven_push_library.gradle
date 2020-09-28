@@ -21,14 +21,14 @@ apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
 bintray {
-    user = getEnvOrProperty('BINTRAY_SC_USERNAME')
-    key = getEnvOrProperty('BINTRAY_SC_KEY')
+    user = 'grauralex'
+    key = '645d5e7bd7748da2a31a074e68e422604463b262'
     publications = ['maven']
     publish = true
     pkg {
-        repo = 'SmartCredentials'
-        name = 'android'
-        userOrg = getEnvOrProperty('BINTRAY_SC_USERNAME')
+        repo = 'maven'
+        name = 'sc-test'
+        userOrg = 'grauralex'
         licenses = ['Apache-2.0']
         version {
             name = rootProject.ext.androidVersionName

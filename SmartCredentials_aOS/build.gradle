@@ -40,7 +40,7 @@ allprojects {
         androidTargetSdkVersion = 30
         androidMinSdkVersion = 21
         androidVersionCode = 5
-        androidVersionName = "6.2.1"
+        androidVersionName = "1.1.2"
 
         androidXAppcompat = "1.2.0"
         androidXAnnotation = "1.1.0"
