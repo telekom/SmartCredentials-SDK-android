@@ -1,5 +1,8 @@
 name: Build
-on: [pull_request, push]
+on: 
+    [pull_request, push]:
+            branches-ignore:
+                - 'master'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -8,9 +11,9 @@ jobs:
         run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.0.6113669"
       - name: Checkout the code
         uses: actions/checkout@v2
-      - name: lint
+      - name: Lint
         run: cd SmartCredentials_aOS && ./gradlew lint 
-      - name: test
+      - name: Test
         run: cd SmartCredentials_aOS && ./gradlew test 
       - name: Build all subproject aar files
         run: cd SmartCredentials_aOS && ./gradlew assembleRelease
