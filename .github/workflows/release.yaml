@@ -1,5 +1,8 @@
-name: Build
-on: [pull_request, push]
+name: Release
+on: 
+    push:
+        branches: 
+            - master
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -11,14 +14,14 @@ jobs:
       - name: lint
         run: cd SmartCredentials_aOS && ./gradlew lint 
       - name: test
-        run: cd SmartCredentials_aOS && ./gradlew test 
+        run: cd SmartCredentials_aOS && ./gradlew test         
       - name: Build all subproject aar files
         run: cd SmartCredentials_aOS && ./gradlew assembleRelease
       - name: Upload Authentication AAR
         uses: actions/upload-artifact@v2
         with:
             name: authentication
-            path: SmartCredentials_aOS/authentication/build/outputs/aar/
+            path: SmartCredentials_aOS/authentication/build/outputs/aar/        
       - name: Upload Authorization AAR
         uses: actions/upload-artifact@v2
         with:
@@ -78,4 +81,6 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
             name: storage
-            path: SmartCredentials_aOS/storage/build/outputs/aar/                     
+            path: SmartCredentials_aOS/storage/build/outputs/aar/ 
+      - name: Bintray Upload
+        run: cd SmartCredentials_aOS && ./gradlew bintrayUpload              
