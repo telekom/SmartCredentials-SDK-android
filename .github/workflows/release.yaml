@@ -17,6 +17,11 @@ jobs:
         run: cd SmartCredentials_aOS && ./gradlew test         
       - name: Build all subproject aar files
         run: cd SmartCredentials_aOS && ./gradlew assembleRelease
+      - name: Upload Authentication AAR
+        uses: actions/upload-artifact@v2
+        with:
+            name: authentication
+            path: SmartCredentials_aOS/authentication/build/outputs/aar/        
       - name: Upload Authorization AAR
         uses: actions/upload-artifact@v2
         with:
