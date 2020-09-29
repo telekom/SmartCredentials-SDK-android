@@ -11,9 +11,9 @@ jobs:
         run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.0.6113669"
       - name: Checkout the code
         uses: actions/checkout@v2
-      - name: lint
+      - name: Lint
         run: cd SmartCredentials_aOS && ./gradlew lint 
-      - name: test
+      - name: Test
         run: cd SmartCredentials_aOS && ./gradlew test         
       - name: Build all subproject aar files
         run: cd SmartCredentials_aOS && ./gradlew assembleRelease
@@ -83,4 +83,7 @@ jobs:
             name: storage
             path: SmartCredentials_aOS/storage/build/outputs/aar/ 
       - name: Bintray Upload
-        run: cd SmartCredentials_aOS && ./gradlew bintrayUpload              
+        env:
+          BINTRAY_SC_USERNAME: ${{ secrets.BINTRAY_SC_USERNAME }}
+          BINTRAY_SC_KEY: ${{ secrets.BINTRAY_SC_KEY }}
+        run: cd SmartCredentials_aOS && ./gradlew bintrayUpload
