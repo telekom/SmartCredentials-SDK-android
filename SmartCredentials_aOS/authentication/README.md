@@ -64,7 +64,7 @@ Then, on the ```AuthenticationServiceInitListener``` attached to the initialize 
         <category android:name="android.intent.category.DEFAULT" />  
         <category android:name="android.intent.category.BROWSABLE" />  
   
-        <data android:scheme="your-data-scheme" />  
+        <data android:scheme="provider-data-scheme" />  
     </intent-filter>  
 </activity>
 ````

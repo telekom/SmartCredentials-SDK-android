@@ -28,4 +28,9 @@
     <string name="profile">Profile</string>
     <string name="email_verified">Verified email</string>
     <string name="expires">Expires at</string>
+    <string name="no_token_value">N/A</string>
+    <string name="type">Type:</string>
+    <string name="signed_jwt">Signed JWT</string>
+    <string name="plain_jwt">Plain JWT</string>
+    <string name="unknown">Unknown</string>
 </resources>

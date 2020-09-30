@@ -7,18 +7,18 @@ public class Token {
 
     public final static int DEFAULT_VALIDITY = -1;
 
-    private final int resId;
+    private final TokenType tokenType;
     private final String token;
     private final long validity;
 
-    public Token(int resId, String token, long validity) {
-        this.resId = resId;
+    public Token(TokenType tokenType, String token, long validity) {
+        this.tokenType = tokenType;
         this.token = token;
         this.validity = validity;
     }
 
-    public int getResId() {
-        return resId;
+    public TokenType getTokenType() {
+        return tokenType;
     }
 
     public String getToken() {
