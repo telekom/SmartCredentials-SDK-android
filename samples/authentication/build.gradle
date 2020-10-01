@@ -23,7 +23,3 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-
-def getEnvOrProperty(String name, String fallback = null) {
-    return System.getenv(name) ?: project.hasProperty(name) ? project[name] : fallback
-}

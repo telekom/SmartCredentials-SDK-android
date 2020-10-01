@@ -17,6 +17,29 @@
         tools:text="Access token" />
 
     <TextView
+        android:id="@+id/token_type_label_text_view"
+        style="@style/SmallTitleTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/type"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/token_label_text_view"
+        tools:text="Token type:" />
+
+    <TextView
+        android:id="@+id/token_type_value_text_view"
+        style="@style/SmallDescriptionTextStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/token_type_label_text_view"
+        app:layout_constraintTop_toBottomOf="@id/token_label_text_view"
+        tools:text="Signed JWT" />
+
+    <TextView
         android:id="@+id/token_value_text_view"
         style="@style/SmallDescriptionTextStyle"
         android:layout_width="0dp"
@@ -24,7 +47,7 @@
         android:layout_marginTop="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/token_label_text_view"
+        app:layout_constraintTop_toBottomOf="@id/token_type_label_text_view"
         tools:text="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0b3B0YWwuY29tIiwiZXhwIjoxNDI2NDIwODAwLCJodHRwOi8vdG9wdGFsLmNvbS9qd3RfY2xhaW1zL2lzX2FkbWluIjp0cnVlLCJjb21wYW55IjoiVG9wdGFsIiwiYXdlc29tZSI6dHJ1ZX0.yRQYnWzskCZUxPwaQupWkiUzKELZ49eM7oWxAQK_ZXw" />
 
     <TextView

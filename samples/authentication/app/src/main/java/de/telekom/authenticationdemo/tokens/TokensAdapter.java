@@ -1,6 +1,5 @@
 package de.telekom.authenticationdemo.tokens;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,11 +26,9 @@ import de.telekom.authenticationdemo.R;
  */
 public class TokensAdapter extends RecyclerView.Adapter<TokensAdapter.ViewHolder> {
 
-    private final Context context;
     private final List<Token> tokens;
 
-    public TokensAdapter(Context context, List<Token> tokens) {
-        this.context = context;
+    public TokensAdapter(List<Token> tokens) {
         this.tokens = tokens;
     }
 
@@ -45,7 +42,7 @@ public class TokensAdapter extends RecyclerView.Adapter<TokensAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(context, tokens.get(position));
+        holder.bind(tokens.get(position));
     }
 
     @Override
@@ -56,6 +53,8 @@ public class TokensAdapter extends RecyclerView.Adapter<TokensAdapter.ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView tokenLabelTextView;
+        private final TextView tokenTypeLabelTextView;
+        private final TextView tokenTypeValueTextView;
         private final TextView tokenValueTextView;
         private final TextView expiresTextView;
         private final TextView tokenValidityTextView;
@@ -63,34 +62,46 @@ public class TokensAdapter extends RecyclerView.Adapter<TokensAdapter.ViewHolder
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tokenLabelTextView = itemView.findViewById(R.id.token_label_text_view);
+            tokenTypeLabelTextView = itemView.findViewById(R.id.token_type_label_text_view);
+            tokenTypeValueTextView = itemView.findViewById(R.id.token_type_value_text_view);
             tokenValueTextView = itemView.findViewById(R.id.token_value_text_view);
             expiresTextView = itemView.findViewById(R.id.expires_text_view);
             tokenValidityTextView = itemView.findViewById(R.id.token_validity_text_view);
         }
 
-        public void bind(@NonNull Context context, @NonNull Token token) {
-            tokenLabelTextView.setText(context.getString(token.getResId()));
-            if (token.getResId() == R.string.id_token) {
+        public void bind(@NonNull Token token) {
+            tokenLabelTextView.setText(token.getTokenType().getNameResId());
+
+            if (token.getTokenType() == TokenType.ID_TOKEN) {
+                tokenTypeLabelTextView.setVisibility(View.VISIBLE);
+                tokenTypeValueTextView.setVisibility(View.VISIBLE);
                 try {
-                    JWT id_token = JWTParser.parse(token.getToken());
-                    if (id_token instanceof SignedJWT) {
-                        SignedJWT jwt = (SignedJWT)id_token;
+                    JWT idToken = JWTParser.parse(token.getToken());
+
+                    if (idToken instanceof SignedJWT) {
+                        tokenTypeValueTextView.setText(R.string.signed_jwt);
+                        SignedJWT jwt = (SignedJWT) idToken;
                         Payload payload = jwt.getPayload();
                         tokenValueTextView.setText(payload.toString());
-                    } else if (id_token instanceof PlainJWT) {
-                        PlainJWT jwt = (PlainJWT)id_token;
+                    } else if (idToken instanceof PlainJWT) {
+                        tokenTypeValueTextView.setText(R.string.plain_jwt);
+                        PlainJWT jwt = (PlainJWT) idToken;
                         Payload payload = jwt.getPayload();
                         tokenValueTextView.setText(payload.toString());
                     } else {
-                        tokenValueTextView.setText("unsupported id_token type " + token.getToken());
+                        tokenTypeValueTextView.setText(R.string.unknown);
+                        tokenValueTextView.setText(token.getToken());
                     }
                 } catch (ParseException e) {
-                    tokenValueTextView.setText("could not parse:\n" + token.getToken());
+                    tokenValueTextView.setText(R.string.no_token_value);
                 }
 
             } else {
+                tokenTypeLabelTextView.setVisibility(View.GONE);
+                tokenTypeValueTextView.setVisibility(View.GONE);
                 tokenValueTextView.setText(token.getToken());
             }
+
             if (token.getValidity() != Token.DEFAULT_VALIDITY) {
                 expiresTextView.setVisibility(View.VISIBLE);
                 tokenValidityTextView.setVisibility(View.VISIBLE);

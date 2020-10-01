@@ -51,7 +51,7 @@ public class TokensActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setLayoutManager(layoutManager);
         tokens = new ArrayList<>();
-        adapter = new TokensAdapter(this, tokens);
+        adapter = new TokensAdapter(tokens);
         recyclerView.setAdapter(adapter);
     }
 
@@ -143,9 +143,9 @@ public class TokensActivity extends AppCompatActivity {
                 .assign(() -> {
                     AuthStateManager authStateManager = AuthStateManager.getInstance(this, IdentityProvider.GOOGLE.getName());
                     List<Token> tokenList = new ArrayList<>();
-                    tokenList.add(new Token(R.string.access_token, authStateManager.getAccessToken(), authStateManager.getAccessTokenExpirationTime()));
-                    tokenList.add(new Token(R.string.id_token, authStateManager.getIdToken(), Token.DEFAULT_VALIDITY));
-                    tokenList.add(new Token(R.string.refresh_token, authStateManager.getRefreshToken(), Token.DEFAULT_VALIDITY));
+                    tokenList.add(new Token(TokenType.ACCESS_TOKEN, authStateManager.getAccessToken(), authStateManager.getAccessTokenExpirationTime()));
+                    tokenList.add(new Token(TokenType.ID_TOKEN, authStateManager.getIdToken(), Token.DEFAULT_VALIDITY));
+                    tokenList.add(new Token(TokenType.REFRESH_TOKEN, authStateManager.getRefreshToken(), Token.DEFAULT_VALIDITY));
                     return tokenList;
                 })
                 .finish(result -> {
