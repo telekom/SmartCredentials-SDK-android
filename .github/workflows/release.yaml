@@ -12,9 +12,25 @@ jobs:
       - name: Lint
         run: cd SmartCredentials_aOS && ./gradlew lint 
       - name: Test
-        run: cd SmartCredentials_aOS && ./gradlew test         
-      - name: Build all subproject aar files
+        run: cd SmartCredentials_aOS && ./gradlew test
+      - name: Assemble all subproject aar files
         run: cd SmartCredentials_aOS && ./gradlew assembleRelease
+      - name: Build Authentication Sample
+        run: cd samples/authentication && chmod +x ./gradlew && ./gradlew build
+      - name: Build Authorization Sample
+        run: cd samples/authorization && chmod +x ./gradlew && ./gradlew build
+      - name: Build Camera Sample
+        run: cd samples/camera && chmod +x ./gradlew && ./gradlew build
+      - name: Build Core Sample
+        run: cd samples/core && chmod +x ./gradlew && ./gradlew build
+      - name: Build Document Scanner Sample
+        run: cd samples/documentscanner && chmod +x ./gradlew && ./gradlew build
+      - name: Build OTP Sample
+        run: cd samples/otp && chmod +x ./gradlew && ./gradlew build
+      - name: Build Push Notifications Sample
+        run: cd samples/pushnotifications && chmod +x ./gradlew && ./gradlew build
+      - name: Build Storage Sample
+        run: cd samples/storage && chmod +x ./gradlew && ./gradlew build
       - name: Upload Authentication AAR
         uses: actions/upload-artifact@v2
         with:

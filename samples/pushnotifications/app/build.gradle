@@ -12,20 +12,19 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "FCM_API_KEY", "\"" + getEnvOrProperty('FCM_API_KEY') + "\"")
+        buildConfigField("String", "FCM_PROJECT_ID", "\"" + getEnvOrProperty('FCM_PROJECT_ID') + "\"")
+        buildConfigField("String", "FCM_DATABASE_URL", "\"" + getEnvOrProperty('FCM_DATABASE_URL') + "\"")
+        buildConfigField("String", "FCM_APPLICATION_ID", "\"" + getEnvOrProperty('FCM_APPLICATION_ID') + "\"")
+        buildConfigField("String", "FCM_GCM_SENDER_ID", "\"" + getEnvOrProperty('FCM_GCM_SENDER_ID') + "\"")
+        buildConfigField("String", "FCM_STORAGE_BUCKET", "\"" + getEnvOrProperty('FCM_STORAGE_BUCKET') + "\"")
     }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-        debug{
-            buildConfigField("String", "FCM_API_KEY", "\"" + getEnvOrProperty('FCM_API_KEY') + "\"")
-            buildConfigField("String", "FCM_PROJECT_ID", "\"" + getEnvOrProperty('FCM_PROJECT_ID') + "\"")
-            buildConfigField("String", "FCM_DATABASE_URL", "\"" + getEnvOrProperty('FCM_DATABASE_URL') + "\"")
-            buildConfigField("String", "FCM_APPLICATION_ID", "\"" + getEnvOrProperty('FCM_APPLICATION_ID') + "\"")
-            buildConfigField("String", "FCM_GCM_SENDER_ID", "\"" + getEnvOrProperty('FCM_GCM_SENDER_ID') + "\"")
-            buildConfigField("String", "FCM_STORAGE_BUCKET", "\"" + getEnvOrProperty('FCM_STORAGE_BUCKET') + "\"")
         }
     }
     compileOptions {

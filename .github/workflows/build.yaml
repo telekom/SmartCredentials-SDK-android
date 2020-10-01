@@ -10,7 +10,7 @@ jobs:
         run: cd SmartCredentials_aOS && ./gradlew lint
       - name: Test
         run: cd SmartCredentials_aOS && ./gradlew test
-      - name: Build all subproject aar files
+      - name: Assemble all subproject aar files
         run: cd SmartCredentials_aOS && ./gradlew assembleRelease
       - name: Upload Authentication AAR
         uses: actions/upload-artifact@v2
@@ -31,7 +31,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
             name: core
-            path: SmartCredentials_aOS/core/build/outputs/aar/               
+            path: SmartCredentials_aOS/core/build/outputs/aar/
       - name: Upload Document Scanner AAR
         uses: actions/upload-artifact@v2
         with:
@@ -41,7 +41,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
             name: eid
-            path: SmartCredentials_aOS/eid/build/outputs/aar/     
+            path: SmartCredentials_aOS/eid/build/outputs/aar/
       - name: Upload Networking AAR
         uses: actions/upload-artifact@v2
         with:
@@ -51,27 +51,27 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
             name: otp
-            path: SmartCredentials_aOS/otp/build/outputs/aar/          
+            path: SmartCredentials_aOS/otp/build/outputs/aar/
       - name: Upload Persistent Logging AAR
         uses: actions/upload-artifact@v2
         with:
             name: persistentlogging
-            path: SmartCredentials_aOS/persistentlogging/build/outputs/aar/              
+            path: SmartCredentials_aOS/persistentlogging/build/outputs/aar/
       - name: Upload Push Notifications AAR
         uses: actions/upload-artifact@v2
         with:
             name: pushnotifications
-            path: SmartCredentials_aOS/pushnotifications/build/outputs/aar/     
+            path: SmartCredentials_aOS/pushnotifications/build/outputs/aar/
       - name: Upload QR Login AAR
         uses: actions/upload-artifact@v2
         with:
             name: qrlogin
-            path: SmartCredentials_aOS/qrlogin/build/outputs/aar/                
+            path: SmartCredentials_aOS/qrlogin/build/outputs/aar/
       - name: Upload Security AAR
         uses: actions/upload-artifact@v2
         with:
             name: security
-            path: SmartCredentials_aOS/security/build/outputs/aar/            
+            path: SmartCredentials_aOS/security/build/outputs/aar/
       - name: Upload Storage AAR
         uses: actions/upload-artifact@v2
         with:
