@@ -39,10 +39,10 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.nimbusds:nimbus-jose-jwt:9.0.1'
 
-    implementation("de.telekom.smartcredentials:core:6.2.1")
-    implementation("de.telekom.smartcredentials:security:6.2.1")
-    implementation("de.telekom.smartcredentials:storage:6.2.1")
-    implementation("de.telekom.smartcredentials:authentication:6.2.1")
+    implementation("de.telekom.smartcredentials:core:6.2.1L")
+    implementation("de.telekom.smartcredentials:security:6.2.1L")
+    implementation("de.telekom.smartcredentials:storage:6.2.1L")
+    implementation("de.telekom.smartcredentials:authentication:6.2.1L")
 
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
