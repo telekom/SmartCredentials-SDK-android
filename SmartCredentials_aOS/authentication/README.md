@@ -37,17 +37,45 @@ SmartCredentialsStorageFactory.initSmartCredentialsStorageModule(context,
 SmartCredentialsAuthenticationFactory.initSmartCredentialsAuthenticationModule(coreApi, storageApi);
 ```
 
-### API initialization
+### Authentication Configuration
+
+#### Create the Authentication Builder
 In order to use the authentication APIs, you have to initialize the API with an OAuth 2.0 or OpenID Connect provider.
 
 ```
-AuthenticationApi authenticationApi = SmartCredentialsAuthenticationFactory.getAuthenticationApi();  
-authenticationApi.initialize(context, identity-provider-name,  
-        identity-provider-configuration, provider-color,  
-        listener);
+AuthenticationConfiguration.ConfigurationBuilder configurationBuilder = 
+		new AuthenticationConfiguration.ConfigurationBuilder(
+                context,
+                identity-provider-name,
+                identity-provider-configuration,
+                provider-color,
+                listener);
 ```
 
 Then, on the ```AuthenticationServiceInitListener``` attached to the initialize call you will be noticed if the provider was successfully initialized or not.
+
+##### Set the PKCE Configuration
+Sets whether the Authentication flow uses the PKCE(Proof Key for Code Exchange) extension or not.
+
+```
+configurationBuilder.setPKCEConfiguration(new PKCEConfiguration());
+```
+
+Read the ```PKCEConfiguration``` javadoc for more information about its initialization.
+
+##### Build the Authentication Configuration
+
+```
+AuthenticationConfiguration authenticationConfiguration = configurationBuilder.build();
+```
+
+### API initialization
+
+
+```
+AuthenticationApi authenticationApi = SmartCredentialsAuthenticationFactory.getAuthenticationApi();  
+authenticationApi.initialize(authenticationConfiguration);
+```
 
 ### Declare Internet permission and RedirectUriReceiverActivity in AndroidManifest
 ```

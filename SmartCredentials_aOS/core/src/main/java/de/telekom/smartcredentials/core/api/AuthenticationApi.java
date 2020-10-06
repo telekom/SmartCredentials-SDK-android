@@ -18,12 +18,13 @@ package de.telekom.smartcredentials.core.api;
 
 import android.content.Context;
 import android.content.Intent;
+
 import androidx.annotation.Nullable;
 
-import de.telekom.smartcredentials.core.authentication.AuthenticationServiceInitListener;
 import de.telekom.smartcredentials.core.authentication.AuthenticationTokenResponse;
 import de.telekom.smartcredentials.core.authentication.OnFreshTokensRetrievedListener;
 import de.telekom.smartcredentials.core.authentication.TokenRefreshListener;
+import de.telekom.smartcredentials.core.authentication.configuration.AuthenticationConfiguration;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 
 /**
@@ -33,21 +34,15 @@ public interface AuthenticationApi {
 
     /**
      * Initializes all necessary dependencies for specified provider.
-     * This will fetch an OpenID Connect discovery document
-     * from the issuer in the configuration to configure this instance for use
-     * or will use the endpoints specified in the configuration document.
+     * This will fetch an OpenID Connect discovery document from the issuer in the configuration
+     * to configure this instance for use or will use the endpoints specified in the configuration
+     * document.
      *
-     * @param context           The application context
-     * @param customTabBarColor The color of the custom tab's action bar
-     * @param listener          An {@link AuthenticationServiceInitListener} that will be called
-     *                          once the initialization is complete or fail
+     * @param authenticationConfiguration The application configuration file which contains the
+     *                                    parameters used for the authentication flow.
      */
     @SuppressWarnings("unused")
-    SmartCredentialsApiResponse<Boolean> initialize(Context context,
-                    String identityProviderId,
-                    int authConfigFileResId,
-                    int customTabBarColor,
-                    AuthenticationServiceInitListener listener);
+    SmartCredentialsApiResponse<Boolean> initialize(AuthenticationConfiguration authenticationConfiguration);
 
     /**
      * Logs in a user and acquires authorization tokens for that user. Uses the endpoints from
