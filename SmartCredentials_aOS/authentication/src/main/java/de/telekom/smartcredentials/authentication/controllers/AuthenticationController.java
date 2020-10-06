@@ -21,6 +21,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
+
 import androidx.annotation.Nullable;
 import androidx.browser.customtabs.CustomTabsIntent;
 
@@ -39,6 +41,7 @@ import net.openid.appauth.ResponseTypeValues;
 import net.openid.appauth.browser.BrowserSelector;
 
 import java.lang.ref.WeakReference;
+import java.security.SecureRandom;
 import java.util.Collections;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -58,6 +61,8 @@ import de.telekom.smartcredentials.core.authentication.AuthenticationServiceInit
 import de.telekom.smartcredentials.core.authentication.AuthenticationTokenResponse;
 import de.telekom.smartcredentials.core.authentication.OnFreshTokensRetrievedListener;
 import de.telekom.smartcredentials.core.authentication.TokenRefreshListener;
+import de.telekom.smartcredentials.core.authentication.configuration.AuthenticationConfiguration;
+import de.telekom.smartcredentials.core.authentication.configuration.PKCEConfiguration;
 import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsFeatureSet;
 import de.telekom.smartcredentials.core.controllers.CoreController;
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
@@ -92,6 +97,7 @@ public class AuthenticationController implements AuthenticationApi {
     private int mCustomTabColor;
     private ExecutorService mExecutor;
     private CoreController mCoreController;
+    private PKCEConfiguration mPkceConfiguration;
 
     private AuthenticationController(CoreController coreController) {
         mCoreController = coreController;
@@ -149,12 +155,9 @@ public class AuthenticationController implements AuthenticationApi {
      * {@inheritDoc}
      */
     @Override
-    public SmartCredentialsApiResponse<Boolean> initialize(Context context,
-                                                           String identityProviderId,
-                                                           int authConfigFileResId,
-                                                           int customTabBarColor,
-                                                           AuthenticationServiceInitListener listener) {
+    public SmartCredentialsApiResponse<Boolean> initialize(AuthenticationConfiguration configuration) {
         ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "initialize");
+        AuthenticationServiceInitListener listener = configuration.getAuthenticationServiceInitListener();
 
         if (mCoreController.isSecurityCompromised()) {
             mCoreController.handleSecurityCompromised();
@@ -166,20 +169,21 @@ public class AuthenticationController implements AuthenticationApi {
             return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
         }
 
-        if (!browserExists(context)) {
+        if (!browserExists(configuration.getContext())) {
             listener.onFailed(AuthenticationError.NO_INSTALLED_BROWSERS);
             return new SmartCredentialsResponse<>(false);
         }
 
-        mAuthenticationStorageRepository.saveAuthConfigValue(KEY_IDENTITY_PROVIDER_ID, identityProviderId);
-        mAuthenticationStorageRepository.saveAuthConfigValue(KEY_AUTH_CONFIG_FILE_ID, String.valueOf(authConfigFileResId));
+        mAuthenticationStorageRepository.saveAuthConfigValue(KEY_IDENTITY_PROVIDER_ID, configuration.getIdentityProviderId());
+        mAuthenticationStorageRepository.saveAuthConfigValue(KEY_AUTH_CONFIG_FILE_ID, String.valueOf(configuration.getAuthConfigFileResId()));
 
-        mCustomTabColor = customTabBarColor;
+        mCustomTabColor = configuration.getCustomTabBarColor();
         mAuthInitListener = new WeakReference<>(listener);
         if (mExecutor == null || mExecutor.isShutdown()) {
             mExecutor = Executors.newSingleThreadExecutor();
         }
-        mExecutor.submit(() -> doInit(context, identityProviderId, authConfigFileResId));
+        mExecutor.submit(() -> doInit(configuration.getContext(), configuration.getIdentityProviderId(),
+                configuration.getAuthConfigFileResId(), configuration.getPkceConfiguration()));
         return new SmartCredentialsResponse<>(true);
     }
 
@@ -362,10 +366,12 @@ public class AuthenticationController implements AuthenticationApi {
         return new SmartCredentialsResponse<>(true);
     }
 
-    private void doInit(Context context, String identityProviderId, int authConfigFileResId) {
+    private void doInit(Context context, String identityProviderId, int authConfigFileResId,
+                        PKCEConfiguration pkceConfiguration) {
         mAuthStateManager = AuthStateManager.getInstance(context, identityProviderId);
         mConfiguration = AuthClientConfiguration.getInstance(context, authConfigFileResId,
                 identityProviderId);
+        extractPKCEConfig(pkceConfiguration);
         recreateAuthService(context);
 
         if (mConfiguration.hasConfigurationChanges()) {
@@ -410,6 +416,16 @@ public class AuthenticationController implements AuthenticationApi {
                         ResponseTypeValues.CODE,
                         mConfiguration.getRedirectUri())
                         .setScope(mConfiguration.getScope());
+
+        if (mPkceConfiguration.getCodeVerifier() != null) {
+            ApiLoggerResolver.logInfo("Using PKCE Extension.");
+            if (mPkceConfiguration.getCodeChallenge() == null || mPkceConfiguration.getCodeChallengeMethod() == null) {
+                authRequestBuilder.setCodeVerifier(mPkceConfiguration.getCodeVerifier());
+            } else {
+                authRequestBuilder.setCodeVerifier(mPkceConfiguration.getCodeVerifier(),
+                        mPkceConfiguration.getCodeChallenge(), mPkceConfiguration.getCodeChallengeMethod());
+            }
+        }
 
         mAuthRequest.set(authRequestBuilder.build());
         if (mAuthInitListener.get() != null) {
@@ -521,5 +537,25 @@ public class AuthenticationController implements AuthenticationApi {
 
     private boolean browserExists(Context context) {
         return !BrowserSelector.getAllBrowsers(context).isEmpty();
+    }
+
+    private void extractPKCEConfig(PKCEConfiguration pkceConfiguration) {
+        if (pkceConfiguration != null) {
+            if (pkceConfiguration.getCodeVerifier() == null) {
+                mPkceConfiguration = new PKCEConfiguration(generateCodeVerifier());
+            } else {
+                mPkceConfiguration = pkceConfiguration;
+            }
+        } else {
+            mPkceConfiguration = new PKCEConfiguration();
+        }
+    }
+
+    private String generateCodeVerifier() {
+        ApiLoggerResolver.logInfo("Using library generated PKCE code verifier.");
+        SecureRandom sr = new SecureRandom();
+        byte[] code = new byte[32];
+        sr.nextBytes(code);
+        return Base64.encodeToString(code, Base64.NO_WRAP | Base64.NO_PADDING | Base64.URL_SAFE);
     }
 }
