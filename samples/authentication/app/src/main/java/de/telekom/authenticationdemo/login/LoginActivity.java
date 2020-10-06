@@ -12,10 +12,12 @@ import de.telekom.authenticationdemo.IdentityProvider;
 import de.telekom.authenticationdemo.R;
 import de.telekom.authenticationdemo.task.SmartTask;
 import de.telekom.authenticationdemo.tokens.TokensActivity;
+import de.telekom.authenticationdemo.utils.PKCEUtils;
 import de.telekom.smartcredentials.authentication.factory.SmartCredentialsAuthenticationFactory;
 import de.telekom.smartcredentials.core.api.AuthenticationApi;
 import de.telekom.smartcredentials.core.authentication.AuthenticationError;
 import de.telekom.smartcredentials.core.authentication.AuthenticationServiceInitListener;
+import de.telekom.smartcredentials.core.authentication.configuration.AuthenticationConfiguration;
 
 public class LoginActivity extends AppCompatActivity implements AuthenticationServiceInitListener {
 
@@ -24,10 +26,17 @@ public class LoginActivity extends AppCompatActivity implements AuthenticationSe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        PKCEUtils pkceUtils = new PKCEUtils();
+
         AuthenticationApi authenticationApi = SmartCredentialsAuthenticationFactory.getAuthenticationApi();
-        authenticationApi.initialize(this, IdentityProvider.GOOGLE.getName(),
-                IdentityProvider.GOOGLE.getConfigId(), ContextCompat.getColor(this, R.color.colorPrimary),
-                this);
+        authenticationApi.initialize(new AuthenticationConfiguration.ConfigurationBuilder(
+                this,
+                IdentityProvider.GOOGLE.getName(),
+                IdentityProvider.GOOGLE.getConfigId(),
+                ContextCompat.getColor(this, R.color.colorPrimary),
+                this)
+                .setPKCEConfiguration(pkceUtils.generatePKCEConfiguration())
+                .build());
 
         if (authenticationApi.isUserLoggedIn().isSuccessful() && authenticationApi.isUserLoggedIn().getData()) {
             startActivity(new Intent(this, TokensActivity.class));
