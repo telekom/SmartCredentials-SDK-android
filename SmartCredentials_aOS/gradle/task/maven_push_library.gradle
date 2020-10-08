@@ -28,7 +28,7 @@ bintray {
     pkg {
         repo = 'SmartCredentials'
         name = 'android'
-        userOrg = getEnvOrProperty('BINTRAY_SC_USERNAME')
+        userOrg = getEnvOrProperty('BINTRAY_SC_USERORG')
         licenses = ['Apache-2.0']
         version {
             name = rootProject.ext.androidVersionName
