@@ -100,4 +100,5 @@ jobs:
         env:
           BINTRAY_SC_USERNAME: ${{ secrets.BINTRAY_SC_USERNAME }}
           BINTRAY_SC_KEY: ${{ secrets.BINTRAY_SC_KEY }}
+          BINTRAY_SC_USERORG: ${{ secrets.BINTRAY_SC_USERORG }}
         run: cd SmartCredentials_aOS && ./gradlew bintrayUpload
