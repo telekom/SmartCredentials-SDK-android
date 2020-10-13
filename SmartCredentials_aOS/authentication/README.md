@@ -48,20 +48,18 @@ AuthenticationConfiguration.ConfigurationBuilder configurationBuilder =
                 context,
                 identity-provider-name,
                 identity-provider-configuration,
-                provider-color,
-                listener);
+                provider-color);
 ```
 
 Then, on the ```AuthenticationServiceInitListener``` attached to the initialize call you will be noticed if the provider was successfully initialized or not.
 
 ##### Set the PKCE Configuration
-Sets whether the Authentication flow uses the PKCE(Proof Key for Code Exchange) extension or not.
+Sets whether the Authentication flow uses the PKCE(Proof Key for Code Exchange) extension or not. 
+In case of an emtpy ```PKCEConfiguration```, the library will handle the flow by generating the needed parameters.
 
 ```
 configurationBuilder.setPKCEConfiguration(new PKCEConfiguration());
 ```
-
-Read the ```PKCEConfiguration``` javadoc for more information about its initialization.
 
 ##### Build the Authentication Configuration
 
@@ -74,7 +72,7 @@ AuthenticationConfiguration authenticationConfiguration = configurationBuilder.b
 
 ```
 AuthenticationApi authenticationApi = SmartCredentialsAuthenticationFactory.getAuthenticationApi();  
-authenticationApi.initialize(authenticationConfiguration);
+authenticationApi.initialize(authenticationConfiguration, authenticationServiceInitListener);
 ```
 
 ### Declare Internet permission and RedirectUriReceiverActivity in AndroidManifest

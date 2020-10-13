@@ -18,8 +18,6 @@ package de.telekom.smartcredentials.core.authentication.configuration;
 
 import android.content.Context;
 
-import de.telekom.smartcredentials.core.authentication.AuthenticationServiceInitListener;
-
 /**
  * Created by gabriel.blaj@endava.com at 10/6/2020
  */
@@ -28,9 +26,8 @@ public class AuthenticationConfiguration {
     private Context mContext;
     private String mIdentityProviderId;
     private int mAuthConfigFileResId;
-    private PKCEConfiguration mPkceConfiguration;
+    private PkceConfiguration mPkceConfiguration;
     private int mCustomTabBarColor;
-    private AuthenticationServiceInitListener mAuthenticationServiceInitListener;
 
     private AuthenticationConfiguration(ConfigurationBuilder builder) {
         mContext = builder.context;
@@ -38,7 +35,6 @@ public class AuthenticationConfiguration {
         mAuthConfigFileResId = builder.authConfigFileResId;
         mPkceConfiguration = builder.pkceConfiguration;
         mCustomTabBarColor = builder.customTabBarColor;
-        mAuthenticationServiceInitListener = builder.authenticationServiceInitListener;
     }
 
     public Context getContext() {
@@ -53,7 +49,7 @@ public class AuthenticationConfiguration {
         return mAuthConfigFileResId;
     }
 
-    public PKCEConfiguration getPkceConfiguration() {
+    public PkceConfiguration getPkceConfiguration() {
         return mPkceConfiguration;
     }
 
@@ -61,52 +57,43 @@ public class AuthenticationConfiguration {
         return mCustomTabBarColor;
     }
 
-    public AuthenticationServiceInitListener getAuthenticationServiceInitListener() {
-        return mAuthenticationServiceInitListener;
-    }
-
     public static class ConfigurationBuilder {
         private Context context;
         private String identityProviderId;
         private int authConfigFileResId;
-        private PKCEConfiguration pkceConfiguration = null;
+        private PkceConfiguration pkceConfiguration = null;
         private int customTabBarColor;
-        private AuthenticationServiceInitListener authenticationServiceInitListener;
 
         /**
          * Creates a builder for a {@link AuthenticationConfiguration} which sets the mandatory
          * parameters for the authentication flow.
          *
-         * @param context                           The application context.
-         * @param identityProviderId                The identity provider name.
-         * @param authConfigFileResId               The identity provider configuration file id from the resources
-         *                                          raw folder.
-         * @param customTabBarColor                 The color of the custom tab's action bar.
-         * @param authenticationServiceInitListener An {@link AuthenticationServiceInitListener} that will be called
-         *                                          once the initialization is complete or fail.
+         * @param context             The application context.
+         * @param identityProviderId  The identity provider name.
+         * @param authConfigFileResId The identity provider configuration file id from the resources
+         *                            raw folder.
+         * @param customTabBarColor   The color of the custom tab's action bar.
          */
         public ConfigurationBuilder(Context context, String identityProviderId, int authConfigFileResId,
-                                    int customTabBarColor, AuthenticationServiceInitListener authenticationServiceInitListener) {
+                                    int customTabBarColor) {
             this.context = context;
             this.identityProviderId = identityProviderId;
             this.authConfigFileResId = authConfigFileResId;
             this.customTabBarColor = customTabBarColor;
-            this.authenticationServiceInitListener = authenticationServiceInitListener;
         }
 
         /**
          * Sets whether the Authentication flow uses the PKCE(Proof Key for Code Exchange) extension
-         * or not. If the {@link PKCEConfiguration} is provided, then the pixie key is used in order
+         * or not. If the {@link PkceConfiguration} is provided, then the pixie key is used in order
          * to prevent several attacks and perform code authorization flow securely.
          * <p>
          *
          * @param pkceConfiguration represents a set of elements that are used in the Auhorization Code flow.
-         *
          * @return this {@link AuthenticationConfiguration.ConfigurationBuilder} object to allow for
          * chaining of calls to set methods
          */
         @SuppressWarnings("unused")
-        public ConfigurationBuilder setPKCEConfiguration(PKCEConfiguration pkceConfiguration) {
+        public ConfigurationBuilder setPkceConfiguration(PkceConfiguration pkceConfiguration) {
             this.pkceConfiguration = pkceConfiguration;
             return this;
         }

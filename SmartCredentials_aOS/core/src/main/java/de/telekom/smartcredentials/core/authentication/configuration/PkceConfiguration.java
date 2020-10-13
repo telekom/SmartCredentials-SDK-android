@@ -21,20 +21,8 @@ import androidx.annotation.NonNull;
 /**
  * Created by gabriel.blaj@endava.com at 10/5/2020
  */
-public class PKCEConfiguration {
+public class PkceConfiguration {
 
-    /**
-     * PKCE(Proof Key for Code Exchange) is an extension to the Authorization Code flow to prevent
-     * certain attacks and to be able to securely perform the OAuth exchange from public clients.
-     * <p>
-     *
-     * @param mCodeVerifier        represents a cryptographically random string used to correlate
-     *                             the authorization request to the token request
-     * @param mCodeChallenge       is derived from the code verifier sent in the authorization request,
-     *                             to be verified against later.
-     * @param mCodeChallengeMethod is the method that was used to derive the code challenge. The default
-     *                             method is the SHA-256, which is represented by the 'S256' string.
-     */
     private String mCodeVerifier;
     private String mCodeChallenge;
     private String mCodeChallengeMethod;
@@ -42,14 +30,14 @@ public class PKCEConfiguration {
     /**
      * The library will handle the PKCE flow by generating the needed parameters.
      */
-    public PKCEConfiguration() {
+    public PkceConfiguration() {
     }
 
     /**
      * The PKCE flow will use the specified {@param codeVerifier}, and will generate a {@param codeChallenge}
      * based on it using the default SHA-256 method.
      */
-    public PKCEConfiguration(@NonNull String codeVerifier) {
+    public PkceConfiguration(@NonNull String codeVerifier) {
         this.mCodeVerifier = codeVerifier;
     }
 
@@ -57,7 +45,7 @@ public class PKCEConfiguration {
      * The PKCE flow will use the specified parameters.
      */
     @SuppressWarnings("unused")
-    public PKCEConfiguration(@NonNull String codeVerifier, @NonNull String codeChallenge, @NonNull String codeChallengeMethod) {
+    public PkceConfiguration(@NonNull String codeVerifier, @NonNull String codeChallenge, @NonNull String codeChallengeMethod) {
         this.mCodeVerifier = codeVerifier;
         this.mCodeChallenge = codeChallenge;
         this.mCodeChallengeMethod = codeChallengeMethod;

@@ -21,6 +21,7 @@ import android.content.Intent;
 
 import androidx.annotation.Nullable;
 
+import de.telekom.smartcredentials.core.authentication.AuthenticationServiceInitListener;
 import de.telekom.smartcredentials.core.authentication.AuthenticationTokenResponse;
 import de.telekom.smartcredentials.core.authentication.OnFreshTokensRetrievedListener;
 import de.telekom.smartcredentials.core.authentication.TokenRefreshListener;
@@ -38,11 +39,14 @@ public interface AuthenticationApi {
      * to configure this instance for use or will use the endpoints specified in the configuration
      * document.
      *
-     * @param authenticationConfiguration The application configuration file which contains the
-     *                                    parameters used for the authentication flow.
+     * @param authenticationConfiguration       The application configuration file which contains the
+     *                                          parameters used for the authentication flow.
+     * @param authenticationServiceInitListener An {@link AuthenticationServiceInitListener} that will be called
+     *                                          once the initialization is complete or fail.
      */
     @SuppressWarnings("unused")
-    SmartCredentialsApiResponse<Boolean> initialize(AuthenticationConfiguration authenticationConfiguration);
+    SmartCredentialsApiResponse<Boolean> initialize(AuthenticationConfiguration authenticationConfiguration,
+                                                    AuthenticationServiceInitListener authenticationServiceInitListener);
 
     /**
      * Logs in a user and acquires authorization tokens for that user. Uses the endpoints from

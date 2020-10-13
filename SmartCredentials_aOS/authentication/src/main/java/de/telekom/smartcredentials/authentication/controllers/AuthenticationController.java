@@ -62,7 +62,7 @@ import de.telekom.smartcredentials.core.authentication.AuthenticationTokenRespon
 import de.telekom.smartcredentials.core.authentication.OnFreshTokensRetrievedListener;
 import de.telekom.smartcredentials.core.authentication.TokenRefreshListener;
 import de.telekom.smartcredentials.core.authentication.configuration.AuthenticationConfiguration;
-import de.telekom.smartcredentials.core.authentication.configuration.PKCEConfiguration;
+import de.telekom.smartcredentials.core.authentication.configuration.PkceConfiguration;
 import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsFeatureSet;
 import de.telekom.smartcredentials.core.controllers.CoreController;
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
@@ -97,7 +97,7 @@ public class AuthenticationController implements AuthenticationApi {
     private int mCustomTabColor;
     private ExecutorService mExecutor;
     private CoreController mCoreController;
-    private PKCEConfiguration mPkceConfiguration;
+    private PkceConfiguration mPkceConfiguration;
 
     private AuthenticationController(CoreController coreController) {
         mCoreController = coreController;
@@ -155,9 +155,9 @@ public class AuthenticationController implements AuthenticationApi {
      * {@inheritDoc}
      */
     @Override
-    public SmartCredentialsApiResponse<Boolean> initialize(AuthenticationConfiguration configuration) {
+    public SmartCredentialsApiResponse<Boolean> initialize(AuthenticationConfiguration configuration,
+                                                           AuthenticationServiceInitListener listener) {
         ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "initialize");
-        AuthenticationServiceInitListener listener = configuration.getAuthenticationServiceInitListener();
 
         if (mCoreController.isSecurityCompromised()) {
             mCoreController.handleSecurityCompromised();
@@ -367,11 +367,11 @@ public class AuthenticationController implements AuthenticationApi {
     }
 
     private void doInit(Context context, String identityProviderId, int authConfigFileResId,
-                        PKCEConfiguration pkceConfiguration) {
+                        PkceConfiguration pkceConfiguration) {
         mAuthStateManager = AuthStateManager.getInstance(context, identityProviderId);
         mConfiguration = AuthClientConfiguration.getInstance(context, authConfigFileResId,
                 identityProviderId);
-        extractPKCEConfig(pkceConfiguration);
+        extractPkceConfig(pkceConfiguration);
         recreateAuthService(context);
 
         if (mConfiguration.hasConfigurationChanges()) {
@@ -539,15 +539,15 @@ public class AuthenticationController implements AuthenticationApi {
         return !BrowserSelector.getAllBrowsers(context).isEmpty();
     }
 
-    private void extractPKCEConfig(PKCEConfiguration pkceConfiguration) {
+    private void extractPkceConfig(PkceConfiguration pkceConfiguration) {
         if (pkceConfiguration != null) {
             if (pkceConfiguration.getCodeVerifier() == null) {
-                mPkceConfiguration = new PKCEConfiguration(generateCodeVerifier());
+                mPkceConfiguration = new PkceConfiguration(generateCodeVerifier());
             } else {
                 mPkceConfiguration = pkceConfiguration;
             }
         } else {
-            mPkceConfiguration = new PKCEConfiguration();
+            mPkceConfiguration = new PkceConfiguration();
         }
     }
 
