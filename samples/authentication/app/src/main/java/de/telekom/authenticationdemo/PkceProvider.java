@@ -1,4 +1,4 @@
-package de.telekom.authenticationdemo.utils;
+package de.telekom.authenticationdemo;
 
 import android.util.Base64;
 
@@ -10,16 +10,16 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Objects;
 
-import de.telekom.smartcredentials.core.authentication.configuration.PKCEConfiguration;
+import de.telekom.smartcredentials.core.authentication.configuration.PkceConfiguration;
 
 /**
  * Created by gabriel.blaj@endava.com at 10/6/2020
  */
-public class PKCEUtils {
+public class PkceProvider {
 
-    public PKCEConfiguration generatePKCEConfiguration(){
+    public PkceConfiguration generatePkceConfiguration() {
         String verifier = generateCodeVerifier();
-        return new PKCEConfiguration(verifier , generateCodeChallenge(verifier), AuthorizationRequest.CODE_CHALLENGE_METHOD_S256);
+        return new PkceConfiguration(verifier, generateCodeChallenge(verifier), AuthorizationRequest.CODE_CHALLENGE_METHOD_S256);
     }
 
     private String generateCodeVerifier() {
@@ -40,6 +40,6 @@ public class PKCEUtils {
         }
         Objects.requireNonNull(md).update(bytes, 0, bytes.length);
         byte[] digest = md.digest();
-        return Base64.encodeToString(digest,Base64.NO_WRAP | Base64.NO_PADDING | Base64.URL_SAFE);
+        return Base64.encodeToString(digest, Base64.NO_WRAP | Base64.NO_PADDING | Base64.URL_SAFE);
     }
 }
