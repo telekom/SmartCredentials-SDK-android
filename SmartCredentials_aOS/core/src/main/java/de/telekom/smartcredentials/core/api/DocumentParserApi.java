@@ -16,18 +16,19 @@
 
 package de.telekom.smartcredentials.core.api;
 
+import android.content.Context;
+
 import de.telekom.smartcredentials.core.documentparser.configuration.DocumentParserConfiguration;
 import de.telekom.smartcredentials.core.documentparser.model.DocumentType;
-import de.telekom.smartcredentials.core.documentparser.model.SmartCredentialsParsingResult;
 
 /**
  * Created by Alex.Graur@endava.com at 9/10/2020
  */
 public interface DocumentParserApi {
 
+    @SuppressWarnings("unused")
     void initialize(DocumentParserConfiguration configuration);
 
-    void setDocumentType(DocumentType documentType);
-
-    SmartCredentialsParsingResult pollResult();
+    @SuppressWarnings("unused")
+    void startParsingActivity(Context context, DocumentType documentType);
 }
