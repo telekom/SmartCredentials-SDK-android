@@ -16,20 +16,16 @@
 
 package de.telekom.smartcredentials.core.api;
 
-import android.app.Activity;
-
 import de.telekom.smartcredentials.core.documentparser.callbacks.ParsingCompletionCallback;
 import de.telekom.smartcredentials.core.documentparser.configuration.DocumentParserConfiguration;
-import de.telekom.smartcredentials.core.documentparser.model.DocumentType;
 
 /**
  * Created by Alex.Graur@endava.com at 9/10/2020
  */
+@SuppressWarnings("unused")
 public interface DocumentParserApi {
 
-    @SuppressWarnings("unused")
     void initialize(DocumentParserConfiguration configuration);
 
-    @SuppressWarnings("unused")
-    void startParsingActivity(Activity activity, DocumentType documentType, ParsingCompletionCallback callback);
+    void setParsingCompletionListener(ParsingCompletionCallback callback);
 }
