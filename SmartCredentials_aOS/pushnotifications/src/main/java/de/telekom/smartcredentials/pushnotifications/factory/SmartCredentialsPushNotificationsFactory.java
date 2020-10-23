@@ -69,6 +69,7 @@ public class SmartCredentialsPushNotificationsFactory {
             objectGraphCreatorPushNotifications.setTpnsService(configuration.getTpnsApplicationKey(),
                     configuration.getTpnsEnvironment());
         }
+        objectGraphCreatorPushNotifications.setSenderId(configuration.getGcmSenderId());
         sPushNotificationsController = objectGraphCreatorPushNotifications
                 .provideApiControllerPushNotifications(coreController);
         sRxPushNotificationsController = objectGraphCreatorPushNotifications

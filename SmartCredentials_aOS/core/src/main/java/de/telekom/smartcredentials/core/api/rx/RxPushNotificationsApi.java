@@ -77,6 +77,14 @@ public interface RxPushNotificationsApi {
     Single<String> retrieveDeviceId();
 
     /**
+     * Method used to retrieve the firebase configuration sender Id.
+     *
+     * @return {@link Single} containing a {@link String} if the response was successful
+     */
+    @SuppressWarnings("unused")
+    Single<String> retrieveSenderId();
+
+    /**
      * Method used to observe for refreshed tokens.
      *
      * @return {@link Observable} that emits {@link String} the refreshed tokens

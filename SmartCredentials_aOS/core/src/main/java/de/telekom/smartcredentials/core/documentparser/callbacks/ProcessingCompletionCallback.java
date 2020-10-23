@@ -16,10 +16,12 @@
 
 package de.telekom.smartcredentials.core.documentparser.callbacks;
 
-/**
- * Created by gabriel.blaj@endava.com at 10/21/2020
- */
-public interface ParsingCompletionCallback {
+import de.telekom.smartcredentials.core.documentparser.model.ParsingResult;
 
-    void onParsingComplete();
+/**
+ * Created by gabriel.blaj@endava.com at 10/23/2020
+ */
+public interface ProcessingCompletionCallback {
+
+    void onProcessingComplete(ParsingResult result);
 }

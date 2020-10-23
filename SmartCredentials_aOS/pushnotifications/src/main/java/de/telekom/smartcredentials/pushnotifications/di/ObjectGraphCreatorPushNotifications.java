@@ -42,6 +42,7 @@ public class ObjectGraphCreatorPushNotifications {
     private static ObjectGraphCreatorPushNotifications sInstance;
     private PushNotificationsController mController;
     private StorageApi mStorageApi;
+    private String mSenderId;
 
     private ObjectGraphCreatorPushNotifications() {
         // required empty constructor
@@ -95,6 +96,14 @@ public class ObjectGraphCreatorPushNotifications {
                         KEY_TPNS_PRODUCTION_STATE, true);
             }
         }
+    }
+
+    public void setSenderId(String senderId){
+        mSenderId = senderId;
+    }
+
+    public String getSenderId() {
+        return mSenderId;
     }
 
     private StorageApi getStorageApi() {

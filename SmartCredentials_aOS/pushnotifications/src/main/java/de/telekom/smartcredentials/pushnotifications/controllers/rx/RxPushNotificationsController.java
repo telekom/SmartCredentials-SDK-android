@@ -94,6 +94,14 @@ public class RxPushNotificationsController implements RxPushNotificationsApi {
      * {@inheritDoc}
      */
     @Override
+    public Single<String> retrieveSenderId() {
+        return Single.just(Objects.requireNonNull(controller.retrieveSenderId().getData()));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Observable<String> observeTokenRefreshed() {
         return Observable.create(new TokenRefreshedObservable(controller)).share();
     }

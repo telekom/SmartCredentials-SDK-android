@@ -21,11 +21,11 @@ import java.util.Map;
 /**
  * Created by gabriel.blaj@endava.com at 10/19/2020
  */
-public abstract class SmartCredentialsParsingResult {
+public interface ParsingResult {
 
-    public abstract String getCode();
+    String getCode();
 
-    public abstract Map<String, String> getDescription();
+    Map<String, String> getDescription();
 
-    public abstract String getMessage();
+    String getMessage();
 }

@@ -96,6 +96,16 @@ public interface PushNotificationsApi {
     SmartCredentialsResponse<String> retrieveDeviceId();
 
     /**
+     * Method used to retrieve the firebase configuration sender Id.
+     *
+     * @return {@link SmartCredentialsApiResponse} containing a {@link String} if response was successful
+     * or {@link RootedThrowable} if the device is rooted
+     * or {@link FeatureNotSupportedThrowable} if the retrieve device id method is not supported
+     * on device (get reason by calling getError().getMessage() on response object)
+     */
+    SmartCredentialsResponse<String> retrieveSenderId();
+
+    /**
      * Method used to listen for refreshed tokens.
      *
      * @param callback {@link PushNotificationsTokenCallback} for retrieving the refreshed token
