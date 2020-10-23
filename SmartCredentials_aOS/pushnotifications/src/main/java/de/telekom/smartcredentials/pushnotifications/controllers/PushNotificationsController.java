@@ -152,6 +152,24 @@ public class PushNotificationsController implements PushNotificationsApi {
      * {@inheritDoc}
      */
     @Override
+    public SmartCredentialsResponse<String> retrieveSenderId() {
+        if (mCoreController.isSecurityCompromised()) {
+            mCoreController.handleSecurityCompromised();
+            return new SmartCredentialsResponse<>(new RootedThrowable());
+        }
+
+        if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.RETRIEVE_SENDER_ID)) {
+            String errorMessage = SmartCredentialsFeatureSet.RETRIEVE_SENDER_ID.getNotSupportedDesc();
+            return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
+        }
+
+        return mControllerFactory.getController().retrieveSenderId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public SmartCredentialsResponse<Void> setTokenRefreshedCallback(PushNotificationsTokenCallback callback) {
         if (mCoreController.isSecurityCompromised()) {
             mCoreController.handleSecurityCompromised();

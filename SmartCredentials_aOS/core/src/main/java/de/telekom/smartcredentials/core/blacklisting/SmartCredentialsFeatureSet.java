@@ -63,6 +63,8 @@ public enum SmartCredentialsFeatureSet {
             "The Retrieve Token feature is not supported on this device model."),
     RETRIEVE_DEVICE_ID("Retrieve Device Id", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
             "The Retrieve Device Id feature is not supported on this device model."),
+    RETRIEVE_SENDER_ID("Retrieve Sender Id", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
+            "The Retrieve Sender Id feature is not supported on this device model."),
     SEND_MESSAGE("Send Message", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
             "The Send Message feature is not supported on this device model."),
     SET_MESSAGE_RECEIVED_CALLBACK("Set Message Received Callback", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,

@@ -106,6 +106,11 @@ public abstract class BaseController implements PushNotificationsApi {
     }
 
     @Override
+    public SmartCredentialsResponse<String> retrieveSenderId() {
+        return new SmartCredentialsResponse<>(ObjectGraphCreatorPushNotifications.getInstance().getSenderId());
+    }
+
+    @Override
     public SmartCredentialsResponse<Void> setTokenRefreshedCallback(PushNotificationsTokenCallback callback) {
         ObjectGraphCreatorPushNotifications.getInstance().providePushNotificationsHandler()
                 .addTokenCallback(callback);
