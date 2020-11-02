@@ -38,4 +38,6 @@ public interface DocumentParserApi {
     void setOtherDocumentsListener(OtherDocumentsCallback callback);
 
     void pollData(Context context);
+
+    void resubmitData(Context context);
 }
