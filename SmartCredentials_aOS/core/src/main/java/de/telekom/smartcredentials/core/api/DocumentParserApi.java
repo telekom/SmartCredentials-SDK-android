@@ -39,5 +39,5 @@ public interface DocumentParserApi {
 
     void pollData(Context context);
 
-    void resubmitData(Context context);
+    void submitData(Context context);
 }
