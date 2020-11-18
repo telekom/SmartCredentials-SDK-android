@@ -14,23 +14,12 @@
  * limitations under the License.
  */
 
-package de.telekom.smartcredentials.core.documentparser.model;
+package de.telekom.smartcredentials.core.documentparser.exception;
 
-/**
- * Created by gabriel.blaj@endava.com at 10/19/2020
- */
-public enum Brand {
-    ECARE("ecare"),
-    CONGSTAR("congstar"),
-    MULTIBRAND("multibrand");
+@SuppressWarnings("unused")
+public class DocumentParsersInitializationException extends RuntimeException {
 
-    private String mName;
-
-    Brand(String name) {
-        this.mName = name;
-    }
-
-    public String getName() {
-        return mName;
+    public DocumentParsersInitializationException(DocumentParserError error) {
+        super(error.getDesc());
     }
 }
