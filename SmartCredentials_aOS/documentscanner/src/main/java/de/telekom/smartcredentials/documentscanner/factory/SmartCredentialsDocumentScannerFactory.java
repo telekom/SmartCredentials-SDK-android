@@ -56,9 +56,8 @@ public class SmartCredentialsDocumentScannerFactory {
         return sDocumentScannerController;
     }
 
-    public static void setLicense(@NonNull final String licenceKey, @NonNull final String licenceName,
-                                  @NonNull final Context context) {
-        DocumentScannerLicenseManager.setLicense(licenceKey, licenceName, context);
+    public static void setLicense(@NonNull final String licenceKey, @NonNull final Context context) {
+        DocumentScannerLicenseManager.setLicense(licenceKey, context);
     }
 
     @NonNull

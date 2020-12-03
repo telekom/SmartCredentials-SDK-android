@@ -28,10 +28,10 @@ import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
  */
 public class DocumentScannerLicenseManager {
 
-    public static void setLicense(String licenceKey, String licenceName, Context context) {
+    public static void setLicense(String licenceKey, Context context) {
         MicroblinkSDK.setShowTimeLimitedLicenseWarning(false);
         try {
-            MicroblinkSDK.setLicenseKey(licenceKey, licenceName, context);
+            MicroblinkSDK.setLicenseKey(licenceKey, context);
         } catch (InvalidLicenceKeyException exception) {
             ApiLoggerResolver.logError("LicenseManager", exception.getMessage());
         }
