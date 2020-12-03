@@ -27,9 +27,25 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "pushnotifications_${archivesBaseName}_${variant.name}_${defaultConfig.versionName}.aar"
+        }
+    }
+
+    signingConfigs {
+        productFlavors.all  {
+            storeFile file("keystore.jks")
+            storePassword "scpushnotificationsdemo"
+            keyAlias "pushnotificationsdemo"
+            keyPassword "scpushnotificationsdemo"
+        }
     }
 }
 
