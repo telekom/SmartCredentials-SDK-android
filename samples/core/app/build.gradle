@@ -23,7 +23,7 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "core_${archivesBaseName}_${variant.name}_${defaultConfig.versionName}.aar"
+            outputFileName = "core_${archivesBaseName}_${variant.name}_${defaultConfig.versionName}.apk"
         }
     }
 
