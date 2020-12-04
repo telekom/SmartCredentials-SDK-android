@@ -43,9 +43,8 @@ SmartCredentialsDocumentScannerFactory.setLicense(licenceKey, licenceName, conte
 ScannerRecognizer scannerRecognizer = ScannerRecognizer.ID_COMBINED_RECOGNIZER;
 ```
 
-Recognizers available in the document scanner module: ```ID_SIMPLE_RECOGNIZER```, ```DOCUMENT_FACE_RECOGNIZER```, 
-```ID_BARCODE_RECOGNIZER```, ```MRTD_COMBINED_RECOGNIZER```, ```MRTD_SIMPLE_RECOGNIZER```, ```USDL_COMBINED_RECOGNIZER```, 
-```USDL_SIMPLE_RECOGNIZER```, ```VISA_RECOGNIZER``` and ```ID_COMBINED_RECOGNIZER```.
+Recognizers available in the document scanner module: ```ID_SIMPLE_RECOGNIZER```, ```ID_BARCODE_RECOGNIZER```,
+ ```USDL_COMBINED_RECOGNIZER``` and ```ID_COMBINED_RECOGNIZER```.
 
 **Step 2:** Implement the document scanner configuration
 
@@ -104,27 +103,12 @@ switch (recognizerType) {
     case ID_SIMPLE_RECOGNIZER:
 		BlinkIdRecognizer.Result idSimpleRecognizerResultData = ((IdSimpleRecognizerResult) result).getResultData();
 		break;
-	case DOCUMENT_FACE_RECOGNIZER:
-	    DocumentFaceRecognizer.Result documentFaceResultData = ((DocumentFaceRecognizerResult) result).getResultData();
-	    break;
 	case ID_BARCODE_RECOGNIZER:
 	    IdBarcodeRecognizer.Result idBarcodeResultData = ((IdBarcodeRecognizerResult) result).getResultData();
-		break;
-	case MRTD_COMBINED_RECOGNIZER:	
-		MrtdCombinedRecognizer.Result mrtdCombinedResultData = ((MrtdCombinedRecognizerResult) result).getResultData();
-		break;
-    case MRTD_SIMPLE_RECOGNIZER:	
-		MrtdRecognizer.Result mrtdSimpleResultData = ((MrtdSimpleRecognizerResult) result).getResultData(); 
 		break;
 	case USDL_COMBINED_RECOGNIZER:	
 		UsdlCombinedRecognizer.Result usdlCombinedResultData = ((UsdlCombinedRecognizerResult) result).getResultData();
 		break;
-	case USDL_SIMPLE_RECOGNIZER:	
-	    UsdlRecognizer.Result usdlSimpleResultData = ((UsdlSimpleRecognizerResult) result).getResultData();
-		break;
-	case VISA_RECOGNIZER:	
-	    VisaRecognizer.Result visaResultData = ((VisaRecognizerResult) result).getResultData();
-	    break;
 	default:
 		// default implementation
 }

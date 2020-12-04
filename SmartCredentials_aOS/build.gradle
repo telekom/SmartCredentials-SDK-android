@@ -53,7 +53,7 @@ allprojects {
 
         retrofitVersion = "2.9.0"
         okHttpVersion = "4.7.2"
-        blinkIDVersion = "5.5.0"
+        blinkIDVersion = "5.8.0"
         rxJavaVersion = "2.1.1"
 
         junitVersion = "4.13"

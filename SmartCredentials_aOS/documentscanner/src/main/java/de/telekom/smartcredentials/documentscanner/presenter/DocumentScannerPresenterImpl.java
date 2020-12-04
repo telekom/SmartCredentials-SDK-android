@@ -186,6 +186,12 @@ public class DocumentScannerPresenterImpl implements DocumentScannerPresenter {
                 mPluginCallback.onScanned(documentResult);
             }
         }
+
+        @Override
+        public void onUnrecoverableError(@NonNull Throwable throwable) {
+            ApiLoggerResolver.logError(TAG, throwable.getMessage());
+            mPluginCallback.onScannedFailed();
+        }
     };
 
     final CameraEventsListener mCameraEventsListener = new CameraEventsListener() {
