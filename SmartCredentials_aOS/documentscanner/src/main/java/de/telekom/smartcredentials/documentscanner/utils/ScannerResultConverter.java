@@ -35,16 +35,10 @@ import com.microblink.entities.recognizers.blinkid.usdl.UsdlCombinedRecognizer;
 import com.microblink.entities.recognizers.blinkid.visa.VisaRecognizer;
 
 import de.telekom.smartcredentials.core.model.DocumentScannerResult;
-import de.telekom.smartcredentials.documentscanner.model.results.DocumentFaceRecognizerResult;
 import de.telekom.smartcredentials.documentscanner.model.results.IdBarcodeRecognizerResult;
 import de.telekom.smartcredentials.documentscanner.model.results.IdCombinedRecognizerResult;
 import de.telekom.smartcredentials.documentscanner.model.results.IdSimpleRecognizerResult;
-import de.telekom.smartcredentials.documentscanner.model.results.MrtdCombinedRecognizerResult;
-import de.telekom.smartcredentials.documentscanner.model.results.MrtdSimpleRecognizerResult;
-import de.telekom.smartcredentials.documentscanner.model.results.PassportRecognizerResult;
 import de.telekom.smartcredentials.documentscanner.model.results.UsdlCombinedRecognizerResult;
-import de.telekom.smartcredentials.documentscanner.model.results.UsdlSimpleRecognizerResult;
-import de.telekom.smartcredentials.documentscanner.model.results.VisaRecognizerResult;
 
 
 public class ScannerResultConverter {
@@ -59,22 +53,10 @@ public class ScannerResultConverter {
             documentScannerResult = parseIdCombinedResult((BlinkIdCombinedRecognizer.Result) result);
         } else if (result instanceof BlinkIdRecognizer.Result) {
             documentScannerResult = parseIdSimpleResult((BlinkIdRecognizer.Result) result);
-        } else if (result instanceof DocumentFaceRecognizer.Result) {
-            documentScannerResult = parseDocumentFaceResult((DocumentFaceRecognizer.Result) result);
         } else if (result instanceof IdBarcodeRecognizer.Result) {
             documentScannerResult = parseIdBarcodeResult((IdBarcodeRecognizer.Result) result);
-        } else if (result instanceof MrtdCombinedRecognizer.Result) {
-            documentScannerResult = parseMrtdCombinedResult((MrtdCombinedRecognizer.Result) result);
-        } else if (result instanceof MrtdRecognizer.Result) {
-            documentScannerResult = parseMrtdSimpleResult((MrtdRecognizer.Result) result);
-        } else if (result instanceof PassportRecognizer.Result) {
-            documentScannerResult = parsePassportResult((PassportRecognizer.Result) result);
         } else if (result instanceof UsdlCombinedRecognizer.Result) {
             documentScannerResult = parseUsdlCombinedResult((UsdlCombinedRecognizer.Result) result);
-        } else if (result instanceof UsdlRecognizer.Result) {
-            documentScannerResult = parseUsdlSimpleResult((UsdlRecognizer.Result) result);
-        } else if (result instanceof VisaRecognizer.Result) {
-            documentScannerResult = parseVisaResult((VisaRecognizer.Result) result);
         }
         return documentScannerResult;
     }
@@ -89,28 +71,8 @@ public class ScannerResultConverter {
                 .setResult(result);
     }
 
-    private static DocumentScannerResult parseDocumentFaceResult(DocumentFaceRecognizer.Result result) {
-        return new DocumentFaceRecognizerResult(result.getResultState())
-                .setResult(result);
-    }
-
     private static DocumentScannerResult parseIdBarcodeResult(IdBarcodeRecognizer.Result result) {
         return new IdBarcodeRecognizerResult(result.getResultState())
-                .setResult(result);
-    }
-
-    private static DocumentScannerResult parseMrtdCombinedResult(MrtdCombinedRecognizer.Result result) {
-        return new MrtdCombinedRecognizerResult(result.getResultState())
-                .setResult(result);
-    }
-
-    private static DocumentScannerResult parseMrtdSimpleResult(MrtdRecognizer.Result result) {
-        return new MrtdSimpleRecognizerResult(result.getResultState())
-                .setResult(result);
-    }
-
-    private static DocumentScannerResult parsePassportResult(PassportRecognizer.Result result) {
-        return new PassportRecognizerResult(result.getResultState())
                 .setResult(result);
     }
 
@@ -119,13 +81,4 @@ public class ScannerResultConverter {
                 .setResult(result);
     }
 
-    private static DocumentScannerResult parseUsdlSimpleResult(UsdlRecognizer.Result result) {
-        return new UsdlSimpleRecognizerResult(result.getResultState())
-                .setResult(result);
-    }
-
-    private static DocumentScannerResult parseVisaResult(VisaRecognizer.Result result) {
-        return new VisaRecognizerResult(result.getResultState())
-                .setResult(result);
-    }
 }

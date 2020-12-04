@@ -19,7 +19,7 @@ package de.telekom.smartcredentials.documentscanner.utils;
 import android.content.Context;
 
 import com.microblink.MicroblinkSDK;
-import com.microblink.recognition.InvalidLicenceKeyException;
+import com.microblink.licence.exception.InvalidLicenceKeyException;
 
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
 

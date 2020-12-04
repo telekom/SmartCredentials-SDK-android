@@ -54,13 +54,7 @@ public enum ScannerRecognizer {
             return new BlinkIdRecognizer();
         }
     },
-    DOCUMENT_FACE_RECOGNIZER() {
-        @NonNull
-        @Override
-        public Recognizer createRecognizer() {
-            return new DocumentFaceRecognizer();
-        }
-    },
+    @SuppressWarnings("unused")
     ID_BARCODE_RECOGNIZER() {
         @NonNull
         @Override
@@ -68,46 +62,12 @@ public enum ScannerRecognizer {
             return new IdBarcodeRecognizer();
         }
     },
-    MRTD_COMBINED_RECOGNIZER() {
-        @NonNull
-        @Override
-        public Recognizer createRecognizer() {
-            return new MrtdCombinedRecognizer();
-        }
-    },
-    MRTD_SIMPLE_RECOGNIZER() {
-        @NonNull
-        @Override
-        public Recognizer createRecognizer() {
-            return new MrtdRecognizer();
-        }
-    },
-    PASSPORT_RECOGNIZER() {
-        @NonNull
-        @Override
-        public Recognizer createRecognizer() {
-            return new PassportRecognizer();
-        }
-    },
+    @SuppressWarnings("unused")
     USDL_COMBINED_RECOGNIZER() {
         @NonNull
         @Override
         public Recognizer createRecognizer() {
             return new UsdlCombinedRecognizer();
-        }
-    },
-    USDL_SIMPLE_RECOGNIZER() {
-        @NonNull
-        @Override
-        public Recognizer createRecognizer() {
-            return new UsdlRecognizer();
-        }
-    },
-    VISA_RECOGNIZER() {
-        @NonNull
-        @Override
-        public Recognizer createRecognizer() {
-            return new VisaRecognizer();
         }
     };
 
