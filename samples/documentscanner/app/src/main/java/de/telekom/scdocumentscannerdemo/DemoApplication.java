@@ -32,7 +32,7 @@ public class DemoApplication extends Application {
         SmartCredentialsCoreFactory.initialize(configuration);
         CoreApi coreApi = SmartCredentialsCoreFactory.getSmartCredentialsCoreApi();
         SmartCredentialsDocumentScannerFactory.initSmartCredentialsDocumentScannerModule(coreApi);
-        SmartCredentialsDocumentScannerFactory.setLicense(BuildConfig.MICROBLINK_LICENCE_KEY, BuildConfig.MICROBLINK_LICENCE_NAME, this);
+        SmartCredentialsDocumentScannerFactory.setLicense(BuildConfig.MICROBLINK_LICENCE_KEY, this);
     }
 
 }
