@@ -52,12 +52,16 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
-    implementation("de.telekom.smartcredentials:core:6.2.1L")
-    implementation('de.telekom.smartcredentials:documentscanner:6.2.1L@aar'){
+    implementation("de.telekom.smartcredentials:core:6.2.1")
+    implementation("de.telekom.smartcredentials:storage:6.2.1")
+    implementation("de.telekom.smartcredentials:security:6.2.1")
+    implementation('de.telekom.smartcredentials:documentscanner:6.2.1@aar'){
         transitive = true
     }
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
+
+    implementation 'com.facebook.stetho:stetho:1.5.1'
 
     testImplementation 'junit:junit:4.13'
 

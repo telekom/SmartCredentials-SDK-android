@@ -10,28 +10,23 @@ import androidx.cardview.widget.CardView;
 
 import de.telekom.scdocumentscannerdemo.BaseUpActivity;
 import de.telekom.scdocumentscannerdemo.R;
+import de.telekom.scdocumentscannerdemo.repository.LocalRepository;
+import de.telekom.scdocumentscannerdemo.repository.Repository;
+import de.telekom.smartcredentials.storage.factory.SmartCredentialsStorageFactory;
 
 /**
  * Created by gabriel.blaj@endava.com at 9/16/2020
  */
 public class ResultActivity extends BaseUpActivity {
 
-    public final static String EXTRA_RESULT_BUNDLE = "extra:result_bundle";
-    public final static String EXTRA_RESULT_IMAGE = "extra:result_image";
-    public final static String EXTRA_RESULT_NAME = "extra:result_name";
-    public final static String EXTRA_RESULT_MRZ = "extra:result_mrz";
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
-
-        Bundle extraBundle = getIntent().getBundleExtra(EXTRA_RESULT_BUNDLE);
-        if (extraBundle != null) {
-            setImage(extraBundle.getByteArray(EXTRA_RESULT_IMAGE));
-            setName(extraBundle.getString(EXTRA_RESULT_NAME));
-            setMrz(extraBundle.getString(EXTRA_RESULT_MRZ));
-        }
+        Repository repository = new LocalRepository(SmartCredentialsStorageFactory.getStorageApi());
+        setImage(repository.retrieveCapture(1), repository.retrieveCapture(2));
+        setName(repository.retrieveName());
+        setMrz(repository.retrieveMrz());
     }
 
     private void setMrz(String mrz) {
@@ -58,12 +53,18 @@ public class ResultActivity extends BaseUpActivity {
         }
     }
 
-    private void setImage(byte[] documentImage) {
-        ImageView resultImage = findViewById(R.id.result_images);
+    private void setImage(byte[] documentFrontImage, byte[] documentBackImage) {
+        ImageView resultFrontImage = findViewById(R.id.result_front_images);
+        ImageView resultBackImage = findViewById(R.id.result_back_images);
         TextView imageText = findViewById(R.id.image_text_view);
         CardView cardView = findViewById(R.id.image_layout);
-        if (documentImage != null) {
-            resultImage.setImageBitmap(ImageUtils.transformByteArrayToBitmap(documentImage));
+        if (documentFrontImage != null && documentFrontImage.length != 0) {
+            resultFrontImage.setImageBitmap(ImageUtils.transformByteArrayToBitmap(documentFrontImage));
+            if (documentBackImage != null && documentBackImage.length != 0) {
+                resultBackImage.setImageBitmap(ImageUtils.transformByteArrayToBitmap(documentBackImage));
+            } else {
+                resultBackImage.setVisibility(View.GONE);
+            }
         } else {
             imageText.setVisibility(View.GONE);
             cardView.setVisibility(View.GONE);

@@ -1,7 +1,5 @@
 package de.telekom.scdocumentscannerdemo.recognizer;
 
-import android.os.Bundle;
-
 import de.telekom.smartcredentials.core.model.DocumentScannerResult;
 import de.telekom.smartcredentials.documentscanner.model.ScannerRecognizer;
 
@@ -11,6 +9,8 @@ import de.telekom.smartcredentials.documentscanner.model.ScannerRecognizer;
 public interface RecognizerData {
 
     void setRecognizer(RecognizerType recognizerType);
+
     ScannerRecognizer getRecognizer();
-    Bundle getExtrasBundle(DocumentScannerResult result);
+
+    void saveScanningResult(DocumentScannerResult result);
 }

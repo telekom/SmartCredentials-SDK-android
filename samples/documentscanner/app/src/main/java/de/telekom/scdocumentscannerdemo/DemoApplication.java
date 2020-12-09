@@ -2,11 +2,16 @@ package de.telekom.scdocumentscannerdemo;
 
 import android.app.Application;
 
+import com.facebook.stetho.Stetho;
+
 import de.telekom.smartcredentials.core.api.CoreApi;
+import de.telekom.smartcredentials.core.api.SecurityApi;
 import de.telekom.smartcredentials.core.configurations.SmartCredentialsConfiguration;
 import de.telekom.smartcredentials.core.factory.SmartCredentialsCoreFactory;
 import de.telekom.smartcredentials.core.rootdetector.RootDetectionOption;
 import de.telekom.smartcredentials.documentscanner.factory.SmartCredentialsDocumentScannerFactory;
+import de.telekom.smartcredentials.security.factory.SmartCredentialsSecurityFactory;
+import de.telekom.smartcredentials.storage.factory.SmartCredentialsStorageFactory;
 import timber.log.Timber;
 
 /**
@@ -20,6 +25,7 @@ public class DemoApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Timber.plant(new Timber.DebugTree());
+        Stetho.initializeWithDefaults(this);
         initSmartCredentialsModules();
     }
 
@@ -31,6 +37,8 @@ public class DemoApplication extends Application {
                 .build();
         SmartCredentialsCoreFactory.initialize(configuration);
         CoreApi coreApi = SmartCredentialsCoreFactory.getSmartCredentialsCoreApi();
+        SecurityApi securityApi = SmartCredentialsSecurityFactory.initSmartCredentialsSecurityModule(this, coreApi);
+        SmartCredentialsStorageFactory.initSmartCredentialsStorageModule(this, coreApi, securityApi);
         SmartCredentialsDocumentScannerFactory.initSmartCredentialsDocumentScannerModule(coreApi);
         SmartCredentialsDocumentScannerFactory.setLicense(BuildConfig.MICROBLINK_LICENCE_KEY, this);
     }
