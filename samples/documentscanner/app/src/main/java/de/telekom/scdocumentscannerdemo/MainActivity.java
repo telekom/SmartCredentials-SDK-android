@@ -152,8 +152,8 @@ public class MainActivity extends AppCompatActivity {
         public void onDetected(DocumentScannerResult result) {
             Timber.tag(DemoApplication.TAG).d("DocumentScannerCallback:onDetected");
             mDocumentScannerView.pauseScanning();
+            recognizerData.saveScanningResult(result);
             Intent intent = new Intent(MainActivity.this, ResultActivity.class);
-            intent.putExtra(ResultActivity.EXTRA_RESULT_BUNDLE, recognizerData.getExtrasBundle(result));
             startActivity(intent);
         }
 
