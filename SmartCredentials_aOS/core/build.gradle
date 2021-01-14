@@ -15,14 +15,12 @@
  */
 
 apply plugin: 'com.android.library'
-
-apply from: "../gradle/task/quality.gradle"
-apply from: "../gradle/task/code_coverage.gradle"
 apply from: "../gradle/task/maven_push_library.gradle"
 
 android {
 
     compileSdkVersion rootProject.ext.androidCompileSdkVersion
+    ndkVersion rootProject.ext.androidNdkVersion
 
     defaultConfig {
         minSdkVersion rootProject.ext.androidMinSdkVersion
@@ -30,7 +28,7 @@ android {
         versionCode rootProject.ext.androidVersionCode
         versionName rootProject.ext.androidVersionName
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -49,11 +47,8 @@ android {
     }
 
     libraryVariants.all { variant ->
-        if (variant.buildType.name == "debug") {
-            def aptOutputDir = new File(buildDir, "generated/source/apt/${variant.unitTestVariant.dirName}")
-            variant.unitTestVariant.addJavaSourceFoldersToModel(aptOutputDir)
-        } else if (variant.buildType.name.toLowerCase().contains("release")) {
-            artifactoryPublish.finalizedBy(incrementSdkVersion)
+        variant.outputs.all {
+            outputFileName = "${archivesBaseName}-${variant.name}-${defaultConfig.versionName}.aar"
         }
     }
 
@@ -69,8 +64,10 @@ android {
 
 dependencies {
 
-    implementation "com.android.support:appcompat-v7:${androidSupportLibVersion}"
-
+    implementation "androidx.annotation:annotation:${androidXAnnotation}"
+    implementation "androidx.fragment:fragment:${androidXFragment}"
+    implementation "io.reactivex.rxjava2:rxandroid:${rxJavaVersion}"
+    
     testImplementation "org.hamcrest:hamcrest-library:${hamcrestVersion}"
     testImplementation "junit:junit:${junitVersion}"
     testImplementation "org.mockito:mockito-core:${mockitoVersion}"
@@ -78,8 +75,8 @@ dependencies {
     testImplementation "org.json:json:${jsonVersion}"
     testImplementation "org.powermock:powermock-api-mockito2:${powermockVersion}"
     testImplementation "org.powermock:powermock-module-junit4:${powermockVersion}"
-    testImplementation "android.arch.core:core-testing:${architectureCoreTestingVersion}"
+    testImplementation "androidx.arch.core:core-testing:2.1.0"
 
-    androidTestImplementation "com.android.support.test.espresso:espresso-core:${espressoLibVersion}"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.3.0"
 
 }

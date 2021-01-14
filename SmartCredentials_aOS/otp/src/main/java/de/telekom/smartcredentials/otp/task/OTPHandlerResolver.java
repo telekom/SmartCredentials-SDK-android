@@ -23,10 +23,11 @@ import de.telekom.smartcredentials.core.model.item.ItemDomainModel;
 import de.telekom.smartcredentials.core.model.otp.OTPType;
 import de.telekom.smartcredentials.core.otp.OTPHandlerCallback;
 import de.telekom.smartcredentials.core.otp.OTPHandlerFailed;
+import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
+import de.telekom.smartcredentials.core.storage.TokenRequest;
 import de.telekom.smartcredentials.otp.otp.OTPFactory;
 import de.telekom.smartcredentials.otp.otp.OTPHandler;
 import de.telekom.smartcredentials.otp.otp.OTPUpdateCallback;
-import de.telekom.smartcredentials.core.storage.TokenRequest;
 
 public class OTPHandlerResolver {
 
@@ -39,27 +40,27 @@ public class OTPHandlerResolver {
     @SuppressWarnings("unchecked")
     public void resolveHandler(SecurityApi securityApi, StorageApi storageApi,
                                OTPHandlerCallback otpHandlerCallback, ItemDomainModel itemDomainModel) {
-        TokenRequest tokenRequest;
-        try {
-            tokenRequest = storageApi.retrieveTokenRequest(itemDomainModel).getData();
-        } catch (EncryptionException e) {
-            otpHandlerCallback.onOTPHandlerInitializationFailed(OTPHandlerFailed.OTP_ITEM_DECRYPTION_FAILED);
-            return;
-        }
-        if (tokenRequest.getEncryptedModel() != null) {
-            try {
-                OTPHandler otpHandler = (OTPHandler) getOTPHandler(tokenRequest);
-                if (otpHandler != null) {
-                    otpHandler.init(securityApi, tokenRequest, mOtpUpdateCallback);
-                    otpHandlerCallback.onOTPHandlerReady(otpHandler);
-                } else {
-                    otpHandlerCallback.onOTPHandlerInitializationFailed(OTPHandlerFailed.OTP_HANDLER_NOT_DEFINED);
+        SmartCredentialsApiResponse<TokenRequest> response = storageApi.retrieveTokenRequest(itemDomainModel);
+
+        if (response.isSuccessful()) {
+            TokenRequest tokenRequest = response.getData();
+            if (tokenRequest.getEncryptedModel() != null) {
+                try {
+                    OTPHandler otpHandler = (OTPHandler) getOTPHandler(tokenRequest);
+                    if (otpHandler != null) {
+                        otpHandler.init(securityApi, tokenRequest, mOtpUpdateCallback);
+                        otpHandlerCallback.onOTPHandlerReady(otpHandler);
+                    } else {
+                        otpHandlerCallback.onOTPHandlerInitializationFailed(OTPHandlerFailed.OTP_HANDLER_NOT_DEFINED);
+                    }
+                } catch (EncryptionException e) {
+                    otpHandlerCallback.onOTPHandlerInitializationFailed(OTPHandlerFailed.OTP_ITEM_DECRYPTION_FAILED);
                 }
-            } catch (EncryptionException e) {
-                otpHandlerCallback.onOTPHandlerInitializationFailed(OTPHandlerFailed.OTP_ITEM_DECRYPTION_FAILED);
+            } else {
+                otpHandlerCallback.onOTPHandlerInitializationFailed(OTPHandlerFailed.OTP_ITEM_NOT_FOUND);
             }
         } else {
-            otpHandlerCallback.onOTPHandlerInitializationFailed(OTPHandlerFailed.OTP_ITEM_NOT_FOUND);
+            otpHandlerCallback.onOTPHandlerInitializationFailed(OTPHandlerFailed.OTP_ITEM_DECRYPTION_FAILED);
         }
     }
 

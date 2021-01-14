@@ -18,7 +18,7 @@ package de.telekom.smartcredentials.documentscanner.presenter;
 
 import android.graphics.Rect;
 import android.os.Looper;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.microblink.entities.Entity;
 import com.microblink.entities.recognizers.Recognizer;
@@ -185,6 +185,12 @@ public class DocumentScannerPresenterImpl implements DocumentScannerPresenter {
                 DocumentScannerResult documentResult = ScannerResultConverter.convertToInternalModel(result);
                 mPluginCallback.onScanned(documentResult);
             }
+        }
+
+        @Override
+        public void onUnrecoverableError(@NonNull Throwable throwable) {
+            ApiLoggerResolver.logError(TAG, throwable.getMessage());
+            mPluginCallback.onScannedFailed();
         }
     };
 

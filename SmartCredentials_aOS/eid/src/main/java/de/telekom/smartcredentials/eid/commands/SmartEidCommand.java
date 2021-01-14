@@ -16,6 +16,8 @@
 
 package de.telekom.smartcredentials.eid.commands;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -34,15 +36,12 @@ public class SmartEidCommand extends EidCommand {
         mName = name;
     }
 
-    public void setName(String mName) {
-        this.mName = mName;
-    }
-
     @Override
     public String getName() {
         return mName;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "SmartEidCommand{" +

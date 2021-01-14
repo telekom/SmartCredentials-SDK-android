@@ -17,7 +17,7 @@
 package de.telekom.smartcredentials.core.api;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import de.telekom.smartcredentials.core.model.request.RequestParams;
 import de.telekom.smartcredentials.core.networking.ServerSocket;

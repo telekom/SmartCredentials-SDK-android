@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_background"
+    android:orientation="vertical"
+    android:padding="32dp">
+
+    <TextView
+        style="@style/SmallTitleTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/qr_code_detected" />
+
+    <TextView
+        android:id="@+id/qr_text_view"
+        style="@style/SmallDescriptionTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp" />
+
+    <Button
+        android:id="@+id/ok_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_selector"
+        android:text="@string/ok"
+        android:textColor="@android:color/white" />
+</LinearLayout>

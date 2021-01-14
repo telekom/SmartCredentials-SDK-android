@@ -16,7 +16,7 @@
 
 package de.telekom.smartcredentials.documentscanner.controllers;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.microblink.util.RecognizerCompatibility;
 import com.microblink.util.RecognizerCompatibilityStatus;
@@ -35,11 +35,12 @@ import de.telekom.smartcredentials.core.responses.RootedThrowable;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsResponse;
 import de.telekom.smartcredentials.documentscanner.config.SmartCredentialsDocumentScanConfiguration;
+import de.telekom.smartcredentials.documentscanner.model.ScannerRecognizer;
 import de.telekom.smartcredentials.documentscanner.view.DocumentScannerLayoutImpl;
 
 import static de.telekom.smartcredentials.documentscanner.callback.PluginCallbackDocScannerConverter.convertToDomainPluginCallback;
 
-public class DocumentScannerController implements DocumentScannerApi<SmartCredentialsDocumentScanConfiguration> {
+public class DocumentScannerController implements DocumentScannerApi<SmartCredentialsDocumentScanConfiguration, ScannerRecognizer> {
 
     private final CoreController mCoreController;
 
@@ -47,7 +48,8 @@ public class DocumentScannerController implements DocumentScannerApi<SmartCreden
         mCoreController = coreController;
     }
 
-    private Object getDocumentScanner(SmartCredentialsDocumentScanConfiguration configuration, DocumentScannerPluginCallback pluginCallback) {
+    private DocumentScannerLayout<ScannerRecognizer> getDocumentScanner(SmartCredentialsDocumentScanConfiguration configuration,
+                                      DocumentScannerPluginCallback pluginCallback) {
         return DocumentScannerLayoutImpl.getNewInstance(configuration, pluginCallback);
     }
 
@@ -55,7 +57,7 @@ public class DocumentScannerController implements DocumentScannerApi<SmartCreden
      * {@inheritDoc}
      */
     @Override
-    public SmartCredentialsApiResponse<DocumentScannerLayout> getDocumentScannerView(@NonNull SmartCredentialsDocumentScanConfiguration configuration, DocumentScannerCallback callback) {
+    public SmartCredentialsApiResponse<DocumentScannerLayout<ScannerRecognizer>> getDocumentScannerView(@NonNull SmartCredentialsDocumentScanConfiguration configuration, DocumentScannerCallback callback) {
         ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "getDocumentScannerView");
         if (mCoreController.isSecurityCompromised()) {
             mCoreController.handleSecurityCompromised();

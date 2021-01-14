@@ -66,26 +66,26 @@ public class DefaultCreationHandlerTest {
 
     @Test
     public void encryptThrowsEncryptionException() throws EncryptionException {
-        String alias = "test";
+        boolean isSensitive = false;
         String toEncrypt = "toEncrypt";
         String err = "err";
-        when(mEncryptionStrategy.encrypt(toEncrypt, alias, EncryptionAlgorithm.RSA_2048))
+        when(mEncryptionStrategy.encrypt(toEncrypt, isSensitive, EncryptionAlgorithm.RSA_2048))
                 .thenThrow(new EncryptionException(err));
 
         thrown.expect(EncryptionException.class);
         thrown.expectMessage(err);
 
-        mDefaultCreationHandler.encrypt(toEncrypt, alias, EncryptionAlgorithm.RSA_2048);
+        mDefaultCreationHandler.encrypt(toEncrypt, isSensitive, EncryptionAlgorithm.RSA_2048);
     }
 
     @Test
     public void encryptCallsMethodOnEncryptionStrategy() throws EncryptionException {
-        String alias = "test";
+        boolean isSensitive = false;
         String toEncrypt = "toEncrypt";
 
-        mDefaultCreationHandler.encrypt(toEncrypt, alias, EncryptionAlgorithm.AES_256);
+        mDefaultCreationHandler.encrypt(toEncrypt, isSensitive, EncryptionAlgorithm.AES_256);
 
         verify(mEncryptionStrategy, times(1))
-                .encrypt(toEncrypt, alias, EncryptionAlgorithm.AES_256);
+                .encrypt(toEncrypt, isSensitive, EncryptionAlgorithm.AES_256);
     }
 }

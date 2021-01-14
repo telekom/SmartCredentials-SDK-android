@@ -19,9 +19,9 @@ package de.telekom.smartcredentials.eid.callback;
 import com.governikus.ausweisapp2.IAusweisApp2SdkCallback;
 
 import de.telekom.smartcredentials.core.eid.callbacks.EidMessageReceivedCallback;
-import de.telekom.smartcredentials.eid.messages.parser.MessageParser;
 import de.telekom.smartcredentials.eid.messages.SessionDisconnectedMessage;
 import de.telekom.smartcredentials.eid.messages.SessionGeneratedMessage;
+import de.telekom.smartcredentials.eid.messages.parser.MessageParser;
 
 /**
  * Created by Alex.Graur@endava.com at 11/8/2019
@@ -29,19 +29,22 @@ import de.telekom.smartcredentials.eid.messages.SessionGeneratedMessage;
 public class AusweisCallback extends IAusweisApp2SdkCallback.Stub {
 
     private final MessageParser mMessageParser;
-    private final EidMessageReceivedCallback mCallback;
+    private final EidMessageReceivedCallback mMessageReceivedCallback;
 
     public String mSessionId;
 
-    public AusweisCallback(MessageParser messageParser, EidMessageReceivedCallback callback) {
-        mMessageParser = messageParser;
-        mCallback = callback;
+    public AusweisCallback(EidMessageReceivedCallback callback) {
+        mMessageParser = new MessageParser(callback);
+        mMessageReceivedCallback = callback;
     }
 
     @Override
     public void sessionIdGenerated(String s, boolean b) {
-        mCallback.onMessageReceived(new SessionGeneratedMessage(s));
         mSessionId = s;
+
+        if (mMessageReceivedCallback != null) {
+            mMessageReceivedCallback.onMessageReceived(new SessionGeneratedMessage(s));
+        }
     }
 
     @Override
@@ -51,6 +54,12 @@ public class AusweisCallback extends IAusweisApp2SdkCallback.Stub {
 
     @Override
     public void sdkDisconnected() {
-        mCallback.onMessageReceived(new SessionDisconnectedMessage());
+        if (mMessageReceivedCallback != null) {
+            mMessageReceivedCallback.onMessageReceived(new SessionDisconnectedMessage());
+        }
+    }
+
+    public EidMessageReceivedCallback getMessageReceivedCallback() {
+        return mMessageReceivedCallback;
     }
 }

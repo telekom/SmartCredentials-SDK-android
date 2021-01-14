@@ -19,6 +19,8 @@ package de.telekom.smartcredentials.security.encryption;
 import android.text.TextUtils;
 import android.util.Base64;
 
+import androidx.annotation.NonNull;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
@@ -118,7 +120,7 @@ public class Base64EncryptionManagerAES implements EncryptionManager {
         }
     }
 
-    private String decrypt(String encryptedText, String repositoryAlias) throws InvalidAlgorithmException, UnsupportedEncodingException, BadPaddingException, IllegalBlockSizeException, NoSuchPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, KeyStoreManagerException, InvalidKeyException, KeyStoreProviderException {
+    String decrypt(@NonNull String encryptedText, String repositoryAlias) throws InvalidAlgorithmException, UnsupportedEncodingException, BadPaddingException, IllegalBlockSizeException, NoSuchPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, KeyStoreManagerException, InvalidKeyException, KeyStoreProviderException {
         String[] textWithIV = encryptedText.split(IV_SEPARATOR);
         if (textWithIV.length < 2) {
             throw new InvalidAlgorithmException(DECRYPTION_EXCEPTION_TEXT + "\n " + MISSING_IV_MESSAGE);

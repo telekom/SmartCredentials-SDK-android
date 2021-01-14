@@ -33,8 +33,6 @@ public abstract class DocumentScannerResult implements Serializable {
         this.mDocumentScannerResultState = scannerResultState;
     }
 
-    public abstract String toString();
-
     public DocumentScannerResultState getDocumentScannerResultState() {
         return mDocumentScannerResultState;
     }

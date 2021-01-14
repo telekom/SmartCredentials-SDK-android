@@ -16,8 +16,9 @@
 
 package de.telekom.smartcredentials.storage.controllers;
 
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
 
@@ -25,6 +26,7 @@ import org.json.JSONException;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import de.telekom.smartcredentials.core.api.StorageApi;
 import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsFeatureSet;
@@ -53,6 +55,10 @@ import de.telekom.smartcredentials.core.storage.TokenRequest;
 import de.telekom.smartcredentials.core.strategies.EncryptionStrategy;
 import de.telekom.smartcredentials.storage.domain.converters.ModelConverter;
 import de.telekom.smartcredentials.storage.exceptions.RepositoryException;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static de.telekom.smartcredentials.core.controllers.CoreController.UID_EXCEPTION_MESSAGE;
 import static de.telekom.smartcredentials.core.model.ModelValidator.checkParamNotNull;
@@ -64,12 +70,14 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
     private final Repository mRepository;
     private final EncryptionStrategy mEncryptionStrategy;
     private final Gson mGson;
+    private final CompositeDisposable mCompositeDisposable;
 
     public StorageController(CoreController coreController, Repository repository, EncryptionStrategy encryptionStrategy, Gson gson) {
         mCoreController = coreController;
         mRepository = repository;
         mEncryptionStrategy = encryptionStrategy;
         mGson = gson;
+        mCompositeDisposable = new CompositeDisposable();
         mCoreController.attach(this);
     }
 
@@ -77,7 +85,7 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
      * {@inheritDoc}
      */
     @Override
-    public SmartCredentialsApiResponse<Integer> putItem(ItemDomainModel itemDomainModel) throws EncryptionException {
+    public SmartCredentialsApiResponse<Integer> putItem(ItemDomainModel itemDomainModel) {
         ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "putItem");
         if (mCoreController.isSecurityCompromised()) {
             mCoreController.handleSecurityCompromised();
@@ -92,7 +100,11 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
         validateItemDomainModel(itemDomainModel);
         ItemDomainMetadata metadata = getValidatedMetadata(itemDomainModel);
         if (metadata.isDataEncrypted()) {
-            itemDomainModel.encryptData(mEncryptionStrategy, isSensitive(metadata));
+            try {
+                itemDomainModel.encryptData(mEncryptionStrategy, isSensitive(metadata));
+            } catch (EncryptionException e) {
+                return new SmartCredentialsResponse<>(e);
+            }
         }
         return new SmartCredentialsResponse<>(mRepository.saveData(itemDomainModel));
     }
@@ -101,7 +113,7 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
      * {@inheritDoc}
      */
     @Override
-    public SmartCredentialsApiResponse<Integer> putItem(ItemDomainModel itemDomainModel, TokenRequest tokenRequest) throws EncryptionException {
+    public SmartCredentialsApiResponse<Integer> putItem(ItemDomainModel itemDomainModel, TokenRequest tokenRequest) {
         ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "putItem");
         if (mCoreController.isSecurityCompromised()) {
             mCoreController.handleSecurityCompromised();
@@ -114,7 +126,12 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
         }
 
         validateItemDomainModel(itemDomainModel);
-        return new SmartCredentialsResponse<>(savePartiallyEncData(ModelConverter.toItemDomainModel(itemDomainModel, tokenRequest)));
+        try {
+            int response = savePartiallyEncData(ModelConverter.toItemDomainModel(itemDomainModel, tokenRequest));
+            return new SmartCredentialsResponse<>(response);
+        } catch (EncryptionException e) {
+            return new SmartCredentialsResponse<>(e);
+        }
     }
 
     /**
@@ -152,7 +169,7 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
      * {@inheritDoc}
      */
     @Override
-    public SmartCredentialsApiResponse<ItemDomainModel> retrieveItemSummaryByUniqueIdAndType(ItemDomainModel itemDomainModel) throws EncryptionException {
+    public SmartCredentialsApiResponse<ItemDomainModel> retrieveItemSummaryByUniqueIdAndType(ItemDomainModel itemDomainModel) {
         ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "retrieveItemSummaryByUniqueIdAndType");
         if (mCoreController.isSecurityCompromised()) {
             mCoreController.handleSecurityCompromised();
@@ -167,7 +184,11 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
         ItemDomainModel retrievedItemDomainModel = mRepository.retrieveFilteredItemSummaryByUniqueIdAndType(itemDomainModel);
 
         if (retrievedItemDomainModel != null) {
-            return new SmartCredentialsResponse<>(decrypt(retrievedItemDomainModel));
+            try {
+                return new SmartCredentialsResponse<>(decrypt(retrievedItemDomainModel));
+            } catch (EncryptionException e) {
+                return new SmartCredentialsResponse<>(e);
+            }
         }
         return new SmartCredentialsResponse<>(new ItemNotFoundException());
     }
@@ -182,9 +203,13 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
         return null;
     }
 
-    @SuppressWarnings("UnusedReturnValue")
-    public int clearStorage() {
-        return mRepository.deleteAllData();
+    private void clearStorage() {
+        mCompositeDisposable.add(Observable.defer(() -> Observable.just(mRepository.deleteAllData()))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(count -> ApiLoggerResolver.logEvent(String.format(Locale.GERMANY, "Deleted %d rows", count)),
+                        throwable -> ApiLoggerResolver.logError(StorageController.class.getSimpleName(),
+                                "Failed to clear storage")));
     }
 
     /**
@@ -299,7 +324,7 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
             }
         } catch (DomainModelException e) {
             return new SmartCredentialsResponse<>(new EnvelopeException(EnvelopeExceptionReason.map(e.getMessage())));
-        } catch (EnvelopeException | RepositoryException | JSONException | EncryptionException e) {
+        } catch (EnvelopeException | RepositoryException | JSONException e) {
             return new SmartCredentialsResponse<>(e);
         }
     }
@@ -358,7 +383,7 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
             return new SmartCredentialsResponse<>(addedItemsCount);
         } catch (DomainModelException e) {
             return new SmartCredentialsResponse<>(new EnvelopeException(EnvelopeExceptionReason.map(e.getMessage())));
-        } catch (EnvelopeException | RepositoryException | EncryptionException e) {
+        } catch (EnvelopeException | RepositoryException e) {
             return new SmartCredentialsResponse<>(e);
         }
     }
@@ -448,6 +473,7 @@ public class StorageController implements StorageApi, SecurityCompromisedObserve
     }
 
     public void detach() {
+        mCompositeDisposable.clear();
         mCoreController.detach(this);
     }
 

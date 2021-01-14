@@ -19,12 +19,10 @@ package de.telekom.smartcredentials.otp.task;
 import android.os.AsyncTask;
 
 import de.telekom.smartcredentials.core.api.StorageApi;
-import de.telekom.smartcredentials.core.exceptions.EncryptionException;
-import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
 import de.telekom.smartcredentials.core.model.item.ItemDomainModel;
 import de.telekom.smartcredentials.core.storage.TokenRequest;
 
-public class UpdateOTPTask extends AsyncTask<Void, Void, Void> {
+public class UpdateOTPTask extends AsyncTask<Void, Void, Boolean> {
 
     private final StorageApi mStorageApi;
     private final ItemDomainModel mItemDomainModel;
@@ -38,13 +36,8 @@ public class UpdateOTPTask extends AsyncTask<Void, Void, Void> {
     }
 
     @Override
-    protected Void doInBackground(Void... voids) {
-        try {
-            ItemDomainModel retrievedItem = mStorageApi.retrieveItemSummaryByUniqueIdAndType(mItemDomainModel).getData();
-            mStorageApi.putItem(retrievedItem, mUpdatedTokenRequest);
-        } catch (EncryptionException e) {
-            ApiLoggerResolver.logError("OTPUpdateCallback", "Could not save updated TokenRequest");
-        }
-        return null;
+    protected Boolean doInBackground(Void... voids) {
+        ItemDomainModel retrievedItem = mStorageApi.retrieveItemSummaryByUniqueIdAndType(mItemDomainModel).getData();
+        return mStorageApi.putItem(retrievedItem, mUpdatedTokenRequest).isSuccessful();
     }
 }

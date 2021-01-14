@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Authentication Demo</string>
+    <string name="app_alias">scauthenticationdemo</string>
+    <string name="current_user_id">1234</string>
+    <string name="login">Login</string>
+    <string name="login_success">Login success</string>
+    <string name="login_failed">Login failed</string>
+    <string name="canceled">Canceled</string>
+    <string name="completed">Completed</string>
+    <string name="logout">Logout</string>
+    <string name="logout_failed">Logout failed</string>
+    <string name="logout_in_progress">Logout in progress …</string>
+    <string name="access_token">Access token</string>
+    <string name="id_token">ID token</string>
+    <string name="refresh_token">Refresh token</string>
+    <string name="refresh_access_token">Refresh access token</string>
+    <string name="refresh_access_token_failed">Failed to refresh access token</string>
+    <string name="refresh_access_token_success">Refreshed access token successfully</string>
+    <string name="performed_action_token">Perform action with fresh tokens</string>
+    <string name="perform_action_failed">Failed to perform action with fresh tokens</string>
+    <string name="perform_action_success">Successfully performed action with fresh tokens</string>
+    <string name="view_profile_item">View user profile</string>
+    <string name="retrieve_profile_failed">Failed to retrieve profile</string>
+    <string name="given_name">Given name</string>
+    <string name="family_name">Family name</string>
+    <string name="email">Email</string>
+    <string name="locale">Locale</string>
+    <string name="profile">Profile</string>
+    <string name="email_verified">Verified email</string>
+    <string name="expires">Expires at</string>
+    <string name="no_token_value">N/A</string>
+    <string name="type">Type:</string>
+    <string name="signed_jwt">Signed JWT</string>
+    <string name="plain_jwt">Plain JWT</string>
+    <string name="unknown">Unknown</string>
+</resources>

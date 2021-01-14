@@ -27,6 +27,9 @@ public class Result {
     @SerializedName("major")
     @Expose
     private String mMajor;
+    @SerializedName("minor")
+    @Expose
+    private String mMinor;
 
     public Result() {
 
@@ -40,10 +43,19 @@ public class Result {
         this.mMajor = major;
     }
 
+    public String getMinor() {
+        return mMinor;
+    }
+
+    public void setMinor(String mMinor) {
+        this.mMinor = mMinor;
+    }
+
     @Override
     public String toString() {
         return "Result{" +
                 "mMajor='" + mMajor + '\'' +
+                ", mMinor='" + mMinor + '\'' +
                 '}';
     }
 }

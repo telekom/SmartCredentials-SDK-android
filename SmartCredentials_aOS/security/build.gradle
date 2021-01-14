@@ -15,14 +15,12 @@
  */
 
 apply plugin: 'com.android.library'
-
-apply from: "../gradle/task/quality.gradle"
-apply from: "../gradle/task/code_coverage.gradle"
 apply from: "../gradle/task/maven_push_library.gradle"
 
 android {
 
     compileSdkVersion rootProject.ext.androidCompileSdkVersion
+    ndkVersion rootProject.ext.androidNdkVersion
 
     defaultConfig {
         minSdkVersion rootProject.ext.androidMinSdkVersion
@@ -30,7 +28,7 @@ android {
         versionCode rootProject.ext.androidVersionCode
         versionName rootProject.ext.androidVersionName
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -48,6 +46,12 @@ android {
         }
     }
 
+    libraryVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "${archivesBaseName}-${variant.name}-${defaultConfig.versionName}.aar"
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -55,8 +59,10 @@ android {
 }
 
 dependencies {
+    androidTestImplementation 'androidx.test:runner:1.3.0'
+    androidTestImplementation 'androidx.test:rules:1.3.0'
 
-    implementation "com.android.support:appcompat-v7:${androidSupportLibVersion}"
+    implementation "androidx.annotation:annotation:${androidXAnnotation}"
 
     testImplementation "junit:junit:${junitVersion}"
     testImplementation "org.hamcrest:hamcrest-library:${hamcrestVersion}"
@@ -64,7 +70,7 @@ dependencies {
     testImplementation "org.powermock:powermock-module-junit4:${powermockVersion}"
     testImplementation "org.powermock:powermock-api-mockito2:${powermockVersion}"
 
-    androidTestImplementation "com.android.support.test.espresso:espresso-core:${espressoLibVersion}"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.3.0"
 
     api project(':core')
 }

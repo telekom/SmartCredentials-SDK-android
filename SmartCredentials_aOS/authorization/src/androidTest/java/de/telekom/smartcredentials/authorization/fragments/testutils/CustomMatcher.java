@@ -16,7 +16,7 @@
 
 package de.telekom.smartcredentials.authorization.fragments.testutils;
 
-import android.support.annotation.DrawableRes;
+import androidx.annotation.DrawableRes;
 import android.view.View;
 
 import org.hamcrest.Matcher;

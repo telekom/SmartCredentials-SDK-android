@@ -17,7 +17,7 @@
 package de.telekom.smartcredentials.storage.factory;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import de.telekom.smartcredentials.core.api.CoreApi;
 import de.telekom.smartcredentials.core.api.SecurityApi;
@@ -69,7 +69,6 @@ public class SmartCredentialsStorageFactory {
 
     public static void clear() {
         ObjectGraphCreatorStorage.destroy();
-        sStorageController.clearStorage();
         sStorageController.detach();
         sStorageController = null;
     }

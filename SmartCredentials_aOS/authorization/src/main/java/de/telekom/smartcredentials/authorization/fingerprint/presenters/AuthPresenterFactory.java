@@ -18,7 +18,7 @@ package de.telekom.smartcredentials.authorization.fingerprint.presenters;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 
 import de.telekom.smartcredentials.authorization.biometric.BiometricPresenter;
 import de.telekom.smartcredentials.authorization.biometric.BiometricPromptWrapper;

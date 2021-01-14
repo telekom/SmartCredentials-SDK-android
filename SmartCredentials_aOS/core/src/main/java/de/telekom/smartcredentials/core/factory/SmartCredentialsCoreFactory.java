@@ -18,7 +18,7 @@ package de.telekom.smartcredentials.core.factory;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import de.telekom.smartcredentials.core.api.CoreApi;
 import de.telekom.smartcredentials.core.configurations.SmartCredentialsConfiguration;

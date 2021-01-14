@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">AuthorizationDemo</string>
+    <string name="app_alias">scauthorizationdemo</string>
+    <string name="current_user_id">1234</string>
+    <string name="authorize">AUTHORIZE</string>
+    <string name="error_device_not_secured">Your device is not secured.</string>
+    <string name="error_performing_authorization">There have been an error while displaying the authorization dialog</string>
+    <string name="successful_authorization">Successful authorization.</string>
+    <string name="authorization_status">Authorization Status</string>
+    <string name="biometrics_view_title">Biometrics View Title</string>
+    <string name="biometrics_view_subtitle">Biometrics View Subtitle</string>
+    <string name="biometrics_view_description">Biometrics View Description</string>
+    <string name="biometrics_view_negative_button_description">DISMISS</string>
+    <string name="authorization_icon_content_description">Authorization Status Icon</string>
+</resources>

@@ -16,8 +16,8 @@
 
 package de.telekom.smartcredentials.core.api;
 
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import de.telekom.smartcredentials.core.authorization.AuthorizationCallback;
 import de.telekom.smartcredentials.core.plugins.fingerprint.BiometricAuthorizationPresenter;

@@ -16,6 +16,8 @@
 
 package de.telekom.smartcredentials.eid.messages;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -51,6 +53,7 @@ public class EnterPukMessage extends SmartEidMessage {
         this.mError = error;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "EnterCanMessage{" +

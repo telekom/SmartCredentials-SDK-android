@@ -16,6 +16,8 @@
 
 package de.telekom.smartcredentials.eid.messages;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -23,6 +25,8 @@ import com.google.gson.annotations.SerializedName;
  * Created by Alex.Graur@endava.com at 11/11/2019
  */
 public class AuthMessage extends SmartEidMessage {
+
+    public static final String AUTH_MESSAGE_CANCELED = "The process has been cancelled.";
 
     @SerializedName("url")
     @Expose
@@ -62,6 +66,7 @@ public class AuthMessage extends SmartEidMessage {
         this.mError = error;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "AuthMessage{" +

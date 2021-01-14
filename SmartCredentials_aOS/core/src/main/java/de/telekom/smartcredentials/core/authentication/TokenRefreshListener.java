@@ -16,7 +16,7 @@
 
 package de.telekom.smartcredentials.core.authentication;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 
 /**

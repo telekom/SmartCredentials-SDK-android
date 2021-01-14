@@ -17,8 +17,8 @@
 package de.telekom.smartcredentials.authorization.fingerprint.presenters;
 
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import de.telekom.smartcredentials.authorization.AuthorizationManagerWrapper;
 import de.telekom.smartcredentials.authorization.fingerprint.AuthHandler;

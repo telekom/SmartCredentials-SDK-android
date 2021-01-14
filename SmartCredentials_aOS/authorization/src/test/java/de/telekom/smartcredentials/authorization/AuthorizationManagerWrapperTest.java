@@ -17,7 +17,7 @@
 package de.telekom.smartcredentials.authorization;
 
 import android.content.Context;
-import android.support.v4.os.CancellationSignal;
+import androidx.core.os.CancellationSignal;
 
 import org.junit.Before;
 import org.junit.Test;

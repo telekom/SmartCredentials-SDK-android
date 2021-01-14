@@ -16,7 +16,7 @@
 
 package de.telekom.smartcredentials.qrlogin.di;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import de.telekom.smartcredentials.core.api.AuthorizationApi;
 import de.telekom.smartcredentials.core.api.NetworkingApi;

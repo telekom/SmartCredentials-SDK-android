@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".profile.ProfileActivity">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_image_view"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="48dp"
+        app:civ_border_color="@color/colorAccent"
+        app:civ_border_width="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/name_text_view"
+        style="@style/BigTitletextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        tools:text="Max Mustermann" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="@string/given_name"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/small_text_size" />
+
+        <TextView
+            android:id="@+id/given_name_text_view"
+            style="@style/SmallDescriptionTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Max" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="@string/family_name"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/small_text_size" />
+
+        <TextView
+            android:id="@+id/family_name_text_view"
+            style="@style/SmallDescriptionTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Mustermann" />
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp">
+
+        <TextView
+            android:id="@+id/email_label_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/email"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/small_text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/email_value_text_view"
+            style="@style/SmallDescriptionTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/email_label_text_view"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="max.mustermann@telekom.de" />
+
+        <ImageView
+            android:id="@+id/email_verified_image_view"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:contentDescription="@string/email_verified"
+            android:src="@drawable/ic_verified_user_magenta_24"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="@string/locale"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/small_text_size" />
+
+        <TextView
+            android:id="@+id/locale_text_view"
+            style="@style/SmallDescriptionTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="de" />
+    </LinearLayout>
+</LinearLayout>

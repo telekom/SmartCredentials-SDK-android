@@ -50,7 +50,25 @@ public enum SmartCredentialsFeatureSet {
     OTP_VIA_QR("OTP via QR", SmartCredentialsModuleSet.OTP_MODULE,
             "The OTP via QR feature is not supported on this device model."),
     AUTHENTICATION("OAuth2.0 & OpenID Connect Authentication", SmartCredentialsModuleSet.AUTHENTICATION_MODULE,
-            "The Authentication Service is not supported on this device model.");
+            "The Authentication Service is not supported on this device model."),
+    SUBSCRIBE("Subscribe", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
+            "The Subscribe feature is not supported on this device model."),
+    UNSUBSCRIBE("Unsubscribe", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
+            "The Unsubscribe feature is not supported on this device model."),
+    SUBSCRIBE_TO_TOPIC("Subscribe To Topic", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
+            "The Subscribe to topic feature is not supported on this device model."),
+    UNSUBSCRIBE_FROM_TOPIC("Unsubscribe From Topic", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
+            "The Unsubscribe from topic feature is not supported on this device model."),
+    RETRIEVE_TOKEN("Retrieve Token", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
+            "The Retrieve Token feature is not supported on this device model."),
+    RETRIEVE_DEVICE_ID("Retrieve Device Id", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
+            "The Retrieve Device Id feature is not supported on this device model."),
+    SEND_MESSAGE("Send Message", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
+            "The Send Message feature is not supported on this device model."),
+    SET_MESSAGE_RECEIVED_CALLBACK("Set Message Received Callback", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
+            "The Set Message Received Callback feature is not supported on this device model."),
+    SET_TOKEN_REFRESHED_CALLBACK("Set Token Refreshed Callback", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
+            "The Set Token Refreshed Callback feature is not supported on this device model.");
 
     private final SmartCredentialsModuleSet mModule;
     private final String mFeatureName;

@@ -16,14 +16,18 @@
 
 package de.telekom.smartcredentials.authentication.di;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
+import de.telekom.smartcredentials.authentication.AuthenticationStorageRepository;
 import de.telekom.smartcredentials.authentication.controllers.AuthenticationController;
+import de.telekom.smartcredentials.core.api.StorageApi;
+import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsModuleSet;
 import de.telekom.smartcredentials.core.controllers.CoreController;
 
 public class ObjectGraphCreatorAuthentication {
 
     private static ObjectGraphCreatorAuthentication sInstance;
+    private StorageApi mStorageApi;
 
     private ObjectGraphCreatorAuthentication() {
         // required empty constructor
@@ -36,9 +40,25 @@ public class ObjectGraphCreatorAuthentication {
         return sInstance;
     }
 
+    public void init(StorageApi storageApi) {
+        mStorageApi = storageApi;
+    }
+
     @NonNull
     public AuthenticationController provideApiControllerAuthentication(CoreController coreController) {
         return AuthenticationController.getInstance(coreController);
+    }
+
+    private StorageApi getStorageApi() {
+        if (mStorageApi == null) {
+            throw new RuntimeException(SmartCredentialsModuleSet.STORAGE_MODULE + " from "
+                    + SmartCredentialsModuleSet.STORAGE_MODULE + " has not been initialized");
+        }
+        return mStorageApi;
+    }
+
+    public AuthenticationStorageRepository provideAuthenticationStorageRepository(){
+        return AuthenticationStorageRepository.getInstance(getStorageApi());
     }
 
     public static void destroy() {

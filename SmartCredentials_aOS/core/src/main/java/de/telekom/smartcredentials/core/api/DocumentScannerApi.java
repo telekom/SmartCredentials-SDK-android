@@ -16,7 +16,7 @@
 
 package de.telekom.smartcredentials.core.api;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import de.telekom.smartcredentials.core.documentscanner.DocumentScanConfiguration;
 import de.telekom.smartcredentials.core.documentscanner.DocumentScannerCallback;
@@ -28,7 +28,7 @@ import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 /**
  * Created by Lucian Iacob on November 12, 2018.
  */
-public interface DocumentScannerApi<T extends DocumentScanConfiguration> {
+public interface DocumentScannerApi<T extends DocumentScanConfiguration, R> {
 
     /**
      * Method used to scan Document (ID or Payment) cards.
@@ -43,7 +43,7 @@ public interface DocumentScannerApi<T extends DocumentScanConfiguration> {
      * @throws NullPointerException if configuration is null
      */
     @SuppressWarnings("unused")
-    SmartCredentialsApiResponse<DocumentScannerLayout> getDocumentScannerView(@NonNull T configuration,
+    SmartCredentialsApiResponse<DocumentScannerLayout<R>> getDocumentScannerView(@NonNull T configuration,
                                                                               DocumentScannerCallback callback);
 
 }

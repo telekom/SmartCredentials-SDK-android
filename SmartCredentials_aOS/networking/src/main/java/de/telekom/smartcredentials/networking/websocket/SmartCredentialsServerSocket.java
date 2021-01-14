@@ -45,7 +45,7 @@ public class SmartCredentialsServerSocket implements ServerSocket<TokenResponse,
 
     @Override
     public void startServer(Map<String, String> params, TokenPluginCallback<TokenResponse, String> pluginCallback) {
-        if (!params.keySet().contains(AuthParamKey.QR_SERVER_URL.name())) {
+        if (!params.containsKey(AuthParamKey.QR_SERVER_URL.name())) {
             if (pluginCallback != null) {
                 pluginCallback.onFailed(UNDEFINED_URL.name());
             }

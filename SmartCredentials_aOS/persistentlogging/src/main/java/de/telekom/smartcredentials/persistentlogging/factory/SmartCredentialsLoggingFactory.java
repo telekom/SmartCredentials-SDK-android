@@ -16,7 +16,7 @@
 
 package de.telekom.smartcredentials.persistentlogging.factory;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import de.telekom.smartcredentials.core.api.LoggingApi;
 import de.telekom.smartcredentials.persistentlogging.controllers.LoggingController;

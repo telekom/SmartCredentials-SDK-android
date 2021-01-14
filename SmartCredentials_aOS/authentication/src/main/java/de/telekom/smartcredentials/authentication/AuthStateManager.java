@@ -17,8 +17,7 @@
 package de.telekom.smartcredentials.authentication;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.TextUtils;
 
 import net.openid.appauth.AuthState;
@@ -30,8 +29,8 @@ import net.openid.appauth.TokenResponse;
 import org.json.JSONException;
 
 import java.util.Objects;
-import java.util.concurrent.locks.ReentrantLock;
 
+import de.telekom.smartcredentials.authentication.di.ObjectGraphCreatorAuthentication;
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
 
 /**
@@ -39,18 +38,15 @@ import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
  */
 public class AuthStateManager {
 
-    private static final String AUTH_STATE_PREFS_NAME = "SmartCredentialsAuthState";
     private static final String KEY_AUTH_STATE = "auth_state";
     private static final String ERR_NULL_OR_EMPTY_PROVIDER = "Cannot use a null or empty identity provider ID.";
 
-    private final SharedPreferences mSharedPreferences;
-    private final ReentrantLock mPrefsLock;
+    private AuthenticationStorageRepository mAuthenticationStorageRepository;
     private final String mProviderId;
 
-    private AuthStateManager(SharedPreferences sharedPreferences, String identityProviderId) {
-        mSharedPreferences = sharedPreferences;
+    private AuthStateManager(String identityProviderId) {
         mProviderId = identityProviderId;
-        mPrefsLock = new ReentrantLock();
+        mAuthenticationStorageRepository = ObjectGraphCreatorAuthentication.getInstance().provideAuthenticationStorageRepository();
     }
 
     public static AuthStateManager getInstance(@NonNull Context context, @NonNull String providerId) {
@@ -58,9 +54,7 @@ public class AuthStateManager {
         if (TextUtils.isEmpty(providerId.trim())) {
             throw new IllegalArgumentException(ERR_NULL_OR_EMPTY_PROVIDER);
         }
-        SharedPreferences prefs = context.getSharedPreferences(AUTH_STATE_PREFS_NAME, Context.MODE_PRIVATE);
-
-        return new AuthStateManager(prefs, providerId);
+        return new AuthStateManager(providerId);
     }
 
     @SuppressWarnings("unused")
@@ -68,6 +62,7 @@ public class AuthStateManager {
         return getCurrent().isAuthorized();
     }
 
+    @SuppressWarnings("unused")
     public String getRefreshToken() {
         return getCurrent().getRefreshToken();
     }
@@ -87,8 +82,13 @@ public class AuthStateManager {
         return getCurrent().getAccessTokenExpirationTime();
     }
 
+    @NonNull
     public AuthState getCurrent() {
         return readState();
+    }
+
+    public void updateAfterActionWithFreshTokens(AuthState authState) {
+        replace(authState);
     }
 
     public void updateAfterTokenResponse(TokenResponse tokenResponse, AuthorizationException exception) {
@@ -112,47 +112,28 @@ public class AuthStateManager {
         if (ex != null) {
             return;
         }
-
         authState.update(registrationResponse);
         replace(authState);
     }
 
     private AuthState readState() {
-        mPrefsLock.lock();
-
+        String currentState = mAuthenticationStorageRepository.getAuthState(computeAuthStateKey());
+        if (currentState == null) {
+            return new AuthState();
+        }
         try {
-            String currentState = mSharedPreferences.getString(computeAuthStateKey(), null);
-            if (currentState == null) {
-                return new AuthState();
-            }
-
-            try {
-                return AuthState.jsonDeserialize(currentState);
-            } catch (JSONException e) {
-                ApiLoggerResolver.logError("AuthStateManager", "Failed to deserialize auth state. Will discart");
-                return new AuthState();
-            }
-        } finally {
-            mPrefsLock.unlock();
+            return AuthState.jsonDeserialize(currentState);
+        } catch (JSONException e) {
+            ApiLoggerResolver.logError("AuthStateManager", "Failed to deserialize auth state. Will discart");
+            return new AuthState();
         }
     }
 
     private void writeState(AuthState authState) {
-        mPrefsLock.lock();
-
-        try {
-            SharedPreferences.Editor editor = mSharedPreferences.edit();
-            if (authState == null) {
-                editor.remove(computeAuthStateKey());
-            } else {
-                editor.putString(computeAuthStateKey(), authState.jsonSerializeString());
-            }
-
-            if (!editor.commit()) {
-                throw new IllegalStateException("Failed to write auth state into Shared Prefs");
-            }
-        } finally {
-            mPrefsLock.unlock();
+        if (authState == null) {
+            mAuthenticationStorageRepository.deleteAuthState(computeAuthStateKey());
+        } else {
+            mAuthenticationStorageRepository.saveAuthState(computeAuthStateKey(), authState.jsonSerialize());
         }
     }
 

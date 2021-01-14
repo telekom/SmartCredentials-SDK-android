@@ -17,7 +17,7 @@
 package de.telekom.smartcredentials.core.itemdatamodel;
 
 import android.os.Parcel;
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.json.JSONException;
 import org.junit.Test;

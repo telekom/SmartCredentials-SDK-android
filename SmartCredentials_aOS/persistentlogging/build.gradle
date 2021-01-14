@@ -15,9 +15,6 @@
  */
 
 apply plugin: 'com.android.library'
-
-apply from: "../gradle/task/quality.gradle"
-apply from: "../gradle/task/code_coverage.gradle"
 apply from: "../gradle/task/maven_push_library.gradle"
 
 android {
@@ -30,7 +27,7 @@ android {
         versionCode rootProject.ext.androidVersionCode
         versionName rootProject.ext.androidVersionName
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -42,6 +39,12 @@ android {
         }
     }
 
+    libraryVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "${archivesBaseName}-${variant.name}-${defaultConfig.versionName}.aar"
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -49,7 +52,8 @@ android {
 }
 
 dependencies {
-    implementation "com.android.support:support-annotations:${androidSupportLibVersion}"
+
+    implementation "androidx.annotation:annotation:${androidXAnnotation}"
 
     api project(':core')
 }

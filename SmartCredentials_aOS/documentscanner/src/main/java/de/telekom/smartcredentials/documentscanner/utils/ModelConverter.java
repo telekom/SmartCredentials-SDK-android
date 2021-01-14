@@ -23,8 +23,8 @@
 package de.telekom.smartcredentials.documentscanner.utils;
 
 import android.graphics.Bitmap;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.microblink.entities.recognizers.Recognizer;
 import com.microblink.hardware.camera.VideoResolutionPreset;

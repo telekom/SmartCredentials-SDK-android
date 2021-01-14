@@ -17,9 +17,9 @@
 package de.telekom.smartcredentials.authorization.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.annotation.VisibleForTesting;
+import androidx.appcompat.app.AppCompatActivity;
 import android.widget.FrameLayout;
 
 import de.telekom.smartcredentials.authorization.R;
