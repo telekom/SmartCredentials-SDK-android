@@ -21,7 +21,6 @@ import androidx.annotation.NonNull;
 import java.util.List;
 
 import de.telekom.smartcredentials.core.context.ItemContext;
-import de.telekom.smartcredentials.core.exceptions.EncryptionException;
 import de.telekom.smartcredentials.core.filter.SmartCredentialsFilter;
 import de.telekom.smartcredentials.core.itemdatamodel.ItemEnvelope;
 import de.telekom.smartcredentials.core.model.item.ItemDomainModel;
@@ -76,21 +75,17 @@ public interface StorageApi {
      * @param itemDomainModel to be saved
      * @param tokenRequest    corresponding to the item
      * @return an integer representing the number of rows saved
-     * @throws EncryptionException is the exception thrown is something went wrong in the process
-     *                             of saving the item
      */
     @SuppressWarnings("UnusedReturnValue")
-    SmartCredentialsApiResponse<Integer> putItem(ItemDomainModel itemDomainModel, TokenRequest tokenRequest) throws EncryptionException;
+    SmartCredentialsApiResponse<Integer> putItem(ItemDomainModel itemDomainModel, TokenRequest tokenRequest);
 
     /**
      * Saves an {@link ItemDomainModel}.
      *
      * @param itemDomainModel to be saved
      * @return an integer representing the number of rows saved
-     * @throws EncryptionException is the exception thrown is something went wrong in the process
-     *                             *                             of saving the item
      */
-    SmartCredentialsApiResponse<Integer> putItem(ItemDomainModel itemDomainModel) throws EncryptionException;
+    SmartCredentialsApiResponse<Integer> putItem(ItemDomainModel itemDomainModel);
 
     /**
      * Updates an ItemEnvelope based on its id
@@ -123,18 +118,14 @@ public interface StorageApi {
      *
      * @param itemDomainModel corresponding to the token request
      * @return an instance of {@link TokenRequest}
-     * @throws EncryptionException is the exception thrown is something went wrong in the process
-     *                             of retrieving the token request
      */
-    SmartCredentialsApiResponse<TokenRequest> retrieveTokenRequest(ItemDomainModel itemDomainModel) throws EncryptionException;
+    SmartCredentialsApiResponse<TokenRequest> retrieveTokenRequest(ItemDomainModel itemDomainModel);
 
     /**
      * Retrieves an item summary by its id and type.
      *
      * @param itemDomainModel holding the id and type
      * @return an instance of {@link ItemDomainModel}
-     * @throws EncryptionException is the exception thrown is something went wrong in the process
-     *                             of retrieving the item summary
      */
-    SmartCredentialsApiResponse<ItemDomainModel> retrieveItemSummaryByUniqueIdAndType(ItemDomainModel itemDomainModel) throws EncryptionException;
+    SmartCredentialsApiResponse<ItemDomainModel> retrieveItemSummaryByUniqueIdAndType(ItemDomainModel itemDomainModel);
 }
