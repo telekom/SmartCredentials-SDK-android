@@ -3,8 +3,8 @@ package de.telekom.authenticationdemo.profile;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,6 +21,9 @@ import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 
 public class ProfileActivity extends AppCompatActivity {
 
+    private View successContainer;
+    private View failureContainer;
+    private ProgressBar progressBar;
     private ImageView imageView;
     private TextView nameTextView;
     private TextView givenNameTextView;
@@ -39,6 +42,9 @@ public class ProfileActivity extends AppCompatActivity {
             getSupportActionBar().setHomeButtonEnabled(true);
         }
 
+        successContainer = findViewById(R.id.success_container);
+        failureContainer = findViewById(R.id.failure_container);
+        progressBar = findViewById(R.id.progress_bar);
         imageView = findViewById(R.id.profile_image_view);
         nameTextView = findViewById(R.id.name_text_view);
         givenNameTextView = findViewById(R.id.given_name_text_view);
@@ -68,8 +74,10 @@ public class ProfileActivity extends AppCompatActivity {
                     return null;
                 })
                 .finish(result -> {
+                    progressBar.setVisibility(View.GONE);
                     Profile profile = (Profile) result;
                     if (profile != null) {
+                        successContainer.setVisibility(View.VISIBLE);
                         Glide.with(this).load(profile.getPicture()).into(imageView);
                         nameTextView.setText(profile.getName());
                         givenNameTextView.setText(profile.getGivenName());
@@ -78,7 +86,7 @@ public class ProfileActivity extends AppCompatActivity {
                         emailImageView.setVisibility(profile.isEmailVerified() ? View.VISIBLE : View.GONE);
                         localeTextView.setText(profile.getLocale());
                     } else {
-                        Toast.makeText(this, R.string.retrieve_profile_failed, Toast.LENGTH_SHORT).show();
+                        failureContainer.setVisibility(View.VISIBLE);
                     }
                 })
                 .execute();

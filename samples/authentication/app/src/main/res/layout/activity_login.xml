@@ -8,13 +8,13 @@
 
     <Button
         android:id="@+id/login_button"
+        style="@style/SmallWhiteTitleTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="120dp"
         android:background="@drawable/button_selector"
         android:text="@string/login"
         android:textAllCaps="true"
-        android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
