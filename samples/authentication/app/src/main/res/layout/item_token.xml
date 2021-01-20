@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/token_label_text_view"
-        style="@style/SmallTitleTextStyle"
+        style="@style/SmallBlackTitleTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -18,7 +18,7 @@
 
     <TextView
         android:id="@+id/token_type_label_text_view"
-        style="@style/SmallTitleTextStyle"
+        style="@style/SmallBlackTitleTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -29,7 +29,7 @@
 
     <TextView
         android:id="@+id/token_type_value_text_view"
-        style="@style/SmallDescriptionTextStyle"
+        style="@style/SmallBlackDescriptionTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -41,7 +41,7 @@
 
     <TextView
         android:id="@+id/token_value_text_view"
-        style="@style/SmallDescriptionTextStyle"
+        style="@style/SmallBlackDescriptionTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -52,7 +52,7 @@
 
     <TextView
         android:id="@+id/expires_text_view"
-        style="@style/SmallTitleTextStyle"
+        style="@style/SmallBlackTitleTextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"

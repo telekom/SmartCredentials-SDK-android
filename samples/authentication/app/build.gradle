@@ -45,7 +45,7 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
@@ -54,10 +54,10 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.nimbusds:nimbus-jose-jwt:9.0.1'
 
-    implementation("de.telekom.smartcredentials:core:6.2.1L")
-    implementation("de.telekom.smartcredentials:security:6.2.1L")
-    implementation("de.telekom.smartcredentials:storage:6.2.1L")
-    implementation("de.telekom.smartcredentials:authentication:6.2.1L")
+    implementation("de.telekom.smartcredentials:core:6.2.2")
+    implementation("de.telekom.smartcredentials:security:6.2.2")
+    implementation("de.telekom.smartcredentials:storage:6.2.2")
+    implementation("de.telekom.smartcredentials:authentication:6.2.2")
 
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

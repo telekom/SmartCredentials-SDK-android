@@ -81,9 +81,14 @@ public class TokensActivity extends AppCompatActivity {
                             @Override
                             public void onRefreshComplete(@Nullable String accessToken, @Nullable String idToken, @Nullable AuthorizationException exception) {
                                 runOnUiThread(() -> {
-                                    Toast.makeText(TokensActivity.this, R.string.perform_action_success,
-                                            Toast.LENGTH_SHORT).show();
-                                    fetchTokens();
+                                    if (exception != null) {
+                                        Toast.makeText(TokensActivity.this,
+                                                R.string.perform_action_failed, Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(TokensActivity.this, R.string.perform_action_success,
+                                                Toast.LENGTH_SHORT).show();
+                                        fetchTokens();
+                                    }
                                 });
                             }
 
@@ -101,9 +106,14 @@ public class TokensActivity extends AppCompatActivity {
                             @Override
                             public void onTokenRequestCompleted(@Nullable AuthenticationTokenResponse response, @Nullable AuthorizationException exception) {
                                 runOnUiThread(() -> {
-                                    fetchTokens();
-                                    Toast.makeText(TokensActivity.this, R.string.refresh_access_token_success,
-                                            Toast.LENGTH_SHORT).show();
+                                    if (exception != null) {
+                                        Toast.makeText(TokensActivity.this,
+                                                R.string.refresh_access_token_failed, Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        fetchTokens();
+                                        Toast.makeText(TokensActivity.this, R.string.refresh_access_token_success,
+                                                Toast.LENGTH_SHORT).show();
+                                    }
                                 });
                             }
 

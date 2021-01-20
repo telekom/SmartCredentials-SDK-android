@@ -10,18 +10,27 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
-    <style name="BigTitletextStyle">
+    <style name="BigBlackTitleTextStyle">
+        <item name="fontFamily">@font/opensans_bold</item>
         <item name="android:textColor">@color/colorAccent</item>
         <item name="android:textSize">@dimen/big_text_size</item>
     </style>
 
-    <style name="SmallTitleTextStyle">
+    <style name="SmallBlackTitleTextStyle">
+        <item name="fontFamily">@font/opensans_bold</item>
         <item name="android:textColor">@color/colorAccent</item>
         <item name="android:textSize">@dimen/small_text_size</item>
     </style>
 
-    <style name="SmallDescriptionTextStyle">
+    <style name="SmallBlackDescriptionTextStyle">
+        <item name="fontFamily">@font/opensans_regular</item>
         <item name="android:textColor">@color/lightTextColor</item>
+        <item name="android:textSize">@dimen/small_text_size</item>
+    </style>
+
+    <style name="SmallWhiteTitleTextStyle">
+        <item name="fontFamily">@font/opensans_regular</item>
+        <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">@dimen/small_text_size</item>
     </style>
 </resources>
