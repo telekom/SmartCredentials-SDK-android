@@ -10,7 +10,7 @@
     <string name="log_token_button_text">LOG TOKEN</string>
     <string name="notification_title">Notification Title:</string>
     <string name="notification_body">Notification Body:</string>
-    <string name="notification_channel_name">sc_pushnotifications_demo_notification_channel</string>
+    <string name="notification_channel_name">SmartCredentials</string>
     <string name="notification_channel_description">Basic notification channel</string>
     <string name="registration_token_log_text">Registration Token:</string>
     <string name="subscribed">Subscribed</string>
