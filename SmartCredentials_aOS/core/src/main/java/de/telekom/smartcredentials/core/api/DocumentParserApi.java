@@ -18,6 +18,7 @@ package de.telekom.smartcredentials.core.api;
 
 import android.content.Context;
 
+import de.telekom.smartcredentials.core.documentparser.callbacks.DebugCallback;
 import de.telekom.smartcredentials.core.documentparser.callbacks.OtherDocumentsCallback;
 import de.telekom.smartcredentials.core.documentparser.callbacks.ParsingCompletionCallback;
 import de.telekom.smartcredentials.core.documentparser.callbacks.ProcessingCompletionCallback;
@@ -40,4 +41,6 @@ public interface DocumentParserApi {
     void pollData(Context context);
 
     void submitData(Context context);
+
+    void setDebugListener(DebugCallback callback);
 }
