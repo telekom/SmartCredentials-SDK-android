@@ -19,6 +19,7 @@ apply from: "../gradle/task/maven_push_library.gradle"
 
 android {
     compileSdkVersion rootProject.ext.androidCompileSdkVersion
+    ndkVersion rootProject.ext.androidNdkVersion
 
     defaultConfig {
         minSdkVersion rootProject.ext.androidMinSdkVersion
