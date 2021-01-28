@@ -4,138 +4,178 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="vertical"
     tools:context=".profile.ProfileActivity">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profile_image_view"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="48dp"
-        app:civ_border_color="@color/colorAccent"
-        app:civ_border_width="2dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/name_text_view"
-        style="@style/BigTitletextStyle"
+    <ProgressBar
+        android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
-        tools:text="Max Mustermann" />
+        android:indeterminateTint="@color/colorPrimary"
+        tools:visibility="gone"
+        android:indeterminate="true"
+        android:visibility="visible" />
 
     <LinearLayout
+        android:id="@+id/failure_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp">
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        tools:visibility="visible"
+        android:visibility="gone">
+
+        <ImageView
+            android:src="@drawable/ic_alert_black_50"
+            android:layout_marginTop="48dp"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:contentDescription="@string/failure" />
 
         <TextView
+            style="@style/SmallBlackDescriptionTextStyle"
             android:layout_width="wrap_content"
+            android:layout_marginTop="16dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:text="@string/given_name"
-            android:textColor="@color/colorAccent"
-            android:textSize="@dimen/small_text_size" />
+            android:text="@string/failed_to_retrieve_profile" />
 
-        <TextView
-            android:id="@+id/given_name_text_view"
-            style="@style/SmallDescriptionTextStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="Max" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/success_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="16dp">
+        tools:visibility="gone"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:text="@string/family_name"
-            android:textColor="@color/colorAccent"
-            android:textSize="@dimen/small_text_size" />
-
-        <TextView
-            android:id="@+id/family_name_text_view"
-            style="@style/SmallDescriptionTextStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="Mustermann" />
-    </LinearLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="16dp">
-
-        <TextView
-            android:id="@+id/email_label_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/email"
-            android:textColor="@color/colorAccent"
-            android:textSize="@dimen/small_text_size"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_image_view"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="48dp"
+            app:civ_border_color="@color/colorAccent"
+            app:civ_border_width="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/email_value_text_view"
-            style="@style/SmallDescriptionTextStyle"
+            android:id="@+id/name_text_view"
+            style="@style/BigBlackTitleTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/email_label_text_view"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="max.mustermann@telekom.de" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            tools:text="Max Mustermann" />
 
-        <ImageView
-            android:id="@+id/email_verified_image_view"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:contentDescription="@string/email_verified"
-            android:src="@drawable/ic_verified_user_magenta_24"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="16dp">
-
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:text="@string/locale"
-            android:textColor="@color/colorAccent"
-            android:textSize="@dimen/small_text_size" />
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp">
 
-        <TextView
-            android:id="@+id/locale_text_view"
-            style="@style/SmallDescriptionTextStyle"
-            android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/SmallBlackTitleTextStyle"
+                android:layout_marginEnd="8dp"
+                android:text="@string/given_name" />
+
+            <TextView
+                android:id="@+id/given_name_text_view"
+                style="@style/SmallBlackDescriptionTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Max" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="de" />
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/SmallBlackTitleTextStyle"
+                android:layout_marginEnd="8dp"
+                android:text="@string/family_name" />
+
+            <TextView
+                android:id="@+id/family_name_text_view"
+                style="@style/SmallBlackDescriptionTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Mustermann" />
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp">
+
+            <TextView
+                android:id="@+id/email_label_text_view"
+                android:layout_width="wrap_content"
+                style="@style/SmallBlackTitleTextStyle"
+                android:layout_height="wrap_content"
+                android:text="@string/email"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/email_value_text_view"
+                style="@style/SmallBlackDescriptionTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/email_label_text_view"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="max.mustermann@telekom.de" />
+
+            <ImageView
+                android:id="@+id/email_verified_image_view"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="@string/email_verified"
+                android:src="@drawable/ic_verified_user_magenta_24"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/locale"
+                style="@style/SmallBlackTitleTextStyle" />
+
+            <TextView
+                android:id="@+id/locale_text_view"
+                style="@style/SmallBlackDescriptionTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="de" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

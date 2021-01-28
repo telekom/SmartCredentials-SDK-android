@@ -33,4 +33,6 @@
     <string name="signed_jwt">Signed JWT</string>
     <string name="plain_jwt">Plain JWT</string>
     <string name="unknown">Unknown</string>
+    <string name="failed_to_retrieve_profile">Failed to retrieve profile.</string>
+    <string name="failure">Failure</string>
 </resources>

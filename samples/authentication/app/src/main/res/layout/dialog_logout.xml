@@ -7,11 +7,11 @@
     android:padding="32dp">
 
     <TextView
+        style="@style/SmallBlackDescriptionTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/colorAccent"
-        android:text="@string/logout_in_progress"
-        android:textSize="14sp" />
+        android:text="@string/logout_in_progress" />
 
     <ProgressBar
         android:layout_width="wrap_content"
