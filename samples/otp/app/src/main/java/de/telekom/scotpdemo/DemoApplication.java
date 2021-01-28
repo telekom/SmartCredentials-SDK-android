@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.facebook.stetho.Stetho;
 
+import java.util.Collections;
+
 import de.telekom.smartcredentials.camera.factory.SmartCredentialsCameraFactory;
 import de.telekom.smartcredentials.core.api.CoreApi;
 import de.telekom.smartcredentials.core.configurations.SmartCredentialsConfiguration;
@@ -20,6 +22,7 @@ import timber.log.Timber;
 public class DemoApplication extends Application {
 
     public static final String TAG = "otp_tag";
+    public static final String SHA_1_ALGORITHM = "SHA1";
 
     @Override
     public void onCreate() {
@@ -44,5 +47,6 @@ public class DemoApplication extends Application {
                 SmartCredentialsSecurityFactory.getSecurityApi(),
                 SmartCredentialsStorageFactory.getStorageApi(),
                 SmartCredentialsCameraFactory.getCameraApi());
+        SmartCredentialsOtpFactory.addAcceptedAlgorithms(Collections.singletonList(SHA_1_ALGORITHM));
     }
 }
