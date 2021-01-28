@@ -49,15 +49,15 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'com.facebook.stetho:stetho:1.5.1'
     implementation 'com.airbnb.android:lottie:3.4.1'
-
-    implementation("de.telekom.smartcredentials:core:6.2.1")
-    implementation("de.telekom.smartcredentials:otp:6.2.1")
-    implementation("de.telekom.smartcredentials:security:6.2.1")
-    implementation("de.telekom.smartcredentials:storage:6.2.1")
-    implementation("de.telekom.smartcredentials:camera:6.2.1")
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.google.android.material:material:1.2.0'
+
+    implementation("de.telekom.smartcredentials:core:${smartCredentialsVersion}")
+    implementation("de.telekom.smartcredentials:otp:${smartCredentialsVersion}")
+    implementation("de.telekom.smartcredentials:security:${smartCredentialsVersion}")
+    implementation("de.telekom.smartcredentials:storage:${smartCredentialsVersion}")
+    implementation("de.telekom.smartcredentials:camera:${smartCredentialsVersion}")
 
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

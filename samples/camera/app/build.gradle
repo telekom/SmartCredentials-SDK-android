@@ -50,8 +50,8 @@ dependencies {
     implementation 'com.airbnb.android:lottie:3.4.2'
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
-    implementation("de.telekom.smartcredentials:core:6.2.1")
-    implementation("de.telekom.smartcredentials:camera:6.2.1")
+    implementation("de.telekom.smartcredentials:core:${smartCredentialsVersion}")
+    implementation("de.telekom.smartcredentials:camera:${smartCredentialsVersion}")
 
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
