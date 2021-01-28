@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements OtpAdapter.OtpCli
                                                  getString(R.string.otp_error, itemEnvelope.getItemId(), otpPluginError.getDesc()),
                                                  Toast.LENGTH_SHORT).show());
                              }
-                         }, MacAlgorithm.SHA256);
+                         }, DemoApplication.SHA_1_ALGORITHM);
                      }
 
                      @Override
@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements OtpAdapter.OtpCli
                                 Toast.LENGTH_SHORT).show()
                         );
                     }
-                }, MacAlgorithm.SHA256);
+                }, DemoApplication.SHA_1_ALGORITHM);
             }
 
             @Override
@@ -240,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements OtpAdapter.OtpCli
                                     itemEnvelope.getItemId(), otpPluginError.getDesc()), Toast.LENGTH_SHORT)
                                     .show());
                 }
-            }, MacAlgorithm.SHA256);
+            }, DemoApplication.SHA_1_ALGORITHM);
         }
     }
 
