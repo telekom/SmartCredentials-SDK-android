@@ -27,7 +27,7 @@ bintray {
     publish = true
     pkg {
         repo = 'SmartCredentials'
-        name = 'android'
+        name = 'smartcredentials'
         userOrg = getEnvOrProperty('BINTRAY_SC_USERORG')
         licenses = ['Apache-2.0']
         version {
