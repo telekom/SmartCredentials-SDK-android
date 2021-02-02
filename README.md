@@ -23,7 +23,7 @@ repositories {
 ```
 Continue by adding one or more Smart Credentials dependecies to your application or SDK build.gradle file, using the latest Smart Credentials version available.
 
-![Generic badge](https://img.shields.io/badge/version-6.2.1-green)
+![Generic badge](https://img.shields.io/badge/version-6.2.3-green)
 ```
 implementation("de.telekom.smartcredentials:core:$smartCredentialsVersion")
 implementation("de.telekom.smartcredentials:authentication:$smartCredentialsVersion")

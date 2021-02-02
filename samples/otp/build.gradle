@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:4.1.1"
+        classpath "com.android.tools.build:gradle:4.1.2"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -20,7 +20,7 @@ allprojects {
     }
 
     project.ext {
-        smartCredentialsVersion = "6.2.2"
+        smartCredentialsVersion = "6.2.3"
     }
 }
 

@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.1"
+    buildToolsVersion "30.0.2"
 
     defaultConfig {
         applicationId "de.telekom.scdocumentscannerdemo"
@@ -49,7 +49,7 @@ android {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     implementation("de.telekom.smartcredentials:core:${smartCredentialsVersion}")

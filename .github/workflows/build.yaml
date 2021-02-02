@@ -9,11 +9,11 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v2
       - name: Lint
-        run: cd SmartCredentials_aOS && ./gradlew lint
+        run: cd SmartCredentials_aOS && chmod +x ./gradlew lint
       - name: Test
-        run: cd SmartCredentials_aOS && ./gradlew test
+        run: cd SmartCredentials_aOS && chmod +x ./gradlew test
       - name: Assemble all subproject aar files
-        run: cd SmartCredentials_aOS && ./gradlew assembleRelease && ./gradlew publishToMavenLocal
+        run: cd SmartCredentials_aOS && chmod +x ./gradlew assembleRelease && chmod +x ./gradlew publishToMavenLocal
         
       - name: Upload Authentication AAR
         uses: actions/upload-artifact@v2
