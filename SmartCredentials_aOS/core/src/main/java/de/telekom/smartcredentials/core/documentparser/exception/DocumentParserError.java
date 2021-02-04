@@ -21,6 +21,7 @@ public enum DocumentParserError {
     INVALID_BRAND("Invalid brand."),
     INVALID_ENVIRONMENT("Invalid parsing environment."),
     INVALID_JWT("Invalid jwt."),
+    INVALID_FCM_SENDER_ID("Invalid FCM sender ID."),
     INVALID_SCANNER_CONFIGURATION("Invalid Scanner Configuration."),
     INVALID_PARSER_CONFIGURATION("Invalid Document Parser Configuration"),
     INVALID_PARSING_COMPLETION_CALLBACK("Parsing Completion callback have not been initialized."),

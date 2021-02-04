@@ -24,15 +24,17 @@ import de.telekom.smartcredentials.core.documentparser.model.ParsingEnvironment;
  */
 public class DocumentParserConfiguration {
 
-    private Brand mBrand;
-    private ParsingEnvironment mEnvironment;
-    private String mJwtToken;
-    private ScannerConfiguration mScannerConfiguration;
+    private final Brand mBrand;
+    private final ParsingEnvironment mEnvironment;
+    private final String mJwtToken;
+    private final String mFcmSenderId;
+    private final ScannerConfiguration mScannerConfiguration;
 
     private DocumentParserConfiguration(ConfigurationBuilder builder) {
         mBrand = builder.brand;
         mEnvironment = builder.environment;
         mJwtToken = builder.jwtToken;
+        mFcmSenderId = builder.fcmSenderId;
         mScannerConfiguration = builder.scannerConfiguration;
     }
 
@@ -48,20 +50,26 @@ public class DocumentParserConfiguration {
         return mJwtToken;
     }
 
+    public String getFcmSenderId() {
+        return mFcmSenderId;
+    }
+
     public ScannerConfiguration getScannerConfiguration() {
         return mScannerConfiguration;
     }
 
     public static class ConfigurationBuilder {
-        private Brand brand;
-        private ParsingEnvironment environment;
-        private String jwtToken;
+        private final Brand brand;
+        private final ParsingEnvironment environment;
+        private final String jwtToken;
+        private final String fcmSenderId;
         private ScannerConfiguration scannerConfiguration;
 
-        public ConfigurationBuilder(Brand brand, ParsingEnvironment environment, String jwtToken) {
+        public ConfigurationBuilder(Brand brand, ParsingEnvironment environment, String jwtToken, String fcmSenderId) {
             this.brand = brand;
             this.environment = environment;
             this.jwtToken = jwtToken;
+            this.fcmSenderId = fcmSenderId;
             this.scannerConfiguration = new ScannerConfiguration();
         }
 
