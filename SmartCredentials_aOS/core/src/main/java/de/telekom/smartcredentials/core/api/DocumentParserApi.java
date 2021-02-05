@@ -39,7 +39,7 @@ public interface DocumentParserApi {
 
     void setOtherDocumentsListener(OtherDocumentsCallback callback);
 
-    void onNotificationReceived(Context context, Map<String, String> notificationData);
+    void sendNotificationData(Context context, Map<String, String> notificationData);
 
     void pollData(Context context);
 
