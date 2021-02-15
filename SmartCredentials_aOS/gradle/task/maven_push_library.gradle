@@ -18,25 +18,8 @@ import java.util.regex.Pattern
  */
 
 apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.bintray'
-
-bintray {
-    user = getEnvOrProperty('BINTRAY_SC_USERNAME')
-    key = getEnvOrProperty('BINTRAY_SC_KEY')
-    publications = ['maven']
-    publish = true
-    pkg {
-        repo = 'SmartCredentials'
-        name = 'smartcredentials'
-        userOrg = getEnvOrProperty('BINTRAY_SC_USERORG')
-        licenses = ['Apache-2.0']
-        version {
-            name = rootProject.ext.androidVersionName
-            desc = 'Smart-Credentials Library'
-            vcsTag = '1.0.0'
-        }
-    }
-}
+apply plugin: 'maven'
+apply plugin: 'signing'
 
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
@@ -68,6 +51,16 @@ def pomConfig = {
 publishing {
     group = "de.telekom.smartcredentials"
     version = rootProject.ext.androidVersionName
+    repositories {
+        maven {
+            name = "MavenCentral"
+            url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
+            credentials {
+                username = getEnvOrProperty('SONATYPE_USERNAME')
+                password = getEnvOrProperty('SONATYPE_PASSWORD')
+            }
+        }
+    }
     publications {
         maven(MavenPublication) {
             groupId project.getGroup()

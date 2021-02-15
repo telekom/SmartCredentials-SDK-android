@@ -148,3 +148,8 @@ jobs:
         with:
             name: sampleApplications
             path: samples/storage/app/build/outputs/apk/release/       
+      - name: Sonatype Upload
+        env:
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+        run: cd SmartCredentials_aOS && ./gradlew publish       
