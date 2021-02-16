@@ -31,8 +31,8 @@ interface PolicyService {
         const val POLICIES_API_URL = "https://dtpolicyapi.azurewebsites.net/"
     }
 
-    @GET("/odata/PolicySchema")
-    fun getPolicySchemas(): Observable<PolicySchemaResponse>
+    @GET("/odata/PolicySchema?\$filter")
+    fun getPolicySchemas(@Query("\$filter") userId: String): Observable<PolicySchemaResponse>
 
     @POST("/UserPolicy")
     fun postPoliciesAsync(@Body userPolicy: UserPolicy): Observable<Void>

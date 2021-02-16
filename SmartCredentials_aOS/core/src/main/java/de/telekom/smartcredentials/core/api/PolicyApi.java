@@ -23,5 +23,5 @@ import de.telekom.smartcredentials.core.pmc.PoliciesCallback;
  */
 public interface PolicyApi<P> {
 
-    void fetchPolicies(PoliciesCallback<P> callback);
+    void fetchPolicies(String filter, PoliciesCallback<P> callback);
 }

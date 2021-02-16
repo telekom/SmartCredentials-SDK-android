@@ -14,14 +14,9 @@
  * limitations under the License.
  */
 
-package de.telekom.smartcredentials.core.pmc;
+package de.telekom.smartcredentials.pmc
 
 /**
- * Created by Alex.Graur@endava.com at 2/10/2021
+ * Created by Alex.Graur@endava.com at 2/15/2021
  */
-public interface PoliciesCallback<P> {
-
-    void onSuccess(P policies);
-
-    void onFailure(Throwable t);
-}
+data class PolicyData(val id: Int)

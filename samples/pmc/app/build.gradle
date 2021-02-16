@@ -51,6 +51,8 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     implementation("de.telekom.smartcredentials:core:${smartCredentialsVersion}")
+    implementation("de.telekom.smartcredentials:security:${smartCredentialsVersion}")
+    implementation("de.telekom.smartcredentials:storage:${smartCredentialsVersion}")
     implementation("de.telekom.smartcredentials:pmc:${smartCredentialsVersion}")
 
     testImplementation 'junit:junit:4.+'

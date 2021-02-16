@@ -16,8 +16,11 @@
 
 package de.telekom.smartcredentials.pmc
 
+import com.squareup.moshi.Moshi
 import de.telekom.smartcredentials.core.api.PolicyApi
+import de.telekom.smartcredentials.core.api.StorageApi
 import de.telekom.smartcredentials.core.pmc.PoliciesCallback
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -25,21 +28,37 @@ import io.reactivex.schedulers.Schedulers
 /**
  * Created by Alex.Graur@endava.com at 2/10/2021
  */
-class PolicyController : PolicyApi<PolicySchemaResponse> {
+class PmcController(val storageApi: StorageApi) : PolicyApi<List<Policy?>> {
 
     private val compositeDisposable = CompositeDisposable()
 
-    override fun fetchPolicies(callback: PoliciesCallback<PolicySchemaResponse>) {
+    override fun fetchPolicies(filter: String, callback: PoliciesCallback<List<Policy?>>) {
+        val repository = Repository(storageApi)
         val policyService = RetrofitClient().createRetrofitClient().create(PolicyService::class.java)
-        compositeDisposable.add(policyService.getPolicySchemas()
-                .observeOn(Schedulers.io())
+        compositeDisposable.add(policyService.getPolicySchemas(filter)
+                .flatMap {
+                    val policies = mutableListOf<Policy?>()
+                    for (policySchema in it.value) {
+                        val noBackslashPolicySchemaContent = policySchema.policySchemaContent?.replace(
+                                "\\",
+                                ""
+                        )
+                        noBackslashPolicySchemaContent?.substring(1, noBackslashPolicySchemaContent.length - 1)
+                        val moshiBuilder = Moshi.Builder().build()
+                        val jsonAdapter = moshiBuilder.adapter(Policy::class.java).lenient()
+                        val policy: Policy? = jsonAdapter.fromJson(noBackslashPolicySchemaContent)
+                        policies.add(policy)
+                    }
+                    return@flatMap Observable.just(policies)
+                }
+                .observeOn(Schedulers.computation())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         {
                             callback.onSuccess(it)
                         },
                         {
-                            callback.onFailure()
+                            callback.onFailure(it)
                         }))
     }
 }

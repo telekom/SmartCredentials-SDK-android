@@ -44,7 +44,7 @@ class RetrofitClient {
                                 Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
                         ).asLenient()
                 )
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
                 .build()
     }
 }

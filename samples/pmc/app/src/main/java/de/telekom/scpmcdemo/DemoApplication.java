@@ -2,9 +2,15 @@ package de.telekom.scpmcdemo;
 
 import android.app.Application;
 
+import de.telekom.smartcredentials.core.api.CoreApi;
+import de.telekom.smartcredentials.core.api.SecurityApi;
+import de.telekom.smartcredentials.core.api.StorageApi;
 import de.telekom.smartcredentials.core.configurations.SmartCredentialsConfiguration;
 import de.telekom.smartcredentials.core.factory.SmartCredentialsCoreFactory;
 import de.telekom.smartcredentials.core.rootdetector.RootDetectionOption;
+import de.telekom.smartcredentials.pmc.factory.SmartCredentialsPmcFactory;
+import de.telekom.smartcredentials.security.factory.SmartCredentialsSecurityFactory;
+import de.telekom.smartcredentials.storage.factory.SmartCredentialsStorageFactory;
 import timber.log.Timber;
 
 public class DemoApplication extends Application {
@@ -21,6 +27,9 @@ public class DemoApplication extends Application {
                 .setRootCheckerEnabled(RootDetectionOption.ALL)
                 .setAppAlias(getString(R.string.app_alias))
                 .build();
-        SmartCredentialsCoreFactory.initialize(configuration);
+        CoreApi coreApi = SmartCredentialsCoreFactory.initialize(configuration);
+        SecurityApi securityApi = SmartCredentialsSecurityFactory.initSmartCredentialsSecurityModule(this, coreApi);
+        StorageApi storageApi = SmartCredentialsStorageFactory.initSmartCredentialsStorageModule(this, coreApi, securityApi);
+        SmartCredentialsPmcFactory.initSmartCredentialsPmcModule(storageApi);
     }
 }
