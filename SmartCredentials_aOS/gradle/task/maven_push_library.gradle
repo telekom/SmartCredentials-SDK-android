@@ -27,6 +27,21 @@ task sourcesJar(type: Jar) {
     include("**")
 }
 
+File secretPropsFile = project.rootProject.file('local.properties')
+if (secretPropsFile.exists()) {
+    Properties p = new Properties()
+    new FileInputStream(secretPropsFile).withCloseable { is ->
+        p.load(is)
+    }
+    p.each { name, value ->
+        ext[name] = value
+    }
+} else {
+    ext["signing.keyId"] = getEnvOrProperty('OSSRH_GPG_SECRET_KEY_ID')
+    ext["signing.password"] = getEnvOrProperty('OSSRH_GPG_SECRET_KEY_PASSWORD')
+    ext["signing.secretKeyRingFile"] = '/release.gpg'
+}
+
 def pomConfig = {
     licenses {
         license {
@@ -111,6 +126,10 @@ publishing {
             }
         }
     }
+}
+
+signing {
+    sign publishing.publications
 }
 
 def getCurrentFlavor() {

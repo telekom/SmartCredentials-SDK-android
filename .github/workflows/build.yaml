@@ -8,13 +8,22 @@ jobs:
         run: echo "y" | sudo /usr/local/lib/android/sdk/tools/bin/sdkmanager --install "ndk;21.3.6528147" --sdk_root=${ANDROID_SDK_ROOT}
       - name: Checkout the code
         uses: actions/checkout@v2
-      - name: Lint
-        run: cd SmartCredentials_aOS && ./gradlew lint
-      - name: Test
-        run: cd SmartCredentials_aOS && ./gradlew test
+
+      - name: Prepare environment
+        env:
+          GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
+          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
+        run: |
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output $GITHUB_WORKSPACE/authentication/release.gpg --dearmor ./release.asc
+    
       - name: Assemble all subproject aar files
         run: cd SmartCredentials_aOS && ./gradlew assembleRelease && ./gradlew publishToMavenLocal
-        
+        env:
+          OSSRH_GPG_SECRET_KEY_ID: ${{ secrets.OSSRH_GPG_SECRET_KEY_ID }}
+          OSSRH_GPG_SECRET_KEY_BASE64: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
+          OSSRH_GPG_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
+          OSSRH_GPG_SECRET_KEY_PASSWORD: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
       - name: Upload Authentication AAR
         uses: actions/upload-artifact@v2
         with:
@@ -152,4 +161,7 @@ jobs:
         env:
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          OSSRH_GPG_SECRET_KEY_ID: ${{ secrets.OSSRH_GPG_SECRET_KEY_ID }}
+          OSSRH_GPG_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
+          OSSRH_GPG_SECRET_KEY_PASSWORD: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
         run: cd SmartCredentials_aOS && ./gradlew publish       
