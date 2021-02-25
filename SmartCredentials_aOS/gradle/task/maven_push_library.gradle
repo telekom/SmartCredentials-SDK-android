@@ -39,7 +39,7 @@ if (secretPropsFile.exists()) {
 } else {
     ext["signing.keyId"] = getEnvOrProperty('OSSRH_GPG_SECRET_KEY_ID')
     ext["signing.password"] = getEnvOrProperty('OSSRH_GPG_SECRET_KEY_PASSWORD')
-    ext["signing.secretKeyRingFile"] = '/release.gpg'
+    ext["signing.secretKeyRingFile"] = 'release.gpg'
 }
 
 def pomConfig = {

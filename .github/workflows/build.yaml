@@ -9,14 +9,123 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v2
 
-      - name: Prepare environment
+      - name: Prepare authentication environment
         env:
           GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
           SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
         run: |
+          cd SmartCredentials_aOS/authentication
           echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
-          gpg --quiet --output $GITHUB_WORKSPACE/authentication/release.gpg --dearmor ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
     
+      - name: Prepare authorization environment
+        env:
+          GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
+          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
+        run: |
+          cd SmartCredentials_aOS/authorization
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
+          
+      - name: Prepare camera environment
+        env:
+          GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
+          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
+        run: |
+          cd SmartCredentials_aOS/camera
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
+          
+      - name: Prepare core environment
+        env:
+          GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
+          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
+        run: |
+          cd SmartCredentials_aOS/core
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
+
+      - name: Prepare documentscanner environment
+        env:
+          GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
+          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
+        run: |
+          cd SmartCredentials_aOS/documentscanner
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
+
+      - name: Prepare eid environment
+        env:
+          GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
+          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
+        run: |
+          cd SmartCredentials_aOS/eid
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
+
+      - name: Prepare networking environment
+        env:
+          GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
+          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
+        run: |
+          cd SmartCredentials_aOS/networking
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
+
+      - name: Prepare otp environment
+        env:
+          GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
+          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
+        run: |
+          cd SmartCredentials_aOS/otp
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
+
+      - name: Prepare persistentlogging environment
+        env:
+          GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
+          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
+        run: |
+          cd SmartCredentials_aOS/persistentlogging
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
+
+      - name: Prepare pushnotifications environment
+        env:
+          GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
+          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
+        run: |
+          cd SmartCredentials_aOS/pushnotifications
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
+
+      - name: Prepare qrlogin environment
+        env:
+          GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
+          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
+        run: |
+          cd SmartCredentials_aOS/qrlogin
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
+
+      - name: Prepare security environment
+        env:
+          GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
+          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
+        run: |
+          cd SmartCredentials_aOS/security
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
+
+      - name: Prepare storage environment
+        env:
+          GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
+          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
+        run: |
+          cd SmartCredentials_aOS/storage
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
+          
       - name: Assemble all subproject aar files
         run: cd SmartCredentials_aOS && ./gradlew assembleRelease && ./gradlew publishToMavenLocal
         env:
