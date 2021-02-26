@@ -129,6 +129,7 @@ publishing {
 }
 
 signing {
+    required {gradle.taskGraph.hasTask("publications")}
     sign publishing.publications
 }
 

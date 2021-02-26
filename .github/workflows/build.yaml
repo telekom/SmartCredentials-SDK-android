@@ -8,124 +8,62 @@ jobs:
         run: echo "y" | sudo /usr/local/lib/android/sdk/tools/bin/sdkmanager --install "ndk;21.3.6528147" --sdk_root=${ANDROID_SDK_ROOT}
       - name: Checkout the code
         uses: actions/checkout@v2
-
-      - name: Prepare authentication environment
+      - name: Prepare signing keys
         env:
           GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
-          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
         run: |
+          echo 'Create authentication module signing key'
           cd SmartCredentials_aOS/authentication
           echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
           gpg --quiet --output ./release.gpg --dearmor ./release.asc
-    
-      - name: Prepare authorization environment
-        env:
-          GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
-          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
-        run: |
-          cd SmartCredentials_aOS/authorization
+          echo 'Create authorization module signing key'
+          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/authorization
           echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
           gpg --quiet --output ./release.gpg --dearmor ./release.asc
-          
-      - name: Prepare camera environment
-        env:
-          GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
-          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
-        run: |
-          cd SmartCredentials_aOS/camera
+          echo 'Create camera module signing key'
+          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/camera
           echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
           gpg --quiet --output ./release.gpg --dearmor ./release.asc
-          
-      - name: Prepare core environment
-        env:
-          GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
-          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
-        run: |
-          cd SmartCredentials_aOS/core
+          echo 'Create core module signing key'
+          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/core
           echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
           gpg --quiet --output ./release.gpg --dearmor ./release.asc
-
-      - name: Prepare documentscanner environment
-        env:
-          GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
-          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
-        run: |
-          cd SmartCredentials_aOS/documentscanner
+          echo 'Create documentscanner module signing key'
+          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/documentscanner
           echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
           gpg --quiet --output ./release.gpg --dearmor ./release.asc
-
-      - name: Prepare eid environment
-        env:
-          GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
-          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
-        run: |
-          cd SmartCredentials_aOS/eid
+          echo 'Create eid module signing key'
+          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/eid
           echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
           gpg --quiet --output ./release.gpg --dearmor ./release.asc
-
-      - name: Prepare networking environment
-        env:
-          GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
-          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
-        run: |
-          cd SmartCredentials_aOS/networking
+          echo 'Create networking module signing key'
+          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/networking
           echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
           gpg --quiet --output ./release.gpg --dearmor ./release.asc
-
-      - name: Prepare otp environment
-        env:
-          GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
-          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
-        run: |
-          cd SmartCredentials_aOS/otp
+          echo 'Create otp module signing key'
+          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/otp
           echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
           gpg --quiet --output ./release.gpg --dearmor ./release.asc
-
-      - name: Prepare persistentlogging environment
-        env:
-          GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
-          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
-        run: |
-          cd SmartCredentials_aOS/persistentlogging
+          echo 'Create persistentlogging module signing key'
+          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/persistentlogging
           echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
           gpg --quiet --output ./release.gpg --dearmor ./release.asc
-
-      - name: Prepare pushnotifications environment
-        env:
-          GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
-          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
-        run: |
-          cd SmartCredentials_aOS/pushnotifications
+          echo 'Create pushnotifications module signing key'
+          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/pushnotifications
           echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
           gpg --quiet --output ./release.gpg --dearmor ./release.asc
-
-      - name: Prepare qrlogin environment
-        env:
-          GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
-          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
-        run: |
-          cd SmartCredentials_aOS/qrlogin
+          echo 'Create qrlogin module signing key'
+          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/qrlogin
           echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
           gpg --quiet --output ./release.gpg --dearmor ./release.asc
-
-      - name: Prepare security environment
-        env:
-          GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
-          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
-        run: |
-          cd SmartCredentials_aOS/security
+          echo 'Create security module signing key'
+          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/security
           echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
           gpg --quiet --output ./release.gpg --dearmor ./release.asc
-
-      - name: Prepare storage environment
-        env:
-          GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
-          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
-        run: |
-          cd SmartCredentials_aOS/storage
+          echo 'Create storage module signing key'
+          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/storage
           echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
           gpg --quiet --output ./release.gpg --dearmor ./release.asc
-          
       - name: Assemble all subproject aar files
         run: cd SmartCredentials_aOS && ./gradlew assembleRelease && ./gradlew publishToMavenLocal
         env:
@@ -265,12 +203,11 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
             name: sampleApplications
-            path: samples/storage/app/build/outputs/apk/release/       
+            path: samples/storage/app/build/outputs/apk/release/
       - name: Sonatype Upload
         env:
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           OSSRH_GPG_SECRET_KEY_ID: ${{ secrets.OSSRH_GPG_SECRET_KEY_ID }}
-          OSSRH_GPG_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
           OSSRH_GPG_SECRET_KEY_PASSWORD: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
-        run: cd SmartCredentials_aOS && ./gradlew publish       
+        run: cd SmartCredentials_aOS && ./gradlew publish
