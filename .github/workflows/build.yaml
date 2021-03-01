@@ -9,12 +9,72 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v2
       - name: Lint
-        run: cd SmartCredentials_aOS && ./gradlew lint
+        run: cd SmartCredentials_aOS && ./gradlew lint 
       - name: Test
         run: cd SmartCredentials_aOS && ./gradlew test
+      - name: Prepare signing keys
+        env:
+          GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
+        run: |
+          echo 'Create authentication module signing key'
+          cd SmartCredentials_aOS/authentication
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
+          echo 'Create authorization module signing key'
+          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/authorization
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
+          echo 'Create camera module signing key'
+          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/camera
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
+          echo 'Create core module signing key'
+          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/core
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
+          echo 'Create documentscanner module signing key'
+          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/documentscanner
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
+          echo 'Create eid module signing key'
+          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/eid
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
+          echo 'Create networking module signing key'
+          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/networking
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
+          echo 'Create otp module signing key'
+          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/otp
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
+          echo 'Create persistentlogging module signing key'
+          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/persistentlogging
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
+          echo 'Create pushnotifications module signing key'
+          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/pushnotifications
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
+          echo 'Create qrlogin module signing key'
+          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/qrlogin
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
+          echo 'Create security module signing key'
+          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/security
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
+          echo 'Create storage module signing key'
+          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/storage
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
       - name: Assemble all subproject aar files
         run: cd SmartCredentials_aOS && ./gradlew assembleRelease && ./gradlew publishToMavenLocal
-        
+        env:
+          OSSRH_GPG_SECRET_KEY_ID: ${{ secrets.OSSRH_GPG_SECRET_KEY_ID }}
+          OSSRH_GPG_SECRET_KEY_BASE64: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
+          OSSRH_GPG_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
+          OSSRH_GPG_SECRET_KEY_PASSWORD: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
       - name: Upload Authentication AAR
         uses: actions/upload-artifact@v2
         with:
@@ -147,4 +207,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
             name: sampleApplications
-            path: samples/storage/app/build/outputs/apk/release/       
+            path: samples/storage/app/build/outputs/apk/release/
