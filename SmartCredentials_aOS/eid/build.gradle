@@ -57,6 +57,6 @@ dependencies {
     implementation "androidx.annotation:annotation:${androidXAnnotation}"
     implementation "com.google.code.gson:gson:${gsonVersion}"
 
-    api 'com.governikus:ausweisapp:1.20.1'
+    api 'com.governikus:ausweisapp:1.22.0.1'
     api project(':core')
 }
