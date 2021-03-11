@@ -16,15 +16,29 @@
 
 package de.telekom.smartcredentials.eid.commands;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
+import de.telekom.smartcredentials.eid.messages.Chat;
 
 /**
  * Created by Alex.Graur@endava.com at 4/8/2020
  */
 @SuppressWarnings("unused")
 public class SetAccessRightsCommand extends SmartEidCommand {
+    @Expose
+    private boolean canAllowed = false;
+    @Expose
+    private Chat chat = null;
 
     public SetAccessRightsCommand() {
         super(EidCommandType.SET_ACCESS_RIGHTS.getCommandType());
+    }
+
+    public SetAccessRightsCommand(Chat chat, boolean canAllowed) {
+        super(EidCommandType.SET_ACCESS_RIGHTS.getCommandType());
+        this.chat = chat;
+        this.canAllowed = canAllowed;
     }
 }

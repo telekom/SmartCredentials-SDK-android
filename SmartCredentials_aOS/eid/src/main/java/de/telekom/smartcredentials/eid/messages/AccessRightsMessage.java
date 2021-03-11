@@ -25,10 +25,35 @@ import com.google.gson.annotations.SerializedName;
  * Created by Alex.Graur@endava.com at 11/11/2019
  */
 public class AccessRightsMessage extends SmartEidMessage {
+/*
+{
+  "msg": "ACCESS_RIGHTS",
+  "error": "some optional error message",
+  "aux":
+       {
+        "ageVerificationDate": "1999-07-20",
+        "requiredAge": "18",
+        "validityDate": "2017-07-20",
+        "communityId": "02760400110000"
+       },
+  "chat":
+        {
+         "effective": ["Address", "FamilyName", "GivenNames", "AgeVerification"],
+         "optional": ["GivenNames", "AgeVerification"],
+         "required": ["Address", "FamilyName"]
+        },
+  "transactionInfo": "this is an example",
+  "canAllowed": false
+}
+ */
 
     @SerializedName("chat")
     @Expose
     private Chat mChat;
+
+    @SerializedName("canAllowed")
+    @Expose
+    private boolean mCanAllowed;
 
     public AccessRightsMessage() {
         super();
@@ -42,11 +67,20 @@ public class AccessRightsMessage extends SmartEidMessage {
         this.mChat = mChat;
     }
 
+    public boolean getCanAllowed() {
+        return mCanAllowed;
+    }
+
+    public void setCanAllowed(boolean canAllowed) {
+        this.mCanAllowed = canAllowed;
+    }
+
     @NonNull
     @Override
     public String toString() {
         return "AccessRightsMessage{" +
-                "mChat=" + mChat +
+                "mChat=" + mChat + "," +
+                "mCanAllowed=" + mCanAllowed +
                 '}';
     }
 }
