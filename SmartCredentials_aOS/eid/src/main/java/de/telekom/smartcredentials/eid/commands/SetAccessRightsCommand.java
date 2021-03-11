@@ -28,17 +28,14 @@ import de.telekom.smartcredentials.eid.messages.Chat;
 @SuppressWarnings("unused")
 public class SetAccessRightsCommand extends SmartEidCommand {
     @Expose
-    private boolean canAllowed = false;
-    @Expose
-    private Chat chat = null;
+    private String[] chat = {};
 
     public SetAccessRightsCommand() {
         super(EidCommandType.SET_ACCESS_RIGHTS.getCommandType());
     }
 
-    public SetAccessRightsCommand(Chat chat, boolean canAllowed) {
+    public SetAccessRightsCommand(String[] chat) {
         super(EidCommandType.SET_ACCESS_RIGHTS.getCommandType());
         this.chat = chat;
-        this.canAllowed = canAllowed;
     }
 }
