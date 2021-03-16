@@ -20,15 +20,16 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
-import de.telekom.smartcredentials.eid.messages.Chat;
 
 /**
  * Created by Alex.Graur@endava.com at 4/8/2020
  */
 @SuppressWarnings("unused")
 public class SetAccessRightsCommand extends SmartEidCommand {
+
+    @SerializedName("chat")
     @Expose
-    private String[] chat = {};
+    private String[] mChat = {};
 
     public SetAccessRightsCommand() {
         super(EidCommandType.SET_ACCESS_RIGHTS.getCommandType());
@@ -36,6 +37,6 @@ public class SetAccessRightsCommand extends SmartEidCommand {
 
     public SetAccessRightsCommand(String[] chat) {
         super(EidCommandType.SET_ACCESS_RIGHTS.getCommandType());
-        this.chat = chat;
+        this.mChat = chat;
     }
 }
