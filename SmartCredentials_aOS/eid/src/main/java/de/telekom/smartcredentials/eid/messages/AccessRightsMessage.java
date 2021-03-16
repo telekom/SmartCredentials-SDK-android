@@ -17,6 +17,7 @@
 package de.telekom.smartcredentials.eid.messages;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -25,27 +26,6 @@ import com.google.gson.annotations.SerializedName;
  * Created by Alex.Graur@endava.com at 11/11/2019
  */
 public class AccessRightsMessage extends SmartEidMessage {
-/*
-{
-  "msg": "ACCESS_RIGHTS",
-  "error": "some optional error message",
-  "aux":
-       {
-        "ageVerificationDate": "1999-07-20",
-        "requiredAge": "18",
-        "validityDate": "2017-07-20",
-        "communityId": "02760400110000"
-       },
-  "chat":
-        {
-         "effective": ["Address", "FamilyName", "GivenNames", "AgeVerification"],
-         "optional": ["GivenNames", "AgeVerification"],
-         "required": ["Address", "FamilyName"]
-        },
-  "transactionInfo": "this is an example",
-  "canAllowed": false
-}
- */
 
     @SerializedName("chat")
     @Expose
@@ -57,6 +37,13 @@ public class AccessRightsMessage extends SmartEidMessage {
 
     public AccessRightsMessage() {
         super();
+    }
+
+    @VisibleForTesting
+    protected AccessRightsMessage(Chat chat, boolean canAllowed) {
+        super();
+        mChat = chat;
+        mCanAllowed = canAllowed;
     }
 
     public Chat getChat() {
