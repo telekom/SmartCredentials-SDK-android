@@ -57,7 +57,7 @@ dependencies {
     implementation "androidx.annotation:annotation:${androidXAnnotation}"
     implementation "com.google.code.gson:gson:${gsonVersion}"
 
-    api 'com.governikus:ausweisapp:1.22.0.1'
+    api 'com.governikus:ausweisapp:1.22.1'
     api project(':core')
     testImplementation "org.hamcrest:hamcrest-library:${hamcrestVersion}"
     testImplementation "junit:junit:${junitVersion}"
