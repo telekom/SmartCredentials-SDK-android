@@ -70,5 +70,10 @@ dependencies {
     testImplementation "org.powermock:powermock-module-junit4:${powermockVersion}"
     testImplementation "androidx.arch.core:core-testing:2.1.0"
 
+    implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"
+    implementation "com.github.akarnokd:rxjava3-retrofit-adapter:${rx3JavaVersion}"
+    implementation "com.squareup.retrofit2:converter-scalars:${retrofitVersion}"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}"
+
     androidTestImplementation "androidx.test.espresso:espresso-core:3.3.0"
 }
