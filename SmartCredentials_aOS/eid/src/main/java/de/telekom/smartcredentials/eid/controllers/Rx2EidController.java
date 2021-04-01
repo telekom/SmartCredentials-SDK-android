@@ -22,6 +22,7 @@ import android.nfc.Tag;
 import de.telekom.smartcredentials.core.api.rx.Rx2EidApi;
 import de.telekom.smartcredentials.core.eid.commands.EidCommand;
 import de.telekom.smartcredentials.core.eid.messages.EidMessage;
+import de.telekom.smartcredentials.eid.rest.RetrofitClient;
 import de.telekom.smartcredentials.eid.rx.BindRx2Completable;
 import de.telekom.smartcredentials.eid.rx.MessagesRx2Observable;
 import de.telekom.smartcredentials.eid.rx.SendCommandRx2Completable;
@@ -64,5 +65,11 @@ public class Rx2EidController implements Rx2EidApi {
     @Override
     public Completable updateNfcTag(Tag tag) {
         return Completable.create(new UpdateNfcTagRx2Completable(tag, eidController));
+    }
+
+    @Override
+    public Observable<String> getError(String jwt, boolean isProduction) {
+        RetrofitClient retrofitClient = new RetrofitClient(eidController.getEidConfiguration());
+        return retrofitClient.getRx2EidService(isProduction).getError(jwt);
     }
 }

@@ -19,6 +19,7 @@ package de.telekom.smartcredentials.eid.factory;
 import androidx.annotation.NonNull;
 
 import de.telekom.smartcredentials.core.api.EidApi;
+import de.telekom.smartcredentials.core.eid.EidConfiguration;
 import de.telekom.smartcredentials.eid.controllers.EidController;
 import de.telekom.smartcredentials.eid.controllers.Rx2EidController;
 import de.telekom.smartcredentials.eid.controllers.Rx3EidController;
@@ -26,6 +27,7 @@ import de.telekom.smartcredentials.eid.controllers.Rx3EidController;
 /**
  * Created by Alex.Graur@endava.com at 11/8/2019
  */
+@SuppressWarnings("unused")
 public class SmartCredentialsEidFactory {
 
     private static final String MODULE_NOT_INITIALIZED_EXCEPTION = "SmartCredentials e-ID Module have not been initialized";
@@ -37,8 +39,9 @@ public class SmartCredentialsEidFactory {
     }
 
     @NonNull
-    public static synchronized EidApi initSmartCredentialsEidModule() {
+    public static synchronized EidApi initSmartCredentialsEidModule(@NonNull final EidConfiguration configuration) {
         sEidController = new EidController();
+        sEidController.setConfiguration(configuration);
         return sEidController;
     }
 

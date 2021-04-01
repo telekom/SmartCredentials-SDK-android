@@ -29,13 +29,21 @@ import io.reactivex.Observable;
  */
 public interface Rx2EidApi {
 
+    @SuppressWarnings("unused")
     Completable bind(Context context, String appPackage);
 
+    @SuppressWarnings("unused")
     Completable unbind(Context context);
 
+    @SuppressWarnings("unused")
     Observable<EidMessage> observeMessages();
 
+    @SuppressWarnings("unused")
     Completable sendCommand(EidCommand command);
 
+    @SuppressWarnings("unused")
     Completable updateNfcTag(Tag tag);
+
+    @SuppressWarnings("unused")
+    Observable<String> getError(String jwt ,boolean isProduction);
 }
