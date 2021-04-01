@@ -84,7 +84,7 @@ public class EidController implements EidApi, EidCallbackSubject {
     }
 
     @Override
-    public <T extends EidCommand> void sendCommand(T command, EidSendCommandCallback callback) {
+    public <C extends EidCommand> void sendCommand(C command, EidSendCommandCallback callback) {
         try {
             if (mServiceConnection != null) {
                 mServiceConnection.getAusweisSdk().send(mAusweisCallback.mSessionId, mGson.toJson(command));
