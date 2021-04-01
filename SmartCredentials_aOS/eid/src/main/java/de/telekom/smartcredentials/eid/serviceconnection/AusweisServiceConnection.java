@@ -24,6 +24,7 @@ import android.os.RemoteException;
 import com.governikus.ausweisapp2.IAusweisApp2Sdk;
 
 import de.telekom.smartcredentials.core.eid.callbacks.EidMessageReceivedCallback;
+import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
 import de.telekom.smartcredentials.eid.callback.AusweisCallback;
 import de.telekom.smartcredentials.eid.messages.SdkConnectedMessage;
 import de.telekom.smartcredentials.eid.messages.SdkDisconnectedMessage;
@@ -36,12 +37,12 @@ import de.telekom.smartcredentials.eid.messages.SdkNotInitializedMessage;
 public class AusweisServiceConnection implements ServiceConnection {
 
     private IAusweisApp2Sdk mSdk;
-    private AusweisCallback mAusweisCallback;
-    private EidMessageReceivedCallback mMessageReceivedCallback;
+    private final AusweisCallback mAusweisCallback;
+    private EidMessageReceivedCallback mCallback;
 
-    public AusweisServiceConnection(AusweisCallback ausweisCallback) {
+    public AusweisServiceConnection(AusweisCallback ausweisCallback, EidMessageReceivedCallback callback) {
         mAusweisCallback = ausweisCallback;
-        mMessageReceivedCallback = ausweisCallback.getMessageReceivedCallback();
+        mCallback = callback;
     }
 
     @Override
@@ -51,31 +52,39 @@ public class AusweisServiceConnection implements ServiceConnection {
         if (mSdk != null) {
             try {
                 mSdk.connectSdk(mAusweisCallback);
-                if (mMessageReceivedCallback != null) {
-                    mMessageReceivedCallback.onMessageReceived(new SdkConnectedMessage());
+                ApiLoggerResolver.logEvent("eid SDK connected");
+                if (mCallback != null) {
+                    mCallback.onMessageReceived(new SdkConnectedMessage());
                 }
             } catch (RemoteException e) {
-                if (mMessageReceivedCallback != null) {
-                    mMessageReceivedCallback.onMessageReceived(new SdkNotConnectedMessage());
+                ApiLoggerResolver.logEvent("eid SDK not connected");
+                if (mCallback != null) {
+                    mCallback.onMessageReceived(new SdkNotConnectedMessage());
                 }
             }
         } else {
-            if (mMessageReceivedCallback != null) {
-                mMessageReceivedCallback.onMessageReceived(new SdkNotInitializedMessage());
+            ApiLoggerResolver.logEvent("eid SDK not initialized");
+            if (mCallback != null) {
+                mCallback.onMessageReceived(new SdkNotInitializedMessage());
             }
         }
     }
 
     @Override
     public void onServiceDisconnected(ComponentName name) {
+        ApiLoggerResolver.logEvent("eid service disconnected");
         mSdk = null;
 
-        if (mMessageReceivedCallback != null) {
-            mMessageReceivedCallback.onMessageReceived(new SdkDisconnectedMessage());
+        if (mCallback != null) {
+            mCallback.onMessageReceived(new SdkDisconnectedMessage());
         }
     }
 
     public IAusweisApp2Sdk getAusweisSdk() {
         return mSdk;
+    }
+
+    public void setCallback(EidMessageReceivedCallback callback) {
+        this.mCallback = callback;
     }
 }

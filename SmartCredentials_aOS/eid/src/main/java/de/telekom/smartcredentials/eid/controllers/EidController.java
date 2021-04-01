@@ -39,9 +39,9 @@ public class EidController implements EidApi {
     private static final String AUSWEIS_APP_ACTION = "com.governikus.ausweisapp2.START_SERVICE";
 
     private final Gson mGson;
+    private EidMessageReceivedCallback mMessageCallback;
     private AusweisServiceConnection mServiceConnection;
     private AusweisCallback mAusweisCallback;
-    private EidMessageReceivedCallback mMessageReceivedCallback;
 
     public EidController() {
         mGson = new Gson();
@@ -51,8 +51,8 @@ public class EidController implements EidApi {
     public void bind(Context context, String appPackage) {
         Intent intent = new Intent(AUSWEIS_APP_ACTION);
         intent.setPackage(appPackage);
-        mAusweisCallback = new AusweisCallback(mMessageReceivedCallback);
-        mServiceConnection = new AusweisServiceConnection(mAusweisCallback);
+        mAusweisCallback = new AusweisCallback(mMessageCallback);
+        mServiceConnection = new AusweisServiceConnection(mAusweisCallback, mMessageCallback);
         context.bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
@@ -64,11 +64,19 @@ public class EidController implements EidApi {
 
     @Override
     public void setMessageReceiverCallback(EidMessageReceivedCallback callback) {
-        mMessageReceivedCallback = callback;
+        mMessageCallback = callback;
+
+        if (mAusweisCallback != null) {
+            mAusweisCallback.setMessageReceivedCallback(callback);
+        }
+
+        if (mServiceConnection != null) {
+            mServiceConnection.setCallback(callback);
+        }
     }
 
     @Override
-    public <T extends EidCommand> void sendCommand(T command, EidSendCommandCallback callback) {
+    public <C extends EidCommand> void sendCommand(C command, EidSendCommandCallback callback) {
         try {
             if (mServiceConnection != null) {
                 mServiceConnection.getAusweisSdk().send(mAusweisCallback.mSessionId, mGson.toJson(command));

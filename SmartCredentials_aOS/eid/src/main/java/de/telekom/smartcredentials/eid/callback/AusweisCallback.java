@@ -19,6 +19,7 @@ package de.telekom.smartcredentials.eid.callback;
 import com.governikus.ausweisapp2.IAusweisApp2SdkCallback;
 
 import de.telekom.smartcredentials.core.eid.callbacks.EidMessageReceivedCallback;
+import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
 import de.telekom.smartcredentials.eid.messages.SessionDisconnectedMessage;
 import de.telekom.smartcredentials.eid.messages.SessionGeneratedMessage;
 import de.telekom.smartcredentials.eid.messages.parser.MessageParser;
@@ -29,37 +30,40 @@ import de.telekom.smartcredentials.eid.messages.parser.MessageParser;
 public class AusweisCallback extends IAusweisApp2SdkCallback.Stub {
 
     private final MessageParser mMessageParser;
-    private final EidMessageReceivedCallback mMessageReceivedCallback;
+    private EidMessageReceivedCallback mCallback;
 
     public String mSessionId;
 
     public AusweisCallback(EidMessageReceivedCallback callback) {
         mMessageParser = new MessageParser(callback);
-        mMessageReceivedCallback = callback;
     }
 
     @Override
     public void sessionIdGenerated(String s, boolean b) {
+        ApiLoggerResolver.logEvent("eid session generated: " + s);
         mSessionId = s;
 
-        if (mMessageReceivedCallback != null) {
-            mMessageReceivedCallback.onMessageReceived(new SessionGeneratedMessage(s));
+        if (mCallback != null) {
+            mCallback.onMessageReceived(new SessionGeneratedMessage(s));
         }
     }
 
     @Override
     public void receive(String s) {
+        ApiLoggerResolver.logEvent("eid message received: " + s);
         mMessageParser.parseMessage(s);
     }
 
     @Override
     public void sdkDisconnected() {
-        if (mMessageReceivedCallback != null) {
-            mMessageReceivedCallback.onMessageReceived(new SessionDisconnectedMessage());
+        ApiLoggerResolver.logEvent("eid SDK disconnected");
+        if (mCallback != null) {
+            mCallback.onMessageReceived(new SessionDisconnectedMessage());
         }
     }
 
-    public EidMessageReceivedCallback getMessageReceivedCallback() {
-        return mMessageReceivedCallback;
+    public void setMessageReceivedCallback(EidMessageReceivedCallback callback) {
+        this.mCallback = callback;
+        mMessageParser.setCallback(callback);
     }
 }

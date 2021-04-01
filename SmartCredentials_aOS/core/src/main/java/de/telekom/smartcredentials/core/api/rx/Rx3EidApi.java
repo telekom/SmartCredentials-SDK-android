@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Telekom Deutschland AG
+ * Copyright (c) 2021 Telekom Deutschland AG
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,28 @@
  * limitations under the License.
  */
 
-package de.telekom.smartcredentials.core.eid.callbacks;
+package de.telekom.smartcredentials.core.api.rx;
 
+import android.content.Context;
+import android.nfc.Tag;
+
+import de.telekom.smartcredentials.core.eid.commands.EidCommand;
 import de.telekom.smartcredentials.core.eid.messages.EidMessage;
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Observable;
 
 /**
- * Created by Alex.Graur@endava.com at 11/8/2019
+ * Created by Alex.Graur@endava.com at 3/31/2021
  */
-public interface EidMessageReceivedCallback {
+public interface Rx3EidApi {
 
-    <M extends EidMessage> void onMessageReceived(M message);
+    Completable bind(Context context, String appPackage);
+
+    Completable unbind(Context context);
+
+    Observable<EidMessage> observeMessages();
+
+    Completable sendCommand(EidCommand command);
+
+    Completable updateNfcTag(Tag tag);
 }

@@ -43,7 +43,7 @@ import de.telekom.smartcredentials.eid.messages.types.EidMessageType;
 public class MessageParser {
 
     private final Gson mGson;
-    private final EidMessageReceivedCallback mCallback;
+    private EidMessageReceivedCallback mCallback;
 
     public MessageParser(EidMessageReceivedCallback callback) {
         mGson = new Gson();
@@ -120,5 +120,9 @@ public class MessageParser {
                     break;
             }
         }
+    }
+
+    public void setCallback(EidMessageReceivedCallback mCallback) {
+        this.mCallback = mCallback;
     }
 }
