@@ -34,6 +34,7 @@ import de.telekom.smartcredentials.core.eid.callbacks.EidSendCommandCallback;
 import de.telekom.smartcredentials.core.eid.callbacks.EidUpdateTagCallback;
 import de.telekom.smartcredentials.core.eid.commands.EidCommand;
 import de.telekom.smartcredentials.eid.callback.AusweisCallback;
+import de.telekom.smartcredentials.eid.rest.RetrofitClient;
 import de.telekom.smartcredentials.eid.callback.EidCallbackObserver;
 import de.telekom.smartcredentials.eid.callback.EidCallbackSubject;
 import de.telekom.smartcredentials.eid.messages.parser.MessageParser;
@@ -122,6 +123,16 @@ public class EidController implements EidApi, EidCallbackSubject {
         } catch (RemoteException e) {
             callback.onFailed(e);
         }
+    }
+
+    @Override
+    public void retrieveLoadingErrorCode(String jwt, boolean isProduction, EidErrorReceivedCallback callback) {
+        RetrofitClient retrofitClient = new RetrofitClient(mEidConfiguration);
+        CompositeDisposable compositeDisposable = new CompositeDisposable();
+        compositeDisposable.add(retrofitClient.getRx2EidService(isProduction).getError(jwt)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(callback::onSuccess, callback::onFailed));
     }
 
     @Override

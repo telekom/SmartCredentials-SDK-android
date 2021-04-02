@@ -68,7 +68,7 @@ public class Rx3EidController implements Rx3EidApi {
     }
 
     @Override
-    public Observable<String> getError(String jwt, boolean isProduction) {
+    public Observable<String> observeLoadingErrorCode(String jwt, boolean isProduction) {
         RetrofitClient retrofitClient = new RetrofitClient(eidController.getEidConfiguration());
         return retrofitClient.getRx3EidService(isProduction).getError(jwt);
     }
