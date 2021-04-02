@@ -45,5 +45,5 @@ public interface Rx2EidApi {
     Completable updateNfcTag(Tag tag);
 
     @SuppressWarnings("unused")
-    Observable<String> getError(String jwt ,boolean isProduction);
+    Observable<String> observeLoadingErrorCode(String jwt , boolean isProduction);
 }
