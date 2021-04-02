@@ -118,7 +118,7 @@ public class EidController implements EidApi {
     }
 
     @Override
-    public void setErrorReceiverCallback(EidErrorReceivedCallback callback, String jwt, boolean isProduction) {
+    public void retrieveLoadingErrorCode(String jwt, boolean isProduction, EidErrorReceivedCallback callback) {
         RetrofitClient retrofitClient = new RetrofitClient(mEidConfiguration);
         CompositeDisposable compositeDisposable = new CompositeDisposable();
         compositeDisposable.add(retrofitClient.getRx2EidService(isProduction).getError(jwt)

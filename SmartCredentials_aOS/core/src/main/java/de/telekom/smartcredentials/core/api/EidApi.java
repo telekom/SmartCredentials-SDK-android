@@ -42,5 +42,5 @@ public interface EidApi {
     void updateNfcTag(Tag tag, EidUpdateTagCallback callback);
 
     @SuppressWarnings("unused")
-    void setErrorReceiverCallback(EidErrorReceivedCallback callback, String jwt , boolean isProduction);
+    void retrieveLoadingErrorCode(String jwt , boolean isProduction, EidErrorReceivedCallback callback);
 }
