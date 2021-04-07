@@ -21,8 +21,18 @@ android {
         buildConfigField("String", "FCM_STORAGE_BUCKET", "\"" + getEnvOrProperty('FCM_STORAGE_BUCKET') + "\"")
     }
 
+    signingConfigs {
+        release  {
+            storeFile file("keystore.jks")
+            storePassword "scpushnotificationsdemo"
+            keyAlias "pushnotificationsdemo"
+            keyPassword "scpushnotificationsdemo"
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -36,15 +46,6 @@ android {
     applicationVariants.all { variant ->
         variant.outputs.all {
             outputFileName = "pushnotifications_${archivesBaseName}_${variant.name}_${defaultConfig.versionName}.apk"
-        }
-    }
-
-    signingConfigs {
-        productFlavors.all  {
-            storeFile file("keystore.jks")
-            storePassword "scpushnotificationsdemo"
-            keyAlias "pushnotificationsdemo"
-            keyPassword "scpushnotificationsdemo"
         }
     }
 }

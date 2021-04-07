@@ -14,8 +14,18 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release  {
+            storeFile file("keystore.jks")
+            storePassword "scauthorizationdemo"
+            keyAlias "authorizationdemo"
+            keyPassword "scauthorizationdemo"
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -29,15 +39,6 @@ android {
     applicationVariants.all { variant ->
         variant.outputs.all {
             outputFileName = "authorization_${archivesBaseName}_${variant.name}_${defaultConfig.versionName}.apk"
-        }
-    }
-
-    signingConfigs {
-        productFlavors.all  {
-            storeFile file("keystore.jks")
-            storePassword "scauthorizationdemo"
-            keyAlias "authorizationdemo"
-            keyPassword "scauthorizationdemo"
         }
     }
 }
