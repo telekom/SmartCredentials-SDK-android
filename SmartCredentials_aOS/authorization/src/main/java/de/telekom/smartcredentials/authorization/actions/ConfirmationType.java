@@ -17,6 +17,7 @@
 package de.telekom.smartcredentials.authorization.actions;
 
 public enum ConfirmationType {
+
     DEFAULT_SYSTEM("Default System");
 
     final String mName;

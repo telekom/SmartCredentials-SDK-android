@@ -19,7 +19,9 @@ package de.telekom.smartcredentials.core.api;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
+import de.telekom.smartcredentials.core.authorization.AuthorizationConfiguration;
 import de.telekom.smartcredentials.core.itemdatamodel.ItemEnvelope;
 import de.telekom.smartcredentials.core.itemdatamodel.ItemEnvelopeFactory;
 import de.telekom.smartcredentials.core.qrlogin.AuthenticationCallback;
@@ -45,6 +47,9 @@ public interface QrLoginApi {
      * if response is successful, or {@link RootedThrowable} if device is rooted.
      */
     @SuppressWarnings("unused")
-    SmartCredentialsApiResponse<Fragment> getAuthorizeUserLogInFragment(@NonNull AuthenticationCallback callback, ItemEnvelope itemEnvelope);
+    SmartCredentialsApiResponse<Void> authorizeQr(@NonNull FragmentActivity activity,
+                                                  @NonNull AuthorizationConfiguration authorizationConfiguration,
+                                                  @NonNull AuthenticationCallback callback,
+                                                  ItemEnvelope itemEnvelope);
 
 }

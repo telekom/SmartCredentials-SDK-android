@@ -16,145 +16,58 @@
 
 package de.telekom.smartcredentials.authorization.controllers;
 
-import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
+import android.os.Build;
 
-import de.telekom.smartcredentials.authorization.biometric.BiometricPresenter;
-import de.telekom.smartcredentials.authorization.biometric.BiometricPromptWrapper;
-import de.telekom.smartcredentials.authorization.callback.PluginCallbackAuthorizationConverter;
-import de.telekom.smartcredentials.authorization.fingerprint.AuthHandler;
-import de.telekom.smartcredentials.authorization.fingerprint.FingerprintManagerWrapper;
-import de.telekom.smartcredentials.authorization.fingerprint.presenters.AuthPresenterFactory;
-import de.telekom.smartcredentials.authorization.fingerprint.presenters.FingerprintPresenter;
-import de.telekom.smartcredentials.authorization.fragments.AuthFragmentFactory;
-import de.telekom.smartcredentials.authorization.keyguard.KeyguardManagerWrapper;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
+
+import de.telekom.smartcredentials.authorization.handlers.AuthorizationHandler;
+import de.telekom.smartcredentials.authorization.handlers.BiometricsHandler;
+import de.telekom.smartcredentials.authorization.handlers.DeviceCredentialsHandler;
+import de.telekom.smartcredentials.authorization.security.CipherManager;
 import de.telekom.smartcredentials.core.api.AuthorizationApi;
 import de.telekom.smartcredentials.core.authorization.AuthorizationCallback;
+import de.telekom.smartcredentials.core.authorization.AuthorizationConfiguration;
 import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsFeatureSet;
 import de.telekom.smartcredentials.core.controllers.CoreController;
-import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
-import de.telekom.smartcredentials.core.plugins.callbacks.AuthorizationPluginCallback;
-import de.telekom.smartcredentials.core.plugins.fingerprint.BiometricAuthorizationPresenter;
-import de.telekom.smartcredentials.core.plugins.fingerprint.FingerprintAuthorizationPresenter;
 import de.telekom.smartcredentials.core.responses.FeatureNotSupportedThrowable;
 import de.telekom.smartcredentials.core.responses.RootedThrowable;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsResponse;
 
-import static de.telekom.smartcredentials.core.utils.ApiLevel.API_ABOVE_28_ERROR_MESSAGE;
-import static de.telekom.smartcredentials.core.utils.ApiLevel.API_BELOW_23_ERROR_MESSAGE;
-import static de.telekom.smartcredentials.core.utils.ApiLevel.API_BELOW_28_ERROR_MESSAGE;
-import static de.telekom.smartcredentials.core.utils.ApiLevel.isAbove28;
-import static de.telekom.smartcredentials.core.utils.ApiLevel.isBelow23;
-import static de.telekom.smartcredentials.core.utils.ApiLevel.isBelow28;
-
 public class AuthorizationController implements AuthorizationApi {
 
-    private final Context mContext;
     private final CoreController mCoreController;
-    private final AuthHandler mAuthHandler;
-    private final FingerprintManagerWrapper mFingerprintManagerWrapper;
-    private final BiometricPromptWrapper mBiometricPromptWrapper;
-    private final KeyguardManagerWrapper mKeyguardManagerWrapper;
+    private final CipherManager mCipherManager;
 
-    public AuthorizationController(Context context, CoreController coreController,
-                                   AuthHandler authHandler,
-                                   FingerprintManagerWrapper fingerprintManagerWrapper,
-                                   BiometricPromptWrapper biometricPromptWrapper,
-                                   KeyguardManagerWrapper keyguardManagerWrapper) {
-        mContext = context;
-        mCoreController = coreController;
-        mAuthHandler = authHandler;
-        mFingerprintManagerWrapper = fingerprintManagerWrapper;
-        mBiometricPromptWrapper = biometricPromptWrapper;
-        mKeyguardManagerWrapper = keyguardManagerWrapper;
+    public AuthorizationController(CoreController coreController,
+                                   CipherManager cipherManager) {
+        this.mCoreController = coreController;
+        this.mCipherManager = cipherManager;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public SmartCredentialsApiResponse<Fragment> getAuthorizeUserFragment(@NonNull AuthorizationCallback callback) {
-        ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "getAuthorizeUserFragment");
-        if (mCoreController.isSecurityCompromised()) {
-            mCoreController.handleSecurityCompromised();
-            return new SmartCredentialsResponse<>(new RootedThrowable());
-        }
-        if (isAbove28()) {
-            return new SmartCredentialsResponse<>(new Throwable(API_ABOVE_28_ERROR_MESSAGE));
-        }
-
-        if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.AUTH_POP_UP)) {
-            String errorMessage = SmartCredentialsFeatureSet.AUTH_POP_UP.getNotSupportedDesc();
-            return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
-        }
-
-        return new SmartCredentialsResponse<>(AuthFragmentFactory
-                .getInstance(mFingerprintManagerWrapper, mKeyguardManagerWrapper)
-                .getAuthorizationFragment(getAuthorizationPluginCallback(callback)));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public SmartCredentialsApiResponse<FingerprintAuthorizationPresenter> getFingerprintAuthorizationPresenter(@NonNull AuthorizationCallback callback) {
-        ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "getFingerprintAuthorizationPresenter");
-        if (mCoreController.isSecurityCompromised()) {
-            mCoreController.handleSecurityCompromised();
-            return new SmartCredentialsResponse<>(new RootedThrowable());
-        }
-        if (isBelow23()) {
-            return new SmartCredentialsResponse<>(new Throwable(API_BELOW_23_ERROR_MESSAGE));
-        }
-        if (isAbove28()) {
-            return new SmartCredentialsResponse<>(new Throwable(API_ABOVE_28_ERROR_MESSAGE));
-        }
-
-        if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.AUTH_CUSTOM_UI)) {
-            String errorMessage = SmartCredentialsFeatureSet.AUTH_CUSTOM_UI.getNotSupportedDesc();
-            return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
-        }
-
-        FingerprintPresenter presenter = AuthPresenterFactory
-                .getInstance()
-                .getFingerprintPresenter(mContext, mAuthHandler);
-        presenter.setAuthPluginCallback(getAuthorizationPluginCallback(callback));
-        return new SmartCredentialsResponse<>(presenter);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public SmartCredentialsApiResponse<BiometricAuthorizationPresenter> getBiometricAuthorizationPresenter(@NonNull AuthorizationCallback callback) {
-
-        ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "getBiometricAuthorizationPresenter");
+    public SmartCredentialsApiResponse<Void> authorize(@Nullable FragmentActivity activity,
+                                                       @NonNull AuthorizationConfiguration configuration,
+                                                       @NonNull AuthorizationCallback callback) {
         if (mCoreController.isSecurityCompromised()) {
             mCoreController.handleSecurityCompromised();
             return new SmartCredentialsResponse<>(new RootedThrowable());
         }
 
-        if (isBelow28()) {
-            return new SmartCredentialsResponse<>(new Throwable(API_BELOW_28_ERROR_MESSAGE));
-        }
-
-        if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.AUTH_BIOMETRICS)) {
-            String errorMessage = SmartCredentialsFeatureSet.AUTH_BIOMETRICS.getNotSupportedDesc();
+        if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.AUTHORIZE)) {
+            String errorMessage = SmartCredentialsFeatureSet.AUTHORIZE.getNotSupportedDesc();
             return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
         }
 
-        BiometricPresenter presenter = AuthPresenterFactory
-                .getInstance()
-                .getBiometricPresenter(mAuthHandler, mBiometricPromptWrapper);
-        presenter.setAuthPluginCallback(getAuthorizationPluginCallback(callback));
-
-        return new SmartCredentialsResponse<>(presenter);
-    }
-
-    private AuthorizationPluginCallback getAuthorizationPluginCallback(AuthorizationCallback callback) {
-        return PluginCallbackAuthorizationConverter
-                .convertToDomainPluginCallback(callback, getClass().getSimpleName());
+        AuthorizationHandler authorizationHandler;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            authorizationHandler = new DeviceCredentialsHandler(activity, configuration, callback, mCipherManager);
+        } else {
+            authorizationHandler = new BiometricsHandler(activity, configuration, callback, mCipherManager);
+        }
+        authorizationHandler.prepareAuthorization();
+        return new SmartCredentialsResponse<>();
     }
 }
