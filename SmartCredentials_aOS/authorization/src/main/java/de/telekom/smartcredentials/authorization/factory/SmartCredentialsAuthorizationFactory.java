@@ -16,7 +16,6 @@
 
 package de.telekom.smartcredentials.authorization.factory;
 
-import android.content.Context;
 import androidx.annotation.NonNull;
 
 import de.telekom.smartcredentials.authorization.controllers.AuthorizationController;
@@ -42,8 +41,7 @@ public class SmartCredentialsAuthorizationFactory {
 
     @NonNull
     @SuppressWarnings("unused")
-    public static synchronized AuthorizationApi initSmartCredentialsAuthorizationModule(@NonNull final Context context,
-                                                                                        @NonNull final CoreApi coreApi,
+    public static synchronized AuthorizationApi initSmartCredentialsAuthorizationModule(@NonNull final CoreApi coreApi,
                                                                                         @NonNull final SecurityApi securityApi,
                                                                                         @NonNull final StorageApi storageApi) {
         CoreController coreController;
@@ -56,7 +54,7 @@ public class SmartCredentialsAuthorizationFactory {
         ObjectGraphCreatorAuthorization objectGraphCreatorAuthorization = ObjectGraphCreatorAuthorization.getInstance();
         objectGraphCreatorAuthorization.init(securityApi, storageApi);
         sAuthorizationController = ObjectGraphCreatorAuthorization.getInstance()
-                .provideAuthorizationController(context, coreController);
+                .provideAuthorizationController(coreController);
         return sAuthorizationController;
     }
 

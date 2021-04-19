@@ -62,6 +62,8 @@ dependencies {
 
     implementation "androidx.constraintlayout:constraintlayout:${constraintLayoutVersion}"
 
+    implementation "androidx.biometric:biometric:1.1.0"
+
     androidTestImplementation "androidx.test.espresso:espresso-core:3.3.0"
     androidTestImplementation "androidx.test.espresso:espresso-intents:3.3.0"
     androidTestImplementation "org.hamcrest:hamcrest-library:${hamcrestVersion}"

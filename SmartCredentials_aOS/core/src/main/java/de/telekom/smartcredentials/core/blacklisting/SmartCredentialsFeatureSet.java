@@ -20,13 +20,8 @@ package de.telekom.smartcredentials.core.blacklisting;
  * Created by Lucian Iacob on January 30, 2019.
  */
 public enum SmartCredentialsFeatureSet {
-
-    AUTH_POP_UP("Authorization Pop-Up", SmartCredentialsModuleSet.AUTHORIZATION_MODULE,
-            "The Authorization Pop-Up feature is not supported on this device model."),
-    AUTH_CUSTOM_UI("Custom UI Authorization", SmartCredentialsModuleSet.AUTHORIZATION_MODULE,
-            "The Custom UI Authorization feature is not supported on this device model."),
-    AUTH_BIOMETRICS("Biometrics Autorization", SmartCredentialsModuleSet.AUTHORIZATION_MODULE,
-            "The Biometrics Authorization feature is not supported on this device model."),
+    AUTHORIZE("Authorize", SmartCredentialsModuleSet.AUTHORIZATION_MODULE,
+            "The Authorize feature is not supported on this device model."),
     OCR("OCR Scanner", SmartCredentialsModuleSet.CAMERA_MODULE,
             "The OCR feature is not supported on this device model."),
     QR("QR Scanner", SmartCredentialsModuleSet.CAMERA_MODULE,

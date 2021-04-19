@@ -12,4 +12,13 @@
     <string name="biometrics_view_description">Biometrics View Description</string>
     <string name="biometrics_view_negative_button_description">DISMISS</string>
     <string name="authorization_icon_content_description">Authorization Status Icon</string>
+    <string name="title">Title</string>
+    <string name="subtitle">Subtitle</string>
+    <string name="description">Description</string>
+    <string name="negative_button_text">Negative Button Text</string>
+    <string name="allow_device_credentials_fallback">Allow Device Credentials Fallback</string>
+    <string name="require_confirmation">Require Face Recognition Confirmation</string>
+    <string name="update">Update</string>
+    <string name="configuration">Configuration</string>
+    <string name="authorization_configuration">Authorization Configuration</string>
 </resources>

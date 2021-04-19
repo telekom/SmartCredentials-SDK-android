@@ -16,18 +16,21 @@
 
 package de.telekom.smartcredentials.core.authorization;
 
-public enum AuthorizationPluginUnavailable {
+public enum AuthorizationError {
 
-    FINGERPRINT_PERMISSION_MISSING("Fingerprint permission is missing.");
+    DEVICE_NOT_SECURED("Cannot perform authorization. Device is not protected by PIN, password or pattern."),
+    AUTHORIZATION_CANCELED("Authorization canceled"),
+    AUTHORIZATION_FAILED("Authorization failed."),
+    INVALID_AUTHORIZATION_VIEW("Authorization failed. Invalid Authorization View."),
+    COULD_NOT_RETRIEVE_CIPHER("Authorization failed. Could not retrieve Authorization Cipher.");
 
-    final String mDesc;
+    private final String mMessage;
 
-    AuthorizationPluginUnavailable(String desc) {
-        mDesc = desc;
+    AuthorizationError(String message) {
+        this.mMessage = message;
     }
 
-    @SuppressWarnings("unused")
-    public String getDesc() {
-        return mDesc;
+    public String getMessage() {
+        return mMessage;
     }
 }

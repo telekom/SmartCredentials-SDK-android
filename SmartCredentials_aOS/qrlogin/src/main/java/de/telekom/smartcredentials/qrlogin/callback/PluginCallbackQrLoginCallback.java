@@ -20,9 +20,9 @@ import androidx.annotation.NonNull;
 
 import de.telekom.smartcredentials.core.authorization.AuthorizationPluginError;
 import de.telekom.smartcredentials.core.authorization.AuthorizationPluginUnavailable;
+import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
 import de.telekom.smartcredentials.core.model.token.TokenResponse;
 import de.telekom.smartcredentials.core.plugins.callbacks.AuthenticationPluginCallback;
-import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
 import de.telekom.smartcredentials.core.qrlogin.AuthenticationCallback;
 import de.telekom.smartcredentials.core.qrlogin.TokenPluginError;
 

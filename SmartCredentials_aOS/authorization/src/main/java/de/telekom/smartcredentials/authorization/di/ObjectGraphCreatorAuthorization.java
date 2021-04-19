@@ -16,18 +16,13 @@
 
 package de.telekom.smartcredentials.authorization.di;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
-import androidx.annotation.NonNull;
-import androidx.core.os.CancellationSignal;
 
-import de.telekom.smartcredentials.authorization.biometric.BiometricPromptWrapper;
+import androidx.annotation.NonNull;
+
 import de.telekom.smartcredentials.authorization.controllers.AuthorizationController;
-import de.telekom.smartcredentials.authorization.fingerprint.AuthHandler;
-import de.telekom.smartcredentials.authorization.fingerprint.AuthorizationCipher;
-import de.telekom.smartcredentials.authorization.fingerprint.FingerprintManagerWrapper;
-import de.telekom.smartcredentials.authorization.keyguard.KeyguardManagerWrapper;
+import de.telekom.smartcredentials.authorization.security.CipherManager;
+import de.telekom.smartcredentials.authorization.security.KeyguardManagerWrapper;
 import de.telekom.smartcredentials.core.api.SecurityApi;
 import de.telekom.smartcredentials.core.api.StorageApi;
 import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsModuleSet;
@@ -35,7 +30,7 @@ import de.telekom.smartcredentials.core.controllers.CoreController;
 import de.telekom.smartcredentials.core.di.Provides;
 
 /**
- * Created by Lucian Iacob on November 05, 2018.
+ * Created by Gabriel Blaj on April 12, 2020.
  */
 public class ObjectGraphCreatorAuthorization {
 
@@ -55,53 +50,13 @@ public class ObjectGraphCreatorAuthorization {
         return sInstance;
     }
 
+    public AuthorizationController provideAuthorizationController(CoreController coreController) {
+        return new AuthorizationController(coreController, provideCipherManager(getSecurityApi()));
+    }
+
     public void init(SecurityApi securityApi, StorageApi storageApi) {
         mSecurityApi = securityApi;
         mStorageApi = storageApi;
-    }
-
-    @NonNull
-    public AuthorizationController provideAuthorizationController(@NonNull final Context context,
-                                                                  @NonNull final CoreController coreController) {
-        return new AuthorizationController(context, coreController, provideAuthHandler(getSecurityApi()),
-                provideFingerprintManagerWrapper(context), provideBiometricPromptWrapper(context),
-                provideKeyguardManagerWrapper(context));
-    }
-
-    @Provides
-    @NonNull
-    public CancellationSignal provideCancellationSignal() {
-        return new CancellationSignal();
-    }
-
-    @Provides
-    @NonNull
-    @TargetApi(Build.VERSION_CODES.P)
-    public BiometricPromptWrapper provideBiometricPromptWrapper(Context context) {
-        return new BiometricPromptWrapper(context);
-    }
-
-    @Provides
-    @NonNull
-    @TargetApi(Build.VERSION_CODES.M)
-    public AuthHandler provideAuthHandler(SecurityApi securityApi) {
-        return new AuthHandler(provideCancellationSignal(), provideAuthorizationCipher(securityApi));
-    }
-
-    @Provides
-    @NonNull
-    private AuthorizationCipher provideAuthorizationCipher(SecurityApi securityApi) {
-        return new AuthorizationCipher(securityApi);
-    }
-
-    @Provides
-    @NonNull
-    private FingerprintManagerWrapper provideFingerprintManagerWrapper(Context context) {
-        return new FingerprintManagerWrapper(context);
-    }
-
-    private KeyguardManagerWrapper provideKeyguardManagerWrapper(Context context) {
-        return new KeyguardManagerWrapper(context);
     }
 
     public SecurityApi getSecurityApi() {
@@ -118,6 +73,16 @@ public class ObjectGraphCreatorAuthorization {
                     + SmartCredentialsModuleSet.AUTHORIZATION_MODULE + " has not been initialized");
         }
         return mStorageApi;
+    }
+
+    @Provides
+    @NonNull
+    private CipherManager provideCipherManager(SecurityApi securityApi) {
+        return new CipherManager(securityApi);
+    }
+
+    public KeyguardManagerWrapper provideKeyguardManagerWrapper(Context context) {
+        return new KeyguardManagerWrapper(context);
     }
 
     public static void destroy() {

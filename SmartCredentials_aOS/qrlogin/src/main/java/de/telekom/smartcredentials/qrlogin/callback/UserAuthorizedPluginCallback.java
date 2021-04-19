@@ -25,8 +25,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import de.telekom.smartcredentials.core.authorization.AuthorizationCallback;
-import de.telekom.smartcredentials.core.authorization.AuthorizationPluginError;
-import de.telekom.smartcredentials.core.authorization.AuthorizationPluginUnavailable;
 import de.telekom.smartcredentials.core.controllers.callbackimplementations.RefreshTokenPluginCallback;
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
 import de.telekom.smartcredentials.core.networking.ServerSocket;
@@ -36,7 +34,7 @@ import de.telekom.smartcredentials.core.plugins.callbacks.TokenPluginCallback;
 
 import static de.telekom.smartcredentials.core.qrlogin.TokenPluginError.ERROR_EXTRACTING_CONNECTION_PARAMS;
 
-public class UserAuthorizedPluginCallback extends AuthorizationCallback {
+public class UserAuthorizedPluginCallback implements AuthorizationCallback {
 
     private static final String TAG = "UserAuthorizedPluginCallback";
 
@@ -48,26 +46,6 @@ public class UserAuthorizedPluginCallback extends AuthorizationCallback {
         mRequestParams = requestParams;
         mCallback = callback;
         mServerSocket = serverSocket;
-    }
-
-
-    @Override
-    public void onAuthorized() {
-        ApiLoggerResolver.logCallbackMethod(TAG, AuthorizationPluginCallback.TAG, "userAuthorized: onAuthorized");
-        TokenPluginCallback pluginCallback = new RefreshTokenPluginCallback(mCallback);
-        mServerSocket.startServer(getConnectionParams(mRequestParams.toString(), pluginCallback), new RefreshTokenPluginCallback(mCallback));
-    }
-
-    @Override
-    public void onUnavailable(AuthorizationPluginUnavailable errorMessage) {
-        ApiLoggerResolver.logCallbackMethod(TAG, AuthorizationPluginCallback.TAG, "userAuthorized: onUnavailable");
-        mCallback.onFailed(errorMessage);
-    }
-
-    @Override
-    public void onFailure(AuthorizationPluginError message) {
-        ApiLoggerResolver.logCallbackMethod(TAG, AuthorizationPluginCallback.TAG, "userAuthorized: onFailure");
-        mCallback.onFailed(message);
     }
 
     Map<String, String> getConnectionParams(String reqParams, TokenPluginCallback pluginCallback) {
@@ -86,5 +64,24 @@ public class UserAuthorizedPluginCallback extends AuthorizationCallback {
             ApiLoggerResolver.logError(TAG, e.getMessage());
         }
         return null;
+    }
+
+    @Override
+    public void onAuthorizationSucceeded() {
+        ApiLoggerResolver.logCallbackMethod(TAG, AuthorizationPluginCallback.TAG, "userAuthorized: onAuthorized");
+        TokenPluginCallback pluginCallback = new RefreshTokenPluginCallback(mCallback);
+        mServerSocket.startServer(getConnectionParams(mRequestParams.toString(), pluginCallback), new RefreshTokenPluginCallback(mCallback));
+    }
+
+    @Override
+    public void onAuthorizationError(String error) {
+        ApiLoggerResolver.logCallbackMethod(TAG, AuthorizationPluginCallback.TAG, "userAuthorized: onUnavailable");
+        mCallback.onFailed(error);
+    }
+
+    @Override
+    public void onAuthorizationFailed(String error) {
+        ApiLoggerResolver.logCallbackMethod(TAG, AuthorizationPluginCallback.TAG, "userAuthorized: onFailure");
+        mCallback.onFailed(error);
     }
 }

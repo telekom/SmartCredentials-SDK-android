@@ -17,7 +17,7 @@
 package de.telekom.smartcredentials.qrlogin.controllers;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import org.json.JSONObject;
 
@@ -25,11 +25,11 @@ import de.telekom.smartcredentials.core.api.AuthorizationApi;
 import de.telekom.smartcredentials.core.api.NetworkingApi;
 import de.telekom.smartcredentials.core.api.QrLoginApi;
 import de.telekom.smartcredentials.core.authorization.AuthorizationCallback;
+import de.telekom.smartcredentials.core.authorization.AuthorizationConfiguration;
 import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsFeatureSet;
 import de.telekom.smartcredentials.core.controllers.CoreController;
 import de.telekom.smartcredentials.core.itemdatamodel.ItemEnvelope;
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
-import de.telekom.smartcredentials.core.plugins.callbacks.AuthenticationPluginCallback;
 import de.telekom.smartcredentials.core.qrlogin.AuthenticationCallback;
 import de.telekom.smartcredentials.core.responses.EnvelopeException;
 import de.telekom.smartcredentials.core.responses.EnvelopeExceptionReason;
@@ -58,7 +58,10 @@ public class QrLoginController implements QrLoginApi {
      * {@inheritDoc}
      */
     @Override
-    public SmartCredentialsApiResponse<Fragment> getAuthorizeUserLogInFragment(@NonNull AuthenticationCallback callback, ItemEnvelope itemEnvelope) {
+    public SmartCredentialsApiResponse<Void> authorizeQr(@NonNull FragmentActivity activity,
+                                                         @NonNull AuthorizationConfiguration configuration,
+                                                         @NonNull AuthenticationCallback callback,
+                                                         ItemEnvelope itemEnvelope) {
         ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "getAuthorizeUserLogInFragment");
         if (mCoreController.isSecurityCompromised()) {
             mCoreController.handleSecurityCompromised();
@@ -75,13 +78,11 @@ public class QrLoginController implements QrLoginApi {
         }
 
         JSONObject requestParams = itemEnvelope.getIdentifier();
-        Fragment authFragment = (Fragment) getLogInWithAuthorizationTool(PluginCallbackQrLoginCallback.convertToDomainPluginCallback(callback, getClass().getSimpleName()),
-                requestParams);
-        return new SmartCredentialsResponse<>(authFragment);
-    }
-
-    private Object getLogInWithAuthorizationTool(AuthenticationPluginCallback callback, JSONObject requestParams) {
-        AuthorizationCallback authorizationCallback = new UserAuthorizedPluginCallback(requestParams, callback, mNetworkingApi.getServerSocket());
-        return mAuthorizationApi.getAuthorizeUserFragment(authorizationCallback);
+        AuthorizationCallback authorizationCallback = new UserAuthorizedPluginCallback(requestParams,
+                PluginCallbackQrLoginCallback.convertToDomainPluginCallback(callback, getClass().getSimpleName()),
+                mNetworkingApi.getServerSocket());
+        
+        mAuthorizationApi.authorize(activity, configuration, authorizationCallback);
+        return new SmartCredentialsResponse<>();
     }
 }

@@ -2,6 +2,8 @@ package de.telekom.scauthorizationdemo;
 
 import android.app.Application;
 
+import com.facebook.stetho.Stetho;
+
 import de.telekom.smartcredentials.authorization.factory.SmartCredentialsAuthorizationFactory;
 import de.telekom.smartcredentials.core.api.CoreApi;
 import de.telekom.smartcredentials.core.configurations.SmartCredentialsConfiguration;
@@ -22,6 +24,7 @@ public class DemoApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Timber.plant(new Timber.DebugTree());
+        Stetho.initializeWithDefaults(this);
         initSmartCredentialsModules();
     }
 
@@ -36,8 +39,8 @@ public class DemoApplication extends Application {
         SmartCredentialsSecurityFactory.initSmartCredentialsSecurityModule(this, coreApi);
         SmartCredentialsStorageFactory.initSmartCredentialsStorageModule(this, coreApi,
                 SmartCredentialsSecurityFactory.getSecurityApi());
-        SmartCredentialsAuthorizationFactory.initSmartCredentialsAuthorizationModule(this,
-                coreApi, SmartCredentialsSecurityFactory.getSecurityApi(),
+        SmartCredentialsAuthorizationFactory.initSmartCredentialsAuthorizationModule(coreApi,
+                SmartCredentialsSecurityFactory.getSecurityApi(),
                 SmartCredentialsStorageFactory.getStorageApi());
     }
 }
