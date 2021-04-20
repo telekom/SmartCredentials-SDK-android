@@ -37,7 +37,7 @@ import de.telekom.smartcredentials.core.security.KeyStoreProviderException;
 @TargetApi(Build.VERSION_CODES.M)
 public class CipherManager {
 
-    private static final String BIOMETRICS_KEY_ALIAS = "BiometricsKeyAlias";
+    private static final String FINGERPRINT_KEY_ALIAS = "FingerprintKeyAlias";
     private static final String CIPHER_ALGORITHM = KeyProperties.KEY_ALGORITHM_AES
             + "/" + KeyProperties.BLOCK_MODE_CBC + "/" + KeyProperties.ENCRYPTION_PADDING_PKCS7;
 
@@ -55,7 +55,7 @@ public class CipherManager {
             return cipherWrapper.getCipher();
         } catch (KeyPermanentlyInvalidatedException e) {
             try {
-                mKeyStoreKeyProvider.deleteEntry(BIOMETRICS_KEY_ALIAS);
+                mKeyStoreKeyProvider.deleteEntry(FINGERPRINT_KEY_ALIAS);
                 CipherWrapper cipherWrapper = getCipherWrapper();
                 return cipherWrapper.getCipher();
             } catch (KeyStoreException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException
@@ -72,6 +72,6 @@ public class CipherManager {
         return mSecurityApi.getCipherWrapper(
                 CIPHER_ALGORITHM,
                 Cipher.ENCRYPT_MODE,
-                mKeyStoreKeyProvider.getKeyStoreSecretKey(BIOMETRICS_KEY_ALIAS));
+                mKeyStoreKeyProvider.getKeyStoreSecretKey(FINGERPRINT_KEY_ALIAS));
     }
 }

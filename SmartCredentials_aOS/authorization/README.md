@@ -18,7 +18,7 @@ The Smart Credentials module initialization is recommended to be made in the app
 ``` 
 SmartCredentialsConfiguration coreConfig = new SmartCredentialsConfiguration.Builder(context, userId)
                 .setLogger(new Logger())
-				.setRootCheckerEnabled(RootDetectionOption.ALL)
+                .setRootCheckerEnabled(RootDetectionOption.ALL)
                 .setAppAlias(alias)
                 .build();
 CoreApi coreApi = SmartCredentialsCoreFactory.initialize(coreConfig);
@@ -27,16 +27,13 @@ CoreApi coreApi = SmartCredentialsCoreFactory.initialize(coreConfig);
 **Security and Storage modules**
 
 ``` 
-SecurityApi securityApi = SmartCredentialsSecurityFactory
-							.initSmartCredentialsSecurityModule(context, coreApi);
-StorageApi storageApi = SmartCredentialsStorageFactory
-							.initSmartCredentialsStorageModule(context, coreApi, securityApi);
+SecurityApi securityApi = SmartCredentialsSecurityFactory.initSmartCredentialsSecurityModule(context, coreApi);
+StorageApi storageApi = SmartCredentialsStorageFactory.initSmartCredentialsStorageModule(context, coreApi, securityApi);
 ```
 
 **Authorization module**
 ``` 
-SmartCredentialsAuthenticationFactory
-							.initSmartCredentialsAuthenticationModule(coreApi, securityApi, storageApi);
+SmartCredentialsAuthenticationFactory.initSmartCredentialsAuthenticationModule(coreApi, securityApi, storageApi);
 ````
 
 ### Authorization 
@@ -54,18 +51,18 @@ SmartCredentialsAuthenticationFactory
 ```
  AuthorizationCallback authorizationCallback = new AuthorizationCallback() {
             @Override
-            public void onAuthorizationSuccedded() {
-				// successful authorization 
+            public void onAuthorizationSucceeded() {
+             // successful authorization
             }
 
             @Override
             public void onAuthorizationError(String error) {
-                // an error occured during the authorization
+             // an error occurred during the authorization
             }
 
             @Override
             public void onAuthorizationFailed(String error) {
-				// failed authorization
+             // failed authorization
             }
         };
 ```
@@ -74,16 +71,18 @@ SmartCredentialsAuthenticationFactory
 
 ```
  AuthorizationView authorizationView = new AuthorizationView.Builder("viewTitle", "viewNegativeButtonText")
-											.setDescription("viewDescription")
-											.setSubtitle("viewSubtitle")
-											.build();
+									.setDescription("viewDescription")
+									.setSubtitle("viewSubtitle")
+									.build();
  AuthorizationConfiguration authorizationConfiguration = new AuthorizationConfiguration.Builder(authorizationView)
-											.allowDeviceCredentialsFallback(true)
-											.requireFaceRecognitionConfirmation(true)
-											.build();		
+									.allowDeviceCredentialsFallback(true)
+									.requireFaceRecognitionConfirmation(true)
+									.build();
 ```
- * The view title can not not be empty.
- * If the device credentials fallback is set to 'false', the negative button text can not be empty.
+ * The **viewTitle** can not not be empty or null.
+ * Set **allowDeviceCredentialsFallback** true if you want to allow the user to choose between biometrics and device credentials authorization if both of them are available, false otherwise.
+ * If **allowDeviceCredentialsFallback** is set to 'false', the negative button text can not be empty or null.
+ * Set **requireFaceRecognitionConfirmation** true if you want the user to validate the face Id authorization by pressing a confirmation button, false otherwise.
 
 **Step 4:** Authorize the user.
 
