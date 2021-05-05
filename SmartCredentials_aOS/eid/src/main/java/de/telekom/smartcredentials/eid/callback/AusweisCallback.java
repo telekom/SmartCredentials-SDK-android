@@ -26,30 +26,30 @@ import de.telekom.smartcredentials.eid.messages.parser.MessageParser;
 /**
  * Created by Alex.Graur@endava.com at 11/8/2019
  */
-public class AusweisCallback extends IAusweisApp2SdkCallback.Stub {
+public class AusweisCallback extends IAusweisApp2SdkCallback.Stub implements EidCallbackObserver {
 
     private final MessageParser mMessageParser;
-    private final EidMessageReceivedCallback mMessageReceivedCallback;
+    private EidMessageReceivedCallback mMessageReceivedCallback;
 
     public String mSessionId;
 
-    public AusweisCallback(EidMessageReceivedCallback callback) {
-        mMessageParser = new MessageParser(callback);
+    public AusweisCallback(MessageParser messageParser, EidMessageReceivedCallback callback) {
         mMessageReceivedCallback = callback;
+        mMessageParser = messageParser;
     }
 
     @Override
-    public void sessionIdGenerated(String s, boolean b) {
-        mSessionId = s;
+    public void sessionIdGenerated(String sessionId, boolean isSessionIdSecure) {
+        mSessionId = sessionId;
 
         if (mMessageReceivedCallback != null) {
-            mMessageReceivedCallback.onMessageReceived(new SessionGeneratedMessage(s));
+            mMessageReceivedCallback.onMessageReceived(new SessionGeneratedMessage(sessionId));
         }
     }
 
     @Override
-    public void receive(String s) {
-        mMessageParser.parseMessage(s);
+    public void receive(String rawMessage) {
+        mMessageParser.parseMessage(rawMessage);
     }
 
     @Override
@@ -61,5 +61,10 @@ public class AusweisCallback extends IAusweisApp2SdkCallback.Stub {
 
     public EidMessageReceivedCallback getMessageReceivedCallback() {
         return mMessageReceivedCallback;
+    }
+
+    @Override
+    public void update(EidMessageReceivedCallback callback) {
+        mMessageReceivedCallback = callback;
     }
 }

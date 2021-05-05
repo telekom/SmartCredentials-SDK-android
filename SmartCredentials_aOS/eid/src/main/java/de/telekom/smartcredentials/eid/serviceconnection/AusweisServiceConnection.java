@@ -25,6 +25,7 @@ import com.governikus.ausweisapp2.IAusweisApp2Sdk;
 
 import de.telekom.smartcredentials.core.eid.callbacks.EidMessageReceivedCallback;
 import de.telekom.smartcredentials.eid.callback.AusweisCallback;
+import de.telekom.smartcredentials.eid.callback.EidCallbackObserver;
 import de.telekom.smartcredentials.eid.messages.SdkConnectedMessage;
 import de.telekom.smartcredentials.eid.messages.SdkDisconnectedMessage;
 import de.telekom.smartcredentials.eid.messages.SdkNotConnectedMessage;
@@ -33,7 +34,7 @@ import de.telekom.smartcredentials.eid.messages.SdkNotInitializedMessage;
 /**
  * Created by Alex.Graur@endava.com at 11/8/2019
  */
-public class AusweisServiceConnection implements ServiceConnection {
+public class AusweisServiceConnection implements ServiceConnection, EidCallbackObserver {
 
     private IAusweisApp2Sdk mSdk;
     private AusweisCallback mAusweisCallback;
@@ -77,5 +78,10 @@ public class AusweisServiceConnection implements ServiceConnection {
 
     public IAusweisApp2Sdk getAusweisSdk() {
         return mSdk;
+    }
+
+    @Override
+    public void update(EidMessageReceivedCallback callback) {
+        mMessageReceivedCallback = callback;
     }
 }

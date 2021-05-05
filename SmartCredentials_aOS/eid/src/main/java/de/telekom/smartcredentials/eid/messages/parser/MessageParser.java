@@ -19,6 +19,7 @@ package de.telekom.smartcredentials.eid.messages.parser;
 import com.google.gson.Gson;
 
 import de.telekom.smartcredentials.core.eid.callbacks.EidMessageReceivedCallback;
+import de.telekom.smartcredentials.eid.callback.EidCallbackObserver;
 import de.telekom.smartcredentials.eid.messages.AccessRightsMessage;
 import de.telekom.smartcredentials.eid.messages.ApiLevelMessage;
 import de.telekom.smartcredentials.eid.messages.AuthMessage;
@@ -40,10 +41,10 @@ import de.telekom.smartcredentials.eid.messages.types.EidMessageType;
 /**
  * Created by Alex.Graur@endava.com at 11/11/2019
  */
-public class MessageParser {
+public class MessageParser implements EidCallbackObserver {
 
     private final Gson mGson;
-    private final EidMessageReceivedCallback mCallback;
+    private EidMessageReceivedCallback mCallback;
 
     public MessageParser(EidMessageReceivedCallback callback) {
         mGson = new Gson();
@@ -120,5 +121,10 @@ public class MessageParser {
                     break;
             }
         }
+    }
+
+    @Override
+    public void update(EidMessageReceivedCallback callback) {
+        mCallback = callback;
     }
 }
