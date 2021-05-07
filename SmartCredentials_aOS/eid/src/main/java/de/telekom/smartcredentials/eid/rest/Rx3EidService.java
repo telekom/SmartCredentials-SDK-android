@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Telekom Deutschland AG
+ * Copyright (c) 2021 Telekom Deutschland AG
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package de.telekom.smartcredentials.core.eid.callbacks;
+package de.telekom.smartcredentials.eid.rest;
 
-import de.telekom.smartcredentials.core.eid.messages.EidMessage;
+import io.reactivex.rxjava3.core.Observable;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
 
-/**
- * Created by Alex.Graur@endava.com at 11/8/2019
- */
-public interface EidMessageReceivedCallback {
+public interface Rx3EidService {
 
-    <M extends EidMessage> void onMessageReceived(M message);
+    @GET("error")
+    Observable<String> getError(@Query("errorCode") String errorCode);
 }

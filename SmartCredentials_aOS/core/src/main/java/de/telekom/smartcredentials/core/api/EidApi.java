@@ -19,6 +19,7 @@ package de.telekom.smartcredentials.core.api;
 import android.content.Context;
 import android.nfc.Tag;
 
+import de.telekom.smartcredentials.core.eid.callbacks.EidErrorReceivedCallback;
 import de.telekom.smartcredentials.core.eid.callbacks.EidMessageReceivedCallback;
 import de.telekom.smartcredentials.core.eid.callbacks.EidSendCommandCallback;
 import de.telekom.smartcredentials.core.eid.callbacks.EidUpdateTagCallback;
@@ -39,4 +40,7 @@ public interface EidApi {
     <T extends EidCommand> void sendCommand(T command, EidSendCommandCallback callback);
 
     void updateNfcTag(Tag tag, EidUpdateTagCallback callback);
+
+    @SuppressWarnings("unused")
+    void retrieveLoadingErrorCode(String jwt , boolean isProduction, EidErrorReceivedCallback callback);
 }

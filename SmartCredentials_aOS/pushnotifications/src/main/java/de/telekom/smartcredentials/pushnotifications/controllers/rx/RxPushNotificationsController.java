@@ -36,7 +36,7 @@ import io.reactivex.Single;
  */
 public class RxPushNotificationsController implements RxPushNotificationsApi {
 
-    private PushNotificationsController controller;
+    private final PushNotificationsController controller;
 
     public RxPushNotificationsController(PushNotificationsController controller) {
         this.controller = controller;
