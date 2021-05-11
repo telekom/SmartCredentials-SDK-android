@@ -13,17 +13,18 @@ user-friendly UI, support for secure elements (SE), NFC-based payments, card-bas
 
 ## Usage
 
-Make sure you have **jcenter** declared as a repository in your project's build.gradle file. Jcenter should be added by default as a repository when you create a new project.
+Make sure you have **mavenCentral** declared as a repository in your project's build.gradle file.
 ```
 repositories {
     google()
     jcenter()
+    mavenCentral()
     ...
 }
 ```
 Continue by adding one or more Smart Credentials dependecies to your application or SDK build.gradle file, using the latest Smart Credentials version available.
 
-![Generic badge](https://img.shields.io/badge/version-6.2.1-green)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.telekom.smartcredentials/core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.telekom.smartcredentials/core)
 ```
 implementation("de.telekom.smartcredentials:core:$smartCredentialsVersion")
 implementation("de.telekom.smartcredentials:authentication:$smartCredentialsVersion")

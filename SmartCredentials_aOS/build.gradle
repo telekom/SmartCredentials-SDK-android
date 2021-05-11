@@ -40,7 +40,7 @@ allprojects {
         androidTargetSdkVersion = 30
         androidMinSdkVersion = 21
         androidVersionCode = 5
-        androidVersionName = "6.2.3"
+        androidVersionName = "6.2.5"
         androidNdkVersion = "21.3.6528147"
 
         androidXAppcompat = "1.2.0"
@@ -55,6 +55,7 @@ allprojects {
         okHttpVersion = "4.7.2"
         blinkIDVersion = "5.8.0"
         rxJavaVersion = "2.1.1"
+        rx3JavaVersion = "3.0.0"
 
         junitVersion = "4.13"
         mockitoVersion = "2.23.4"

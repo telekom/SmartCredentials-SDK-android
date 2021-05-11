@@ -23,36 +23,64 @@ import android.os.RemoteException;
 
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.telekom.smartcredentials.core.api.EidApi;
+import de.telekom.smartcredentials.core.eid.EidConfiguration;
+import de.telekom.smartcredentials.core.eid.callbacks.EidErrorReceivedCallback;
 import de.telekom.smartcredentials.core.eid.callbacks.EidMessageReceivedCallback;
 import de.telekom.smartcredentials.core.eid.callbacks.EidSendCommandCallback;
 import de.telekom.smartcredentials.core.eid.callbacks.EidUpdateTagCallback;
 import de.telekom.smartcredentials.core.eid.commands.EidCommand;
 import de.telekom.smartcredentials.eid.callback.AusweisCallback;
+import de.telekom.smartcredentials.eid.rest.RetrofitClient;
+import de.telekom.smartcredentials.eid.callback.EidCallbackObserver;
+import de.telekom.smartcredentials.eid.callback.EidCallbackSubject;
+import de.telekom.smartcredentials.eid.messages.parser.MessageParser;
 import de.telekom.smartcredentials.eid.serviceconnection.AusweisServiceConnection;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Alex.Graur@endava.com at 11/8/2019
  */
-public class EidController implements EidApi {
+public class EidController implements EidApi, EidCallbackSubject {
 
     private static final String AUSWEIS_APP_ACTION = "com.governikus.ausweisapp2.START_SERVICE";
 
     private final Gson mGson;
     private AusweisServiceConnection mServiceConnection;
     private AusweisCallback mAusweisCallback;
+    private MessageParser mMessageParser;
     private EidMessageReceivedCallback mMessageReceivedCallback;
+    private List<EidCallbackObserver> mObservers;
+    private EidConfiguration mEidConfiguration;
 
     public EidController() {
         mGson = new Gson();
     }
 
+    public void setConfiguration(EidConfiguration configuration) {
+        mEidConfiguration = configuration;
+    }
+
+    public EidConfiguration getEidConfiguration() {
+        return mEidConfiguration;
+    }
+
     @Override
     public void bind(Context context, String appPackage) {
+        mObservers = new ArrayList<>();
         Intent intent = new Intent(AUSWEIS_APP_ACTION);
         intent.setPackage(appPackage);
-        mAusweisCallback = new AusweisCallback(mMessageReceivedCallback);
+        mMessageParser = new MessageParser(mMessageReceivedCallback);
+        attach(mMessageParser);
+        mAusweisCallback = new AusweisCallback(mMessageParser, mMessageReceivedCallback);
+        attach(mAusweisCallback);
         mServiceConnection = new AusweisServiceConnection(mAusweisCallback);
+        attach(mServiceConnection);
         context.bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
@@ -65,10 +93,13 @@ public class EidController implements EidApi {
     @Override
     public void setMessageReceiverCallback(EidMessageReceivedCallback callback) {
         mMessageReceivedCallback = callback;
+        if (mAusweisCallback != null) {
+            notify(callback);
+        }
     }
 
     @Override
-    public <T extends EidCommand> void sendCommand(T command, EidSendCommandCallback callback) {
+    public <C extends EidCommand> void sendCommand(C command, EidSendCommandCallback callback) {
         try {
             if (mServiceConnection != null) {
                 mServiceConnection.getAusweisSdk().send(mAusweisCallback.mSessionId, mGson.toJson(command));
@@ -91,6 +122,28 @@ public class EidController implements EidApi {
             }
         } catch (RemoteException e) {
             callback.onFailed(e);
+        }
+    }
+
+    @Override
+    public void retrieveLoadingErrorCode(String jwt, boolean isProduction, EidErrorReceivedCallback callback) {
+        RetrofitClient retrofitClient = new RetrofitClient(mEidConfiguration);
+        CompositeDisposable compositeDisposable = new CompositeDisposable();
+        compositeDisposable.add(retrofitClient.getRx2EidService(isProduction).getError(jwt)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(callback::onSuccess, callback::onFailed));
+    }
+
+    @Override
+    public void attach(EidCallbackObserver observer) {
+        mObservers.add(observer);
+    }
+
+    @Override
+    public void notify(EidMessageReceivedCallback callback) {
+        for (EidCallbackObserver observer : mObservers) {
+            observer.update(callback);
         }
     }
 }

@@ -16,6 +16,9 @@
 
 package de.telekom.smartcredentials.eid.commands;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
 
 /**
@@ -24,7 +27,16 @@ import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
 @SuppressWarnings("unused")
 public class SetAccessRightsCommand extends SmartEidCommand {
 
+    @SerializedName("chat")
+    @Expose
+    private String[] mChat = {};
+
     public SetAccessRightsCommand() {
         super(EidCommandType.SET_ACCESS_RIGHTS.getCommandType());
+    }
+
+    public SetAccessRightsCommand(String[] chat) {
+        super(EidCommandType.SET_ACCESS_RIGHTS.getCommandType());
+        this.mChat = chat;
     }
 }

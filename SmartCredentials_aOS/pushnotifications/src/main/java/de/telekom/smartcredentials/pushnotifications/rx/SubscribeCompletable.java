@@ -23,6 +23,7 @@ import de.telekom.smartcredentials.core.pushnotifications.models.PushNotificatio
 import de.telekom.smartcredentials.pushnotifications.controllers.PushNotificationsController;
 import io.reactivex.CompletableEmitter;
 import io.reactivex.CompletableOnSubscribe;
+import io.reactivex.annotations.NonNull;
 
 /**
  * Created by gabriel.blaj@endava.com at 5/21/2020
@@ -36,7 +37,7 @@ public class SubscribeCompletable implements CompletableOnSubscribe {
     }
 
     @Override
-    public void subscribe(CompletableEmitter emitter) {
+    public void subscribe(@NonNull CompletableEmitter emitter) {
         mController.subscribeAllNotifications(new PushNotificationsCallback() {
             @Override
             public void onSuccess(String message) {

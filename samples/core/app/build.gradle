@@ -14,25 +14,31 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release  {
+            storeFile file("keystore.jks")
+            storePassword "sccoredemo"
+            keyAlias "coredemo"
+            keyPassword "sccoredemo"
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     applicationVariants.all { variant ->
         variant.outputs.all {
             outputFileName = "core_${archivesBaseName}_${variant.name}_${defaultConfig.versionName}.apk"
-        }
-    }
-
-    signingConfigs {
-        productFlavors.all  {
-            storeFile file("keystore.jks")
-            storePassword "sccoredemo"
-            keyAlias "coredemo"
-            keyPassword "sccoredemo"
         }
     }
 }

@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "de.telekom.scauthorizationdemo"
-        minSdkVersion 23
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -14,8 +14,18 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release  {
+            storeFile file("keystore.jks")
+            storePassword "scauthorizationdemo"
+            keyAlias "authorizationdemo"
+            keyPassword "scauthorizationdemo"
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -31,15 +41,6 @@ android {
             outputFileName = "authorization_${archivesBaseName}_${variant.name}_${defaultConfig.versionName}.apk"
         }
     }
-
-    signingConfigs {
-        productFlavors.all  {
-            storeFile file("keystore.jks")
-            storePassword "scauthorizationdemo"
-            keyAlias "authorizationdemo"
-            keyPassword "scauthorizationdemo"
-        }
-    }
 }
 
 dependencies {
@@ -47,6 +48,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     implementation 'com.jakewharton.timber:timber:4.7.1'
+    implementation 'com.google.android.material:material:1.2.0'
+    implementation 'com.facebook.stetho:stetho:1.5.1'
 
     implementation("de.telekom.smartcredentials:core:${smartCredentialsVersion}")
     implementation("de.telekom.smartcredentials:security:${smartCredentialsVersion}")

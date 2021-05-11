@@ -23,5 +23,5 @@ import de.telekom.smartcredentials.core.eid.messages.EidMessage;
  */
 public interface EidMessageReceivedCallback {
 
-    <T extends EidMessage> void onMessageReceived(T message);
+    <M extends EidMessage> void onMessageReceived(M message);
 }

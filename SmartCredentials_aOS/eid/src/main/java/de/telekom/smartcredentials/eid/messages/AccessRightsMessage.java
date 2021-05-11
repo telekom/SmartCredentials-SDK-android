@@ -17,6 +17,7 @@
 package de.telekom.smartcredentials.eid.messages;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -30,8 +31,19 @@ public class AccessRightsMessage extends SmartEidMessage {
     @Expose
     private Chat mChat;
 
+    @SerializedName("canAllowed")
+    @Expose
+    private boolean mCanAllowed;
+
     public AccessRightsMessage() {
         super();
+    }
+
+    @VisibleForTesting
+    protected AccessRightsMessage(Chat chat, boolean canAllowed) {
+        super();
+        mChat = chat;
+        mCanAllowed = canAllowed;
     }
 
     public Chat getChat() {
@@ -42,11 +54,20 @@ public class AccessRightsMessage extends SmartEidMessage {
         this.mChat = mChat;
     }
 
+    public boolean getCanAllowed() {
+        return mCanAllowed;
+    }
+
+    public void setCanAllowed(boolean canAllowed) {
+        this.mCanAllowed = canAllowed;
+    }
+
     @NonNull
     @Override
     public String toString() {
         return "AccessRightsMessage{" +
-                "mChat=" + mChat +
+                "mChat=" + mChat + "," +
+                "mCanAllowed=" + mCanAllowed +
                 '}';
     }
 }

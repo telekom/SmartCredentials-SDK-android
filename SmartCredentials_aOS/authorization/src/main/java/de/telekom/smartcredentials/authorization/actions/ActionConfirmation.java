@@ -17,9 +17,10 @@
 package de.telekom.smartcredentials.authorization.actions;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Handler;
+
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,8 +32,7 @@ import de.telekom.smartcredentials.core.actions.SmartCredentialsAction;
 import de.telekom.smartcredentials.core.api.AuthorizationApi;
 import de.telekom.smartcredentials.core.api.StorageApi;
 import de.telekom.smartcredentials.core.authorization.AuthorizationCallback;
-import de.telekom.smartcredentials.core.authorization.AuthorizationPluginError;
-import de.telekom.smartcredentials.core.authorization.AuthorizationPluginUnavailable;
+import de.telekom.smartcredentials.core.authorization.AuthorizationConfiguration;
 import de.telekom.smartcredentials.core.context.ItemContext;
 import de.telekom.smartcredentials.core.context.ItemContextFactory;
 import de.telekom.smartcredentials.core.converters.ModelConverter;
@@ -51,13 +51,18 @@ public class ActionConfirmation extends SmartCredentialsAction {
     private ItemEnvelope mItemEnvelope;
     private Fragment mAuthorizationDialog;
     private BiometricAuthorizationPresenter mBiometricsAuthorizationPresenter;
+    private FragmentActivity mActivity;
+    private AuthorizationConfiguration mConfiguration;
 
     public ActionConfirmation() {
         // required empty constructor
     }
 
-    public ActionConfirmation(String id, String name, JSONObject data) {
+    public ActionConfirmation(FragmentActivity activity, AuthorizationConfiguration configuration,
+                              String id, String name, JSONObject data) {
         super(id, name, data);
+        this.mActivity = activity;
+        this.mConfiguration = configuration;
     }
 
     @Override
@@ -74,9 +79,8 @@ public class ActionConfirmation extends SmartCredentialsAction {
             if (confirmationType.equals(ConfirmationType.DEFAULT_SYSTEM.name())) {
                 AuthorizationApi authorizationApi = SmartCredentialsAuthorizationFactory
                         .getAuthorizationApi();
-                callback.onAuthorizationRequired(Build.VERSION.SDK_INT < Build.VERSION_CODES.P ?
-                        authorizationApi.getAuthorizeUserFragment(getAuthorizationCallback(storageApi, callback, ConfirmationType.DEFAULT_SYSTEM)) :
-                        authorizationApi.getBiometricAuthorizationPresenter(getAuthorizationCallback(storageApi, callback, ConfirmationType.DEFAULT_SYSTEM)));
+                authorizationApi.authorize(mActivity, mConfiguration,
+                        getAuthorizationCallback(storageApi, callback, ConfirmationType.DEFAULT_SYSTEM));
             }
         } catch (JSONException e) {
             ApiLoggerResolver.logError(getClass().getSimpleName(), "Could not retrieve the confirmation type");
@@ -86,17 +90,17 @@ public class ActionConfirmation extends SmartCredentialsAction {
     private AuthorizationCallback getAuthorizationCallback(StorageApi storageApi, ExecutionCallback callback, ConfirmationType type) {
         return new AuthorizationCallback() {
             @Override
-            public void onUnavailable(AuthorizationPluginUnavailable errorMessage) {
-                callback.onUnavailable(errorMessage.toString());
+            public void onAuthorizationError(String error) {
+                callback.onUnavailable(error);
             }
 
             @Override
-            public void onFailure(AuthorizationPluginError message) {
-                callback.onFailed(new ActionConfirmationResponse(false, message.toString(), type));
+            public void onAuthorizationFailed(String error) {
+                callback.onFailed(new ActionConfirmationResponse(false, error, type));
             }
 
             @Override
-            public void onAuthorized() {
+            public void onAuthorizationSucceeded() {
                 new Handler().postDelayed(() -> {
                     callback.onComplete(new ActionConfirmationResponse(true, "Authorization successful", type));
                     updateItem(storageApi);

@@ -16,13 +16,12 @@
 
 package de.telekom.smartcredentials.core.authorization;
 
-import de.telekom.smartcredentials.core.plugins.callbacks.BasePluginCallback;
+public interface AuthorizationCallback {
 
-public abstract class AuthorizationCallback extends BasePluginCallback {
+    void onAuthorizationSucceeded();
 
-    public abstract void onAuthorized();
+    void onAuthorizationError(String error);
 
-    public abstract void onUnavailable(AuthorizationPluginUnavailable errorMessage);
-
-    public abstract void onFailure(AuthorizationPluginError message);
+    void onAuthorizationFailed(String error);
 }
+
