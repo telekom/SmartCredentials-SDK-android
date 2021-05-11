@@ -1,6 +1,6 @@
 name: Release
 on: 
-    push:
+    pull_request:
         branches: 
             - master
 jobs:
@@ -72,7 +72,7 @@ jobs:
           echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
           gpg --quiet --output ./release.gpg --dearmor ./release.asc      
       - name: Assemble all subproject aar files
-        run: cd SmartCredentials_aOS && ./gradlew assembleRelease
+        run: cd SmartCredentials_aOS && ./gradlew assembleRelease && ./gradlew publishToMavenLocal
         env:
           OSSRH_GPG_SECRET_KEY_ID: ${{ secrets.OSSRH_GPG_SECRET_KEY_ID }}
           OSSRH_GPG_SECRET_KEY_BASE64: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
@@ -148,6 +148,5 @@ jobs:
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           OSSRH_GPG_SECRET_KEY_ID: ${{ secrets.OSSRH_GPG_SECRET_KEY_ID }}
-          OSSRH_GPG_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
           OSSRH_GPG_SECRET_KEY_PASSWORD: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
         run: cd SmartCredentials_aOS && ./gradlew publish       
