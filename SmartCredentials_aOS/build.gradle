@@ -40,8 +40,7 @@ allprojects {
         androidTargetSdkVersion = 30
         androidMinSdkVersion = 21
         androidVersionCode = 5
-        //todo change local version
-        androidVersionName = "6.2.5local"
+        androidVersionName = "6.2.5"
         androidNdkVersion = "21.3.6528147"
 
         androidXAppcompat = "1.2.0"
