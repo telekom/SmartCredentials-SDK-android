@@ -96,7 +96,7 @@ public class CoreController extends SecurityCompromisedSubject implements CoreAp
     }
 
     public boolean isDeviceRestricted(SmartCredentialsFeatureSet feature) {
-        return SmartCredentialsSystemPropertyMap.isFeatureBlockedOnCurrentDevice(mContext, feature);
+        return false;
     }
 
     public String getUserId() {
