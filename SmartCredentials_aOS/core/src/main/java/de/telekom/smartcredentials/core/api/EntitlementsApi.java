@@ -8,5 +8,9 @@ import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 @SuppressWarnings("unused")
 public interface EntitlementsApi {
 
-    SmartCredentialsApiResponse<String> getTransactionToken();
+    SmartCredentialsApiResponse<String> getAccessToken(String secret);
+
+    SmartCredentialsApiResponse<String> getBearerToken(String accessToken, String packageName);
+
+    SmartCredentialsApiResponse<String> getTransactionToken(String bearerToken, String packageName);
 }
