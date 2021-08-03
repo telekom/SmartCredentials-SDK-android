@@ -8,5 +8,5 @@ import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 @SuppressWarnings("unused")
 public interface SimApi {
 
-    SmartCredentialsApiResponse<Void> placeholderMethod();
+    SmartCredentialsApiResponse<String> getDeviceToken();
 }
