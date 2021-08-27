@@ -189,6 +189,13 @@ jobs:
         with:
             name: qrlogin
             path: SmartCredentials_aOS/qrlogin/build/outputs/aar/
+      - name: Build QR Login Sample Application
+        run: cd samples/qrlogin && chmod +x ./gradlew && ./gradlew build && ./gradlew assembleRelease    
+      - name: Upload QR Login Sample APK
+        uses: actions/upload-artifact@v2
+        with:
+            name: sampleApplications
+            path: samples/qrlogin/app/build/outputs/apk/release/     
             
       - name: Upload Security AAR
         uses: actions/upload-artifact@v2

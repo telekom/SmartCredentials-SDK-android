@@ -25,7 +25,8 @@ public enum TokenPluginError {
     SOCKET_FAILED("Web socket used for authentication has been closed due to an error reading from or writing to the network."),
     EMPTY_MESSAGE("Message that should be sent through web socket is null."),
     ERROR_EXTRACTING_CONNECTION_PARAMS("Could not extract connection params needed for communication through web socket."),
-    INVALID_URL("Request URL for QR authentication is invalid.");
+    INVALID_URL("Request URL for QR authentication is invalid."),
+    INVALID_WEB_SOCKET_URL("Request Web Socket URL for QR authentication is invalid.");
 
     private final String mDesc;
 

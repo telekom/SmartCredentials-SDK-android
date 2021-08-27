@@ -18,8 +18,6 @@ package de.telekom.smartcredentials.qrlogin.callback;
 
 import androidx.annotation.NonNull;
 
-import de.telekom.smartcredentials.core.authorization.AuthorizationPluginError;
-import de.telekom.smartcredentials.core.authorization.AuthorizationPluginUnavailable;
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
 import de.telekom.smartcredentials.core.model.token.TokenResponse;
 import de.telekom.smartcredentials.core.plugins.callbacks.AuthenticationPluginCallback;
@@ -31,10 +29,10 @@ import de.telekom.smartcredentials.core.qrlogin.TokenPluginError;
  */
 public class PluginCallbackQrLoginCallback {
 
-    public static AuthenticationPluginCallback convertToDomainPluginCallback(final AuthenticationCallback callback, final String tag) {
-        return new AuthenticationPluginCallback<AuthorizationPluginUnavailable, AuthorizationPluginError, TokenPluginError>() {
+    public static AuthenticationPluginCallback<String, String, String> convertToDomainPluginCallback(final AuthenticationCallback callback, final String tag) {
+        return new AuthenticationPluginCallback<String, String, String>() {
             @Override
-            public void onRetrievingAuthInfoFailed(TokenPluginError message) {
+            public void onRetrievingAuthInfoFailed(String message) {
                 ApiLoggerResolver.logCallbackMethod(tag, TAG, "onRetrievingAuthInfoFailed");
                 if (callback == null) {
                     return;
@@ -52,7 +50,7 @@ public class PluginCallbackQrLoginCallback {
             }
 
             @Override
-            public void onPluginUnavailable(AuthorizationPluginUnavailable errorMessage) {
+            public void onPluginUnavailable(String errorMessage) {
                 ApiLoggerResolver.logCallbackMethod(tag, TAG, "onPluginUnavailable");
                 if (callback == null) {
                     return;
@@ -61,12 +59,12 @@ public class PluginCallbackQrLoginCallback {
             }
 
             @Override
-            public void onFailed(AuthorizationPluginError message) {
+            public void onFailed(String errorMessage) {
                 ApiLoggerResolver.logCallbackMethod(tag, TAG, "onFailed");
                 if (callback == null) {
                     return;
                 }
-                callback.onFailure(TokenPluginError.FAILED_AUTHENTICATION);
+                callback.onFailure(TokenPluginError.FAILED_AUTHENTICATION.getDesc());
             }
         };
     }

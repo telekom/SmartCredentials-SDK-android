@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">QrLoginDemo</string>
+    <string name="app_alias">scqrlogindemo</string>
+    <string name="current_user_id">1234</string>
+    <string name="camera_permission_not_granted">Camera permission not granted!</string>
+    <string name="camera_scanner_layout_failed">Failed to retrieve camera scanner layout!</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="url">URL</string>
+    <string name="web_socket">Web Socket Address</string>
+    <string name="update">Update</string>
+    <string name="user_configuration">User Configuration</string>
+    <string name="configuration">Configuration</string>
+    <string name="scan_qr">Login</string>
+    <string name="login_status">Login Status</string>
+    <string name="qr_scanning">QR Scanning</string>
+</resources>

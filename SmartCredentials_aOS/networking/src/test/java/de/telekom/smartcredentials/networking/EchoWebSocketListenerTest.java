@@ -67,7 +67,7 @@ public class EchoWebSocketListenerTest {
     public void onMessageCallsOnFailedOnCallbackWhenResponseIsAuthFailed() {
         mEchoWebSocketListener.onMessage(mWebSocket, TestUtils.AUTH_FAIL_RESPONSE);
 
-        verify(mPluginCallback).onFailed(TokenPluginError.FAILED_AUTHENTICATION.name());
+        verify(mPluginCallback).onFailed(TokenPluginError.FAILED_AUTHENTICATION.getDesc());
         verify(mWebSocket).close(NORMAL_CLOSURE_STATUS, null);
     }
 
