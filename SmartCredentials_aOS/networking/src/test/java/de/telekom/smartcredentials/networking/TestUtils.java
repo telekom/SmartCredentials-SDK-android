@@ -29,8 +29,7 @@ class TestUtils {
     private static final String FAIL_TEXT = "failure_message";
 
     static final String CONNECTION_SUCCESS_RESPONSE =
-            "{\"event\":\"" + "Connection#Success"
-                    + "\",\"data\":{\"_id\":\"id\"}}";
+            "{\"event\":\"Connection#Success\",\"data\":{\"_id\":\"id\"}}";
     static final String AUTH_SUCCESS_RESPONSE =
             "{\"event\":\"" + "Success#QRCodeScan"
                     + "\",\"data\":{\"access_token\":\"" + ACCESS_TOKEN + "\","
@@ -47,8 +46,8 @@ class TestUtils {
     private static final String QR_ID = "2138127398";
     private static final String BROWSER_CLIENT = "client";
     private static final String WS_EMIT_EVENT_QR_SCANNED = "Scanning#QRCode";
-    private static final String BARCODE_JSON = "{\"browserClient\":\"" + BROWSER_CLIENT
-            + "\",\"qr_uuid\":\"" + QR_ID + "\"}";
+    private static final String BARCODE_JSON = "[{\"browserClient\":\"" + BROWSER_CLIENT
+            + "\",\"qr_uuid\":\"" + QR_ID + "\"}]";
     private static final String ID_TOKEN =
             "id_token";
     private static final String REFRESH_TOKEN = "refresh_token";

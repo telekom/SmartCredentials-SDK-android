@@ -67,7 +67,7 @@ public class EchoWebSocketListenerTest {
     public void onMessageCallsOnFailedOnCallbackWhenResponseIsAuthFailed() {
         mEchoWebSocketListener.onMessage(mWebSocket, TestUtils.AUTH_FAIL_RESPONSE);
 
-        verify(mPluginCallback).onFailed(TokenPluginError.FAILED_AUTHENTICATION.name());
+        verify(mPluginCallback).onFailed(TokenPluginError.FAILED_AUTHENTICATION.getDesc());
         verify(mWebSocket).close(NORMAL_CLOSURE_STATUS, null);
     }
 
@@ -92,7 +92,7 @@ public class EchoWebSocketListenerTest {
     public void onMessageCallsOnNullMessageWhenResponseIsNull() {
         mEchoWebSocketListener.onMessage(mWebSocket, (String) null);
 
-        verify(mPluginCallback).onFailed(EMPTY_MESSAGE.name());
+        verify(mPluginCallback).onFailed(EMPTY_MESSAGE.getDesc());
         verify(mWebSocket).close(NORMAL_CLOSURE_STATUS, EMPTY_MESSAGE.getDesc());
     }
 
@@ -129,14 +129,14 @@ public class EchoWebSocketListenerTest {
 
         mEchoWebSocketListener.onFailure(mWebSocket, new Throwable(throwableMessage), any());
 
-        verify(mPluginCallback).onFailed(SOCKET_FAILED.name());
+        verify(mPluginCallback).onFailed(SOCKET_FAILED.getDesc());
     }
 
     @Test
     public void onNullMessageCallsOnFailedOnPluginCallbackAndClosingWebSocket() {
         mEchoWebSocketListener.onNullMessage(mWebSocket);
 
-        verify(mPluginCallback).onFailed(EMPTY_MESSAGE.name());
+        verify(mPluginCallback).onFailed(EMPTY_MESSAGE.getDesc());
         verify(mWebSocket).close(NORMAL_CLOSURE_STATUS, EMPTY_MESSAGE.getDesc());
     }
 
