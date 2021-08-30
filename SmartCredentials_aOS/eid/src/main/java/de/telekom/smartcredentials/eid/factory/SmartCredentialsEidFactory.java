@@ -68,6 +68,7 @@ public class SmartCredentialsEidFactory {
     }
 
     public static void clear() {
+        sEidController.destroy();
         sEidController = null;
     }
 }

@@ -72,4 +72,10 @@ public class Rx2EidController implements Rx2EidApi {
         RetrofitClient retrofitClient = new RetrofitClient(eidController.getEidConfiguration());
         return retrofitClient.getRx2EidService(isProduction).getError(jwt);
     }
+
+    @Override
+    public Observable<Boolean> observeCheckPatchLevel(String version, boolean isProduction) {
+        RetrofitClient retrofitClient = new RetrofitClient(eidController.getEidConfiguration());
+        return retrofitClient.getRx2EidService(isProduction).checkPatchLevel(version);
+    }
 }
