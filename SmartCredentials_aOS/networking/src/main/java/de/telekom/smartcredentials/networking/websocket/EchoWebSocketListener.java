@@ -86,7 +86,7 @@ public class EchoWebSocketListener extends WebSocketListener {
                     }
                     mPluginCallback.onSuccess(new TokenResponse(authInfo.mAccessToken, System.currentTimeMillis() + expiresIn));
                 } else {
-                    mPluginCallback.onFailed(TokenPluginError.NULL_ACCESS_TOKEN.name());
+                    mPluginCallback.onFailed(TokenPluginError.NULL_ACCESS_TOKEN.getDesc());
                 }
                 webSocket.close(NORMAL_CLOSURE_STATUS, null);
                 break;
@@ -94,7 +94,7 @@ public class EchoWebSocketListener extends WebSocketListener {
                 String errorEnvelope = mGson.toJson(message.mData);
                 ErrorAuthInfo info = mGson.fromJson(errorEnvelope, ErrorAuthInfo.class);
                 ApiLoggerResolver.logError(TAG, info.mError.mErrorMessage);
-                mPluginCallback.onFailed(TokenPluginError.FAILED_AUTHENTICATION.name());
+                mPluginCallback.onFailed(TokenPluginError.FAILED_AUTHENTICATION.getDesc());
                 webSocket.close(NORMAL_CLOSURE_STATUS, null);
                 break;
             default:
@@ -118,19 +118,20 @@ public class EchoWebSocketListener extends WebSocketListener {
     @Override
     public void onFailure(WebSocket webSocket, Throwable t, Response response) {
         ApiLoggerResolver.logEvent("Error : " + t.getMessage());
-        mPluginCallback.onFailed(TokenPluginError.SOCKET_FAILED.name());
+        mPluginCallback.onFailed(TokenPluginError.SOCKET_FAILED.getDesc());
     }
 
     public void onNullMessage(WebSocket webSocket) {
         if (mPluginCallback != null) {
-            mPluginCallback.onFailed(EMPTY_MESSAGE.name());
+            mPluginCallback.onFailed(EMPTY_MESSAGE.getDesc());
         }
         webSocket.close(NORMAL_CLOSURE_STATUS, EMPTY_MESSAGE.getDesc());
     }
 
     public void sendQrSocketMessage(WebSocket webSocket) {
         String qrCodeRaw = mParamMap.get(AuthParamKey.QR_CODE.name());
-        BarcodeWrapper barcodeWrapper = mGson.fromJson(qrCodeRaw, BarcodeWrapper.class);
+        BarcodeWrapper[] barcodeWrapperArray = mGson.fromJson(qrCodeRaw, BarcodeWrapper[].class);
+        BarcodeWrapper barcodeWrapper = barcodeWrapperArray[0];
         WebSocketMessage webSocketMessage =
                 new WebSocketMessage(WS_EMIT_EVENT_QR_SCANNED,
                         barcodeWrapper.mQrID,

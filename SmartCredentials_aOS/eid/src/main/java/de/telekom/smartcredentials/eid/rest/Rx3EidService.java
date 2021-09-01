@@ -18,10 +18,14 @@ package de.telekom.smartcredentials.eid.rest;
 
 import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface Rx3EidService {
 
     @GET("error")
     Observable<String> getError(@Query("errorCode") String errorCode);
+
+    @GET("patch/check/android/{version}")
+    Observable<Boolean> checkPatchLevel(@Path("version") String version);
 }

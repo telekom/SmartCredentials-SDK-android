@@ -61,7 +61,7 @@ public class ActionQrLogin extends SmartCredentialsAction {
         try {
             serverSocket.startServer(generateRequestParameters(), getServicePluginCallback(callback));
         } catch (IllegalArgumentException e) {
-            callback.onFailed(TokenPluginError.INVALID_URL);
+            callback.onFailed(TokenPluginError.INVALID_URL.getDesc());
         }
     }
 

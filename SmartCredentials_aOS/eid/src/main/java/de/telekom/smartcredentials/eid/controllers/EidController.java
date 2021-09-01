@@ -30,14 +30,15 @@ import de.telekom.smartcredentials.core.api.EidApi;
 import de.telekom.smartcredentials.core.eid.EidConfiguration;
 import de.telekom.smartcredentials.core.eid.callbacks.EidErrorReceivedCallback;
 import de.telekom.smartcredentials.core.eid.callbacks.EidMessageReceivedCallback;
+import de.telekom.smartcredentials.core.eid.callbacks.EidPatchLevelCheckCallback;
 import de.telekom.smartcredentials.core.eid.callbacks.EidSendCommandCallback;
 import de.telekom.smartcredentials.core.eid.callbacks.EidUpdateTagCallback;
 import de.telekom.smartcredentials.core.eid.commands.EidCommand;
 import de.telekom.smartcredentials.eid.callback.AusweisCallback;
-import de.telekom.smartcredentials.eid.rest.RetrofitClient;
 import de.telekom.smartcredentials.eid.callback.EidCallbackObserver;
 import de.telekom.smartcredentials.eid.callback.EidCallbackSubject;
 import de.telekom.smartcredentials.eid.messages.parser.MessageParser;
+import de.telekom.smartcredentials.eid.rest.RetrofitClient;
 import de.telekom.smartcredentials.eid.serviceconnection.AusweisServiceConnection;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -51,6 +52,7 @@ public class EidController implements EidApi, EidCallbackSubject {
     private static final String AUSWEIS_APP_ACTION = "com.governikus.ausweisapp2.START_SERVICE";
 
     private final Gson mGson;
+    private final CompositeDisposable mCompositeDisposable;
     private AusweisServiceConnection mServiceConnection;
     private AusweisCallback mAusweisCallback;
     private MessageParser mMessageParser;
@@ -60,6 +62,7 @@ public class EidController implements EidApi, EidCallbackSubject {
 
     public EidController() {
         mGson = new Gson();
+        mCompositeDisposable = new CompositeDisposable();
     }
 
     public void setConfiguration(EidConfiguration configuration) {
@@ -128,11 +131,25 @@ public class EidController implements EidApi, EidCallbackSubject {
     @Override
     public void retrieveLoadingErrorCode(String jwt, boolean isProduction, EidErrorReceivedCallback callback) {
         RetrofitClient retrofitClient = new RetrofitClient(mEidConfiguration);
-        CompositeDisposable compositeDisposable = new CompositeDisposable();
-        compositeDisposable.add(retrofitClient.getRx2EidService(isProduction).getError(jwt)
+        mCompositeDisposable.add(retrofitClient.getRx2EidService(isProduction).getError(jwt)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(callback::onSuccess, callback::onFailed));
+    }
+
+    @Override
+    public void checkPatchLevel(String version, boolean isProduction, EidPatchLevelCheckCallback callback) {
+        RetrofitClient retrofitClient = new RetrofitClient(mEidConfiguration);
+        mCompositeDisposable.add(retrofitClient.getRx2EidService(isProduction).checkPatchLevel(version)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(isSupported -> {
+                    if (isSupported) {
+                        callback.onSupportedPatchLevel();
+                    } else {
+                        callback.onUnsupportedPatchLevel();
+                    }
+                }, callback::onFailed));
     }
 
     @Override
@@ -145,5 +162,9 @@ public class EidController implements EidApi, EidCallbackSubject {
         for (EidCallbackObserver observer : mObservers) {
             observer.update(callback);
         }
+    }
+
+    public void destroy() {
+        mCompositeDisposable.clear();
     }
 }

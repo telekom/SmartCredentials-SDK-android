@@ -22,6 +22,6 @@ public abstract class AuthenticationCallback extends BaseAuthPluginCallback {
 
     public abstract void onAuthenticated(String authResponse, long expirationTime);
 
-    public abstract void onFailure(TokenPluginError message);
+    public abstract void onFailure(String message);
 
 }
