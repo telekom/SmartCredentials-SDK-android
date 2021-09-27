@@ -3,6 +3,7 @@ package de.telekom.scpushnotificationsdemo;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -126,6 +127,10 @@ public class MainActivity extends AppCompatActivity {
     private PendingIntent getNotificationTapIntent() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        return PendingIntent.getActivity(this, 0, intent, 0);
+        int intentFlag = 0;
+        if (Build.VERSION.SDK_INT >= 31) {
+            intentFlag = PendingIntent.FLAG_MUTABLE;
+        }
+        return PendingIntent.getActivity(this, 0, intent, intentFlag);
     }
 }
