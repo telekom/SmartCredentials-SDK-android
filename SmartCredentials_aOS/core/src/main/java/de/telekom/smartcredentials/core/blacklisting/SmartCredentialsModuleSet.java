@@ -30,7 +30,7 @@ public enum SmartCredentialsModuleSet {
     EID("e-ID module"),
     PERSISTENT_LOGGING("Persistent Logging Module"),
     PUSH_NOTIFICATIONS_MODULE("Push Notifications Module"),
-    ENTITLEMENTS_MODULE("Entitlements Module"),
+    ONE_CLICK_BUSINESS_MODULE("One Click Business Module"),
     SIM_MODULE("Sim Module");
 
     private final String mModuleName;
