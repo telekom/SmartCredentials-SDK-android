@@ -9,4 +9,8 @@ import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 public interface SimApi {
 
     SmartCredentialsApiResponse<String> getDeviceToken();
+
+    void setDebugDeviceToken(String debugDeviceToken);
+
+    String getDebugDeviceToken();
 }
