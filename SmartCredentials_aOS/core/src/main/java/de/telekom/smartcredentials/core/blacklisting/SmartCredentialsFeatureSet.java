@@ -63,7 +63,11 @@ public enum SmartCredentialsFeatureSet {
     SET_MESSAGE_RECEIVED_CALLBACK("Set Message Received Callback", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
             "The Set Message Received Callback feature is not supported on this device model."),
     SET_TOKEN_REFRESHED_CALLBACK("Set Token Refreshed Callback", SmartCredentialsModuleSet.PUSH_NOTIFICATIONS_MODULE,
-            "The Set Token Refreshed Callback feature is not supported on this device model.");
+            "The Set Token Refreshed Callback feature is not supported on this device model."),
+    GET_TRANSACTION_TOKEN("Get Transaction Token", SmartCredentialsModuleSet.ONE_CLICK_BUSINESS_MODULE,
+            "The retrieve of the transaction token feature is not supported on this device model."),
+    GET_DEVICE_TOKEN("Get Device Token", SmartCredentialsModuleSet.SIM_MODULE,
+            "The retrieve of the device token feature is not supported on this device model.");
 
     private final SmartCredentialsModuleSet mModule;
     private final String mFeatureName;
