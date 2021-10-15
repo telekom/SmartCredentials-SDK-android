@@ -25,6 +25,7 @@ import de.telekom.smartcredentials.pushnotifications.rx.MessageReceivedObservabl
 import de.telekom.smartcredentials.pushnotifications.rx.SubscribeCompletable;
 import de.telekom.smartcredentials.pushnotifications.rx.SubscribeToTopicCompletable;
 import de.telekom.smartcredentials.pushnotifications.rx.TokenRefreshedObservable;
+import de.telekom.smartcredentials.pushnotifications.rx.TokenRetrievedSingle;
 import de.telekom.smartcredentials.pushnotifications.rx.UnsubscribeCompletable;
 import de.telekom.smartcredentials.pushnotifications.rx.UnsubscribeFromTopicCompletable;
 import io.reactivex.Completable;
@@ -79,7 +80,7 @@ public class RxPushNotificationsController implements RxPushNotificationsApi {
      */
     @Override
     public Single<String> retrieveToken() {
-        return Single.just(Objects.requireNonNull(controller.retrieveToken().getData()));
+        return Single.create(new TokenRetrievedSingle(controller));
     }
 
     /**

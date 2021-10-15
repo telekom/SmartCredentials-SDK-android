@@ -44,7 +44,7 @@ public class DemoApplication extends Application {
 
         PushNotificationsConfiguration firebaseConfig = new PushNotificationsConfiguration.ConfigurationBuilder(
                 this,
-                BuildConfig.FCM_API_KEY,
+        BuildConfig.FCM_API_KEY,
                 BuildConfig.FCM_PROJECT_ID,
                 BuildConfig.FCM_DATABASE_URL,
                 BuildConfig.FCM_APPLICATION_ID,

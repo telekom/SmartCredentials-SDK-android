@@ -20,7 +20,8 @@
             android:parentActivityName=".tokens.TokensActivity" />
         <activity android:name=".login.CancelActivity" />
         <activity android:name=".login.CompletionActivity" />
-        <activity android:name=".login.LoginActivity">
+        <activity android:name=".login.LoginActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,7 +31,8 @@
         <activity android:name=".tokens.TokensActivity" />
         <activity
             android:name="net.openid.appauth.RedirectUriReceiverActivity"
-            tools:node="replace">
+            tools:node="replace"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />

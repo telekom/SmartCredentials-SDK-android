@@ -49,6 +49,15 @@ public interface AuthenticationApi {
                                                     AuthenticationServiceInitListener authenticationServiceInitListener);
 
     /**
+     * Determines whether the api has been successfully initialized.
+     *
+     * @return {@code true} if the api is initialized and the configuration hasn't changed;
+     * {@code false} otherwise
+     */
+    @SuppressWarnings("unused")
+    SmartCredentialsApiResponse<Boolean> isApiInitialized();
+
+    /**
      * Logs in a user and acquires authorization tokens for that user. Uses the endpoints from
      * configuration document.
      *

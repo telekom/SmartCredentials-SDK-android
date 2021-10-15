@@ -16,14 +16,14 @@
 
 package de.telekom.smartcredentials.pushnotifications.rest.models;
 
-import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.JsonObject;
 
 import java.util.UUID;
 
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
-import de.telekom.smartcredentials.pushnotifications.repositories.PushNotificationsStorageRepository;
 import de.telekom.smartcredentials.pushnotifications.di.ObjectGraphCreatorPushNotifications;
+import de.telekom.smartcredentials.pushnotifications.repositories.PushNotificationsStorageRepository;
 
 /**
  * Created by gabriel.blaj@endava.com at 5/18/2020
@@ -38,20 +38,20 @@ public class TpnsRequestBody {
     private final static String KEY_DEVICE_REGISTRATION_ID = "deviceRegistrationId";
     private final static String APPLICATION_TYPE_AOS = "AOS";
 
-    private PushNotificationsStorageRepository mStorageRepository;
+    private final PushNotificationsStorageRepository mStorageRepository;
 
-    private String mApplicationType;
-    private String mApplicationKey;
-    private String mDeviceId;
+    private final String mApplicationType;
+    private final String mApplicationKey;
+    private final String mDeviceId;
     private String mDeviceRegistrationId;
 
     public TpnsRequestBody() {
+        retrieveDeviceRegistrationId();
         mStorageRepository = ObjectGraphCreatorPushNotifications.getInstance()
                 .providePushNotificationsStorageRepository();
         mApplicationType = APPLICATION_TYPE_AOS;
         mApplicationKey = retrieveApplicationKey();
         mDeviceId = retrieveDeviceId();
-        mDeviceRegistrationId = retrieveDeviceRegistrationId();
     }
 
     private String getApplicationType() {
@@ -82,7 +82,7 @@ public class TpnsRequestBody {
     private String retrieveApplicationKey() {
         String applicationKey = mStorageRepository.getPushNotificationsConfigString(
                 PushNotificationsStorageRepository.KEY_TPNS_APPLICATION_KEY);
-        if(applicationKey.equals("")){
+        if (applicationKey.equals("")) {
             ApiLoggerResolver.logError(getClass().getSimpleName(), NULL_APPLICATION_KEY);
         } else {
             ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "ApplicationKey: " + applicationKey);
@@ -101,13 +101,13 @@ public class TpnsRequestBody {
         return deviceId;
     }
 
-    private String retrieveDeviceRegistrationId() {
-        String token = FirebaseInstanceId.getInstance().getToken();
-        if(token == null) {
-            return "";
-        } else {
-            return token;
-        }
+    private void retrieveDeviceRegistrationId() {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        mDeviceRegistrationId = task.getResult();
+                    }
+                }
+        );
     }
 
 }
