@@ -20,13 +20,13 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 
 import de.telekom.smartcredentials.core.api.PushNotificationsApi;
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
+import de.telekom.smartcredentials.core.pushnotifications.callbacks.PushNotificationRetrieveTokenCallback;
 import de.telekom.smartcredentials.core.pushnotifications.callbacks.PushNotificationsCallback;
 import de.telekom.smartcredentials.core.pushnotifications.callbacks.PushNotificationsMessageCallback;
 import de.telekom.smartcredentials.core.pushnotifications.callbacks.PushNotificationsTokenCallback;
@@ -95,8 +95,13 @@ public abstract class BaseController implements PushNotificationsApi {
     }
 
     @Override
-    public SmartCredentialsResponse<String> retrieveToken() {
-        return new SmartCredentialsResponse<>(FirebaseInstanceId.getInstance().getToken());
+    public SmartCredentialsResponse<Void> retrieveToken(PushNotificationRetrieveTokenCallback callback) {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                callback.onTokenRetrieved(task.getResult());
+            }
+        });
+        return new SmartCredentialsResponse<>();
     }
 
     @Override

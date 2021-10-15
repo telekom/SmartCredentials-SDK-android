@@ -87,7 +87,7 @@ public class AuthenticationController implements AuthenticationApi {
     private static final AtomicReference<AuthenticationController> INSTANCE_REF =
             new AtomicReference<>(null);
 
-    private AuthenticationStorageRepository mAuthenticationStorageRepository;
+    private final AuthenticationStorageRepository mAuthenticationStorageRepository;
     private final AtomicReference<AuthorizationService> mAuthService = new AtomicReference<>();
     private final AtomicReference<AuthorizationRequest> mAuthRequest = new AtomicReference<>();
     private WeakReference<AuthenticationServiceInitListener> mAuthInitListener;
@@ -97,7 +97,7 @@ public class AuthenticationController implements AuthenticationApi {
     private AuthClientConfiguration mConfiguration;
     private int mCustomTabColor;
     private ExecutorService mExecutor;
-    private CoreController mCoreController;
+    private final CoreController mCoreController;
     private PkceConfiguration mPkceConfiguration;
 
     private AuthenticationController(CoreController coreController) {
@@ -186,6 +186,26 @@ public class AuthenticationController implements AuthenticationApi {
         mExecutor.submit(() -> doInit(configuration.getContext(), configuration.getIdentityProviderId(),
                 configuration.getAuthConfigFileResId(), configuration.getPkceConfiguration()));
         return new SmartCredentialsResponse<>(true);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SmartCredentialsApiResponse<Boolean> isApiInitialized() {
+
+        if (mCoreController.isSecurityCompromised()) {
+            mCoreController.handleSecurityCompromised();
+            return new SmartCredentialsResponse<>(new RootedThrowable());
+        }
+
+        if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.AUTHENTICATION)) {
+            String errorMessage = SmartCredentialsFeatureSet.AUTHENTICATION.getNotSupportedDesc();
+            return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
+        }
+
+        return new SmartCredentialsResponse<>(!mConfiguration.hasConfigurationChanges()
+                && mAuthStateManager.getCurrent().getAuthorizationServiceConfiguration() != null);
     }
 
     /**

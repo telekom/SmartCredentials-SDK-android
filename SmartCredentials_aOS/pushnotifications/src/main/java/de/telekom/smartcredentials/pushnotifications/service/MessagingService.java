@@ -19,6 +19,8 @@ package de.telekom.smartcredentials.pushnotifications.service;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import org.jetbrains.annotations.NotNull;
+
 import de.telekom.smartcredentials.pushnotifications.di.ObjectGraphCreatorPushNotifications;
 import de.telekom.smartcredentials.pushnotifications.factory.SmartCredentialsPushNotificationsFactory;
 import de.telekom.smartcredentials.pushnotifications.handlers.PushNotificationsHandler;
@@ -33,8 +35,8 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class MessagingService extends FirebaseMessagingService {
 
-    private PushNotificationsStorageRepository mStorageRepository;
-    private PushNotificationsHandler mHandler;
+    private final PushNotificationsStorageRepository mStorageRepository;
+    private final PushNotificationsHandler mHandler;
     private CompositeDisposable mCompositeDisposable;
 
     public MessagingService() {
@@ -56,7 +58,7 @@ public class MessagingService extends FirebaseMessagingService {
     }
 
     @Override
-    public void onNewToken(String token) {
+    public void onNewToken(@NotNull String token) {
         if (mStorageRepository.getPushNotificationsConfigBoolean(PushNotificationsStorageRepository.KEY_AUTO_SUBSCRIBE)) {
             mCompositeDisposable.add(SmartCredentialsPushNotificationsFactory.getRxPushNotificationsApi().subscribeAllNotifications()
                     .subscribeOn(Schedulers.io())
@@ -70,7 +72,7 @@ public class MessagingService extends FirebaseMessagingService {
     }
 
     @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
+    public void onMessageReceived(@NotNull RemoteMessage remoteMessage) {
         if (mStorageRepository.getPushNotificationsConfigBoolean(
                 PushNotificationsStorageRepository.KEY_SUBSCRIPTION_STATE)) {
             mHandler.onMessageReceived(new FirebaseRemoteMessage(remoteMessage));

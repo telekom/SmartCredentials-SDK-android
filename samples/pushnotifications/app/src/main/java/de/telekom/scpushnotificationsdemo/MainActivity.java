@@ -57,16 +57,17 @@ public class MainActivity extends AppCompatActivity {
                 SmartTask.with(this).assign(() -> pushNotificationsApi.subscribeAllNotifications(new PushNotificationsCallback() {
                     @Override
                     public void onSuccess(String message) {
-                            setSubscribedState();
-                            logMessage(message);
+                        setSubscribedState();
+                        logMessage(message);
                     }
 
                     @Override
                     public void onFailure(String message, List<PushNotificationsError> errors) {
-                            setSubscribedState();
-                            logMessage(message);
+                        setSubscribedState();
+                        logMessage(message);
                     }
-                })).finish(result -> {}).execute());
+                })).finish(result -> {
+                }).execute());
 
         Button unsubscribeButton = findViewById(R.id.unsubscribe_button);
         unsubscribeButton.setOnClickListener(v ->
@@ -82,23 +83,23 @@ public class MainActivity extends AppCompatActivity {
                         setUnsubscribedState();
                         logMessage(message);
                     }
-                })).finish(result -> {}).execute());
+                })).finish(result -> {
+                }).execute());
 
         Button logTokenButton = findViewById(R.id.log_token_button);
         logTokenButton.setOnClickListener(v ->
-        {
-            String token = pushNotificationsApi.retrieveToken().getData();
-            tokenValue.setText(token);
-            logMessage(String.format("%s%s",getResources().getString(R.string.registration_token_log_text),token));
-        });
+                pushNotificationsApi.retrieveToken(token -> {
+                    tokenValue.setText(token);
+                    logMessage(String.format("%s%s", getResources().getString(R.string.registration_token_log_text), token));
+                }));
     }
 
-    private void setSubscribedState(){
+    private void setSubscribedState() {
         subscriptionStateIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_subscribed));
         subscriptionMessage.setText(getString(R.string.subscribed));
     }
 
-    private void setUnsubscribedState(){
+    private void setUnsubscribedState() {
         subscriptionStateIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_unsubscribed));
         subscriptionMessage.setText(getString(R.string.unsubscribed));
     }

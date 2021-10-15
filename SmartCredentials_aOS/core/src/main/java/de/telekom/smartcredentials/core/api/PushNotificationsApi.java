@@ -16,6 +16,7 @@
 
 package de.telekom.smartcredentials.core.api;
 
+import de.telekom.smartcredentials.core.pushnotifications.callbacks.PushNotificationRetrieveTokenCallback;
 import de.telekom.smartcredentials.core.pushnotifications.callbacks.PushNotificationsCallback;
 import de.telekom.smartcredentials.core.pushnotifications.callbacks.PushNotificationsMessageCallback;
 import de.telekom.smartcredentials.core.pushnotifications.callbacks.PushNotificationsTokenCallback;
@@ -55,7 +56,7 @@ public interface PushNotificationsApi {
      * Method used to subscribe to a topic in order to receive notifications about it.
      *
      * @param callback {@link PushNotificationsCallback} for retrieving the subscribe success or failure event
-     * @param topic the subscribe topic
+     * @param topic    the subscribe topic
      * @return {@link SmartCredentialsApiResponse} containing a {@link Void} if the response was returned on callback
      * or {@link RootedThrowable} if the device is rooted
      * or {@link FeatureNotSupportedThrowable} if the subscribe to topic method is not supported
@@ -67,7 +68,7 @@ public interface PushNotificationsApi {
      * Method used to unsubscribe from a topic in order to stop receiving notifications about it.
      *
      * @param callback {@link PushNotificationsCallback} for retrieving the unsubscribe success or failure event
-     * @param topic the unsubscribe topic
+     * @param topic    the unsubscribe topic
      * @return {@link SmartCredentialsApiResponse} containing a {@link Void} if the response was returned on callback
      * or {@link RootedThrowable} if the device is rooted
      * or {@link FeatureNotSupportedThrowable} if the unsubscribe to topic method is not supported
@@ -76,14 +77,16 @@ public interface PushNotificationsApi {
     SmartCredentialsApiResponse<Void> unsubscribeFromTopic(String topic, PushNotificationsCallback callback);
 
     /**
-     * Method used to retrieve the token used for initializing the Firebase client.
+     * Method used to retrieve the firebase token.
      *
-     * @return {@link SmartCredentialsApiResponse} containing a {@link String} if response was successful
+     * @param callback {@link PushNotificationRetrieveTokenCallback} for retrieving the firebase token
+     * @return {@link SmartCredentialsApiResponse} containing a {@link Void} if the callback was attached
+     * successfully in order to return the token
      * or {@link RootedThrowable} if the device is rooted
      * or {@link FeatureNotSupportedThrowable} if the retrieve token method is not supported
      * on device (get reason by calling getError().getMessage() on response object)
      */
-    SmartCredentialsResponse<String> retrieveToken();
+    SmartCredentialsResponse<Void> retrieveToken(PushNotificationRetrieveTokenCallback callback);
 
     /**
      * Method used to retrieve the device id used for registering to TPNS.

@@ -19,6 +19,7 @@ package de.telekom.smartcredentials.pushnotifications.controllers;
 import de.telekom.smartcredentials.core.api.PushNotificationsApi;
 import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsFeatureSet;
 import de.telekom.smartcredentials.core.controllers.CoreController;
+import de.telekom.smartcredentials.core.pushnotifications.callbacks.PushNotificationRetrieveTokenCallback;
 import de.telekom.smartcredentials.core.pushnotifications.callbacks.PushNotificationsCallback;
 import de.telekom.smartcredentials.core.pushnotifications.callbacks.PushNotificationsMessageCallback;
 import de.telekom.smartcredentials.core.pushnotifications.callbacks.PushNotificationsTokenCallback;
@@ -116,7 +117,7 @@ public class PushNotificationsController implements PushNotificationsApi {
      * {@inheritDoc}
      */
     @Override
-    public SmartCredentialsResponse<String> retrieveToken() {
+    public SmartCredentialsResponse<Void> retrieveToken(PushNotificationRetrieveTokenCallback callback) {
         if (mCoreController.isSecurityCompromised()) {
             mCoreController.handleSecurityCompromised();
             return new SmartCredentialsResponse<>(new RootedThrowable());
@@ -127,7 +128,7 @@ public class PushNotificationsController implements PushNotificationsApi {
             return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
         }
 
-        return mControllerFactory.getController().retrieveToken();
+        return mControllerFactory.getController().retrieveToken(callback);
     }
 
     /**
