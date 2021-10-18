@@ -20,6 +20,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 
@@ -86,7 +87,7 @@ public class AuthenticationController implements AuthenticationApi {
     private static final AtomicReference<AuthenticationController> INSTANCE_REF =
             new AtomicReference<>(null);
 
-    private AuthenticationStorageRepository mAuthenticationStorageRepository;
+    private final AuthenticationStorageRepository mAuthenticationStorageRepository;
     private final AtomicReference<AuthorizationService> mAuthService = new AtomicReference<>();
     private final AtomicReference<AuthorizationRequest> mAuthRequest = new AtomicReference<>();
     private WeakReference<AuthenticationServiceInitListener> mAuthInitListener;
@@ -96,7 +97,7 @@ public class AuthenticationController implements AuthenticationApi {
     private AuthClientConfiguration mConfiguration;
     private int mCustomTabColor;
     private ExecutorService mExecutor;
-    private CoreController mCoreController;
+    private final CoreController mCoreController;
     private PkceConfiguration mPkceConfiguration;
 
     private AuthenticationController(CoreController coreController) {
@@ -191,6 +192,26 @@ public class AuthenticationController implements AuthenticationApi {
      * {@inheritDoc}
      */
     @Override
+    public SmartCredentialsApiResponse<Boolean> isApiInitialized() {
+
+        if (mCoreController.isSecurityCompromised()) {
+            mCoreController.handleSecurityCompromised();
+            return new SmartCredentialsResponse<>(new RootedThrowable());
+        }
+
+        if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.AUTHENTICATION)) {
+            String errorMessage = SmartCredentialsFeatureSet.AUTHENTICATION.getNotSupportedDesc();
+            return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
+        }
+
+        return new SmartCredentialsResponse<>(!mConfiguration.hasConfigurationChanges()
+                && mAuthStateManager.getCurrent().getAuthorizationServiceConfiguration() != null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public SmartCredentialsApiResponse<Boolean> login(Context context, Intent completionIntent, Intent cancelIntent) {
         ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "login");
 
@@ -218,8 +239,11 @@ public class AuthenticationController implements AuthenticationApi {
 
         PendingIntent intermediateIntent = AuthenticationTradeActivity
                 .createStartIntent(context.getApplicationContext());
-
-        PendingIntent cancelPendingIntent = PendingIntent.getActivity(context, 0, cancelIntent, 0);
+        int intentFlag = 0;
+        if (Build.VERSION.SDK_INT >= 31) {
+            intentFlag = PendingIntent.FLAG_IMMUTABLE;
+        }
+        PendingIntent cancelPendingIntent = PendingIntent.getActivity(context, 0, cancelIntent, intentFlag);
         mExecutor.submit(() -> doLogin(intermediateIntent, cancelPendingIntent));
         return new SmartCredentialsResponse<>(true);
     }

@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
@@ -123,7 +124,11 @@ public class AuthenticationTradeActivity extends Activity {
      */
     public static PendingIntent createStartIntent(Context applicationContext) {
         Intent intent = new Intent(applicationContext, AuthenticationTradeActivity.class);
-        return PendingIntent.getActivity(applicationContext, 0, intent, 0);
+        int intentFlag = 0;
+        if (Build.VERSION.SDK_INT >= 31) {
+            intentFlag = PendingIntent.FLAG_MUTABLE;
+        }
+        return PendingIntent.getActivity(applicationContext, 0, intent, intentFlag);
     }
 
     private void extractPrefs() {

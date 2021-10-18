@@ -5,5 +5,6 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowSplashScreenBackground" tools:targetApi="31">@color/colorPrimary</item>
     </style>
 </resources>

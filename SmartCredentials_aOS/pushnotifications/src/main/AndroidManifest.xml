@@ -20,7 +20,7 @@
     <application>
         <service
             android:name="de.telekom.smartcredentials.pushnotifications.service.MessagingService"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

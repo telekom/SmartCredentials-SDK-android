@@ -62,7 +62,7 @@ public class QrLoginController implements QrLoginApi {
                                                          @NonNull AuthorizationConfiguration configuration,
                                                          @NonNull AuthenticationCallback callback,
                                                          ItemEnvelope itemEnvelope) {
-        ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "getAuthorizeUserLogInFragment");
+        ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "authorizeQr");
         if (mCoreController.isSecurityCompromised()) {
             mCoreController.handleSecurityCompromised();
             return new SmartCredentialsResponse<>(new RootedThrowable());

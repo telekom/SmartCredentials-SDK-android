@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
 import android.nfc.tech.IsoDep;
+import android.os.Build;
 
 /**
  * Created by Alex.Graur@endava.com at 11/8/2019
@@ -31,7 +32,11 @@ public class ForegroundDispatcher {
 
     public static void enable(Activity activity) {
         Intent intent = new Intent(activity, activity.getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(activity, 0, intent, 0);
+        int intentFlag = 0;
+        if (Build.VERSION.SDK_INT >= 31) {
+            intentFlag = PendingIntent.FLAG_MUTABLE;
+        }
+        PendingIntent pendingIntent = PendingIntent.getActivity(activity, 0, intent, intentFlag);
         NfcAdapter mNfcAdapter = NfcAdapter.getDefaultAdapter(activity);
         IntentFilter[] filters = new IntentFilter[]{new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED)};
         String[][] technologies = new String[][]{new String[]{IsoDep.class.getName()}};
