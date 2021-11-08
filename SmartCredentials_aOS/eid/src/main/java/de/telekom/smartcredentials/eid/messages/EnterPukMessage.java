@@ -56,7 +56,7 @@ public class EnterPukMessage extends SmartEidMessage {
     @NonNull
     @Override
     public String toString() {
-        return "EnterCanMessage{" +
+        return "EnterPukMessage{" +
                 "mError='" + mError + '\'' +
                 ", mReader=" + mReader +
                 '}';
