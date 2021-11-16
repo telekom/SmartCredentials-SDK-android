@@ -56,7 +56,7 @@ public class EnterPinMessage extends SmartEidMessage {
     @NonNull
     @Override
     public String toString() {
-        return "EnterCanMessage{" +
+        return "EnterPinMessage{" +
                 "mError='" + mError + '\'' +
                 ", mReader=" + mReader +
                 '}';
