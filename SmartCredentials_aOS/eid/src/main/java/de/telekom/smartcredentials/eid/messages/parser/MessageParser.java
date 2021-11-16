@@ -25,7 +25,9 @@ import de.telekom.smartcredentials.eid.messages.ApiLevelMessage;
 import de.telekom.smartcredentials.eid.messages.AuthMessage;
 import de.telekom.smartcredentials.eid.messages.BadStateMessage;
 import de.telekom.smartcredentials.eid.messages.CertificateMessage;
+import de.telekom.smartcredentials.eid.messages.ChangePinMessage;
 import de.telekom.smartcredentials.eid.messages.EnterCanMessage;
+import de.telekom.smartcredentials.eid.messages.EnterNewPinMessage;
 import de.telekom.smartcredentials.eid.messages.EnterPinMessage;
 import de.telekom.smartcredentials.eid.messages.EnterPukMessage;
 import de.telekom.smartcredentials.eid.messages.InfoMessage;
@@ -84,6 +86,10 @@ public class MessageParser implements EidCallbackObserver {
                     EnterPinMessage enterPinMessage = mGson.fromJson(rawMessage, EnterPinMessage.class);
                     mCallback.onMessageReceived(enterPinMessage);
                     break;
+                case ENTER_NEW_PIN:
+                    EnterNewPinMessage enterNewPinMessage = mGson.fromJson(rawMessage, EnterNewPinMessage.class);
+                    mCallback.onMessageReceived(enterNewPinMessage);
+                    break;
                 case ENTER_PUK:
                     EnterPukMessage enterPukMessage = mGson.fromJson(rawMessage, EnterPukMessage.class);
                     mCallback.onMessageReceived(enterPukMessage);
@@ -111,6 +117,10 @@ public class MessageParser implements EidCallbackObserver {
                 case READER_LIST:
                     ReaderListMessage readerListMessage = mGson.fromJson(rawMessage, ReaderListMessage.class);
                     mCallback.onMessageReceived(readerListMessage);
+                    break;
+                case CHANGE_PIN:
+                    ChangePinMessage changePinMessage = mGson.fromJson(rawMessage, ChangePinMessage.class);
+                    mCallback.onMessageReceived(changePinMessage);
                     break;
                 case UNKNOWN_COMMAND:
                     UnknownCommandMessage unknownCommandMessage = mGson.fromJson(rawMessage, UnknownCommandMessage.class);
