@@ -17,7 +17,6 @@ Make sure you have **mavenCentral** declared as a repository in your project's b
 ```
 repositories {
     google()
-    jcenter()
     mavenCentral()
     ...
 }
