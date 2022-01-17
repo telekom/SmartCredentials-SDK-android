@@ -18,8 +18,12 @@ package de.telekom.smartcredentials.eid.factory;
 
 import androidx.annotation.NonNull;
 
+import de.telekom.smartcredentials.core.api.CoreApi;
 import de.telekom.smartcredentials.core.api.EidApi;
+import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsModuleSet;
+import de.telekom.smartcredentials.core.controllers.CoreController;
 import de.telekom.smartcredentials.core.eid.EidConfiguration;
+import de.telekom.smartcredentials.core.exceptions.InvalidCoreApiException;
 import de.telekom.smartcredentials.eid.controllers.EidController;
 import de.telekom.smartcredentials.eid.controllers.Rx2EidController;
 import de.telekom.smartcredentials.eid.controllers.Rx3EidController;
@@ -39,8 +43,17 @@ public class SmartCredentialsEidFactory {
     }
 
     @NonNull
-    public static synchronized EidApi initSmartCredentialsEidModule(@NonNull final EidConfiguration configuration) {
-        sEidController = new EidController();
+    public static synchronized EidApi initSmartCredentialsEidModule(@NonNull CoreApi coreApi,
+                                                                    @NonNull final EidConfiguration configuration) {
+        CoreController coreController;
+
+        if (coreApi instanceof CoreController) {
+            coreController = (CoreController) coreApi;
+        } else {
+            throw new InvalidCoreApiException(SmartCredentialsModuleSet.EID_MODULE.getModuleName());
+        }
+
+        sEidController = new EidController(coreController);
         sEidController.setConfiguration(configuration);
         return sEidController;
     }

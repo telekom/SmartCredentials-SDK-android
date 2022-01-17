@@ -15,6 +15,7 @@
  */
 
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 apply from: "../gradle/task/maven_push_library.gradle"
 
 android {
@@ -80,5 +81,7 @@ dependencies {
     testImplementation "androidx.arch.core:core-testing:2.1.0"
 
     androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
+    implementation "androidx.core:core-ktx:+"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
 }

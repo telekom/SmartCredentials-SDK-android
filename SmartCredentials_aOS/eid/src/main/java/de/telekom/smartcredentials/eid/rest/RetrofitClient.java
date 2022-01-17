@@ -16,8 +16,13 @@
 
 package de.telekom.smartcredentials.eid.rest;
 
+import java.util.Collections;
+
 import de.telekom.smartcredentials.core.eid.EidConfiguration;
+import de.telekom.smartcredentials.eid.mapper.TlsConfigurationMapper;
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory;
+import okhttp3.ConnectionSpec;
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
@@ -25,9 +30,12 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 public class RetrofitClient {
 
     private final EidConfiguration mEidConfiguration;
+    private final ConnectionSpec mConnectionSpec;
 
     public RetrofitClient(EidConfiguration configuration) {
         mEidConfiguration = configuration;
+        TlsConfigurationMapper tlsConfigurationMapper = new TlsConfigurationMapper();
+        mConnectionSpec = tlsConfigurationMapper.map(configuration.getTlsConfiguration());
     }
 
     public Rx3EidService getRx3EidService(boolean isProduction) {
@@ -44,8 +52,13 @@ public class RetrofitClient {
 
     private Retrofit.Builder getRetrofitClientBuilder(boolean isProduction) {
         String baseUrl = isProduction ? mEidConfiguration.getProductionUrl() : mEidConfiguration.getTestUrl();
+        OkHttpClient okHttpClient = new OkHttpClient
+                .Builder()
+                .connectionSpecs(Collections.singletonList(mConnectionSpec))
+                .build();
         return new Retrofit.Builder()
                 .baseUrl(baseUrl)
+                .client(okHttpClient)
                 .addConverterFactory(ScalarsConverterFactory.create());
     }
 }
