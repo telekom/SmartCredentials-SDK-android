@@ -27,7 +27,7 @@ public enum SmartCredentialsModuleSet {
     QR_LOGIN_MODULE("QR Login Module"),
     OTP_MODULE("OTP Module"),
     AUTHENTICATION_MODULE("Authentication Module"),
-    EID("e-ID module"),
+    EID_MODULE("e-ID module"),
     PERSISTENT_LOGGING("Persistent Logging Module"),
     PUSH_NOTIFICATIONS_MODULE("Push Notifications Module"),
     ONE_CLICK_BUSINESS_MODULE("One Click Business Module"),

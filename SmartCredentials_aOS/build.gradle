@@ -15,6 +15,7 @@
  */
 
 buildscript {
+    ext.kotlin_version = '1.6.10'
     repositories {
         google()
         mavenCentral()
@@ -22,6 +23,7 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:4.1.1"
         classpath 'com.google.gms:google-services:4.3.3'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
@@ -37,7 +39,7 @@ allprojects {
         androidTargetSdkVersion = 31
         androidMinSdkVersion = 21
         androidVersionCode = 5
-        androidVersionName = "6.3.2"
+        androidVersionName = "6.3.3"
         androidNdkVersion = "23.1.7779620"
 
         androidXAppcompat = "1.2.0"

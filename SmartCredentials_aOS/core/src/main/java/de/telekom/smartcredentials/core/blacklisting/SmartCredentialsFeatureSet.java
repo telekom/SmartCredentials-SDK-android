@@ -67,7 +67,21 @@ public enum SmartCredentialsFeatureSet {
     GET_TRANSACTION_TOKEN("Get Transaction Token", SmartCredentialsModuleSet.ONE_CLICK_BUSINESS_MODULE,
             "The retrieve of the transaction token feature is not supported on this device model."),
     GET_DEVICE_TOKEN("Get Device Token", SmartCredentialsModuleSet.SIM_MODULE,
-            "The retrieve of the device token feature is not supported on this device model.");
+            "The retrieve of the device token feature is not supported on this device model."),
+    BIND("Bind", SmartCredentialsModuleSet.EID_MODULE,
+            "The sdk bind feature is not supported on this device model."),
+    UNBIND("Unbind", SmartCredentialsModuleSet.EID_MODULE,
+            "The sdk unbind feature is not supported on this device model."),
+    SET_MESSAGE_RECEIVER_CALLBACK("Set Message Receiver Callback", SmartCredentialsModuleSet.EID_MODULE,
+            "The Set Message Receiver Callback feature is not supported on this device model."),
+    SEND_COMMAND("Send Command", SmartCredentialsModuleSet.EID_MODULE,
+            "The Send Command feature is not supported on this device model."),
+    UPDATE_NFC_TAG("Update Nfc Tag", SmartCredentialsModuleSet.EID_MODULE,
+            "The Update Nfc Tag feature is not supported on this device model."),
+    RETRIEVE_LOADING_ERROR_CODE("Retrieve Loading Error Code", SmartCredentialsModuleSet.EID_MODULE,
+            "The Retrieve Loading ErrorCode feature is not supported on this device model."),
+    CHECK_PATCH_LEVEL("Check Patch Level", SmartCredentialsModuleSet.EID_MODULE,
+            "The Check Patch Level feature is not supported on this device model.");
 
     private final SmartCredentialsModuleSet mModule;
     private final String mFeatureName;

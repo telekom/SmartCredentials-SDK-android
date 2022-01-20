@@ -25,6 +25,7 @@ import de.telekom.smartcredentials.core.eid.callbacks.EidPatchLevelCheckCallback
 import de.telekom.smartcredentials.core.eid.callbacks.EidSendCommandCallback;
 import de.telekom.smartcredentials.core.eid.callbacks.EidUpdateTagCallback;
 import de.telekom.smartcredentials.core.eid.commands.EidCommand;
+import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 
 /**
  * Created by Alex.Graur@endava.com at 11/8/2019
@@ -32,19 +33,19 @@ import de.telekom.smartcredentials.core.eid.commands.EidCommand;
 @SuppressWarnings("unused")
 public interface EidApi {
 
-    void bind(Context context, String appPackage);
+    SmartCredentialsApiResponse<Void> bind(Context context, String appPackage);
 
-    void unbind(Context context);
+    SmartCredentialsApiResponse<Void> unbind(Context context);
 
-    void setMessageReceiverCallback(EidMessageReceivedCallback callback);
+    SmartCredentialsApiResponse<Void> setMessageReceiverCallback(EidMessageReceivedCallback callback);
 
-    <T extends EidCommand> void sendCommand(T command, EidSendCommandCallback callback);
+    <T extends EidCommand> SmartCredentialsApiResponse<Void> sendCommand(T command, EidSendCommandCallback callback);
 
-    void updateNfcTag(Tag tag, EidUpdateTagCallback callback);
-
-    @SuppressWarnings("unused")
-    void retrieveLoadingErrorCode(String jwt, boolean isProduction, EidErrorReceivedCallback callback);
+    SmartCredentialsApiResponse<Void> updateNfcTag(Tag tag, EidUpdateTagCallback callback);
 
     @SuppressWarnings("unused")
-    void checkPatchLevel(String version, boolean isProduction, EidPatchLevelCheckCallback callback);
+    SmartCredentialsApiResponse<Void> retrieveLoadingErrorCode(String jwt, boolean isProduction, EidErrorReceivedCallback callback);
+
+    @SuppressWarnings("unused")
+    SmartCredentialsApiResponse<Void> checkPatchLevel(String version, boolean isProduction, EidPatchLevelCheckCallback callback);
 }

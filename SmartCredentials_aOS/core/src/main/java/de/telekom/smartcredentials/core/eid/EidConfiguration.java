@@ -20,10 +20,12 @@ public class EidConfiguration {
 
     private final String mProductionUrl;
     private final String mTestUrl;
+    private final TlsConfiguration mTlsConfiguration;
 
     private EidConfiguration(ConfigurationBuilder builder) {
         mProductionUrl = builder.productionUrl;
         mTestUrl = builder.testUrl;
+        mTlsConfiguration = builder.tlsConfiguration;
     }
 
     public String getProductionUrl() {
@@ -34,13 +36,19 @@ public class EidConfiguration {
         return mTestUrl;
     }
 
+    public TlsConfiguration getTlsConfiguration() {
+        return mTlsConfiguration;
+    }
+
     public static class ConfigurationBuilder {
         private final String productionUrl;
         private final String testUrl;
+        private final TlsConfiguration tlsConfiguration;
 
-        public ConfigurationBuilder(String productionUrl, String testUrl) {
+        public ConfigurationBuilder(String productionUrl, String testUrl, TlsConfiguration tlsConfiguration) {
             this.productionUrl = productionUrl;
             this.testUrl = testUrl;
+            this.tlsConfiguration = tlsConfiguration;
         }
 
         public EidConfiguration build() {

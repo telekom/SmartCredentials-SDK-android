@@ -32,7 +32,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 
-import java.util.Random;
+import java.security.SecureRandom;
 
 import de.telekom.smartcredentials.camera.R;
 import de.telekom.smartcredentials.camera.views.presenters.CameraScannerPresenter;
@@ -185,7 +185,7 @@ public abstract class CameraScannerLayoutImpl extends CameraScannerLayout implem
 
         mCustomDetectedBlockView = viewStub.inflate();
         setupCustomDetectedBlockView();
-        setId(new Random().nextInt());
+        setId(new SecureRandom().nextInt());
         assembleView();
         informPresenterViewIsReady();
         initGlobalLayoutListener();
