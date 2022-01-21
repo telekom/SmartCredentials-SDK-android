@@ -77,6 +77,6 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}"
 
     androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
-    implementation "androidx.core:core-ktx:+"
+    implementation "androidx.core:core-ktx:$kotlin_core_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
