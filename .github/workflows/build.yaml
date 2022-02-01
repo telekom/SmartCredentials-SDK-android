@@ -13,10 +13,10 @@ jobs:
         run: echo "y" | sudo /usr/local/lib/android/sdk/tools/bin/sdkmanager --install "ndk;23.1.7779620" --sdk_root=${ANDROID_SDK_ROOT}
       - name: Checkout the code
         uses: actions/checkout@v2
-#      - name: Lint
-#        run: cd SmartCredentials_aOS && ./gradlew lint 
-#     - name: Test
-#        run: cd SmartCredentials_aOS && ./gradlew test
+      - name: Lint
+        run: cd SmartCredentials_aOS && ./gradlew lint 
+     - name: Test
+        run: cd SmartCredentials_aOS && ./gradlew test
       - name: Prepare signing keys
         env:
           GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
