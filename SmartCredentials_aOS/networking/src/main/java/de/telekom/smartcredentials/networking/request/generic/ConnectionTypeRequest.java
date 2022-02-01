@@ -16,6 +16,7 @@
 
 package de.telekom.smartcredentials.networking.request.generic;
 
+import android.annotation.SuppressLint;
 import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
 
@@ -23,6 +24,7 @@ import de.telekom.smartcredentials.networking.request.models.enums.ConnectionTyp
 
 class ConnectionTypeRequest {
 
+    @SuppressLint("WrongConstant")
     static NetworkRequest getNetworkRequest(ConnectionType connectionType) {
         NetworkRequest.Builder builder = new NetworkRequest.Builder();
         if (connectionType != ConnectionType.DEFAULT) {
