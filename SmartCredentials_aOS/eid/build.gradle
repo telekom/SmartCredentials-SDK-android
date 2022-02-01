@@ -48,8 +48,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 }
 
@@ -72,7 +72,7 @@ dependencies {
     testImplementation "androidx.arch.core:core-testing:2.1.0"
 
     implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"
-    implementation "com.github.akarnokd:rxjava3-retrofit-adapter:${rx3JavaVersion}"
+    implementation "com.github.akarnokd:rxjava3-retrofit-adapter:3.0.0"
     implementation "com.squareup.retrofit2:converter-scalars:${retrofitVersion}"
     implementation "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}"
 
