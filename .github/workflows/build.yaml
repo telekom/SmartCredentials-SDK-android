@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Lint
         run: cd SmartCredentials_aOS && ./gradlew lint 
-     - name: Test
+      - name: Test
         run: cd SmartCredentials_aOS && ./gradlew test
       - name: Prepare signing keys
         env:
