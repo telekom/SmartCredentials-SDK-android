@@ -17,13 +17,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.telekom.smartcredentials.authentication">
 
-    <application>
+    <uses-permission android:name="android.permission.INTERNET" />
 
+    <application>
         <activity
             android:name=".AuthenticationTradeActivity"
             android:exported="false"
             android:launchMode="singleTask" />
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

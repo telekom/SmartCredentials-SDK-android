@@ -53,8 +53,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     sourceSets {
@@ -65,14 +65,14 @@ android {
 dependencies {
 
     implementation "androidx.appcompat:appcompat:${androidXAppcompat}"
-    implementation "androidx.room:room-runtime:2.2.5"
+    implementation "androidx.room:room-runtime:2.4.1"
     implementation "com.google.code.gson:gson:${gsonVersion}"
     implementation "io.reactivex.rxjava2:rxandroid:${rxJavaVersion}"
 
-    annotationProcessor "androidx.room:room-compiler:2.2.5"
+    annotationProcessor "androidx.room:room-compiler:2.4.1"
 
-    androidTestImplementation "androidx.test.espresso:espresso-core:3.3.0"
-    androidTestImplementation "androidx.room:room-testing:2.2.5"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
+    androidTestImplementation "androidx.room:room-testing:2.4.1"
     androidTestImplementation "org.mockito:mockito-core:${mockitoVersion}"
 
     testImplementation "junit:junit:${junitVersion}"

@@ -21,8 +21,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:4.1.1"
-        classpath 'com.google.gms:google-services:4.3.3'
+        classpath "com.android.tools.build:gradle:7.1.0"
+        classpath 'com.google.gms:google-services:4.3.10'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -39,32 +39,32 @@ allprojects {
         androidTargetSdkVersion = 31
         androidMinSdkVersion = 21
         androidVersionCode = 5
-        androidVersionName = "6.3.3"
+        androidVersionName = "6.3.4"
         androidNdkVersion = "23.1.7779620"
 
-        androidXAppcompat = "1.2.0"
-        androidXAnnotation = "1.1.0"
-        androidXFragment = "1.2.5"
-        constraintLayoutVersion = "2.0.1"
+        androidXAppcompat = "1.4.1"
+        androidXAnnotation = "1.3.0"
+        androidXFragment = "1.4.1"
+        constraintLayoutVersion = "2.1.3"
         architectureComponentsVersion = "1.1.1"
-        gsonVersion = "2.8.6"
+        gsonVersion = "2.8.9"
         mobileVisionVersion = "17.0.2"
 
         retrofitVersion = "2.9.0"
-        okHttpVersion = "4.7.2"
+        okHttpVersion = "4.9.1"
         blinkIDVersion = "5.8.0"
         rxJavaVersion = "2.1.1"
-        rx3JavaVersion = "3.0.0"
+        rx3JavaVersion = "3.1.1"
 
         junitVersion = "4.13.2"
-        mockitoVersion = "3.10.0"
+        mockitoVersion = "3.12.4"
         hamcrestVersion = "2.2"
         powermockVersion = "2.0.7"
         jsonVersion = "20180813"
         espressoLibVersion = "3.0.2"
         architectureCoreTestingVersion = "1.1.1"
 
-        kotlin_core_version = "1.3.2"
+        kotlin_core_version = "1.7.0"
     }
 }
 
