@@ -20,10 +20,16 @@ SmartCredentialsConfiguration coreConfig = new SmartCredentialsConfiguration.Bui
                 .build();
 SmartCredentialsCoreFactory.initialize(coreConfig);
 ```
+
 **Eid module**
 ``` 
-SmartCredentialsEidFactory.initSmartCredentialsEidModule();
+EidConfiguration configuration = EidConfiguration.ConfigurationBuilder(
+                productionUrl,
+                testUrl,
+                tlsConfiguration).build()
+SmartCredentialsEidFactory.initSmartCredentialsEidModule(coreApi, configuration);
 ```
+
 ### Setup foreground dispatcher
 Call ```ForegroundDispatcher.enable(activity)``` in the ```onResume``` lifecycle callback and ```ForegroundDispatcher.disable(activity)``` in the ```onPause``` lifecycle callback of the activity that will receive the NFC tags.
 ### Pass NFC tags to eID module

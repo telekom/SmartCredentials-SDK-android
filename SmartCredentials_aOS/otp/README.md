@@ -38,6 +38,11 @@ StorageApi storageApi = SmartCredentialsStorageFactory.initSmartCredentialsStora
 SmartCredentialsOtpFactory.initSmartCredentialsOtpModule(coreApi, securityApi, storageApi, cameraApi);
 ````
 
+**Support extra Mac Algorithms**
+``` 
+SmartCredentialsOtpFactory.addAcceptedAlgorithms(Collections.singletonList("SHA224"));
+````
+
 ### Set up Item Envelope for OTP generation
 
 **Step 1:** Create item envelope
@@ -110,7 +115,7 @@ SmartCredentialsApiResponse<CameraScannerLayout> response =
     }
 ```
 
-**Step 3:** Add the camera scanner layout to the activity/fagment layout and start the scanner
+**Step 3:** Add the camera scanner layout to the activity/fragment layout and start the scanner
 ```
 view.addView(cameraScannerLayout);
 cameraScannerLayout.startScanner();
