@@ -66,19 +66,21 @@ A core module need to be initialized, because all other modules are dependent to
 
 1. Authentication module  
 An user guide for the Authentication module can be found [here](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/SmartCredentials_aOS/authentication), as well as a [demo application](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/samples/authentication).
-2.  Authorization module  
+2. Authorization module  
 An user guide for the Authorization module can be found [here](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/SmartCredentials_aOS/authorization), as well as a [demo application](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/samples/authorization).
 3. Camera module  
 An user guide for the Camera module can be found [here](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/SmartCredentials_aOS/camera), as well as a [demo application](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/samples/camera).
-4. Document Scanner module  
+4. Core module  
+An user guide for the Core module can be found [here](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/SmartCredentials_aOS/core), as well as a [demo application](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/samples/core).
+5. Document Scanner module  
 An user guide for the Document Scanner module can be found [here](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/SmartCredentials_aOS/documentscanner), as well as a [demo application](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/samples/documentscanner).
-5. eID module  
+6. eID module  
 An user guide for the eID module can be found [here](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/SmartCredentials_aOS/eid).
-6. OTP module  
+7. OTP module  
 An user guide for the OTP module can be found [here](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/SmartCredentials_aOS/otp), as well as a [demo application](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/samples/otp).
-7. Push notifications module  
+8. Push notifications module  
 An user guide for the Push notifications module can be found [here](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/SmartCredentials_aOS/pushnotifications), as well as a [demo application](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/samples/pushnotifications).
-8. Storage module  
+9. Storage module  
 An user guide for the Storage module can be found [here](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/SmartCredentials_aOS/storage), as well as a [demo application](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/samples/storage).
  
 ## Support
