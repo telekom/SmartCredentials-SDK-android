@@ -58,8 +58,10 @@ public class EidController implements EidApi {
 
     @Override
     public void unbind(Context context) {
-        context.unbindService(mServiceConnection);
-        mServiceConnection = null;
+        if (mServiceConnection != null) {
+            context.unbindService(mServiceConnection);
+            mServiceConnection = null;
+        }
     }
 
     @Override
