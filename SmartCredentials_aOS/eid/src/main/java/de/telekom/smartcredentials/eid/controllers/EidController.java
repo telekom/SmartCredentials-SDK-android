@@ -121,8 +121,10 @@ public class EidController implements EidApi, EidCallbackSubject {
             return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
         }
 
-        context.unbindService(mServiceConnection);
-        mServiceConnection = null;
+        if (mServiceConnection != null) {
+            context.unbindService(mServiceConnection);
+            mServiceConnection = null;
+        }
         return new SmartCredentialsResponse<>();
     }
 
