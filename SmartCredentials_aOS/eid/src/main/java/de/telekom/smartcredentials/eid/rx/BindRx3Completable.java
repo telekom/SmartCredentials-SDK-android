@@ -42,6 +42,7 @@ public class BindRx3Completable implements CompletableOnSubscribe {
     @Override
     public void subscribe(@NonNull CompletableEmitter emitter) {
         SmartCredentialsApiResponse<Void> response = eidController.bind(context, appPackage);
+
         if (response.isSuccessful()) {
             emitter.onComplete();
         } else {

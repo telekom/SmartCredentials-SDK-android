@@ -23,5 +23,5 @@ public interface EidSendCommandCallback {
 
     void onSuccess();
 
-    void onFailed(Exception e);
+    void onFailed(Throwable e);
 }

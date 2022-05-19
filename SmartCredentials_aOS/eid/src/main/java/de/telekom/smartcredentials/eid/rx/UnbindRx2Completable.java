@@ -18,6 +18,7 @@ package de.telekom.smartcredentials.eid.rx;
 
 import android.content.Context;
 
+import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 import de.telekom.smartcredentials.eid.controllers.EidController;
 import io.reactivex.CompletableEmitter;
 import io.reactivex.CompletableOnSubscribe;
@@ -38,7 +39,12 @@ public class UnbindRx2Completable implements CompletableOnSubscribe {
 
     @Override
     public void subscribe(@NonNull CompletableEmitter emitter) {
-        eidController.unbind(context);
-        emitter.onComplete();
+        SmartCredentialsApiResponse<Void> response = eidController.unbind(context);
+
+        if (response.isSuccessful()) {
+            emitter.onComplete();
+        } else {
+            emitter.onError(response.getError());
+        }
     }
 }

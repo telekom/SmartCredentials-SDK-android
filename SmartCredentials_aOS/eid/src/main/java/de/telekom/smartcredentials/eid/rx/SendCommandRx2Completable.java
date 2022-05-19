@@ -18,7 +18,6 @@ package de.telekom.smartcredentials.eid.rx;
 
 import de.telekom.smartcredentials.core.eid.callbacks.EidSendCommandCallback;
 import de.telekom.smartcredentials.core.eid.commands.EidCommand;
-import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 import de.telekom.smartcredentials.eid.controllers.EidController;
 import io.reactivex.CompletableEmitter;
 import io.reactivex.CompletableOnSubscribe;
@@ -39,19 +38,16 @@ public class SendCommandRx2Completable implements CompletableOnSubscribe {
 
     @Override
     public void subscribe(@NonNull CompletableEmitter emitter) {
-        SmartCredentialsApiResponse<Void> response = eidController.sendCommand(command, new EidSendCommandCallback() {
+        eidController.sendCommand(command, new EidSendCommandCallback() {
             @Override
             public void onSuccess() {
                 emitter.onComplete();
             }
 
             @Override
-            public void onFailed(Exception e) {
+            public void onFailed(Throwable e) {
                 emitter.onError(e);
             }
         });
-        if (!response.isSuccessful()) {
-            emitter.onError(response.getError());
-        }
     }
 }
