@@ -19,6 +19,8 @@ package de.telekom.smartcredentials.core.controllers;
 import android.content.Context;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+
 import org.json.JSONException;
 
 import java.util.List;
@@ -130,7 +132,7 @@ public class CoreController extends SecurityCompromisedSubject implements CoreAp
         ApiLoggerResolver.logError(getClass().getSimpleName(), "SECURITY COMPROMISED!");
     }
 
-    private void execute(Context context, ItemDomainModel itemDomainModel, String actionId, ExecutionCallback executionCallback) {
+    private void execute(Context context, @NonNull ItemDomainModel itemDomainModel, String actionId, ExecutionCallback executionCallback) {
         ItemDomainAction confirmationActionDomain = null;
         List<ItemDomainAction> actionList = itemDomainModel.getMetadata().getActionList();
 

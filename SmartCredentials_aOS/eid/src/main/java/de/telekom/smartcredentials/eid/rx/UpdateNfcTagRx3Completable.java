@@ -46,7 +46,7 @@ public class UpdateNfcTagRx3Completable implements CompletableOnSubscribe {
             }
 
             @Override
-            public void onFailed(Exception e) {
+            public void onFailed(Throwable e) {
                 emitter.onError(e);
             }
         });

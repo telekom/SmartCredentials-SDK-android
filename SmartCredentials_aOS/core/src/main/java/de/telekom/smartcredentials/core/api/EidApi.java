@@ -37,15 +37,15 @@ public interface EidApi {
 
     SmartCredentialsApiResponse<Void> unbind(Context context);
 
-    SmartCredentialsApiResponse<Void> setMessageReceiverCallback(EidMessageReceivedCallback callback);
+    void setMessageReceiverCallback(EidMessageReceivedCallback callback);
 
-    <T extends EidCommand> SmartCredentialsApiResponse<Void> sendCommand(T command, EidSendCommandCallback callback);
+    <T extends EidCommand> void sendCommand(T command, EidSendCommandCallback callback);
 
-    SmartCredentialsApiResponse<Void> updateNfcTag(Tag tag, EidUpdateTagCallback callback);
-
-    @SuppressWarnings("unused")
-    SmartCredentialsApiResponse<Void> retrieveLoadingErrorCode(String jwt, boolean isProduction, EidErrorReceivedCallback callback);
+    void updateNfcTag(Tag tag, EidUpdateTagCallback callback);
 
     @SuppressWarnings("unused")
-    SmartCredentialsApiResponse<Void> checkPatchLevel(String version, boolean isProduction, EidPatchLevelCheckCallback callback);
+    void retrieveLoadingErrorCode(String jwt, boolean isProduction, EidErrorReceivedCallback callback);
+
+    @SuppressWarnings("unused")
+    void checkPatchLevel(String version, boolean isProduction, EidPatchLevelCheckCallback callback);
 }
