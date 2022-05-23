@@ -18,6 +18,10 @@ package de.telekom.smartcredentials.core.rootdetector;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
+import org.jetbrains.annotations.Contract;
+
 import java.util.Set;
 
 import de.telekom.smartcredentials.core.rootdetector.strategy.BusyBoxBinaryFilesStrategy;
@@ -49,8 +53,10 @@ public class RootDetectionController implements RootDetectionApi {
         return isDeviceRooted;
     }
 
+    @NonNull
+    @Contract("_, _ -> new")
     private RootDetectionStrategy provideRootDetectionStrategy(Context context,
-                                                               RootDetectionOption option) {
+                                                               @NonNull RootDetectionOption option) {
         switch (option) {
             case CHECK_BUSY_BOX_BINARY_FILES:
                 return new BusyBoxBinaryFilesStrategy(context);

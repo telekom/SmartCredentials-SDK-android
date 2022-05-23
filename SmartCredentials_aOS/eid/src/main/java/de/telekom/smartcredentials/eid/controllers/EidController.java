@@ -121,42 +121,49 @@ public class EidController implements EidApi, EidCallbackSubject {
             return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
         }
 
-        context.unbindService(mServiceConnection);
-        mServiceConnection = null;
+        if (mServiceConnection != null) {
+            context.unbindService(mServiceConnection);
+            mServiceConnection = null;
+        }
         return new SmartCredentialsResponse<>();
     }
 
     @Override
-    public SmartCredentialsApiResponse<Void> setMessageReceiverCallback(EidMessageReceivedCallback callback) {
+    public void setMessageReceiverCallback(EidMessageReceivedCallback callback) {
         ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "setMessageReceiverCallback");
         if (mCoreController.isSecurityCompromised()) {
             mCoreController.handleSecurityCompromised();
-            return new SmartCredentialsResponse<>(new RootedThrowable());
+            callback.onFailed(new RootedThrowable());
+            return;
         }
 
         if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.SET_MESSAGE_RECEIVER_CALLBACK)) {
             String errorMessage = SmartCredentialsFeatureSet.SET_MESSAGE_RECEIVER_CALLBACK.getNotSupportedDesc();
-            return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
+            callback.onFailed(new FeatureNotSupportedThrowable(errorMessage));
+            return;
         }
 
         mMessageReceivedCallback = callback;
         if (mAusweisCallback != null) {
             notify(callback);
+        } else {
+            callback.onFailed(new Exception("Auweis callback is null"));
         }
-        return new SmartCredentialsResponse<>();
     }
 
     @Override
-    public <C extends EidCommand> SmartCredentialsApiResponse<Void> sendCommand(C command, EidSendCommandCallback callback) {
+    public <C extends EidCommand> void sendCommand(C command, EidSendCommandCallback callback) {
         ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "sendCommand");
         if (mCoreController.isSecurityCompromised()) {
             mCoreController.handleSecurityCompromised();
-            return new SmartCredentialsResponse<>(new RootedThrowable());
+            callback.onFailed(new RootedThrowable());
+            return;
         }
 
         if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.SEND_COMMAND)) {
             String errorMessage = SmartCredentialsFeatureSet.SEND_COMMAND.getNotSupportedDesc();
-            return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
+            callback.onFailed(new FeatureNotSupportedThrowable(errorMessage));
+            return;
         }
 
         try {
@@ -168,20 +175,21 @@ public class EidController implements EidApi, EidCallbackSubject {
         } catch (RemoteException e) {
             callback.onFailed(e);
         }
-        return new SmartCredentialsResponse<>();
     }
 
     @Override
-    public SmartCredentialsApiResponse<Void> updateNfcTag(Tag tag, EidUpdateTagCallback callback) {
+    public void updateNfcTag(Tag tag, EidUpdateTagCallback callback) {
         ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "updateNfcTag");
         if (mCoreController.isSecurityCompromised()) {
             mCoreController.handleSecurityCompromised();
-            return new SmartCredentialsResponse<>(new RootedThrowable());
+            callback.onFailed(new RootedThrowable());
+            return;
         }
 
         if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.UPDATE_NFC_TAG)) {
             String errorMessage = SmartCredentialsFeatureSet.UPDATE_NFC_TAG.getNotSupportedDesc();
-            return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
+            callback.onFailed(new FeatureNotSupportedThrowable(errorMessage));
+            return;
         }
 
         try {
@@ -194,22 +202,22 @@ public class EidController implements EidApi, EidCallbackSubject {
         } catch (RemoteException e) {
             callback.onFailed(e);
         }
-        return new SmartCredentialsResponse<>();
     }
 
     @Override
-    public SmartCredentialsApiResponse<Void> retrieveLoadingErrorCode(String jwt,
-                                                                      boolean isProduction,
-                                                                      EidErrorReceivedCallback callback) {
+    public void retrieveLoadingErrorCode(String jwt, boolean isProduction,
+                                         EidErrorReceivedCallback callback) {
         ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "retrieveLoadingErrorCode");
         if (mCoreController.isSecurityCompromised()) {
             mCoreController.handleSecurityCompromised();
-            return new SmartCredentialsResponse<>(new RootedThrowable());
+            callback.onFailed(new RootedThrowable());
+            return;
         }
 
         if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.RETRIEVE_LOADING_ERROR_CODE)) {
             String errorMessage = SmartCredentialsFeatureSet.RETRIEVE_LOADING_ERROR_CODE.getNotSupportedDesc();
-            return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
+            callback.onFailed(new FeatureNotSupportedThrowable(errorMessage));
+            return;
         }
 
         RetrofitClient retrofitClient = new RetrofitClient(mEidConfiguration);
@@ -217,20 +225,21 @@ public class EidController implements EidApi, EidCallbackSubject {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(callback::onSuccess, callback::onFailed));
-        return new SmartCredentialsResponse<>();
     }
 
     @Override
-    public SmartCredentialsApiResponse<Void> checkPatchLevel(String version, boolean isProduction, EidPatchLevelCheckCallback callback) {
+    public void checkPatchLevel(String version, boolean isProduction, EidPatchLevelCheckCallback callback) {
         ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "checkPatchLevel");
         if (mCoreController.isSecurityCompromised()) {
             mCoreController.handleSecurityCompromised();
-            return new SmartCredentialsResponse<>(new RootedThrowable());
+            callback.onFailed(new RootedThrowable());
+            return;
         }
 
         if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.CHECK_PATCH_LEVEL)) {
             String errorMessage = SmartCredentialsFeatureSet.CHECK_PATCH_LEVEL.getNotSupportedDesc();
-            return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
+            callback.onFailed(new FeatureNotSupportedThrowable(errorMessage));
+            return;
         }
         RetrofitClient retrofitClient = new RetrofitClient(mEidConfiguration);
         mCompositeDisposable.add(retrofitClient.getRx2EidService(isProduction).checkPatchLevel(version)
@@ -243,7 +252,6 @@ public class EidController implements EidApi, EidCallbackSubject {
                         callback.onUnsupportedPatchLevel();
                     }
                 }, callback::onFailed));
-        return new SmartCredentialsResponse<>();
     }
 
     @Override
