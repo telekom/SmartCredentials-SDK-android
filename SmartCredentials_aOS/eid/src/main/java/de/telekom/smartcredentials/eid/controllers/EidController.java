@@ -63,7 +63,6 @@ public class EidController implements EidApi, EidCallbackSubject {
     private final CompositeDisposable mCompositeDisposable;
     private AusweisServiceConnection mServiceConnection;
     private AusweisCallback mAusweisCallback;
-    private MessageParser mMessageParser;
     private EidMessageReceivedCallback mMessageReceivedCallback;
     private List<EidCallbackObserver> mObservers;
     private EidConfiguration mEidConfiguration;
@@ -98,7 +97,7 @@ public class EidController implements EidApi, EidCallbackSubject {
         mObservers = new ArrayList<>();
         Intent intent = new Intent(AUSWEIS_APP_ACTION);
         intent.setPackage(appPackage);
-        mMessageParser = new MessageParser(mMessageReceivedCallback);
+        MessageParser mMessageParser = new MessageParser(mMessageReceivedCallback);
         attach(mMessageParser);
         mAusweisCallback = new AusweisCallback(mMessageParser, mMessageReceivedCallback);
         attach(mAusweisCallback);
@@ -144,11 +143,7 @@ public class EidController implements EidApi, EidCallbackSubject {
         }
 
         mMessageReceivedCallback = callback;
-        if (mAusweisCallback != null) {
-            notify(callback);
-        } else {
-            callback.onFailed(new Exception("Auweis callback is null"));
-        }
+        notify(callback);
     }
 
     @Override
