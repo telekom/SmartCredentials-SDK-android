@@ -39,7 +39,7 @@ public class WebSocketMessage {
     public String toString() {
         return "WebSocketMessage{" +
                 "mEvent='" + mEvent + '\'' +
-                ", mData=" + mData.toString() +
+                ", mData=" + mData +
                 '}';
     }
 
