@@ -70,9 +70,9 @@ android {
 dependencies {
 
     implementation "androidx.annotation:annotation:${androidXAnnotation}"
-    implementation "androidx.fragment:fragment:${androidXFragment}"
+    implementation "androidx.fragment:fragment-ktx:${androidXFragment}"
     implementation "io.reactivex.rxjava2:rxandroid:${rxJavaVersion}"
-    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    implementation "io.reactivex.rxjava3:rxandroid:${rx3AndroidVersion}"
     implementation "io.reactivex.rxjava3:rxjava:${rx3JavaVersion}"
 
     testImplementation "org.hamcrest:hamcrest-library:${hamcrestVersion}"

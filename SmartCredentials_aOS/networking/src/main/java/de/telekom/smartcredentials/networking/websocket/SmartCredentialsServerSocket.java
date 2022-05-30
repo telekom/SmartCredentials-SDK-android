@@ -16,16 +16,14 @@
 
 package de.telekom.smartcredentials.networking.websocket;
 
+import static de.telekom.smartcredentials.core.qrlogin.TokenPluginError.INVALID_WEB_SOCKET_URL;
+import static de.telekom.smartcredentials.core.qrlogin.TokenPluginError.UNDEFINED_URL;
+
 import com.google.gson.Gson;
 
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
 import de.telekom.smartcredentials.core.model.token.TokenResponse;
 import de.telekom.smartcredentials.core.networking.AuthParamKey;
 import de.telekom.smartcredentials.core.networking.ServerSocket;
@@ -34,9 +32,6 @@ import de.telekom.smartcredentials.networking.request.utils.HttpClientBuilder;
 import okhttp3.CertificatePinner;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-
-import static de.telekom.smartcredentials.core.qrlogin.TokenPluginError.INVALID_WEB_SOCKET_URL;
-import static de.telekom.smartcredentials.core.qrlogin.TokenPluginError.UNDEFINED_URL;
 
 public class SmartCredentialsServerSocket implements ServerSocket<TokenResponse, String> {
 
@@ -60,7 +55,7 @@ public class SmartCredentialsServerSocket implements ServerSocket<TokenResponse,
         }
         mWebSocketListener = new EchoWebSocketListener(params, pluginCallback, new Gson());
         String url = params.get(AuthParamKey.QR_SERVER_URL.name());
-        if(Pattern.compile("^(wss?:\\/\\/(?!\\s*$).+)").matcher(url).matches()){
+        if (Pattern.compile("^(wss?:\\/\\/(?!\\s*$).+)").matcher(url).matches()) {
             startWebSocket(url, params);
         } else {
             pluginCallback.onFailed(INVALID_WEB_SOCKET_URL.getDesc());

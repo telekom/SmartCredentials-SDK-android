@@ -19,7 +19,6 @@ package de.telekom.smartcredentials.eid.rx;
 import android.nfc.Tag;
 
 import de.telekom.smartcredentials.core.eid.callbacks.EidUpdateTagCallback;
-import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 import de.telekom.smartcredentials.eid.controllers.EidController;
 import io.reactivex.CompletableEmitter;
 import io.reactivex.CompletableOnSubscribe;

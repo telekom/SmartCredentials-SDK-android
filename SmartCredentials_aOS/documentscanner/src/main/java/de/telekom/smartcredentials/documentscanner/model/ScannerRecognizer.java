@@ -25,16 +25,10 @@ package de.telekom.smartcredentials.documentscanner.model;
 import androidx.annotation.NonNull;
 
 import com.microblink.entities.recognizers.Recognizer;
-import com.microblink.entities.recognizers.blinkbarcode.usdl.UsdlRecognizer;
-import com.microblink.entities.recognizers.blinkid.documentface.DocumentFaceRecognizer;
 import com.microblink.entities.recognizers.blinkid.generic.BlinkIdCombinedRecognizer;
 import com.microblink.entities.recognizers.blinkid.generic.BlinkIdRecognizer;
 import com.microblink.entities.recognizers.blinkid.idbarcode.IdBarcodeRecognizer;
-import com.microblink.entities.recognizers.blinkid.mrtd.MrtdCombinedRecognizer;
-import com.microblink.entities.recognizers.blinkid.mrtd.MrtdRecognizer;
-import com.microblink.entities.recognizers.blinkid.passport.PassportRecognizer;
 import com.microblink.entities.recognizers.blinkid.usdl.UsdlCombinedRecognizer;
-import com.microblink.entities.recognizers.blinkid.visa.VisaRecognizer;
 
 import de.telekom.smartcredentials.documentscanner.utils.ScannerUtils;
 
