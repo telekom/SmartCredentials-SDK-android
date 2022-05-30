@@ -16,21 +16,19 @@
 
 package de.telekom.smartcredentials.core.model.item;
 
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.powermock.api.mockito.PowerMockito.when;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import de.telekom.smartcredentials.core.domain.utils.MocksProvider;
 import de.telekom.smartcredentials.core.exceptions.EncryptionException;
 import de.telekom.smartcredentials.core.model.EncryptionAlgorithm;
 import de.telekom.smartcredentials.core.strategies.EncryptionStrategy;
-import de.telekom.smartcredentials.core.domain.utils.MocksProvider;
-
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.powermock.api.mockito.PowerMockito.when;
 
 public class ItemDomainDataTest {
 

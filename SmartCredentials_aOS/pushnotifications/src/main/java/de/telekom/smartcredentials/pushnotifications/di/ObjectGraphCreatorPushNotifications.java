@@ -87,13 +87,8 @@ public class ObjectGraphCreatorPushNotifications {
                     KEY_TPNS_APPLICATION_KEY, applicationKey);
         }
         if(environment != null){
-            if(environment == TpnsEnvironment.TESTING){
-                providePushNotificationsStorageRepository().saveConfigurationValue(
-                        KEY_TPNS_PRODUCTION_STATE, false);
-            } else {
-                providePushNotificationsStorageRepository().saveConfigurationValue(
-                        KEY_TPNS_PRODUCTION_STATE, true);
-            }
+            providePushNotificationsStorageRepository().saveConfigurationValue(
+                    KEY_TPNS_PRODUCTION_STATE, environment != TpnsEnvironment.TESTING);
         }
     }
 

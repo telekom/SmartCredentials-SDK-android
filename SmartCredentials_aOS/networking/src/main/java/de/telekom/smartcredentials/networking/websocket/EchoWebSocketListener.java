@@ -139,6 +139,6 @@ public class EchoWebSocketListener extends WebSocketListener {
                         mParamMap.get(AuthParamKey.ID_TOKEN.name()),
                         mParamMap.get(AuthParamKey.REFRESH_TOKEN.name()));
         webSocket.send(mGson.toJson(webSocketMessage, WebSocketMessage.class));
-        ApiLoggerResolver.logEvent("Send server message, " + webSocketMessage.toString());
+        ApiLoggerResolver.logEvent("Send server message, " + webSocketMessage);
     }
 }
