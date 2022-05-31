@@ -61,16 +61,17 @@ public class EidController implements EidApi, EidCallbackSubject {
     private final CoreController mCoreController;
     private final Gson mGson;
     private final CompositeDisposable mCompositeDisposable;
+    private final List<EidCallbackObserver> mObservers;
     private AusweisServiceConnection mServiceConnection;
     private AusweisCallback mAusweisCallback;
     private EidMessageReceivedCallback mMessageReceivedCallback;
-    private List<EidCallbackObserver> mObservers;
     private EidConfiguration mEidConfiguration;
 
     public EidController(CoreController coreController) {
         mCoreController = coreController;
         mGson = new Gson();
         mCompositeDisposable = new CompositeDisposable();
+        mObservers = new ArrayList<>();
     }
 
     public void setConfiguration(EidConfiguration configuration) {
@@ -94,7 +95,6 @@ public class EidController implements EidApi, EidCallbackSubject {
             return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
         }
 
-        mObservers = new ArrayList<>();
         Intent intent = new Intent(AUSWEIS_APP_ACTION);
         intent.setPackage(appPackage);
         MessageParser mMessageParser = new MessageParser(mMessageReceivedCallback);
