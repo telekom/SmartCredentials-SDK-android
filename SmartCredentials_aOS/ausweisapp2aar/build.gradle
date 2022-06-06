@@ -1,0 +1,131 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.2.1'
+    }
+}
+
+repositories {
+    google()
+    mavenCentral()
+}
+
+apply plugin: 'com.android.library'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+}
+
+android {
+    /*******************************************************
+     * The following variables:
+     * - androidBuildToolsVersion,
+     * - androidCompileSdkVersion
+     * - qt5AndroidDir - holds the path to qt android files
+     *                   needed to build any Qt application
+     *                   on Android.
+     *
+     * are defined in gradle.properties file. This file is
+     * updated by QtCreator and androiddeployqt tools.
+     * Changing them manually might break the compilation!
+     *******************************************************/
+
+    compileSdkVersion androidCompileSdkVersion.toInteger()
+
+    buildToolsVersion androidBuildToolsVersion
+
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+    
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = [qt5AndroidDir + '/src', 'src', 'java']
+            aidl.srcDirs = [qt5AndroidDir + '/src', 'src', 'aidl']
+            res.srcDirs = [qt5AndroidDir + '/res', 'res']
+            resources.srcDirs = ['resources']
+            renderscript.srcDirs = ['src']
+            assets.srcDirs = ['assets']
+            jniLibs.srcDirs = ['libs']
+       }
+    }
+
+    buildTypes {
+        release {
+            ndk {
+                abiFilters 'armeabi-v7a', 'arm64-v8a'
+
+            }
+        }
+        debug {
+            ndk {
+                abiFilters 'armeabi-v7a', 'arm64-v8a'
+            }
+        }
+    }
+
+    tasks.withType(JavaCompile) {
+        options.incremental = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    // Do not compress Qt binary resources file
+    aaptOptions {
+        noCompress 'rcc'
+    }
+
+    defaultConfig {
+        resConfig "en"
+        minSdkVersion qtMinSdkVersion
+        targetSdkVersion qtTargetSdkVersion
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+dependencies {
+    implementation "androidx.appcompat:appcompat:1.2.0"
+}
+
+allprojects {
+    repositories {
+        maven {
+            url "https://maven.google.com"
+        }
+    }
+}
+
+android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        exclude 'META-INF/*.version'
+        exclude 'META-INF/proguard/androidx-annotations.pro'
+    }
+
+    lintOptions {
+        lintConfig file('lint.xml')
+    }
+}
+android.defaultConfig.consumerProguardFiles 'consumer-rules.pro'
