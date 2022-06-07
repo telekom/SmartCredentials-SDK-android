@@ -15,6 +15,7 @@ repositories {
 }
 
 apply plugin: 'com.android.library'
+apply from: "../gradle/task/maven_push_library.gradle"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
@@ -37,6 +38,15 @@ android {
     compileSdkVersion androidCompileSdkVersion.toInteger()
 
     buildToolsVersion androidBuildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.androidMinSdkVersion
+        targetSdkVersion rootProject.ext.androidTargetSdkVersion
+        versionCode rootProject.ext.androidVersionCode
+        versionName rootProject.ext.androidVersionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
 
     packagingOptions {
         jniLibs {
@@ -76,8 +86,14 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    libraryVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "${archivesBaseName}-${variant.name}-${defaultConfig.versionName}.aar"
+        }
     }
 
     lintOptions {
@@ -94,11 +110,6 @@ android {
         minSdkVersion qtMinSdkVersion
         targetSdkVersion qtTargetSdkVersion
     }
-}
-
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
 }
 
 dependencies {
