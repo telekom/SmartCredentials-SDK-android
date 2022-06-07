@@ -64,6 +64,7 @@ import java.util.List;
 import dalvik.system.DexClassLoader;
 
 public abstract class QtLoader {
+    String TAG = "QtLoader";
 
     public final static int MINISTRO_INSTALL_REQUEST_CODE = 0xf3ee; // request code used to know when Ministro instalation is finished
     public static final int MINISTRO_API_LEVEL = 5; // Ministro api level (check IMinistro.aidl file)
@@ -188,6 +189,7 @@ public abstract class QtLoader {
     {
         HashMap<String, ArrayList<String>> abisLibs = new HashMap<>();
         for (String lib : libs) {
+            Log.i(TAG, String.format("lib: %s", lib));
             String[] archLib = lib.split(";", 2);
             if (preferredAbi != null && !archLib[0].equals(preferredAbi))
                 continue;
@@ -205,6 +207,7 @@ public abstract class QtLoader {
 
         for (String abi: supportedAbis) {
             if (abisLibs.containsKey(abi)) {
+                Log.i(TAG, String.format("preferredAbi %s", abi));
                 preferredAbi = abi;
                 return abisLibs.get(abi);
             }
@@ -246,7 +249,12 @@ public abstract class QtLoader {
             String libName = null;
             if (m_contextInfo.metaData.containsKey("android.app.lib_name")) {
                 libName = m_contextInfo.metaData.getString("android.app.lib_name") + "_" + preferredAbi;
+                Log.i(TAG, String.format("libName: %s", libName));
                 loaderParams.putString(MAIN_LIBRARY_KEY, libName); //main library contains main() function
+            }
+
+            for (String lib : libs) {
+                Log.i(TAG, String.format("lib: %s", lib));
             }
 
             loaderParams.putStringArrayList(BUNDLED_LIBRARIES_KEY, libs);
