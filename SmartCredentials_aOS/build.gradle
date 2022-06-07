@@ -29,9 +29,6 @@ buildscript {
 
 allprojects {
     repositories {
-        flatDir {
-            dirs 'ausweisapp2'
-        }
         mavenCentral()
         google()
         maven { url 'https://maven.microblink.com' }
