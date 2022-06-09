@@ -219,6 +219,7 @@ public abstract class QtLoader {
     private void loadApplication(Bundle loaderParams)
     {
         try {
+            Log.i(TAG, "in loadApplication");
             final int errorCode = loaderParams.getInt(ERROR_CODE_KEY);
             if (errorCode != 0) {
                 if (errorCode == INCOMPATIBLE_MINISTRO_VERSION) {
@@ -260,10 +261,17 @@ public abstract class QtLoader {
             loaderParams.putStringArrayList(BUNDLED_LIBRARIES_KEY, libs);
             loaderParams.putInt(NECESSITAS_API_LEVEL_KEY, NECESSITAS_API_LEVEL);
 
+            String libsFolder = loaderParams.containsKey(LIB_PATH_KEY) ? loaderParams.getString(LIB_PATH_KEY) : null;
+            Log.i(TAG, String.format("libsFolder: %s", libsFolder));
+            String dexPath = loaderParams.getString(DEX_PATH_KEY);
+            Log.i(TAG, String.format("dexPath: %s", dexPath));
+            String outDex = m_context.getDir("outdex", Context.MODE_PRIVATE).getAbsolutePath();
+            Log.i(TAG, String.format("outDex: %s", outDex));
+
             // load and start QtLoader class
-            DexClassLoader classLoader = new DexClassLoader(loaderParams.getString(DEX_PATH_KEY), // .jar/.apk files
-                    m_context.getDir("outdex", Context.MODE_PRIVATE).getAbsolutePath(), // directory where optimized DEX files should be written.
-                    loaderParams.containsKey(LIB_PATH_KEY) ? loaderParams.getString(LIB_PATH_KEY) : null, // libs folder (if exists)
+            DexClassLoader classLoader = new DexClassLoader(dexPath, // .jar/.apk files
+                    outDex, // directory where optimized DEX files should be written.
+                    libsFolder, // libs folder (if exists)
                     m_context.getClassLoader()); // parent loader
 
             Class<?> loaderClass = classLoader.loadClass(loaderParams.getString(LOADER_CLASS_NAME_KEY)); // load QtLoader class
@@ -272,14 +280,17 @@ public abstract class QtLoader {
                     contextClassName(),
                     ClassLoader.class,
                     Bundle.class);
+            Log.i(TAG, String.format("prepareAppMethod.toGenericString(): %s", prepareAppMethod.toGenericString()));
+
             if (!(Boolean)prepareAppMethod.invoke(qtLoader, m_context, classLoader, loaderParams))
-                throw new Exception("");
+                throw new Exception("Invoking loadApplication failed");
 
             QtApplication.setQtContextDelegate(m_delegateClass, qtLoader);
 
             Method startAppMethod=qtLoader.getClass().getMethod("startApplication");
+            Log.i(TAG, String.format("startAppMethod.toGenericString(): %s", startAppMethod.toGenericString()));
             if (!(Boolean)startAppMethod.invoke(qtLoader))
-                throw new Exception("");
+                throw new Exception("Invoking startApplication failed");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -367,6 +378,7 @@ public abstract class QtLoader {
     public void startApp(final boolean firstStart)
     {
         try {
+            Log.i(TAG, "in startApp");
             if (m_contextInfo.metaData.containsKey("android.app.qt_sources_resource_id")) {
                 int resourceId = m_contextInfo.metaData.getInt("android.app.qt_sources_resource_id");
                 m_sources = m_context.getResources().getStringArray(resourceId);
@@ -402,11 +414,13 @@ public abstract class QtLoader {
                             + "android.app.system_libs_prefix metadata variable in your AndroidManifest.xml");
                         Log.e(QtApplication.QtTAG, "Using " + SYSTEM_LIB_PATH + " as default path");
                     }
+                    Log.i(TAG, String.format("systemLibsPrefix %s", systemLibsPrefix));
                     File systemLibraryDir = new File(systemLibsPrefix);
                     if (systemLibraryDir.exists() && systemLibraryDir.isDirectory() && systemLibraryDir.list().length > 0)
                         libsDir = systemLibsPrefix;
                 } else {
                     String nativeLibraryPrefix = m_context.getApplicationInfo().nativeLibraryDir + "/";
+                    Log.i(TAG, String.format("nativeLibraryPrefix %s", nativeLibraryPrefix));
                     File nativeLibraryDir = new File(nativeLibraryPrefix);
                     if (nativeLibraryDir.exists() && nativeLibraryDir.isDirectory() && nativeLibraryDir.list().length > 0) {
                         libsDir = nativeLibraryPrefix;
