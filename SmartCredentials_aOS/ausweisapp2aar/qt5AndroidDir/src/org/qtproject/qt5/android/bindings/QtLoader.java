@@ -206,6 +206,7 @@ public abstract class QtLoader {
         }
 
         for (String abi: supportedAbis) {
+            Log.i(TAG, String.format("supported ABI %s", abi));
             if (abisLibs.containsKey(abi)) {
                 Log.i(TAG, String.format("preferredAbi %s", abi));
                 preferredAbi = abi;
