@@ -228,4 +228,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
             name: ausweisapp2aar
-            path: SmartCredentials_aOS/storage/build/outputs/aar/
+            path: SmartCredentials_aOS/ausweisapp2aar/build/outputs/aar/
