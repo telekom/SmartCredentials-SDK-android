@@ -73,6 +73,7 @@ qtMinSdkVersion=21
 qtTargetSdkVersion=30
 
 ```
+- merge libs.xml so that qt_libs contains all the libraries
 - remove jcenter and add mavenCentral
 - updated gradle
 - update dependencies
