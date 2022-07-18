@@ -22,6 +22,7 @@ android {
 
     compileSdkVersion rootProject.ext.androidCompileSdkVersion
     ndkVersion rootProject.ext.androidNdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         minSdkVersion rootProject.ext.androidMinSdkVersion
