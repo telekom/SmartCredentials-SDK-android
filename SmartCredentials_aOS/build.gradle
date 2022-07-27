@@ -15,14 +15,14 @@
  */
 
 buildscript {
-    ext.kotlin_version = '1.6.10'
+    ext.kotlin_version = '1.7.10'
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:7.1.0"
-        classpath 'com.google.gms:google-services:4.3.10'
+        classpath "com.android.tools.build:gradle:7.2.1"
+        classpath 'com.google.gms:google-services:4.3.13'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -35,16 +35,17 @@ allprojects {
     }
 
     project.ext {
-        androidCompileSdkVersion = 31
-        androidTargetSdkVersion = 31
+        androidCompileSdkVersion = 32
+        androidTargetSdkVersion = 32
         androidMinSdkVersion = 21
+        buildToolsVersion = "32.0.0"
         androidVersionCode = 5
-        androidVersionName = "6.3.9"
+        androidVersionName = "6.3.10"
         androidNdkVersion = "23.1.7779620"
 
-        androidXAppcompat = "1.4.1"
-        androidXAnnotation = "1.3.0"
-        androidXFragment = "1.4.1"
+        androidXAppcompat = "1.4.2"
+        androidXAnnotation = "1.4.0"
+        androidXFragment = "1.5.0"
         constraintLayoutVersion = "2.1.4"
         architectureComponentsVersion = "1.1.1"
         gsonVersion = "2.8.9"
@@ -65,7 +66,7 @@ allprojects {
         espressoLibVersion = "3.0.2"
         architectureCoreTestingVersion = "1.1.1"
 
-        kotlin_core_version = "1.7.0"
+        kotlin_core_version = "1.8.0"
     }
 }
 

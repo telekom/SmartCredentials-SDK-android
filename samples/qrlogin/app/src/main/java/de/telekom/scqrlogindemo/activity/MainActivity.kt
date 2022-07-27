@@ -74,12 +74,12 @@ class MainActivity : AppCompatActivity(), RetrieveConfigurationCallback {
         loginStatusTextView = findViewById(R.id.login_status_textview)
 
         val loginButton = findViewById<Button>(R.id.login_button)
-        loginButton.setOnClickListener { view: View? ->
+        loginButton.setOnClickListener {
             cameraLauncherActivity.launch(Intent(this@MainActivity, CameraActivity::class.java))
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.menu_main, menu)
         return true
