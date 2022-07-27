@@ -21,6 +21,7 @@ android {
 
     compileSdkVersion rootProject.ext.androidCompileSdkVersion
     ndkVersion rootProject.ext.androidNdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         minSdkVersion rootProject.ext.androidMinSdkVersion
@@ -59,9 +60,6 @@ android {
 }
 
 dependencies {
-    androidTestImplementation 'androidx.test:runner:1.4.0'
-    androidTestImplementation 'androidx.test:rules:1.4.0'
-
     implementation "androidx.annotation:annotation:${androidXAnnotation}"
 
     testImplementation "junit:junit:${junitVersion}"
@@ -71,6 +69,8 @@ dependencies {
     testImplementation "org.powermock:powermock-api-mockito2:${powermockVersion}"
 
     androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
+    androidTestImplementation 'androidx.test:runner:1.4.0'
+    androidTestImplementation 'androidx.test:rules:1.4.0'
 
     api project(':core')
 }
