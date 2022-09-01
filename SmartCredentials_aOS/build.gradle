@@ -21,7 +21,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:7.2.1"
+        classpath "com.android.tools.build:gradle:7.2.2"
         classpath 'com.google.gms:google-services:4.3.13'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
@@ -35,20 +35,20 @@ allprojects {
     }
 
     project.ext {
-        androidCompileSdkVersion = 32
-        androidTargetSdkVersion = 32
+        androidCompileSdkVersion = 33
+        androidTargetSdkVersion = 33
         androidMinSdkVersion = 21
-        buildToolsVersion = "32.0.0"
+        buildToolsVersion = "33.0.0"
         androidVersionCode = 5
-        androidVersionName = "6.3.10"
+        androidVersionName = "6.4.0"
         androidNdkVersion = "23.1.7779620"
 
         androidXAppcompat = "1.4.2"
         androidXAnnotation = "1.4.0"
-        androidXFragment = "1.5.0"
+        androidXFragment = "1.5.1"
         constraintLayoutVersion = "2.1.4"
         architectureComponentsVersion = "1.1.1"
-        gsonVersion = "2.8.9"
+        gsonVersion = "2.9.0"
         mobileVisionVersion = "17.0.2"
 
         retrofitVersion = "2.9.0"

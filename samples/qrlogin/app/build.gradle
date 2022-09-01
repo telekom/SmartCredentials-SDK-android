@@ -4,15 +4,15 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
-    buildToolsVersion "32.0.0"
+    compileSdkVersion 33
+    buildToolsVersion "33.0.0"
 
     defaultConfig {
         applicationId "de.telekom.scqrlogindemo"
         minSdkVersion 21
-        targetSdkVersion 32
-        versionCode 2
-        versionName "1.1"
+        targetSdkVersion 33
+        versionCode 3
+        versionName "1.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -60,14 +60,14 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.jakewharton.timber:timber:5.0.1'
     implementation 'com.facebook.stetho:stetho:1.5.1'
-    implementation 'com.airbnb.android:lottie:4.2.1'
+    implementation 'com.airbnb.android:lottie:5.2.0'
 
     implementation "com.squareup.okhttp3:okhttp:4.9.3"
     implementation "com.squareup.okhttp3:logging-interceptor:4.9.3"
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.squareup.retrofit2:converter-scalars:2.9.0"
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
-    implementation "com.google.code.gson:gson:2.8.9"
+    implementation "com.google.code.gson:gson:2.9.0"
     implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
 
     implementation("de.telekom.smartcredentials:core:${smartCredentialsVersion}")
