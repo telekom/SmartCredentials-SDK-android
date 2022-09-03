@@ -34,6 +34,7 @@ public enum EidCommandType {
     ACCEPT("ACCEPT"),
     SET_PIN("SET_PIN"),
     SET_CAN("SET_CAN"),
+    SET_CARD("SET_CARD"),
     SET_PUK("SET_PUK"),
     RUN_CHANGE_PIN("RUN_CHANGE_PIN"),
     SET_NEW_PIN("SET_NEW_PIN");
