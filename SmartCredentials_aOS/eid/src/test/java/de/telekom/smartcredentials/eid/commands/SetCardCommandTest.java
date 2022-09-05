@@ -114,15 +114,6 @@ public class SetCardCommandTest {
     }
 
     @Test
-    public void testSetCardCommandMunicipalityID() {
-        SetCardCommand cmd = new SetCardCommand("reader name");
-        cmd.setMunicipalityID(new byte[]{ 0x00, 0x05, 0x00, 0x03, 0x01, 0x05, 0x00, 0x00, 0x00, 0x00});
-        Gson gson = new Gson();
-        assertThat(gson.toJson(cmd),
-                is("{\"simulator\":{\"files\":[{\"fileId\":\"010F\",\"shortFileId\":\"0F\",\"content\":\"7209040702760503150000\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
-    }
-
-    @Test
     public void testSetCardCommandWithFiles() {
         SetCardCommand.SimulatorFile[] files = new SetCardCommand.SimulatorFile[]{
                 new SetCardCommand.SimulatorFile("0101", "01", "610413024944")
