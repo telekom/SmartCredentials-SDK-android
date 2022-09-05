@@ -24,6 +24,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Arrays;
 import java.util.Locale;
 
+import de.persosim.simulator.tlv.Asn1DateWrapper;
 import de.persosim.simulator.tlv.Asn1DocumentType;
 import de.persosim.simulator.tlv.Asn1Utf8StringWrapper;
 import de.persosim.simulator.tlv.ConstructedTlvDataObject;
@@ -142,6 +143,30 @@ public class SetCardCommand extends SmartEidCommand {
             setFile("010d", "0d", content );
         }
 
+        // DateOfBirth ::= [APPLICATION 8] Date
+        // Date ::= NumericString (SIZE (8)) -- YYYYMMDD
+        public void setBirthDate(String birthDate) {
+            ConstructedTlvDataObject constructedTlvDataObject = Asn1DateWrapper.getInstance().encode(new TlvTag((byte) 0x68), birthDate);
+            String content = HexString.encode(constructedTlvDataObject.toByteArray()).toLowerCase(Locale.ROOT);
+            setFile("0108", "08", content );
+        }
+
+        // DateOfExpiry ::= [APPLICATION 3] Date
+        // Date ::= NumericString (SIZE (8)) -- YYYYMMDD
+        public void setDateOfExpiry(String dateOfExpiry) {
+            ConstructedTlvDataObject constructedTlvDataObject = Asn1DateWrapper.getInstance().encode(new TlvTag((byte) 0x63), dateOfExpiry);
+            String content = HexString.encode(constructedTlvDataObject.toByteArray()).toLowerCase(Locale.ROOT);
+            setFile("0103", "03", content );
+        }
+
+        // DateOfIssuance ::= {APPLICATION 15] Date
+        // Date ::= NumericString (SIZE (8)) -- YYYYMMDD
+        public void setDateOfIssuance(String dateOfIssuance) {
+            ConstructedTlvDataObject constructedTlvDataObject = Asn1DateWrapper.getInstance().encode(new TlvTag((byte) 0x6f), dateOfIssuance);
+            String content = HexString.encode(constructedTlvDataObject.toByteArray()).toLowerCase(Locale.ROOT);
+            setFile("010F", "0F", content );
+        }
+
     }
 
     @SerializedName("simulator")
@@ -192,5 +217,17 @@ public class SetCardCommand extends SmartEidCommand {
 
     public void setDocumentType(@NonNull String documentType) {
         mSimulator.setDocumentType(documentType);
+    }
+    
+    public void setBirthDate(@NonNull String birthDate) {
+        mSimulator.setBirthDate(birthDate);
+    }
+
+    public void setDateOfExpiry(@NonNull String dateOfExpiry) {
+        mSimulator.setDateOfExpiry(dateOfExpiry);
+    }
+
+    public void setDateOfIssuance(@NonNull String dateOfIssuance) {
+        mSimulator.setDateOfIssuance(dateOfIssuance);
     }
 }
