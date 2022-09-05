@@ -14,7 +14,7 @@ public enum DataGroup {
     DG11("DG11", "Sex", "0x0101", "0x01", "Sex"),
     DG13("DG13", "Birth Name ", "0x0101", "0x01", "BirthName"),
     DG15("DG15", "Date of Issuance", "0x0101", "0x01", "Date"),
-    DG17("DG17", "Normal Place of Residence (multiple)", "0x0101", "0x01", "PlaceOfResidence"),
+    DG17("DG17", "Normal Place of Residence (multiple)", "0x0111", "0x11", "PlaceOfResidence"),
     DG18("DG18", "Municipality ID ", "0x0101", "0x01", "MunicipalityID"),
     DG19("DG19", "Residence Permit I", "0x0101", "0x01", "ResidencePermitI"),
     DG20("DG20", "Residence Permit II", "0x0101", "0x01", "ResidencePermitII");
