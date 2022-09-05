@@ -11,7 +11,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.util.Locale;
+
+import de.persosim.simulator.tlv.Asn1DateWrapper;
 import de.persosim.simulator.tlv.Asn1DocumentType;
+import de.persosim.simulator.tlv.Asn1OctetStringWrapper;
 import de.persosim.simulator.tlv.Asn1Utf8StringWrapper;
 import de.persosim.simulator.tlv.ConstructedTlvDataObject;
 import de.persosim.simulator.tlv.TlvDataObject;
@@ -83,6 +87,42 @@ public class SetCardCommandTest {
     }
 
     @Test
+    public void testSetCardCommandBirthDate() {
+        SetCardCommand cmd = new SetCardCommand("reader name");
+        cmd.setBirthDate("19640812");
+        Gson gson = new Gson();
+        assertThat(gson.toJson(cmd),
+                is("{\"simulator\":{\"files\":[{\"fileId\":\"0108\",\"shortFileId\":\"08\",\"content\":\"680a12083139363430383132\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
+    }
+
+    @Test
+    public void testSetCardCommandDateOfExpiry() {
+        SetCardCommand cmd = new SetCardCommand("reader name");
+        cmd.setDateOfExpiry("20291031");
+        Gson gson = new Gson();
+        assertThat(gson.toJson(cmd),
+                is("{\"simulator\":{\"files\":[{\"fileId\":\"0103\",\"shortFileId\":\"03\",\"content\":\"630a12083230323931303331\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
+    }
+
+    @Test
+    public void testSetCardCommandDateOfIssuance() {
+        SetCardCommand cmd = new SetCardCommand("reader name");
+        cmd.setDateOfIssuance("20191101");
+        Gson gson = new Gson();
+        assertThat(gson.toJson(cmd),
+                is("{\"simulator\":{\"files\":[{\"fileId\":\"010F\",\"shortFileId\":\"0F\",\"content\":\"6f0a12083230313931313031\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
+    }
+
+    @Test
+    public void testSetCardCommandMunicipalityID() {
+        SetCardCommand cmd = new SetCardCommand("reader name");
+        cmd.setMunicipalityID(new byte[]{ 0x00, 0x05, 0x00, 0x03, 0x01, 0x05, 0x00, 0x00, 0x00, 0x00});
+        Gson gson = new Gson();
+        assertThat(gson.toJson(cmd),
+                is("{\"simulator\":{\"files\":[{\"fileId\":\"010F\",\"shortFileId\":\"0F\",\"content\":\"7209040702760503150000\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
+    }
+
+    @Test
     public void testSetCardCommandWithFiles() {
         SetCardCommand.SimulatorFile[] files = new SetCardCommand.SimulatorFile[]{
                 new SetCardCommand.SimulatorFile("0101", "01", "610413024944")
@@ -113,6 +153,14 @@ public class SetCardCommandTest {
             assertThat(expected.toByteArray(),is(received.toByteArray()));
 
             assertThat(HexString.encode(received.toByteArray()), is("66020C00"));
+        }
+        {
+            ConstructedTlvDataObject received = Asn1DateWrapper.getInstance().encode(new TlvTag((byte) 0x68), "19640812");
+            ConstructedTlvDataObject expected = new ConstructedTlvDataObject(HexString.toByteArray("680a12083139363430383132"));
+
+            assertThat(expected.toByteArray(),is(received.toByteArray()));
+
+            assertThat(HexString.encode(received.toByteArray()), is("680a12083139363430383132".toUpperCase(Locale.ROOT)));
         }
     }
     
