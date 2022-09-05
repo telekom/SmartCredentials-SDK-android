@@ -13,11 +13,12 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.Locale;
 
+import de.persosim.simulator.tlv.Asn1;
 import de.persosim.simulator.tlv.Asn1DateWrapper;
 import de.persosim.simulator.tlv.Asn1DocumentType;
-import de.persosim.simulator.tlv.Asn1OctetStringWrapper;
 import de.persosim.simulator.tlv.Asn1Utf8StringWrapper;
 import de.persosim.simulator.tlv.ConstructedTlvDataObject;
+import de.persosim.simulator.tlv.PrimitiveTlvDataObject;
 import de.persosim.simulator.tlv.TlvDataObject;
 import de.persosim.simulator.tlv.TlvDataObjectFactory;
 import de.persosim.simulator.tlv.TlvTag;
@@ -114,6 +115,15 @@ public class SetCardCommandTest {
     }
 
     @Test
+    public void testSetCardCommandMunicipality() {
+        SetCardCommand cmd = new SetCardCommand("reader name");
+        cmd.setMunicipality("02760503150000");
+        Gson gson = new Gson();
+        assertThat(gson.toJson(cmd),
+                is("{\"simulator\":{\"files\":[{\"fileId\":\"0112\",\"shortFileId\":\"12\",\"content\":\"7209040702760503150000\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
+    }
+
+    @Test
     public void testSetCardCommandWithFiles() {
         SetCardCommand.SimulatorFile[] files = new SetCardCommand.SimulatorFile[]{
                 new SetCardCommand.SimulatorFile("0101", "01", "610413024944")
@@ -133,7 +143,7 @@ public class SetCardCommandTest {
             ConstructedTlvDataObject received = Asn1Utf8StringWrapper.getInstance().encode(new TlvTag((byte) 0x64), "ERIKA");
             ConstructedTlvDataObject expected = new ConstructedTlvDataObject(HexString.toByteArray("64070C054552494B41"));
 
-            assertThat(expected.toByteArray(),is(received.toByteArray()));
+            assertThat(expected.toByteArray(), is(received.toByteArray()));
 
             assertThat(HexString.encode(received.toByteArray()), is("64070C054552494B41"));
         }
@@ -141,20 +151,41 @@ public class SetCardCommandTest {
             ConstructedTlvDataObject received = Asn1Utf8StringWrapper.getInstance().encode(new TlvTag((byte) 0x66), "");
             ConstructedTlvDataObject expected = new ConstructedTlvDataObject(HexString.toByteArray("66020C00"));
 
-            assertThat(expected.toByteArray(),is(received.toByteArray()));
+            assertThat(expected.toByteArray(), is(received.toByteArray()));
 
             assertThat(HexString.encode(received.toByteArray()), is("66020C00"));
         }
-        {
-            ConstructedTlvDataObject received = Asn1DateWrapper.getInstance().encode(new TlvTag((byte) 0x68), "19640812");
-            ConstructedTlvDataObject expected = new ConstructedTlvDataObject(HexString.toByteArray("680a12083139363430383132"));
-
-            assertThat(expected.toByteArray(),is(received.toByteArray()));
-
-            assertThat(HexString.encode(received.toByteArray()), is("680a12083139363430383132".toUpperCase(Locale.ROOT)));
-        }
     }
-    
+
+    /**
+     * Positive test: test generation of wrapped ASN.1 data structure "UTF8String".
+     */
+    @Test
+    public void testAsn1DateWrapperEncode() {
+        ConstructedTlvDataObject received = Asn1DateWrapper.getInstance().encode(new TlvTag((byte) 0x68), "19640812");
+        ConstructedTlvDataObject expected = new ConstructedTlvDataObject(HexString.toByteArray("680a12083139363430383132"));
+
+        assertThat(expected.toByteArray(),is(received.toByteArray()));
+
+        assertThat(HexString.encode(received.toByteArray()), is("680a12083139363430383132".toUpperCase(Locale.ROOT)));
+    }
+
+    @Test
+    public void testOctetString() {
+        byte[] decoded = HexString.toByteArray("02760503150000");
+        // byte[] bytes = new byte[]{2, 118, 5, 3, 21, 0, 0};
+        PrimitiveTlvDataObject primitiveTlvDataObject =
+                new PrimitiveTlvDataObject(new TlvTag(Asn1.UNIVERSAL_OCTET_STRING), decoded);
+        ConstructedTlvDataObject constructedTlvDataObject = new ConstructedTlvDataObject(new TlvTag((byte) 0x72));
+        constructedTlvDataObject.addTlvDataObject(primitiveTlvDataObject);
+
+        ConstructedTlvDataObject expected = new ConstructedTlvDataObject(HexString.toByteArray("7209040702760503150000"));
+
+        assertThat(expected.toByteArray(),is(constructedTlvDataObject.toByteArray()));
+
+        assertThat(HexString.encode(constructedTlvDataObject.toByteArray()), is("7209040702760503150000".toUpperCase(Locale.ROOT)));
+    }
+
     @Test
     public void testSimulatorDefaults() {
         // DocumentType

@@ -24,10 +24,12 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Arrays;
 import java.util.Locale;
 
+import de.persosim.simulator.tlv.Asn1;
 import de.persosim.simulator.tlv.Asn1DateWrapper;
 import de.persosim.simulator.tlv.Asn1DocumentType;
 import de.persosim.simulator.tlv.Asn1Utf8StringWrapper;
 import de.persosim.simulator.tlv.ConstructedTlvDataObject;
+import de.persosim.simulator.tlv.PrimitiveTlvDataObject;
 import de.persosim.simulator.tlv.TlvTag;
 import de.persosim.simulator.utils.HexString;
 import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
@@ -167,6 +169,15 @@ public class SetCardCommand extends SmartEidCommand {
             setFile("010F", "0F", content );
         }
 
+        public void setMunicipality(String municipality) {
+            byte[] decoded = HexString.toByteArray(municipality);
+            PrimitiveTlvDataObject primitiveTlvDataObject =
+                    new PrimitiveTlvDataObject(new TlvTag(Asn1.UNIVERSAL_OCTET_STRING), decoded);
+            ConstructedTlvDataObject constructedTlvDataObject = new ConstructedTlvDataObject(new TlvTag((byte) 0x72));
+            constructedTlvDataObject.addTlvDataObject(primitiveTlvDataObject);
+            String content = HexString.encode(constructedTlvDataObject.toByteArray()).toLowerCase(Locale.ROOT);
+            setFile("0112", "12", content );
+        }
     }
 
     @SerializedName("simulator")
@@ -229,5 +240,9 @@ public class SetCardCommand extends SmartEidCommand {
 
     public void setDateOfIssuance(@NonNull String dateOfIssuance) {
         mSimulator.setDateOfIssuance(dateOfIssuance);
+    }
+
+    public void setMunicipality(String municipality) {
+        mSimulator.setMunicipality(municipality);
     }
 }
