@@ -246,6 +246,22 @@ public class SetCardCommand extends SmartEidCommand {
             String content = HexString.encode(constructedTlvDataObject.toByteArray()).toLowerCase(Locale.ROOT);
             setFile("010B", "0B", content );
         }
+
+        public void setResidencePermitI(String residencePermit) {
+            ConstructedTlvDataObject asn1Utf8StringCTDO = Asn1Utf8StringWrapper.getInstance().encode(TlvConstants.TAG_A1, residencePermit);
+            ConstructedTlvDataObject constructedTlvDataObject = new ConstructedTlvDataObject(new TlvTag((byte) 0x73));
+            constructedTlvDataObject.addTlvDataObject(asn1Utf8StringCTDO);
+            String content = HexString.encode(constructedTlvDataObject.toByteArray()).toLowerCase(Locale.ROOT);
+            setFile("0113", "13", content );
+        }
+
+        public void setResidencePermitII(String residencePermit) {
+            ConstructedTlvDataObject asn1Utf8StringCTDO = Asn1Utf8StringWrapper.getInstance().encode(TlvConstants.TAG_A1, residencePermit);
+            ConstructedTlvDataObject constructedTlvDataObject = new ConstructedTlvDataObject(new TlvTag((byte) 0x74));
+            constructedTlvDataObject.addTlvDataObject(asn1Utf8StringCTDO);
+            String content = HexString.encode(constructedTlvDataObject.toByteArray()).toLowerCase(Locale.ROOT);
+            setFile("0114", "14", content );
+        }
     }
 
     @SerializedName("simulator")
@@ -338,5 +354,13 @@ public class SetCardCommand extends SmartEidCommand {
 
     public void setSex(String sex) {
         mSimulator.setSex(sex);
+    }
+
+    public void setResidencePermitI(String residencePermitI) {
+        mSimulator.setResidencePermitI(residencePermitI);
+    }
+
+    public void setResidencePermitII(String residencePermitI) {
+        mSimulator.setResidencePermitII(residencePermitI);
     }
 }
