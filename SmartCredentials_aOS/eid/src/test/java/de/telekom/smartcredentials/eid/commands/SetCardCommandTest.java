@@ -204,15 +204,28 @@ public class SetCardCommandTest {
         //       [AE|07|([13|05|3531313437])]
         //      )
         // ])
-        SetCardCommand cmd = new SetCardCommand("reader name");
-        cmd.setPlaceOfResidence(
-                "HEIDESTRAẞE 17",
-                "KÖLN",
-                "51147",
-                "D");
-        Gson gson = new Gson();
-        assertThat(gson.toJson(cmd),
-                is("{\"simulator\":{\"files\":[{\"fileId\":\"0112\",\"shortFileId\":\"12\",\"content\":\"712d302baa120c10484549444553545241e1ba9e45203137ab070c054bc3964c4ead03130144ae0713053531313437\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
+        {
+            SetCardCommand cmd = new SetCardCommand("reader name");
+            cmd.setPlaceOfResidence(
+                    "HEIDESTRAẞE 17",
+                    "KÖLN",
+                    "51147",
+                    "D");
+            Gson gson = new Gson();
+            assertThat(gson.toJson(cmd),
+                    is("{\"simulator\":{\"files\":[{\"fileId\":\"0111\",\"shortFileId\":\"11\",\"content\":\"712d302baa120c10484549444553545241e1ba9e45203137ab070c054bc3964c4ead03130144ae0713053531313437\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
+        }
+        {
+            SetCardCommand cmd = new SetCardCommand("reader name");
+            cmd.setPlaceOfBirth(
+                    "HEIDESTRAẞE 17",
+                    "KÖLN",
+                    "51147",
+                    "D");
+            Gson gson = new Gson();
+            assertThat(gson.toJson(cmd),
+                    is("{\"simulator\":{\"files\":[{\"fileId\":\"0109\",\"shortFileId\":\"09\",\"content\":\"712d302baa120c10484549444553545241e1ba9e45203137ab070c054bc3964c4ead03130144ae0713053531313437\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
+        }
     }
 
     @Test
