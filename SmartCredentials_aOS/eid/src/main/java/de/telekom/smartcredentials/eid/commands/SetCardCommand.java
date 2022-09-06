@@ -27,6 +27,7 @@ import java.util.Locale;
 import de.persosim.simulator.tlv.Asn1;
 import de.persosim.simulator.tlv.Asn1DateWrapper;
 import de.persosim.simulator.tlv.Asn1DocumentType;
+import de.persosim.simulator.tlv.Asn1IcaoStringWrapper;
 import de.persosim.simulator.tlv.Asn1PrintableStringWrapper;
 import de.persosim.simulator.tlv.Asn1Utf8StringWrapper;
 import de.persosim.simulator.tlv.ConstructedTlvDataObject;
@@ -105,6 +106,17 @@ public class SetCardCommand extends SmartEidCommand {
             ConstructedTlvDataObject constructedTlvDataObject = Asn1DocumentType.getInstance().encode(new TlvTag((byte) 0x61), documentType);
             String content = HexString.encode(constructedTlvDataObject.toByteArray()).toLowerCase(Locale.ROOT);
             setFile("0101", "01", content );
+        }
+
+        // IssuingEntity ::= [APPLICATION 2] CHOICE {
+        //  issuingState ICAOCountry
+        //  issuingPlace Place
+        // }
+        // "D"
+        public void setIssuingEntity(String issuingEntity) {
+            ConstructedTlvDataObject constructedTlvDataObject = Asn1IcaoStringWrapper.getInstance().encode(new TlvTag((byte) 0x62), issuingEntity);
+            String content = HexString.encode(constructedTlvDataObject.toByteArray()).toLowerCase(Locale.ROOT);
+            setFile("0102", "02", content );
         }
 
         // GivenNames ::= [APPLICATION 4] UTF8String
@@ -249,6 +261,10 @@ public class SetCardCommand extends SmartEidCommand {
 
     public Simulator getSimulator() {
         return mSimulator;
+    }
+
+    public void setIssuingEntity(String issuingEntity) {
+        mSimulator.setIssuingEntity(issuingEntity);
     }
 
     public void setFirstNames(@NonNull String firstnames) {
