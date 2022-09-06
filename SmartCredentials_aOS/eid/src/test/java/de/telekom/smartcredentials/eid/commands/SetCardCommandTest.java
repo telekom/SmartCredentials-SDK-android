@@ -16,6 +16,7 @@ import java.util.Locale;
 import de.persosim.simulator.tlv.Asn1;
 import de.persosim.simulator.tlv.Asn1DateWrapper;
 import de.persosim.simulator.tlv.Asn1DocumentType;
+import de.persosim.simulator.tlv.Asn1IcaoStringWrapper;
 import de.persosim.simulator.tlv.Asn1PrintableStringWrapper;
 import de.persosim.simulator.tlv.Asn1Utf8StringWrapper;
 import de.persosim.simulator.tlv.ConstructedTlvDataObject;
@@ -156,6 +157,25 @@ public class SetCardCommandTest {
             assertThat(expected.toByteArray(), is(received.toByteArray()));
 
             assertThat(HexString.encode(received.toByteArray()), is("66020C00"));
+        }
+    }
+
+    @Test
+    public void testIssuingEntity() {
+        {
+            ConstructedTlvDataObject received = Asn1IcaoStringWrapper.getInstance().encode(new TlvTag((byte) 0x62), "D");
+            ConstructedTlvDataObject expected = new ConstructedTlvDataObject(HexString.toByteArray("6203130144"));
+
+            assertThat(expected.toByteArray(), is(received.toByteArray()));
+
+            assertThat(HexString.encode(received.toByteArray()), is("6203130144"));
+        }
+        {
+            SetCardCommand cmd = new SetCardCommand("reader name");
+            cmd.setIssuingEntity("D");
+            Gson gson = new Gson();
+            assertThat(gson.toJson(cmd),
+                    is("{\"simulator\":{\"files\":[{\"fileId\":\"0102\",\"shortFileId\":\"02\",\"content\":\"6203130144\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
         }
     }
 
