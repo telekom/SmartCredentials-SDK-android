@@ -165,6 +165,51 @@ public class SetCardCommandTest {
     }
 
     @Test
+    public void testSetCardCommandResidencePermitI() {
+        {
+            ConstructedTlvDataObject asn1Utf8StringCTDO = Asn1Utf8StringWrapper.getInstance().encode(TlvConstants.TAG_A1, "RESIDENCE PERMIT 1");
+            ConstructedTlvDataObject received = new ConstructedTlvDataObject(new TlvTag((byte) 0x73));
+            received.addTlvDataObject(asn1Utf8StringCTDO);
+
+            // 73|16|([A1|14|([0C|12|5245534944454E4345205045524D49542031])])
+            ConstructedTlvDataObject expected = new ConstructedTlvDataObject(HexString.toByteArray("7316a1140c125245534944454e4345205045524d49542031"));
+
+            assertThat(expected.toByteArray(), is(received.toByteArray()));
+
+            assertThat(HexString.encode(received.toByteArray()).toLowerCase(Locale.ROOT), is("7316a1140c125245534944454e4345205045524d49542031"));
+        }
+        {
+            SetCardCommand cmd = new SetCardCommand("reader name");
+            cmd.setResidencePermitI("RESIDENCE PERMIT 1");
+            Gson gson = new Gson();
+            assertThat(gson.toJson(cmd),
+                    is("{\"simulator\":{\"files\":[{\"fileId\":\"0113\",\"shortFileId\":\"13\",\"content\":\"7316a1140c125245534944454e4345205045524d49542031\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
+        }
+    }
+
+    @Test
+    public void testSetCardCommandResidencePermitII() {
+        {
+            ConstructedTlvDataObject asn1Utf8StringCTDO = Asn1Utf8StringWrapper.getInstance().encode(TlvConstants.TAG_A1, "RESIDENCE PERMIT 2");
+            ConstructedTlvDataObject received = new ConstructedTlvDataObject(new TlvTag((byte) 0x74));
+            received.addTlvDataObject(asn1Utf8StringCTDO);
+
+            ConstructedTlvDataObject expected = new ConstructedTlvDataObject(HexString.toByteArray("7416a1140c125245534944454e4345205045524d49542032"));
+
+            assertThat(expected.toByteArray(), is(received.toByteArray()));
+
+            assertThat(HexString.encode(received.toByteArray()).toLowerCase(Locale.ROOT), is("7416a1140c125245534944454e4345205045524d49542032"));
+        }
+        {
+            SetCardCommand cmd = new SetCardCommand("reader name");
+            cmd.setResidencePermitII("RESIDENCE PERMIT 2");
+            Gson gson = new Gson();
+            assertThat(gson.toJson(cmd),
+                    is("{\"simulator\":{\"files\":[{\"fileId\":\"0114\",\"shortFileId\":\"14\",\"content\":\"7416a1140c125245534944454e4345205045524d49542032\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
+        }
+    }
+
+    @Test
     public void testSetCardCommandWithFiles() {
         SetCardCommand.SimulatorFile[] files = new SetCardCommand.SimulatorFile[]{
                 new SetCardCommand.SimulatorFile("0101", "01", "610413024944")
