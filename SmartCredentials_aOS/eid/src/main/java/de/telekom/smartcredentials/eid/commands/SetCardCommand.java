@@ -240,6 +240,12 @@ public class SetCardCommand extends SmartEidCommand {
             String content = HexString.encode(constructedTlvDataObject.toByteArray()).toLowerCase(Locale.ROOT);
             setFile("010A", "0A", content );
         }
+
+        public void setSex(String sex) {
+            ConstructedTlvDataObject constructedTlvDataObject = Asn1IcaoStringWrapper.getInstance().encode(new TlvTag((byte) 0x6b), sex);
+            String content = HexString.encode(constructedTlvDataObject.toByteArray()).toLowerCase(Locale.ROOT);
+            setFile("010B", "0B", content );
+        }
     }
 
     @SerializedName("simulator")
@@ -325,8 +331,12 @@ public class SetCardCommand extends SmartEidCommand {
                                 String country) {
         mSimulator.setPlaceOfBirth(streetAndHousenumber, cityname, zipcode,country);
     }
-    
+
     public void setNationality(String nationality) {
         mSimulator.setNationality(nationality);
+    }
+
+    public void setSex(String sex) {
+        mSimulator.setSex(sex);
     }
 }
