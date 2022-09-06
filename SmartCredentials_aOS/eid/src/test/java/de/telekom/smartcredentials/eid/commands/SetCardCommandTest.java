@@ -16,9 +16,11 @@ import java.util.Locale;
 import de.persosim.simulator.tlv.Asn1;
 import de.persosim.simulator.tlv.Asn1DateWrapper;
 import de.persosim.simulator.tlv.Asn1DocumentType;
+import de.persosim.simulator.tlv.Asn1PrintableStringWrapper;
 import de.persosim.simulator.tlv.Asn1Utf8StringWrapper;
 import de.persosim.simulator.tlv.ConstructedTlvDataObject;
 import de.persosim.simulator.tlv.PrimitiveTlvDataObject;
+import de.persosim.simulator.tlv.TlvConstants;
 import de.persosim.simulator.tlv.TlvDataObject;
 import de.persosim.simulator.tlv.TlvDataObjectFactory;
 import de.persosim.simulator.tlv.TlvTag;
@@ -184,6 +186,33 @@ public class SetCardCommandTest {
         assertThat(expected.toByteArray(),is(constructedTlvDataObject.toByteArray()));
 
         assertThat(HexString.encode(constructedTlvDataObject.toByteArray()), is("7209040702760503150000".toUpperCase(Locale.ROOT)));
+    }
+
+    @Test
+    public void testGeneralPlace() {
+        // PlaceOfResidence ::= [APPLICATION 17] CHOICE {
+        //  residence GeneralPlace
+        //  multResidence SET OF GeneralPlace
+        //}
+
+        // 71|2D|(
+        // [30|2B|
+        //      (
+        //       [AA|12|([0C|10|484549444553545241E1BA9E45203137])]
+        //       [AB|07|([0C|05|4BC3964C4E])]
+        //       [AD|03|([13|01|44])]
+        //       [AE|07|([13|05|3531313437])]
+        //      )
+        // ])
+        SetCardCommand cmd = new SetCardCommand("reader name");
+        cmd.setPlaceOfResidence(
+                "HEIDESTRAẞE 17",
+                "KÖLN",
+                "51147",
+                "D");
+        Gson gson = new Gson();
+        assertThat(gson.toJson(cmd),
+                is("{\"simulator\":{\"files\":[{\"fileId\":\"0112\",\"shortFileId\":\"12\",\"content\":\"712d302baa120c10484549444553545241e1ba9e45203137ab070c054bc3964c4ead03130144ae0713053531313437\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
     }
 
     @Test

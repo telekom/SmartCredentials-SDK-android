@@ -27,9 +27,11 @@ import java.util.Locale;
 import de.persosim.simulator.tlv.Asn1;
 import de.persosim.simulator.tlv.Asn1DateWrapper;
 import de.persosim.simulator.tlv.Asn1DocumentType;
+import de.persosim.simulator.tlv.Asn1PrintableStringWrapper;
 import de.persosim.simulator.tlv.Asn1Utf8StringWrapper;
 import de.persosim.simulator.tlv.ConstructedTlvDataObject;
 import de.persosim.simulator.tlv.PrimitiveTlvDataObject;
+import de.persosim.simulator.tlv.TlvConstants;
 import de.persosim.simulator.tlv.TlvTag;
 import de.persosim.simulator.utils.HexString;
 import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
@@ -178,6 +180,49 @@ public class SetCardCommand extends SmartEidCommand {
             String content = HexString.encode(constructedTlvDataObject.toByteArray()).toLowerCase(Locale.ROOT);
             setFile("0112", "12", content );
         }
+
+        ConstructedTlvDataObject createAddressCTDO(
+                String streetAndHousenumber,
+                String cityname,
+                String zipcode,
+                String country)
+        {
+            ConstructedTlvDataObject streetCTDO = Asn1Utf8StringWrapper.getInstance().encode(TlvConstants.TAG_AA, streetAndHousenumber);
+            ConstructedTlvDataObject cityCTDO = Asn1Utf8StringWrapper.getInstance().encode(TlvConstants.TAG_AB, cityname);
+
+            ConstructedTlvDataObject countryCTDO = Asn1PrintableStringWrapper.getInstance().encode(TlvConstants.TAG_AD, country);
+            ConstructedTlvDataObject zipcodeCTDO = Asn1PrintableStringWrapper.getInstance().encode(TlvConstants.TAG_AE, zipcode);
+
+            ConstructedTlvDataObject sequenceCTDO = new ConstructedTlvDataObject(new TlvTag((byte) 0x30));
+            sequenceCTDO.addTlvDataObject(streetCTDO);
+            sequenceCTDO.addTlvDataObject(cityCTDO);
+            sequenceCTDO.addTlvDataObject(countryCTDO);
+            sequenceCTDO.addTlvDataObject(zipcodeCTDO);
+
+            ConstructedTlvDataObject addressCTDO = new ConstructedTlvDataObject(new TlvTag((byte) 0x71));
+            addressCTDO.addTlvDataObject(sequenceCTDO);
+
+            return addressCTDO;
+        }
+
+        public void setPlaceOfResidence(String streetAndHousenumber,
+                                        String cityname,
+                                        String zipcode,
+                                        String country) {
+            ConstructedTlvDataObject addressCTDO = createAddressCTDO(streetAndHousenumber, cityname, zipcode,country);
+            String content = HexString.encode(addressCTDO.toByteArray()).toLowerCase(Locale.ROOT);
+            setFile("0111", "11", content );
+        }
+
+        public void setPlaceOfBirth(String streetAndHousenumber,
+                                        String cityname,
+                                        String zipcode,
+                                        String country) {
+            ConstructedTlvDataObject addressCTDO = createAddressCTDO(streetAndHousenumber, cityname, zipcode,country);
+            String content = HexString.encode(addressCTDO.toByteArray()).toLowerCase(Locale.ROOT);
+            setFile("0109", "09", content );
+        }
+
     }
 
     @SerializedName("simulator")
@@ -244,5 +289,19 @@ public class SetCardCommand extends SmartEidCommand {
 
     public void setMunicipality(String municipality) {
         mSimulator.setMunicipality(municipality);
+    }
+
+    public void setPlaceOfResidence(String streetAndHousenumber,
+                                    String cityname,
+                                    String zipcode,
+                                    String country) {
+        mSimulator.setPlaceOfResidence(streetAndHousenumber, cityname, zipcode,country);
+    }
+
+    public void setPlaceOfBirth(String streetAndHousenumber,
+                                String cityname,
+                                String zipcode,
+                                String country) {
+        mSimulator.setPlaceOfBirth(streetAndHousenumber, cityname, zipcode,country);
     }
 }
