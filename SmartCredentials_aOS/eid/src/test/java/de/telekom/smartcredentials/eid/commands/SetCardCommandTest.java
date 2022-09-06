@@ -127,6 +127,25 @@ public class SetCardCommandTest {
     }
 
     @Test
+    public void testSetCardCommandNationality() {
+        {
+            ConstructedTlvDataObject received = Asn1IcaoStringWrapper.getInstance().encode(new TlvTag((byte) 0x6a), "D");
+            ConstructedTlvDataObject expected = new ConstructedTlvDataObject(HexString.toByteArray("6a03130144"));
+
+            assertThat(expected.toByteArray(), is(received.toByteArray()));
+
+            assertThat(HexString.encode(received.toByteArray()).toLowerCase(Locale.ROOT), is("6a03130144"));
+        }
+        {
+            SetCardCommand cmd = new SetCardCommand("reader name");
+            cmd.setNationality("D");
+            Gson gson = new Gson();
+            assertThat(gson.toJson(cmd),
+                    is("{\"simulator\":{\"files\":[{\"fileId\":\"010A\",\"shortFileId\":\"0A\",\"content\":\"6a03130144\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
+        }
+    }
+
+    @Test
     public void testSetCardCommandWithFiles() {
         SetCardCommand.SimulatorFile[] files = new SetCardCommand.SimulatorFile[]{
                 new SetCardCommand.SimulatorFile("0101", "01", "610413024944")
