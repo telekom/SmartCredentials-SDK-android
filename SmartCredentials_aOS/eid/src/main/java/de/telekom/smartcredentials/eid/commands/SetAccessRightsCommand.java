@@ -16,9 +16,14 @@
 
 package de.telekom.smartcredentials.eid.commands;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Arrays;
+
+import de.telekom.smartcredentials.eid.commands.builder.CommandBuilder;
 import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
 
 /**
@@ -29,14 +34,37 @@ public class SetAccessRightsCommand extends SmartEidCommand {
 
     @SerializedName("chat")
     @Expose
-    private String[] mChat = {};
+    private String[] mChat;
 
-    public SetAccessRightsCommand() {
+    private SetAccessRightsCommand(Builder builder) {
         super(EidCommandType.SET_ACCESS_RIGHTS.getCommandType());
+        this.mChat = builder.mChat;
     }
 
-    public SetAccessRightsCommand(String[] chat) {
-        super(EidCommandType.SET_ACCESS_RIGHTS.getCommandType());
-        this.mChat = chat;
+    public String[] getChat() {
+        return mChat;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "SetAccessRightsCommand{" +
+                "mChat=" + Arrays.toString(mChat) +
+                '}';
+    }
+
+    public static class Builder implements CommandBuilder<SetAccessRightsCommand> {
+
+        private String[] mChat;
+
+        public Builder chat(String[] chat) {
+            this.mChat = chat;
+            return this;
+        }
+
+        @Override
+        public SetAccessRightsCommand build() {
+            return new SetAccessRightsCommand(this);
+        }
     }
 }

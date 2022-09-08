@@ -26,18 +26,21 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Reader {
 
-    @SerializedName("attached")
-    @Expose
-    private boolean mAttached;
-    @SerializedName("card")
-    @Expose
-    private Card mCard;
-    @SerializedName("keypad")
-    @Expose
-    private boolean mKeypad;
     @SerializedName("name")
     @Expose
     private String mName;
+    @SerializedName("insertable")
+    @Expose
+    private boolean mInsertable;
+    @SerializedName("attached")
+    @Expose
+    private boolean mAttached;
+    @SerializedName("keypad")
+    @Expose
+    private boolean mKeypad;
+    @SerializedName("card")
+    @Expose
+    private Card mCard;
 
     public Reader() {
 
@@ -49,6 +52,14 @@ public class Reader {
 
     public void setAttached(boolean attached) {
         this.mAttached = attached;
+    }
+
+    public boolean isInsertable() {
+        return mInsertable;
+    }
+
+    public void setInsertable(boolean insertable) {
+        this.mInsertable = insertable;
     }
 
     public Card getCard() {
@@ -79,10 +90,11 @@ public class Reader {
     @Override
     public String toString() {
         return "Reader{" +
-                "mAttached=" + mAttached +
-                ", mCard=" + mCard +
+                "mName='" + mName + '\'' +
+                ", mInsertable=" + mInsertable +
+                ", mAttached=" + mAttached +
                 ", mKeypad=" + mKeypad +
-                ", mName='" + mName + '\'' +
+                ", mCard=" + mCard +
                 '}';
     }
 }

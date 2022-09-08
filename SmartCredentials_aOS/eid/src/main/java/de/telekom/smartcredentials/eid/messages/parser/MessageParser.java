@@ -37,6 +37,7 @@ import de.telekom.smartcredentials.eid.messages.InvalidMessage;
 import de.telekom.smartcredentials.eid.messages.ReaderListMessage;
 import de.telekom.smartcredentials.eid.messages.ReaderMessage;
 import de.telekom.smartcredentials.eid.messages.SmartEidMessage;
+import de.telekom.smartcredentials.eid.messages.StatusMessage;
 import de.telekom.smartcredentials.eid.messages.UnknownCommandMessage;
 import de.telekom.smartcredentials.eid.messages.types.EidMessageType;
 
@@ -125,6 +126,10 @@ public class MessageParser implements EidCallbackObserver {
                 case UNKNOWN_COMMAND:
                     UnknownCommandMessage unknownCommandMessage = mGson.fromJson(rawMessage, UnknownCommandMessage.class);
                     mCallback.onMessageReceived(unknownCommandMessage);
+                    break;
+                case STATUS:
+                    StatusMessage statusMessage = mGson.fromJson(rawMessage, StatusMessage.class);
+                    mCallback.onMessageReceived(statusMessage);
                     break;
                 default:
                     mCallback.onMessageReceived(message);

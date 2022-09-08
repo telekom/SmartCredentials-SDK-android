@@ -16,6 +16,7 @@
 
 package de.telekom.smartcredentials.eid.commands;
 
+import de.telekom.smartcredentials.eid.commands.builder.CommandBuilder;
 import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
 
 /**
@@ -24,7 +25,15 @@ import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
 @SuppressWarnings("unused")
 public class CancelCommand extends SmartEidCommand {
 
-    public CancelCommand() {
+    private CancelCommand() {
         super(EidCommandType.CANCEL.getCommandType());
+    }
+
+    public static class Builder implements CommandBuilder<CancelCommand> {
+
+        @Override
+        public CancelCommand build() {
+            return new CancelCommand();
+        }
     }
 }
