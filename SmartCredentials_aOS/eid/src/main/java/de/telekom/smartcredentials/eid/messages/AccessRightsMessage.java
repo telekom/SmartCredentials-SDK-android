@@ -17,7 +17,6 @@
 package de.telekom.smartcredentials.eid.messages;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.VisibleForTesting;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -27,47 +26,59 @@ import com.google.gson.annotations.SerializedName;
  */
 public class AccessRightsMessage extends SmartEidMessage {
 
+    @SerializedName("error")
+    @Expose
+    private String mError;
+    @SerializedName("aux")
+    @Expose
+    private Auxiliary mAuxiliary;
     @SerializedName("chat")
     @Expose
     private Chat mChat;
-
-    @SerializedName("canAllowed")
+    @SerializedName("transactionInfo")
     @Expose
-    private boolean mCanAllowed;
+    private String mTransactionInfo;
 
-    public AccessRightsMessage() {
-        super();
+    public String getError() {
+        return mError;
     }
 
-    @VisibleForTesting
-    protected AccessRightsMessage(Chat chat, boolean canAllowed) {
-        super();
-        mChat = chat;
-        mCanAllowed = canAllowed;
+    public void setError(String error) {
+        this.mError = error;
+    }
+
+    public Auxiliary getAuxiliary() {
+        return mAuxiliary;
+    }
+
+    public void setAuxiliary(Auxiliary auxiliary) {
+        this.mAuxiliary = auxiliary;
     }
 
     public Chat getChat() {
         return mChat;
     }
 
-    public void setChat(Chat mChat) {
-        this.mChat = mChat;
+    public void setChat(Chat chat) {
+        this.mChat = chat;
     }
 
-    public boolean getCanAllowed() {
-        return mCanAllowed;
+    public String getTransactionInfo() {
+        return mTransactionInfo;
     }
 
-    public void setCanAllowed(boolean canAllowed) {
-        this.mCanAllowed = canAllowed;
+    public void setTransactionInfo(String transactionInfo) {
+        this.mTransactionInfo = transactionInfo;
     }
 
     @NonNull
     @Override
     public String toString() {
         return "AccessRightsMessage{" +
-                "mChat=" + mChat + "," +
-                "mCanAllowed=" + mCanAllowed +
+                "mError='" + mError + '\'' +
+                ", mAuxiliary=" + mAuxiliary +
+                ", mChat=" + mChat +
+                ", mTransactionInfo='" + mTransactionInfo + '\'' +
                 '}';
     }
 }

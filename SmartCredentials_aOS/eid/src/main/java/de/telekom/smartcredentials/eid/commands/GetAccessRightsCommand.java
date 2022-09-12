@@ -16,6 +16,7 @@
 
 package de.telekom.smartcredentials.eid.commands;
 
+import de.telekom.smartcredentials.eid.commands.builder.CommandBuilder;
 import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
 
 /**
@@ -24,7 +25,15 @@ import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
 @SuppressWarnings("unused")
 public class GetAccessRightsCommand extends SmartEidCommand {
 
-    public GetAccessRightsCommand() {
+    private GetAccessRightsCommand() {
         super(EidCommandType.GET_ACCESS_RIGHTS.getCommandType());
+    }
+
+    public static class Builder implements CommandBuilder<GetAccessRightsCommand> {
+
+        @Override
+        public GetAccessRightsCommand build() {
+            return new GetAccessRightsCommand();
+        }
     }
 }

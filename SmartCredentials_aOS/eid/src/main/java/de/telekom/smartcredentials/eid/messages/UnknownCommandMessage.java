@@ -16,6 +16,8 @@
 
 package de.telekom.smartcredentials.eid.messages;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -34,5 +36,13 @@ public class UnknownCommandMessage extends SmartEidMessage {
 
     public void setError(String error) {
         this.mError = error;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "UnknownCommandMessage{" +
+                "mError='" + mError + '\'' +
+                '}';
     }
 }

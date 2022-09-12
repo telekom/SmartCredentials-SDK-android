@@ -30,6 +30,9 @@ public class ReaderMessage extends SmartEidMessage {
     @SerializedName("name")
     @Expose
     private String mName;
+    @SerializedName("insertable")
+    @Expose
+    private boolean mInsertable;
     @SerializedName("attached")
     @Expose
     private boolean mAttached;
@@ -40,16 +43,20 @@ public class ReaderMessage extends SmartEidMessage {
     @Expose
     private Card mCard;
 
-    public ReaderMessage() {
-
-    }
-
     public String getName() {
         return mName;
     }
 
     public void setName(String name) {
         this.mName = name;
+    }
+
+    public boolean isInsertable() {
+        return mInsertable;
+    }
+
+    public void setInsertable(boolean insertable) {
+        this.mInsertable = insertable;
     }
 
     public boolean isAttached() {
@@ -81,6 +88,7 @@ public class ReaderMessage extends SmartEidMessage {
     public String toString() {
         return "ReaderMessage{" +
                 "mName='" + mName + '\'' +
+                ", mInsertable=" + mInsertable +
                 ", mAttached=" + mAttached +
                 ", mKeypad=" + mKeypad +
                 ", mCard=" + mCard +

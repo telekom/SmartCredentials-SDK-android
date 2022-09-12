@@ -16,6 +16,12 @@
 
 package de.telekom.smartcredentials.eid.commands;
 
+import androidx.annotation.NonNull;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import de.telekom.smartcredentials.eid.commands.builder.CommandBuilder;
 import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
 
 /**
@@ -24,7 +30,39 @@ import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
 @SuppressWarnings("unused")
 public class GetReaderCommand extends SmartEidCommand {
 
-    public GetReaderCommand() {
+    @SerializedName("name")
+    @Expose
+    private String mName;
+
+    private GetReaderCommand(Builder builder) {
         super(EidCommandType.GET_READER.getCommandType());
+        this.mName = builder.mName;
+    }
+
+    public String getName() {
+        return mName;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "GetReaderCommand{" +
+                "mName='" + mName + '\'' +
+                '}';
+    }
+
+    public static class Builder implements CommandBuilder<GetReaderCommand> {
+
+        private String mName;
+
+        public Builder setName(String name) {
+            mName = name;
+            return this;
+        }
+
+        @Override
+        public GetReaderCommand build() {
+            return new GetReaderCommand(this);
+        }
     }
 }

@@ -38,9 +38,10 @@ allprojects {
         androidCompileSdkVersion = 33
         androidTargetSdkVersion = 33
         androidMinSdkVersion = 21
+        androidMinSdkVersionEid = 24
         buildToolsVersion = "33.0.0"
         androidVersionCode = 5
-        androidVersionName = "6.4.0"
+        androidVersionName = "6.4.1"
         androidNdkVersion = "23.1.7779620"
 
         androidXAppcompat = "1.4.2"
@@ -55,7 +56,7 @@ allprojects {
         okHttpVersion = "4.9.3"
         blinkIDVersion = "5.8.0"
         rxJavaVersion = "2.1.1"
-        rx3JavaVersion = "3.1.1"
+        rx3JavaVersion = "3.1.5"
         rx3AndroidVersion = "3.0.0"
 
         junitVersion = "4.13.2"
@@ -66,7 +67,7 @@ allprojects {
         espressoLibVersion = "3.0.2"
         architectureCoreTestingVersion = "1.1.1"
 
-        kotlin_core_version = "1.8.0"
+        kotlin_core_version = "1.9.0"
     }
 }
 

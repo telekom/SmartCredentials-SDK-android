@@ -16,9 +16,12 @@
 
 package de.telekom.smartcredentials.eid.commands;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import de.telekom.smartcredentials.eid.commands.builder.CommandBuilder;
 import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
 
 /**
@@ -26,16 +29,39 @@ import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
  */
 @SuppressWarnings("unused")
 public class SetPinCommand extends SmartEidCommand {
+
     @SerializedName("value")
     @Expose
     private String mValue;
 
-    public SetPinCommand(String value) {
+    public SetPinCommand(Builder builder) {
         super(EidCommandType.SET_PIN.getCommandType());
-        mValue = value;
+        mValue = builder.mValue;
     }
 
     public String getValue() {
         return mValue;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "SetPinCommand{" +
+                "mValue='" + mValue + '\'' +
+                '}';
+    }
+
+    public static class Builder implements CommandBuilder<SetPinCommand> {
+
+        private final String mValue;
+
+        public Builder(String value) {
+            mValue = value;
+        }
+
+        @Override
+        public SetPinCommand build() {
+            return new SetPinCommand(this);
+        }
     }
 }

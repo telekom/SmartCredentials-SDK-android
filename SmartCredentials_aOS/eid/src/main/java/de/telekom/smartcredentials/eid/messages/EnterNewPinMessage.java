@@ -5,8 +5,6 @@ import androidx.annotation.NonNull;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import de.telekom.smartcredentials.eid.messages.types.EidMessageType;
-
 public class EnterNewPinMessage extends SmartEidMessage {
 
     @SerializedName("error")
@@ -15,10 +13,6 @@ public class EnterNewPinMessage extends SmartEidMessage {
     @SerializedName("reader")
     @Expose
     private Reader mReader;
-
-    public EnterNewPinMessage() {
-        super(EidMessageType.ENTER_NEW_PIN.getMessageType());
-    }
 
     public Reader getReader() {
         return mReader;
