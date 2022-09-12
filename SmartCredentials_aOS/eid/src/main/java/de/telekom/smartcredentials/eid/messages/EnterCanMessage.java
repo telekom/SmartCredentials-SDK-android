@@ -33,10 +33,6 @@ public class EnterCanMessage extends SmartEidMessage {
     @Expose
     private Reader mReader;
 
-    public EnterCanMessage() {
-
-    }
-
     public Reader getReader() {
         return mReader;
     }

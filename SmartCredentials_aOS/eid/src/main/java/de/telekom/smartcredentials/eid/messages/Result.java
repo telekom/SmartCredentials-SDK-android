@@ -16,6 +16,8 @@
 
 package de.telekom.smartcredentials.eid.messages;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -30,10 +32,15 @@ public class Result {
     @SerializedName("minor")
     @Expose
     private String mMinor;
-
-    public Result() {
-
-    }
+    @SerializedName("language")
+    @Expose
+    private String mLanguage;
+    @SerializedName("description")
+    @Expose
+    private String mDescription;
+    @SerializedName("message")
+    @Expose
+    private String mMessage;
 
     public String getMajor() {
         return mMajor;
@@ -51,11 +58,39 @@ public class Result {
         this.mMinor = mMinor;
     }
 
+    public String getLanguage() {
+        return mLanguage;
+    }
+
+    public void setmLanguage(String language) {
+        this.mLanguage = language;
+    }
+
+    public String getDescription() {
+        return mDescription;
+    }
+
+    public void setDescription(String description) {
+        this.mDescription = description;
+    }
+
+    public String getMessage() {
+        return mMessage;
+    }
+
+    public void setMessage(String message) {
+        this.mMessage = message;
+    }
+
+    @NonNull
     @Override
     public String toString() {
         return "Result{" +
                 "mMajor='" + mMajor + '\'' +
                 ", mMinor='" + mMinor + '\'' +
+                ", mLanguage='" + mLanguage + '\'' +
+                ", mDescription='" + mDescription + '\'' +
+                ", mMessage='" + mMessage + '\'' +
                 '}';
     }
 }

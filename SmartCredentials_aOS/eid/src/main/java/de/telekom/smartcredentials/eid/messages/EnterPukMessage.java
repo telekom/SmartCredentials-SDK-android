@@ -33,10 +33,6 @@ public class EnterPukMessage extends SmartEidMessage {
     @Expose
     private Reader mReader;
 
-    public EnterPukMessage() {
-
-    }
-
     public Reader getReader() {
         return mReader;
     }

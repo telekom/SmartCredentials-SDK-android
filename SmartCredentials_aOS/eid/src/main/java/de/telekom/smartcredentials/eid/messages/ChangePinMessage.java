@@ -1,23 +1,29 @@
 package de.telekom.smartcredentials.eid.messages;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import de.telekom.smartcredentials.eid.messages.types.EidMessageType;
-
-public class ChangePinMessage extends SmartEidMessage{
+public class ChangePinMessage extends SmartEidMessage {
 
     @SerializedName("success")
     @Expose
-    private boolean mState;
+    private boolean mSuccess;
 
-    public ChangePinMessage(boolean state) {
-        super(EidMessageType.CHANGE_PIN.getMessageType());
-        mState = state;
+    public boolean isSuccess() {
+        return mSuccess;
     }
 
-    public boolean getState() {
-        return mState;
+    public void setSuccess(boolean success) {
+        this.mSuccess = success;
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        return "ChangePinMessage{" +
+                "mSuccess=" + mSuccess +
+                '}';
+    }
 }

@@ -16,6 +16,7 @@
 
 package de.telekom.smartcredentials.eid.commands;
 
+import de.telekom.smartcredentials.eid.commands.builder.CommandBuilder;
 import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
 
 /**
@@ -24,7 +25,15 @@ import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
 @SuppressWarnings("unused")
 public class GetCertificateCommand extends SmartEidCommand {
 
-    public GetCertificateCommand() {
+    private GetCertificateCommand() {
         super(EidCommandType.GET_CERTIFICATE.getCommandType());
+    }
+
+    public static class Builder implements CommandBuilder<GetCertificateCommand> {
+
+        @Override
+        public GetCertificateCommand build() {
+            return new GetCertificateCommand();
+        }
     }
 }

@@ -16,9 +16,12 @@
 
 package de.telekom.smartcredentials.eid.commands;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import de.telekom.smartcredentials.eid.commands.builder.CommandBuilder;
 import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
 
 /**
@@ -31,12 +34,34 @@ public class SetCanCommand extends SmartEidCommand {
     @Expose
     private String mValue;
 
-    public SetCanCommand(String can) {
+    public SetCanCommand(Builder builder) {
         super(EidCommandType.SET_CAN.getCommandType());
-        mValue = can;
+        mValue = builder.mValue;
     }
 
     public String getValue() {
         return mValue;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "SetCanCommand{" +
+                "mValue='" + mValue + '\'' +
+                '}';
+    }
+
+    public static class Builder implements CommandBuilder<SetCanCommand> {
+
+        private final String mValue;
+
+        public Builder(String value) {
+            mValue = value;
+        }
+
+        @Override
+        public SetCanCommand build() {
+            return new SetCanCommand(this);
+        }
     }
 }
