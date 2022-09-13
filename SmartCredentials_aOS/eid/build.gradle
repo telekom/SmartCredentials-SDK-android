@@ -84,4 +84,7 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
     implementation "androidx.core:core-ktx:$kotlin_core_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    // https://mvnrepository.com/artifact/com.thoughtworks.xstream/xstream
+    implementation 'com.thoughtworks.xstream:xstream:1.4.19'
 }
