@@ -3,8 +3,6 @@ package de.telekom.smartcredentials.eid.commands;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 
 import org.junit.Test;
@@ -17,7 +15,6 @@ import de.persosim.simulator.tlv.Asn1;
 import de.persosim.simulator.tlv.Asn1DateWrapper;
 import de.persosim.simulator.tlv.Asn1DocumentType;
 import de.persosim.simulator.tlv.Asn1IcaoStringWrapper;
-import de.persosim.simulator.tlv.Asn1PrintableStringWrapper;
 import de.persosim.simulator.tlv.Asn1Utf8StringWrapper;
 import de.persosim.simulator.tlv.ConstructedTlvDataObject;
 import de.persosim.simulator.tlv.PrimitiveTlvDataObject;
@@ -31,15 +28,17 @@ import de.persosim.simulator.utils.HexString;
 public class SetCardCommandTest {
     @Test
     public void testSetCardCommand() {
-        SetCardCommand cmd = new SetCardCommand("reader name", new SetCardCommand.SimulatorFile[]{});
+        SetCardCommand cmd = new SetCardCommand.Builder(new Simulator(new SimulatorFile[]{})).setReaderName("reader name").build();
         Gson gson = new Gson();
         assertThat(gson.toJson(cmd), is("{\"simulator\":{\"files\":[]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
     }
 
     @Test
     public void testSetCardCommandFirstnames() {
-        SetCardCommand cmd = new SetCardCommand("reader name");
-        cmd.setFirstNames("ERIKA");
+        SetCardCommand cmd = new SetCardCommand.Builder()
+                .setReaderName("reader name")
+                .setFirstNames("ERIKA")
+                .build();
         Gson gson = new Gson();
         assertThat(gson.toJson(cmd),
                 is("{\"simulator\":{\"files\":[{\"fileId\":\"0104\",\"shortFileId\":\"04\",\"content\":\"64070c054552494b41\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
@@ -47,8 +46,10 @@ public class SetCardCommandTest {
 
     @Test
     public void testSetCardCommandFamilyNames() {
-        SetCardCommand cmd = new SetCardCommand("reader name");
-        cmd.setFamilyNames("MUSTERMANN");
+        SetCardCommand cmd = new SetCardCommand.Builder()
+                .setReaderName("reader name")
+                .setFamilyNames("MUSTERMANN")
+                .build();
         Gson gson = new Gson();
         assertThat(gson.toJson(cmd),
                 is("{\"simulator\":{\"files\":[{\"fileId\":\"0105\",\"shortFileId\":\"05\",\"content\":\"650c0c0a4d55535445524d414e4e\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
@@ -56,8 +57,10 @@ public class SetCardCommandTest {
 
     @Test
     public void testSetCardCommandBirthName() {
-        SetCardCommand cmd = new SetCardCommand("reader name");
-        cmd.setBirthName("GABLER");
+        SetCardCommand cmd = new SetCardCommand.Builder()
+                .setReaderName("reader name")
+                .setBirthName("GABLER")
+                .build();
         Gson gson = new Gson();
         assertThat(gson.toJson(cmd),
                 is("{\"simulator\":{\"files\":[{\"fileId\":\"010d\",\"shortFileId\":\"0d\",\"content\":\"6d080c064741424c4552\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
@@ -65,8 +68,10 @@ public class SetCardCommandTest {
 
     @Test
     public void testSetCardCommandDocumentType() {
-        SetCardCommand cmd = new SetCardCommand("reader name");
-        cmd.setDocumentType("ID");
+        SetCardCommand cmd = new SetCardCommand.Builder()
+                .setReaderName("reader name")
+                .setDocumentType("ID")
+                .build();
         Gson gson = new Gson();
         assertThat(gson.toJson(cmd),
                 is("{\"simulator\":{\"files\":[{\"fileId\":\"0101\",\"shortFileId\":\"01\",\"content\":\"610413024944\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
@@ -74,8 +79,10 @@ public class SetCardCommandTest {
 
     @Test
     public void testSetCardCommandNomDePlume() {
-        SetCardCommand cmd = new SetCardCommand("reader name");
-        cmd.setNomDePlume("");
+        SetCardCommand cmd = new SetCardCommand.Builder()
+                .setReaderName("reader name")
+                .setNomDePlume("")
+                .build();
         Gson gson = new Gson();
         assertThat(gson.toJson(cmd),
                 is("{\"simulator\":{\"files\":[{\"fileId\":\"0106\",\"shortFileId\":\"06\",\"content\":\"66020c00\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
@@ -83,8 +90,10 @@ public class SetCardCommandTest {
 
     @Test
     public void testSetCardCommandAcademicTitle() {
-        SetCardCommand cmd = new SetCardCommand("reader name");
-        cmd.setAcademicTitle("");
+        SetCardCommand cmd = new SetCardCommand.Builder()
+                .setReaderName("reader name")
+                .setAcademicTitle("")
+                .build();
         Gson gson = new Gson();
         assertThat(gson.toJson(cmd),
                 is("{\"simulator\":{\"files\":[{\"fileId\":\"0107\",\"shortFileId\":\"07\",\"content\":\"67020c00\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
@@ -92,8 +101,10 @@ public class SetCardCommandTest {
 
     @Test
     public void testSetCardCommandBirthDate() {
-        SetCardCommand cmd = new SetCardCommand("reader name");
-        cmd.setBirthDate("19640812");
+        SetCardCommand cmd = new SetCardCommand.Builder()
+                .setReaderName("reader name")
+                .setBirthDate("19640812")
+                .build();
         Gson gson = new Gson();
         assertThat(gson.toJson(cmd),
                 is("{\"simulator\":{\"files\":[{\"fileId\":\"0108\",\"shortFileId\":\"08\",\"content\":\"680a12083139363430383132\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
@@ -101,8 +112,10 @@ public class SetCardCommandTest {
 
     @Test
     public void testSetCardCommandDateOfExpiry() {
-        SetCardCommand cmd = new SetCardCommand("reader name");
-        cmd.setDateOfExpiry("20291031");
+        SetCardCommand cmd = new SetCardCommand.Builder()
+                .setReaderName("reader name")
+                .setDateOfExpiry("20291031")
+                .build();
         Gson gson = new Gson();
         assertThat(gson.toJson(cmd),
                 is("{\"simulator\":{\"files\":[{\"fileId\":\"0103\",\"shortFileId\":\"03\",\"content\":\"630a12083230323931303331\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
@@ -110,8 +123,10 @@ public class SetCardCommandTest {
 
     @Test
     public void testSetCardCommandDateOfIssuance() {
-        SetCardCommand cmd = new SetCardCommand("reader name");
-        cmd.setDateOfIssuance("20191101");
+        SetCardCommand cmd = new SetCardCommand.Builder()
+                .setReaderName("reader name")
+                .setDateOfIssuance("20191101")
+                .build();
         Gson gson = new Gson();
         assertThat(gson.toJson(cmd),
                 is("{\"simulator\":{\"files\":[{\"fileId\":\"010F\",\"shortFileId\":\"0F\",\"content\":\"6f0a12083230313931313031\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
@@ -119,8 +134,10 @@ public class SetCardCommandTest {
 
     @Test
     public void testSetCardCommandMunicipality() {
-        SetCardCommand cmd = new SetCardCommand("reader name");
-        cmd.setMunicipality("02760503150000");
+        SetCardCommand cmd = new SetCardCommand.Builder()
+                .setReaderName("reader name")
+                .setMunicipality("02760503150000")
+                .build();
         Gson gson = new Gson();
         assertThat(gson.toJson(cmd),
                 is("{\"simulator\":{\"files\":[{\"fileId\":\"0112\",\"shortFileId\":\"12\",\"content\":\"7209040702760503150000\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
@@ -137,8 +154,10 @@ public class SetCardCommandTest {
             assertThat(HexString.encode(received.toByteArray()).toLowerCase(Locale.ROOT), is("6a03130144"));
         }
         {
-            SetCardCommand cmd = new SetCardCommand("reader name");
-            cmd.setNationality("D");
+            SetCardCommand cmd = new SetCardCommand.Builder()
+                    .setReaderName("reader name")
+                    .setNationality("D")
+                    .build();
             Gson gson = new Gson();
             assertThat(gson.toJson(cmd),
                     is("{\"simulator\":{\"files\":[{\"fileId\":\"010A\",\"shortFileId\":\"0A\",\"content\":\"6a03130144\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
@@ -156,8 +175,10 @@ public class SetCardCommandTest {
             assertThat(HexString.encode(received.toByteArray()).toLowerCase(Locale.ROOT), is("6b03130146"));
         }
         {
-            SetCardCommand cmd = new SetCardCommand("reader name");
-            cmd.setSex("F");
+            SetCardCommand cmd = new SetCardCommand.Builder()
+                    .setReaderName("reader name")
+                    .setSex("F")
+                    .build();
             Gson gson = new Gson();
             assertThat(gson.toJson(cmd),
                     is("{\"simulator\":{\"files\":[{\"fileId\":\"010B\",\"shortFileId\":\"0B\",\"content\":\"6b03130146\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
@@ -179,8 +200,10 @@ public class SetCardCommandTest {
             assertThat(HexString.encode(received.toByteArray()).toLowerCase(Locale.ROOT), is("7316a1140c125245534944454e4345205045524d49542031"));
         }
         {
-            SetCardCommand cmd = new SetCardCommand("reader name");
-            cmd.setResidencePermitI("RESIDENCE PERMIT 1");
+            SetCardCommand cmd = new SetCardCommand.Builder()
+                    .setReaderName("reader name")
+                    .setResidencePermitI("RESIDENCE PERMIT 1")
+                    .build();
             Gson gson = new Gson();
             assertThat(gson.toJson(cmd),
                     is("{\"simulator\":{\"files\":[{\"fileId\":\"0113\",\"shortFileId\":\"13\",\"content\":\"7316a1140c125245534944454e4345205045524d49542031\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
@@ -201,8 +224,10 @@ public class SetCardCommandTest {
             assertThat(HexString.encode(received.toByteArray()).toLowerCase(Locale.ROOT), is("7416a1140c125245534944454e4345205045524d49542032"));
         }
         {
-            SetCardCommand cmd = new SetCardCommand("reader name");
-            cmd.setResidencePermitII("RESIDENCE PERMIT 2");
+            SetCardCommand cmd = new SetCardCommand.Builder()
+                    .setReaderName("reader name")
+                    .setResidencePermitII("RESIDENCE PERMIT 2")
+                    .build();
             Gson gson = new Gson();
             assertThat(gson.toJson(cmd),
                     is("{\"simulator\":{\"files\":[{\"fileId\":\"0114\",\"shortFileId\":\"14\",\"content\":\"7416a1140c125245534944454e4345205045524d49542032\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
@@ -211,10 +236,10 @@ public class SetCardCommandTest {
 
     @Test
     public void testSetCardCommandWithFiles() {
-        SetCardCommand.SimulatorFile[] files = new SetCardCommand.SimulatorFile[]{
-                new SetCardCommand.SimulatorFile("0101", "01", "610413024944")
-        };
-        SetCardCommand cmd = new SetCardCommand("reader name", files);
+        SimulatorFile[] simulatorFiles =
+                new SimulatorFile[]{new SimulatorFile("0101", "01", "610413024944")};
+        Simulator simulator = new Simulator(simulatorFiles);
+        SetCardCommand cmd = new SetCardCommand.Builder(simulator).setReaderName("reader name").build();
         Gson gson = new Gson();
         assertThat(gson.toJson(cmd),
                 is("{\"simulator\":{\"files\":[{\"fileId\":\"0101\",\"shortFileId\":\"01\",\"content\":\"610413024944\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
@@ -254,8 +279,10 @@ public class SetCardCommandTest {
             assertThat(HexString.encode(received.toByteArray()), is("6203130144"));
         }
         {
-            SetCardCommand cmd = new SetCardCommand("reader name");
-            cmd.setIssuingEntity("D");
+            SetCardCommand cmd = new SetCardCommand.Builder()
+                    .setReaderName("reader name")
+                    .setIssuingEntity("D")
+                    .build();
             Gson gson = new Gson();
             assertThat(gson.toJson(cmd),
                     is("{\"simulator\":{\"files\":[{\"fileId\":\"0102\",\"shortFileId\":\"02\",\"content\":\"6203130144\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
@@ -270,7 +297,7 @@ public class SetCardCommandTest {
         ConstructedTlvDataObject received = Asn1DateWrapper.getInstance().encode(new TlvTag((byte) 0x68), "19640812");
         ConstructedTlvDataObject expected = new ConstructedTlvDataObject(HexString.toByteArray("680a12083139363430383132"));
 
-        assertThat(expected.toByteArray(),is(received.toByteArray()));
+        assertThat(expected.toByteArray(), is(received.toByteArray()));
 
         assertThat(HexString.encode(received.toByteArray()), is("680a12083139363430383132".toUpperCase(Locale.ROOT)));
     }
@@ -286,7 +313,7 @@ public class SetCardCommandTest {
 
         ConstructedTlvDataObject expected = new ConstructedTlvDataObject(HexString.toByteArray("7209040702760503150000"));
 
-        assertThat(expected.toByteArray(),is(constructedTlvDataObject.toByteArray()));
+        assertThat(expected.toByteArray(), is(constructedTlvDataObject.toByteArray()));
 
         assertThat(HexString.encode(constructedTlvDataObject.toByteArray()), is("7209040702760503150000".toUpperCase(Locale.ROOT)));
     }
@@ -308,23 +335,25 @@ public class SetCardCommandTest {
         //      )
         // ])
         {
-            SetCardCommand cmd = new SetCardCommand("reader name");
-            cmd.setPlaceOfResidence(
-                    "HEIDESTRAẞE 17",
-                    "KÖLN",
-                    "51147",
-                    "D");
+            SetCardCommand cmd = new SetCardCommand.Builder()
+                    .setReaderName("reader name")
+                    .setPlaceOfResidence("HEIDESTRAẞE 17",
+                            "KÖLN",
+                            "51147",
+                            "D")
+                    .build();
             Gson gson = new Gson();
             assertThat(gson.toJson(cmd),
                     is("{\"simulator\":{\"files\":[{\"fileId\":\"0111\",\"shortFileId\":\"11\",\"content\":\"712d302baa120c10484549444553545241e1ba9e45203137ab070c054bc3964c4ead03130144ae0713053531313437\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
         }
         {
-            SetCardCommand cmd = new SetCardCommand("reader name");
-            cmd.setPlaceOfBirth(
-                    "HEIDESTRAẞE 17",
-                    "KÖLN",
-                    "51147",
-                    "D");
+            SetCardCommand cmd = new SetCardCommand.Builder()
+                    .setReaderName("reader name")
+                    .setPlaceOfBirth("HEIDESTRAẞE 17",
+                            "KÖLN",
+                            "51147",
+                            "D")
+                    .build();
             Gson gson = new Gson();
             assertThat(gson.toJson(cmd),
                     is("{\"simulator\":{\"files\":[{\"fileId\":\"0109\",\"shortFileId\":\"09\",\"content\":\"712d302baa120c10484549444553545241e1ba9e45203137ab070c054bc3964c4ead03130144ae0713053531313437\"}]},\"name\":\"reader name\",\"cmd\":\"SET_CARD\"}"));
