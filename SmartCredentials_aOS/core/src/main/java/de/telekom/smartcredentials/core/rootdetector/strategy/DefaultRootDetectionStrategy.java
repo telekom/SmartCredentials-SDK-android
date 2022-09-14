@@ -20,8 +20,8 @@ import android.content.Context;
 
 public class DefaultRootDetectionStrategy extends RootDetectionStrategy {
 
-    public DefaultRootDetectionStrategy(Context context) {
-        super(context);
+    public DefaultRootDetectionStrategy(Context context, RootDetectionOptionListener listener) {
+        super(context, null, listener);
     }
 
     @Override

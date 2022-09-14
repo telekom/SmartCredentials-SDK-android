@@ -21,6 +21,7 @@ import android.content.Context;
 import de.telekom.smartcredentials.core.actions.ExecutionCallback;
 import de.telekom.smartcredentials.core.itemdatamodel.ItemEnvelope;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
+import de.telekom.smartcredentials.core.rootdetector.strategy.RootDetectionOptionListener;
 
 public interface CoreApi {
 
@@ -32,6 +33,8 @@ public interface CoreApi {
      */
     @SuppressWarnings("unused")
     SmartCredentialsApiResponse<Boolean> isDeviceRooted();
+
+    SmartCredentialsApiResponse<Boolean> isDeviceRooted(RootDetectionOptionListener listener);
 
     /**
      * Executes a specific action over an item envelope

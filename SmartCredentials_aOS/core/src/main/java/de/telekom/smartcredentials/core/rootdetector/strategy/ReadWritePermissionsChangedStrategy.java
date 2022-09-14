@@ -20,6 +20,7 @@ import android.content.Context;
 
 import de.telekom.smartcredentials.core.rootdetector.CommandStreamScanner;
 import de.telekom.smartcredentials.core.rootdetector.RootDetectionConstantsSet;
+import de.telekom.smartcredentials.core.rootdetector.RootDetectionOption;
 
 import static de.telekom.smartcredentials.core.rootdetector.RootDetectionConstants.convertArrayListToStringArray;
 import static de.telekom.smartcredentials.core.rootdetector.RootDetectionConstants.getJSONConstantsList;
@@ -28,8 +29,8 @@ public class ReadWritePermissionsChangedStrategy extends RootDetectionStrategy {
 
     private static final String COMMA_DELIMITER = ",";
 
-    public ReadWritePermissionsChangedStrategy(Context context) {
-        super(context);
+    public ReadWritePermissionsChangedStrategy(Context context, RootDetectionOptionListener listener) {
+        super(context, RootDetectionOption.READ_WRITE_PERMISSIONS_CHANGED, listener);
     }
 
     @Override
@@ -37,7 +38,7 @@ public class ReadWritePermissionsChangedStrategy extends RootDetectionStrategy {
         String mountCommand = getJSONConstantsList(mContext, RootDetectionConstantsSet.MOUNT_COMMAND).get(0);
         String[] lines = CommandStreamScanner.getCommand(mountCommand);
         if (lines == null || lines.length == 0) {
-            return false;
+            return deliverResult(false);
         }
 
         for (String line : lines) {
@@ -58,13 +59,13 @@ public class ReadWritePermissionsChangedStrategy extends RootDetectionStrategy {
                 if (mountPoint.equalsIgnoreCase(pathToCheck)) {
                     for (String option : mountOptions.split(COMMA_DELIMITER)) {
                         if (option.equalsIgnoreCase(readWriteOption)) {
-                            return true;
+                            return deliverResult(true);
                         }
                     }
                 }
             }
         }
 
-        return false;
+        return deliverResult(false);
     }
 }

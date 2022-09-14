@@ -21,6 +21,7 @@ import android.content.Context;
 import java.io.File;
 
 import de.telekom.smartcredentials.core.rootdetector.RootDetectionConstantsSet;
+import de.telekom.smartcredentials.core.rootdetector.RootDetectionOption;
 
 import static de.telekom.smartcredentials.core.rootdetector.RootDetectionConstants.convertArrayListToStringArray;
 import static de.telekom.smartcredentials.core.rootdetector.RootDetectionConstants.getJSONConstantsList;
@@ -29,8 +30,9 @@ public abstract class BinaryFilesStrategy extends RootDetectionStrategy {
 
     private String mFilename;
 
-    public BinaryFilesStrategy(Context context, String filename) {
-        super(context);
+    public BinaryFilesStrategy(Context context, String filename, RootDetectionOption option,
+                               RootDetectionOptionListener listener) {
+        super(context, option, listener);
         mFilename = filename;
     }
 
@@ -40,10 +42,10 @@ public abstract class BinaryFilesStrategy extends RootDetectionStrategy {
         for (String suPath : suPathsArray) {
             File suFile = new File(suPath + mFilename);
             if (suFile.exists()) {
-                return true;
+                return deliverResult(true);
             }
         }
 
-        return false;
+        return deliverResult(false);
     }
 }

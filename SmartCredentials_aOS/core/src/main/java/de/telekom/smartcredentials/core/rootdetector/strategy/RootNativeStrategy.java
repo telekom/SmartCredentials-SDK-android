@@ -20,20 +20,21 @@ import android.content.Context;
 
 import de.telekom.smartcredentials.core.rootdetector.RootDetectionConstantsSet;
 import de.telekom.smartcredentials.core.rootdetector.RootDetectionNative;
+import de.telekom.smartcredentials.core.rootdetector.RootDetectionOption;
 
 import static de.telekom.smartcredentials.core.rootdetector.RootDetectionConstants.convertArrayListToStringArray;
 import static de.telekom.smartcredentials.core.rootdetector.RootDetectionConstants.getJSONConstantsList;
 
 public class RootNativeStrategy extends RootDetectionStrategy {
 
-    public RootNativeStrategy(Context context) {
-        super(context);
+    public RootNativeStrategy(Context context, RootDetectionOptionListener listener) {
+        super(context, RootDetectionOption.ROOT_NATIVE_EXISTS, listener);
     }
 
     @Override
     public boolean check() {
         if (!canLoadNativeLibrary()) {
-            return false;
+            return deliverResult(false);
         }
 
         String[] suPathsArray = convertArrayListToStringArray(getJSONConstantsList(mContext, RootDetectionConstantsSet.SU_PATHS));
@@ -45,7 +46,7 @@ public class RootNativeStrategy extends RootDetectionStrategy {
         }
 
         RootDetectionNative rootDetectionNative = new RootDetectionNative();
-        return rootDetectionNative.checkRooted(paths) > 0;
+        return deliverResult(rootDetectionNative.checkRooted(paths) > 0);
     }
 
     private boolean canLoadNativeLibrary() {

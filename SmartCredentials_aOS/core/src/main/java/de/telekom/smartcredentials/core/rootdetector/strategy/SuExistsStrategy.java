@@ -16,6 +16,8 @@
 
 package de.telekom.smartcredentials.core.rootdetector.strategy;
 
+import static de.telekom.smartcredentials.core.rootdetector.RootDetectionConstants.getJSONConstantsList;
+
 import android.content.Context;
 
 import java.io.BufferedReader;
@@ -25,13 +27,12 @@ import java.nio.charset.Charset;
 
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
 import de.telekom.smartcredentials.core.rootdetector.RootDetectionConstantsSet;
-
-import static de.telekom.smartcredentials.core.rootdetector.RootDetectionConstants.getJSONConstantsList;
+import de.telekom.smartcredentials.core.rootdetector.RootDetectionOption;
 
 public class SuExistsStrategy extends RootDetectionStrategy {
 
-    public SuExistsStrategy(Context context) {
-        super(context);
+    public SuExistsStrategy(Context context, RootDetectionOptionListener listener) {
+        super(context, RootDetectionOption.SU_EXISTS, listener);
     }
 
     @Override
@@ -46,9 +47,9 @@ public class SuExistsStrategy extends RootDetectionStrategy {
             process = Runtime.getRuntime().exec(new String[]{whichFileName, superUserFileName});
             in = new BufferedReader(new InputStreamReader(process.getInputStream(), Charset.defaultCharset()));
             String line = in.readLine();
-            return line != null;
+            return deliverResult(line != null);
         } catch (IOException ex) {
-            return false;
+            return deliverResult(false);
         } finally {
             if (process != null) {
                 process.destroy();

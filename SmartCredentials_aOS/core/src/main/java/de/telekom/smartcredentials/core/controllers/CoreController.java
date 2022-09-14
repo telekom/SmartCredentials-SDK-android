@@ -49,6 +49,7 @@ import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsResponse;
 import de.telekom.smartcredentials.core.rootdetector.RootDetectionApi;
 import de.telekom.smartcredentials.core.rootdetector.RootDetectionOption;
+import de.telekom.smartcredentials.core.rootdetector.strategy.RootDetectionOptionListener;
 import de.telekom.smartcredentials.core.storage.SecurityCompromisedSubject;
 
 /**
@@ -81,6 +82,12 @@ public class CoreController extends SecurityCompromisedSubject implements CoreAp
     public SmartCredentialsApiResponse<Boolean> isDeviceRooted() {
         ApiLoggerResolver.logMethodAccess(TAG, "isDeviceRooted");
         return new SmartCredentialsResponse<>(mRootDetectionApi.isSecurityCompromised(mRootDetectionOptions));
+    }
+
+    @Override
+    public SmartCredentialsApiResponse<Boolean> isDeviceRooted(RootDetectionOptionListener listener) {
+        ApiLoggerResolver.logMethodAccess(TAG, "isDeviceRooted");
+        return new SmartCredentialsResponse<>(mRootDetectionApi.isSecurityCompromised(mRootDetectionOptions, listener));
     }
 
     /**

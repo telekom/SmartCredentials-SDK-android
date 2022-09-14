@@ -30,6 +30,7 @@ import de.telekom.smartcredentials.core.rootdetector.strategy.DangerousSystemPro
 import de.telekom.smartcredentials.core.rootdetector.strategy.DefaultRootDetectionStrategy;
 import de.telekom.smartcredentials.core.rootdetector.strategy.DetectTestKeysStrategy;
 import de.telekom.smartcredentials.core.rootdetector.strategy.ReadWritePermissionsChangedStrategy;
+import de.telekom.smartcredentials.core.rootdetector.strategy.RootDetectionOptionListener;
 import de.telekom.smartcredentials.core.rootdetector.strategy.RootDetectionStrategy;
 import de.telekom.smartcredentials.core.rootdetector.strategy.RootManagementApplicationStrategy;
 import de.telekom.smartcredentials.core.rootdetector.strategy.RootNativeStrategy;
@@ -48,36 +49,46 @@ public class RootDetectionController implements RootDetectionApi {
     public boolean isSecurityCompromised(Set<RootDetectionOption> rootDetectionOptions) {
         boolean isDeviceRooted = false;
         for (RootDetectionOption option : rootDetectionOptions) {
-            isDeviceRooted |= provideRootDetectionStrategy(mContext, option).check();
+            isDeviceRooted |= provideRootDetectionStrategy(mContext, option, null).check();
+        }
+        return isDeviceRooted;
+    }
+
+    @Override
+    public boolean isSecurityCompromised(Set<RootDetectionOption> rootDetectionOptions, RootDetectionOptionListener listener) {
+        boolean isDeviceRooted = false;
+        for (RootDetectionOption option : rootDetectionOptions) {
+            isDeviceRooted |= provideRootDetectionStrategy(mContext, option, listener).check();
         }
         return isDeviceRooted;
     }
 
     @NonNull
-    @Contract("_, _ -> new")
+    @Contract("_, _, _ -> new")
     private RootDetectionStrategy provideRootDetectionStrategy(Context context,
-                                                               @NonNull RootDetectionOption option) {
+                                                               @NonNull RootDetectionOption option,
+                                                               RootDetectionOptionListener listener) {
         switch (option) {
             case CHECK_BUSY_BOX_BINARY_FILES:
-                return new BusyBoxBinaryFilesStrategy(context);
+                return new BusyBoxBinaryFilesStrategy(context, listener);
             case CHECK_SUPER_USER_BINARY_FILES:
-                return new SuperUserBinaryFilesStrategy(context);
+                return new SuperUserBinaryFilesStrategy(context, listener);
             case DANGEROUS_APPLICATIONS_EXISTS:
-                return new DangerousApplicationsStrategy(context);
+                return new DangerousApplicationsStrategy(context, listener);
             case DANGEROUS_SYSTEM_PROPERTIES_EXISTS:
-                return new DangerousSystemPropertiesStrategy(context);
+                return new DangerousSystemPropertiesStrategy(context, listener);
             case DETECT_TEST_KEYS:
-                return new DetectTestKeysStrategy(context);
+                return new DetectTestKeysStrategy(context, listener);
             case READ_WRITE_PERMISSIONS_CHANGED:
-                return new ReadWritePermissionsChangedStrategy(context);
+                return new ReadWritePermissionsChangedStrategy(context, listener);
             case ROOT_MANAGEMENT_APPLICATIONS_EXISTS:
-                return new RootManagementApplicationStrategy(context);
+                return new RootManagementApplicationStrategy(context, listener);
             case ROOT_NATIVE_EXISTS:
-                return new RootNativeStrategy(context);
+                return new RootNativeStrategy(context, listener);
             case SU_EXISTS:
-                return new SuExistsStrategy(context);
+                return new SuExistsStrategy(context, listener);
             default:
-                return new DefaultRootDetectionStrategy(context);
+                return new DefaultRootDetectionStrategy(context, listener);
         }
     }
 }

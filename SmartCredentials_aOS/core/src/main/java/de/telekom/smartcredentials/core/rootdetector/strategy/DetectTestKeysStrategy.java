@@ -19,19 +19,20 @@ package de.telekom.smartcredentials.core.rootdetector.strategy;
 import android.content.Context;
 
 import de.telekom.smartcredentials.core.rootdetector.RootDetectionConstantsSet;
+import de.telekom.smartcredentials.core.rootdetector.RootDetectionOption;
 
 import static de.telekom.smartcredentials.core.rootdetector.RootDetectionConstants.getJSONConstantsList;
 
 public class DetectTestKeysStrategy extends RootDetectionStrategy {
 
-    public DetectTestKeysStrategy(Context context) {
-        super(context);
+    public DetectTestKeysStrategy(Context context, RootDetectionOptionListener listener) {
+        super(context, RootDetectionOption.DETECT_TEST_KEYS, listener);
     }
 
     @Override
     public boolean check() {
         String testKeysTag = getJSONConstantsList(mContext, RootDetectionConstantsSet.TEST_KEYS_TAG).get(0);
         String buildTags = android.os.Build.TAGS;
-        return buildTags != null && buildTags.contains(testKeysTag);
+        return deliverResult(buildTags != null && buildTags.contains(testKeysTag));
     }
 }

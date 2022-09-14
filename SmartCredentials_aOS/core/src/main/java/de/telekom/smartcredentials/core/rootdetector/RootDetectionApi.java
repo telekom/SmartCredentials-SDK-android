@@ -19,7 +19,12 @@ package de.telekom.smartcredentials.core.rootdetector;
 
 import java.util.Set;
 
+import de.telekom.smartcredentials.core.rootdetector.strategy.RootDetectionOptionListener;
+
 public interface RootDetectionApi {
 
     boolean isSecurityCompromised(Set<RootDetectionOption> rootDetectionOptions);
+
+    boolean isSecurityCompromised(Set<RootDetectionOption> rootDetectionOptions,
+                                  RootDetectionOptionListener listener);
 }

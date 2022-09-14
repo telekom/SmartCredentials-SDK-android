@@ -19,12 +19,14 @@ package de.telekom.smartcredentials.core.rootdetector.strategy;
 import android.content.Context;
 
 import de.telekom.smartcredentials.core.rootdetector.RootDetectionConstantsSet;
+import de.telekom.smartcredentials.core.rootdetector.RootDetectionOption;
 
 import static de.telekom.smartcredentials.core.rootdetector.RootDetectionConstants.getJSONConstantsList;
 
 public class SuperUserBinaryFilesStrategy extends BinaryFilesStrategy {
 
-    public SuperUserBinaryFilesStrategy(Context context) {
-        super(context, getJSONConstantsList(context, RootDetectionConstantsSet.SUPER_USER_FILENAME).get(0));
+    public SuperUserBinaryFilesStrategy(Context context, RootDetectionOptionListener listener) {
+        super(context, getJSONConstantsList(context, RootDetectionConstantsSet.SUPER_USER_FILENAME).get(0),
+                RootDetectionOption.CHECK_SUPER_USER_BINARY_FILES, listener);
     }
 }

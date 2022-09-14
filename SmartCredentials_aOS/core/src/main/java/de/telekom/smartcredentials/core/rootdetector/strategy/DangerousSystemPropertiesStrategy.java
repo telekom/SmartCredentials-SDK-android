@@ -22,14 +22,15 @@ import java.util.Map;
 
 import de.telekom.smartcredentials.core.rootdetector.CommandStreamScanner;
 import de.telekom.smartcredentials.core.rootdetector.RootDetectionConstantsSet;
+import de.telekom.smartcredentials.core.rootdetector.RootDetectionOption;
 
 import static de.telekom.smartcredentials.core.rootdetector.RootDetectionConstants.getJSONConstantsList;
 import static de.telekom.smartcredentials.core.rootdetector.RootDetectionConstants.getJSONConstantsMap;
 
 public class DangerousSystemPropertiesStrategy extends RootDetectionStrategy {
 
-    public DangerousSystemPropertiesStrategy(Context context) {
-        super(context);
+    public DangerousSystemPropertiesStrategy(Context context, RootDetectionOptionListener listener) {
+        super(context, RootDetectionOption.DANGEROUS_SYSTEM_PROPERTIES_EXISTS, listener);
     }
 
     @Override
@@ -37,7 +38,7 @@ public class DangerousSystemPropertiesStrategy extends RootDetectionStrategy {
         String systemPropsCommand = getJSONConstantsList(mContext, RootDetectionConstantsSet.SYSTEM_PROPS_COMMAND).get(0);
         String[] systemProperties = CommandStreamScanner.getCommand(systemPropsCommand);
         if (systemProperties == null || systemProperties.length == 0) {
-            return false;
+            return deliverResult(false);
         }
 
         Map<String, String> dangerousSystemPropsMap =
@@ -47,12 +48,12 @@ public class DangerousSystemPropertiesStrategy extends RootDetectionStrategy {
                 if (systemProperty.contains(dangerousSystemPropertyEntry.getKey())) {
                     String dangerousSystemPropertyValue = "[" + dangerousSystemPropertyEntry.getValue() + "]";
                     if (systemProperty.contains(dangerousSystemPropertyValue)) {
-                        return true;
+                        return deliverResult(true);
                     }
                 }
             }
         }
 
-        return false;
+        return deliverResult(false);
     }
 }

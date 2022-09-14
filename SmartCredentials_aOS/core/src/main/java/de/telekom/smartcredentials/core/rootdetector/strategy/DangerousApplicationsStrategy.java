@@ -21,18 +21,19 @@ import android.content.Context;
 import java.util.List;
 
 import de.telekom.smartcredentials.core.rootdetector.RootDetectionConstantsSet;
+import de.telekom.smartcredentials.core.rootdetector.RootDetectionOption;
 
 import static de.telekom.smartcredentials.core.rootdetector.RootDetectionConstants.getJSONConstantsList;
 
 public class DangerousApplicationsStrategy extends RootDetectionStrategy {
 
-    public DangerousApplicationsStrategy(Context context) {
-        super(context);
+    public DangerousApplicationsStrategy(Context context, RootDetectionOptionListener listener) {
+        super(context, RootDetectionOption.DANGEROUS_APPLICATIONS_EXISTS, listener);
     }
 
     @Override
     public boolean check() {
         List<String> packages = getJSONConstantsList(mContext, RootDetectionConstantsSet.DANGEROUS_APPLICATIONS_PACKAGES);
-        return existsPackageInstalled(packages);
+        return deliverResult(existsPackageInstalled(packages));
     }
 }

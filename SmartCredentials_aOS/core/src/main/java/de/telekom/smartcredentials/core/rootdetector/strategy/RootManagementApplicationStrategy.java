@@ -21,19 +21,20 @@ import android.content.Context;
 import java.util.List;
 
 import de.telekom.smartcredentials.core.rootdetector.RootDetectionConstantsSet;
+import de.telekom.smartcredentials.core.rootdetector.RootDetectionOption;
 
 import static de.telekom.smartcredentials.core.rootdetector.RootDetectionConstants.getJSONConstantsList;
 
 public class RootManagementApplicationStrategy extends RootDetectionStrategy {
 
-    public RootManagementApplicationStrategy(Context context) {
-        super(context);
+    public RootManagementApplicationStrategy(Context context, RootDetectionOptionListener listener) {
+        super(context, RootDetectionOption.ROOT_MANAGEMENT_APPLICATIONS_EXISTS, listener);
     }
 
     @Override
     public boolean check() {
         List<String> generalRootApplicationsPackagesList =
                 getJSONConstantsList(mContext, RootDetectionConstantsSet.GENERAL_ROOT_APPLICATIONS_PACKAGES);
-        return existsPackageInstalled(generalRootApplicationsPackagesList);
+        return deliverResult(existsPackageInstalled(generalRootApplicationsPackagesList));
     }
 }

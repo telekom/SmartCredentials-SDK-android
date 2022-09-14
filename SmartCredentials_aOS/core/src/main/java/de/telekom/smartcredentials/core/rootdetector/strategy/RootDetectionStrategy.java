@@ -21,17 +21,32 @@ import android.content.pm.PackageManager;
 
 import java.util.List;
 
+import de.telekom.smartcredentials.core.rootdetector.RootDetectionOption;
+
 public abstract class RootDetectionStrategy {
 
     protected static final String TAG = "RootDetectionStrategy";
 
     protected Context mContext;
+    protected RootDetectionOption mOption;
+    protected RootDetectionOptionListener mListener;
 
-    public RootDetectionStrategy(Context context) {
+    public RootDetectionStrategy(Context context, RootDetectionOption option,
+                                 RootDetectionOptionListener listener) {
         mContext = context;
+        mOption = option;
+        mListener = listener;
     }
 
     public abstract boolean check();
+
+    public boolean deliverResult(boolean result) {
+        if (mListener != null) {
+            mListener.onOptionChecked(mOption, result);
+        }
+
+        return result;
+    }
 
     /**
      * Check if one or more packages from list is installed in system.
@@ -51,6 +66,6 @@ public abstract class RootDetectionStrategy {
                 return false;
             }
         }
-        return result;
+        return deliverResult(result);
     }
 }
