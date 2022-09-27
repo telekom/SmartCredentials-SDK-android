@@ -8,8 +8,8 @@ android {
         applicationId "de.telekom.camerademo"
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 3
-        versionName "1.2"
+        versionCode 4
+        versionName "2.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -36,6 +36,10 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
 
+    buildFeatures {
+        viewBinding true
+    }
+
     applicationVariants.all { variant ->
         variant.outputs.all {
             outputFileName = "camera_${archivesBaseName}_${variant.name}_${defaultConfig.versionName}.apk"
@@ -45,14 +49,22 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'com.airbnb.android:lottie:5.2.0'
     implementation 'com.jakewharton.timber:timber:5.0.1'
 
-    implementation("de.telekom.smartcredentials:core:${smartCredentialsVersion}")
-    implementation("de.telekom.smartcredentials:camera:${smartCredentialsVersion}")
+    def camerax_version = "1.2.0-beta02"
+    implementation "androidx.camera:camera-core:${camerax_version}"
+    implementation "androidx.camera:camera-camera2:${camerax_version}"
+    implementation "androidx.camera:camera-lifecycle:${camerax_version}"
+    implementation "androidx.camera:camera-video:${camerax_version}"
+
+    implementation "androidx.camera:camera-view:${camerax_version}"
+    implementation "androidx.camera:camera-extensions:${camerax_version}"
+
+    implementation 'com.google.mlkit:barcode-scanning:17.0.2'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
