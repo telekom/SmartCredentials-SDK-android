@@ -25,4 +25,7 @@ public abstract class ScannerCallback extends BaseScannerCallback<ScannerPluginU
     public static final String TAG = "ScannerCallback";
 
     public abstract void onDetected(List<String> detectedValues);
+
+    //TODO: find a better naming
+    public abstract void onSomethingHappened(Exception e);
 }

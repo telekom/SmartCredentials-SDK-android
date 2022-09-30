@@ -17,6 +17,7 @@
 package de.telekom.smartcredentials.core.api;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import de.telekom.smartcredentials.core.camera.CameraScannerLayout;
@@ -70,5 +71,5 @@ public interface OtpApi {
      * or {@link RootedThrowable} if device is rooted
      */
     @SuppressWarnings("unused")
-    SmartCredentialsApiResponse<CameraScannerLayout> importOTPItemViaQRForId(@NonNull Context context, @NonNull String itemId, OTPImporterCallback callback);
+    <V> SmartCredentialsApiResponse<CameraScannerLayout<V>> importOTPItemViaQRForId(@NonNull Context context, @NonNull String itemId, OTPImporterCallback callback);
 }

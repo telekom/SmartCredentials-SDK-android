@@ -51,7 +51,7 @@ public class OtpController implements OtpApi {
 
     private final CoreController mCoreController;
     private final SecurityApi mSecurityApi;
-    private final CameraApi mCameraApi;
+    private final CameraApi<CameraScannerLayout> mCameraApi;
     private final StorageApi mStorageApi;
     private final ScannerPluginCallbackForOTP mScannerPluginCallbackForOTP;
     private final TaskManager mTaskManager;
@@ -59,7 +59,7 @@ public class OtpController implements OtpApi {
     public OtpController(@NonNull final CoreController coreController,
                          @NonNull final SecurityApi securityApi,
                          @NonNull final StorageApi storageApi,
-                         @NonNull final CameraApi cameraApi,
+                         @NonNull final CameraApi<CameraScannerLayout> cameraApi,
                          @NonNull final ScannerPluginCallbackForOTP scannerPluginCallbackForOTP,
                          @NonNull final TaskManager taskManager) {
         mCoreController = coreController;
@@ -112,8 +112,8 @@ public class OtpController implements OtpApi {
 
         mScannerPluginCallbackForOTP.init(itemId, mCoreController.getUserId(), pluginCallback);
 
-        CameraScannerLayout cameraScannerLayout = mCameraApi
-                .getBarcodeScannerView(context, mScannerPluginCallbackForOTP, BarcodeType.BARCODE_2D_QR_CODE).getData();
+        CameraScannerLayout cameraScannerLayout = mCameraApi.getBarcodeScannerView(context,
+                mScannerPluginCallbackForOTP, BarcodeType.BARCODE_2D_QR_CODE).getData();
         return new SmartCredentialsResponse<>(cameraScannerLayout);
     }
 

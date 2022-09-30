@@ -16,27 +16,11 @@
 
 package de.telekom.smartcredentials.core.camera;
 
-import android.content.Context;
-import android.widget.LinearLayout;
+import androidx.lifecycle.LifecycleOwner;
 
-public abstract class CameraScannerLayout extends LinearLayout {
+public interface CameraScannerLayout<V> {
 
-    public CameraScannerLayout(Context context) {
-        super(context);
-    }
+    V getView();
 
-    /**
-     * Call this when the scanner - along with the camera - needs to be started
-     */
-    public abstract void startScanner();
-
-    /**
-     * Call this in onPause
-     */
-    public abstract void stopScanner();
-
-    /**
-     * Call this in onDestroy
-     */
-    public abstract void releaseCamera();
+    void startCamera(LifecycleOwner lifecycleOwner);
 }

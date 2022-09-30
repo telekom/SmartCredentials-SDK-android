@@ -17,103 +17,84 @@
 package de.telekom.smartcredentials.camera.barcode;
 
 import android.content.Context;
-import android.graphics.Rect;
+import android.media.Image;
 
-import com.google.android.gms.vision.Detector;
+import androidx.camera.core.CameraSelector;
+import androidx.camera.core.ExperimentalGetImage;
+import androidx.camera.core.ImageAnalysis;
+import androidx.camera.core.Preview;
+import androidx.camera.lifecycle.ProcessCameraProvider;
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.LifecycleOwner;
 
-import de.telekom.smartcredentials.camera.R;
-import de.telekom.smartcredentials.camera.barcode.barcodetrackers.BarcodeTrackerFactory;
-import de.telekom.smartcredentials.camera.barcode.di.BarcodeObjectCreator;
-import de.telekom.smartcredentials.camera.barcode.presenters.BarcodeCameraScannerPresenter;
-import de.telekom.smartcredentials.camera.barcode.presenters.BarcodeCameraScannerView;
-import de.telekom.smartcredentials.camera.views.CameraScannerLayoutImpl;
-import de.telekom.smartcredentials.camera.views.DetectedBlockView;
-import de.telekom.smartcredentials.camera.views.presenters.CameraScannerPresenter;
-import de.telekom.smartcredentials.core.camera.ScannerPluginUnavailable;
-import de.telekom.smartcredentials.core.plugins.callbacks.ScannerPluginCallback;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.mlkit.vision.barcode.BarcodeScanner;
+import com.google.mlkit.vision.barcode.BarcodeScanning;
+import com.google.mlkit.vision.barcode.common.Barcode;
+import com.google.mlkit.vision.common.InputImage;
 
-public class BarcodeCameraScannerLayoutImpl extends CameraScannerLayoutImpl implements BarcodeCameraScannerView, BarcodeCameraScannerLayout {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 
-    BarcodeTrackerFactory mBarcodeTrackerFactory;
-    BarcodeCameraScannerPresenter mBarcodeCameraScannerPresenter;
-    Detector mDetector;
-    Detector.Processor mProcessor;
-    private int mBarcodeFormat;
-    private BarcodeBlockView mBarcodeBlockView;
+import de.telekom.smartcredentials.camera.camera.CameraScannerLayoutImpl;
+import de.telekom.smartcredentials.core.camera.ScannerCallback;
 
-    public static BarcodeCameraScannerLayoutImpl getNewInstance(Context context, ScannerPluginCallback<ScannerPluginUnavailable> pluginCallback, int barcodeFormat) {
-        return new BarcodeCameraScannerLayoutImpl(context, pluginCallback, barcodeFormat);
+
+public class BarcodeCameraScannerLayoutImpl extends CameraScannerLayoutImpl {
+
+    public BarcodeCameraScannerLayoutImpl(Context context, ScannerCallback scannerCallback) {
+        super(context, scannerCallback);
     }
 
-    public BarcodeCameraScannerLayoutImpl(Context context) {
-        super(context, null);
-    }
-
-    private BarcodeCameraScannerLayoutImpl(Context context, ScannerPluginCallback<ScannerPluginUnavailable> pluginCallback, int barcodeFormat) {
-        super(context, pluginCallback);
-        mBarcodeFormat = barcodeFormat;
-    }
-
+    @ExperimentalGetImage
     @Override
-    public int getCustomLayoutResource() {
-        return R.layout.sc_layout_barcode_scanner;
+    public void startCamera(LifecycleOwner lifecycleOwner) {
+        ListenableFuture<ProcessCameraProvider> future = ProcessCameraProvider.getInstance(mContext);
+        future.addListener(() -> {
+            try {
+                ProcessCameraProvider cameraProvider = future.get();
+                bindPreview(cameraProvider, lifecycleOwner);
+            } catch (ExecutionException | InterruptedException e) {
+                //TODO: handle use-case
+                e.printStackTrace();
+            }
+        }, ContextCompat.getMainExecutor(mContext));
     }
 
-    @Override
-    public void setupCustomDetectedBlockView() {
-        mBarcodeBlockView = mCustomDetectedBlockView.findViewById(R.id.sc_view_barcode_block);
-    }
+    @ExperimentalGetImage
+    private void bindPreview(ProcessCameraProvider cameraProvider, LifecycleOwner lifecycleOwner) {
+        Preview preview = new Preview.Builder()
+                .build();
+        CameraSelector cameraSelector = new CameraSelector.Builder()
+                .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                .build();
+        ImageAnalysis imageAnalysis = new ImageAnalysis.Builder()
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .build();
+        imageAnalysis.setAnalyzer(Executors.newSingleThreadExecutor(), imageProxy -> {
+            Image mediaImage = imageProxy.getImage();
 
-    @Override
-    public void assembleView() {
-        BarcodeObjectCreator objectCreator = new BarcodeObjectCreator(mContext, mBarcodeFormat, mBarcodeBlockView);
-        mBarcodeTrackerFactory = objectCreator.provideBarcodeTrackerFactory();
-        mBarcodeCameraScannerPresenter = objectCreator.provideBarcodeScannerPresenter();
-        mDetector = objectCreator.provideDetector();
-        mProcessor = objectCreator.provideProcessor();
-    }
-
-    @Override
-    public void informPresenterViewIsReady() {
-        mBarcodeCameraScannerPresenter.viewReady(this);
-    }
-
-    @Override
-    public CameraScannerPresenter getPresenter() {
-        return mBarcodeCameraScannerPresenter;
-    }
-
-    @Override
-    public Detector getDetector() {
-        return mDetector;
-    }
-
-    @Override
-    public Detector.Processor getProcessor() {
-        return mProcessor;
-    }
-
-    @Override
-    protected DetectedBlockView getDetectedBlockView() {
-        return mBarcodeBlockView;
-    }
-
-    @Override
-    public void setBarcodeTrackerFactoryListener() {
-        mBarcodeTrackerFactory.setListener(mBarcodeCameraScannerPresenter);
-    }
-
-    @Override
-    public void startScanner(Rect rect) {
-        super.startScanner(rect);
-    }
-
-    @Override
-    public void stopScanner() {
-        super.stopScanner();
-
-        if (mBarcodeTrackerFactory != null) {
-            mBarcodeTrackerFactory.setListener(null);
-        }
+            if (mediaImage != null) {
+                InputImage image = InputImage.fromMediaImage(mediaImage, imageProxy.getImageInfo().getRotationDegrees());
+                BarcodeScanner scanner = BarcodeScanning.getClient();
+                scanner.process(image)
+                        .addOnSuccessListener(barcodes -> {
+                            if (!barcodes.isEmpty()) {
+                                List<String> barcodesList = new ArrayList<>();
+                                for (Barcode barcode : barcodes) {
+                                    barcodesList.add(barcode.getDisplayValue());
+                                }
+                                mScannerCallback.onDetected(barcodesList);
+                            }
+                        })
+                        .addOnFailureListener(mScannerCallback::onSomethingHappened)
+                        .addOnCompleteListener(barcodes -> imageProxy.close());
+            }
+        });
+        preview.setSurfaceProvider(mPreviewView.getSurfaceProvider());
+        cameraProvider.unbindAll();
+        cameraProvider.bindToLifecycle(lifecycleOwner, cameraSelector, preview, imageAnalysis);
     }
 }

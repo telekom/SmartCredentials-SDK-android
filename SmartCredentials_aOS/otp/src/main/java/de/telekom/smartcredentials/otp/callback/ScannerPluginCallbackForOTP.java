@@ -98,6 +98,11 @@ public class ScannerPluginCallbackForOTP extends ScannerCallback {
     }
 
     @Override
+    public void onSomethingHappened(Exception e) {
+
+    }
+
+    @Override
     public void onInitialized() {
         ApiLoggerResolver.logCallbackMethod(TAG, OTPScannerPluginCallback.TAG, "QROTPScanner: onScannerStarted");
         mOTPScannerPluginCallback.onScannerStarted();
