@@ -17,9 +17,11 @@
 package de.telekom.smartcredentials.core.api;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
 
-import de.telekom.smartcredentials.core.camera.CameraScannerLayout;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
+
+import de.telekom.smartcredentials.core.camera.SurfaceContainer;
 import de.telekom.smartcredentials.core.model.otp.OTPType;
 import de.telekom.smartcredentials.core.otp.HOTPHandler;
 import de.telekom.smartcredentials.core.otp.HOTPHandlerCallback;
@@ -32,7 +34,7 @@ import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 /**
  * Created by Lucian Iacob on November 12, 2018.
  */
-public interface OtpApi {
+public interface OtpApi<S> {
 
     /**
      * Method used to get a HOTP handler that will generate OTPs based on the item id received
@@ -66,9 +68,13 @@ public interface OtpApi {
      *
      * @param itemId   Id that will be set for the newly created item
      * @param callback {@link OTPImporterCallback} for retrieving success or failure events
-     * @return {@link SmartCredentialsApiResponse} containing a {@link CameraScannerLayout} if response was successful,
+     * @return {@link SmartCredentialsApiResponse} containing a {@link SurfaceContainer} if response was successful,
      * or {@link RootedThrowable} if device is rooted
      */
     @SuppressWarnings("unused")
-    SmartCredentialsApiResponse<CameraScannerLayout> importOTPItemViaQRForId(@NonNull Context context, @NonNull String itemId, OTPImporterCallback callback);
+    SmartCredentialsApiResponse<Boolean> importOTPItemViaQRForId(@NonNull Context context,
+                                                                 SurfaceContainer<S> surfaceContainer,
+                                                                 LifecycleOwner lifecycleOwner,
+                                                                 @NonNull String itemId,
+                                                                 OTPImporterCallback callback);
 }

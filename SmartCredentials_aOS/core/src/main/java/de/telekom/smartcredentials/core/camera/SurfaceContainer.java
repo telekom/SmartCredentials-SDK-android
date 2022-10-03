@@ -14,11 +14,17 @@
  * limitations under the License.
  */
 
-package de.telekom.smartcredentials.camera.barcode.presenters;
+package de.telekom.smartcredentials.core.camera;
 
-import de.telekom.smartcredentials.camera.views.presenters.CameraScannerView;
+public class SurfaceContainer<SH> {
 
-public interface BarcodeCameraScannerView extends CameraScannerView {
+    private final SH mSurfaceHolder;
 
-    void setBarcodeTrackerFactoryListener();
+    public SurfaceContainer(SH surfaceHolder) {
+        this.mSurfaceHolder = surfaceHolder;
+    }
+
+    public SH getSurfaceHolder() {
+        return mSurfaceHolder;
+    }
 }

@@ -16,9 +16,17 @@
 
 package de.telekom.smartcredentials.camera.ocr;
 
-import java.util.List;
+import de.telekom.smartcredentials.camera.camera.CameraScanner;
+import de.telekom.smartcredentials.core.camera.ScannerCallback;
 
-public interface TextParser {
+public class OcrCameraScanner extends CameraScanner {
 
-    List<String> parse(List<String> scannedValues);
+    public OcrCameraScanner(ScannerCallback callback) {
+        super(callback);
+    }
+
+    @Override
+    public void addUseCases() {
+
+    }
 }

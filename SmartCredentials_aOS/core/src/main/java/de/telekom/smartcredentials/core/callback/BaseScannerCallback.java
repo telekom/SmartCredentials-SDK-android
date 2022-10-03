@@ -20,6 +20,6 @@ public abstract class BaseScannerCallback<T> {
 
     public abstract void onInitialized();
 
-    public abstract void onScannerUnavailable(T errorMessage);
+    public abstract void onScannerUnavailable(T error);
 
 }

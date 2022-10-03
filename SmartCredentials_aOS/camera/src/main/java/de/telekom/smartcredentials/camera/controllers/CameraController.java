@@ -17,25 +17,27 @@
 package de.telekom.smartcredentials.camera.controllers;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
 
-import de.telekom.smartcredentials.camera.barcode.BarcodeCameraScannerLayoutImpl;
-import de.telekom.smartcredentials.camera.callback.PluginCallbackCameraConverter;
-import de.telekom.smartcredentials.camera.ocr.OcrCameraScannerLayoutImpl;
+import androidx.annotation.NonNull;
+import androidx.camera.core.ExperimentalGetImage;
+import androidx.camera.view.PreviewView;
+import androidx.lifecycle.LifecycleOwner;
+
+import de.telekom.smartcredentials.camera.barcode.BarcodeCameraScanner;
+import de.telekom.smartcredentials.camera.ocr.OcrCameraScanner;
 import de.telekom.smartcredentials.core.api.CameraApi;
 import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsFeatureSet;
 import de.telekom.smartcredentials.core.camera.BarcodeType;
-import de.telekom.smartcredentials.core.camera.CameraScannerLayout;
 import de.telekom.smartcredentials.core.camera.ScannerCallback;
+import de.telekom.smartcredentials.core.camera.SurfaceContainer;
 import de.telekom.smartcredentials.core.controllers.CoreController;
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
-import de.telekom.smartcredentials.core.plugins.callbacks.ScannerPluginCallback;
 import de.telekom.smartcredentials.core.responses.FeatureNotSupportedThrowable;
 import de.telekom.smartcredentials.core.responses.RootedThrowable;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsResponse;
 
-public class CameraController implements CameraApi {
+public class CameraController implements CameraApi<PreviewView> {
 
     private final CoreController mCoreController;
 
@@ -46,10 +48,13 @@ public class CameraController implements CameraApi {
     /**
      * {@inheritDoc}
      */
+    @ExperimentalGetImage
     @Override
-    public SmartCredentialsApiResponse<CameraScannerLayout> getBarcodeScannerView(@NonNull Context context,
-                                                                                  @NonNull ScannerCallback callback,
-                                                                                  BarcodeType barcodeType) {
+    public SmartCredentialsApiResponse<Boolean> getBarcodeScannerView(@NonNull Context context,
+                                                                      SurfaceContainer<PreviewView> surfaceContainer,
+                                                                      LifecycleOwner lifecycleOwner,
+                                                                      @NonNull ScannerCallback callback,
+                                                                      BarcodeType barcodeType) {
         ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "getBarcodeScannerView");
         if (mCoreController.isSecurityCompromised()) {
             mCoreController.handleSecurityCompromised();
@@ -64,18 +69,19 @@ public class CameraController implements CameraApi {
         int barcodeFormat = barcodeType == null
                 ? BarcodeType.BARCODE_ALL_FORMATS.getFormat()
                 : barcodeType.getFormat();
-        ScannerPluginCallback pluginCallback = PluginCallbackCameraConverter
-                .convertToDomainPluginCallback(callback, getClass().getSimpleName());
-        CameraScannerLayout barcodeScanner = BarcodeCameraScannerLayoutImpl.getNewInstance(context, pluginCallback, barcodeFormat);
-        return new SmartCredentialsResponse<>(barcodeScanner);
+        new BarcodeCameraScanner(callback)
+                .startCamera(context, surfaceContainer.getSurfaceHolder(), lifecycleOwner);
+        return new SmartCredentialsResponse<>(true);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public SmartCredentialsApiResponse<CameraScannerLayout> getOcrScannerView(@NonNull Context context,
-                                                                              @NonNull ScannerCallback callback) {
+    public SmartCredentialsApiResponse<Boolean> getOcrScannerView(@NonNull Context context,
+                                                                  SurfaceContainer<PreviewView> surfaceContainer,
+                                                                  LifecycleOwner lifecycleOwner,
+                                                                  @NonNull ScannerCallback callback) {
         ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "getBarcodeScannerView");
         if (mCoreController.isSecurityCompromised()) {
             mCoreController.handleSecurityCompromised();
@@ -87,10 +93,8 @@ public class CameraController implements CameraApi {
             return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
         }
 
-        ScannerPluginCallback pluginCallback = PluginCallbackCameraConverter
-                .convertToDomainPluginCallback(callback, getClass().getSimpleName());
-
-        CameraScannerLayout cameraScannerLayout = OcrCameraScannerLayoutImpl.getNewInstance(context, pluginCallback);
-        return new SmartCredentialsResponse<>(cameraScannerLayout);
+        new OcrCameraScanner(callback)
+                .startCamera(context, surfaceContainer.getSurfaceHolder(), lifecycleOwner);
+        return new SmartCredentialsResponse<>(true);
     }
 }

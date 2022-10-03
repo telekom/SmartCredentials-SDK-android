@@ -14,27 +14,24 @@
  * limitations under the License.
  */
 
-package de.telekom.smartcredentials.camera.views.presenters;
+package de.telekom.smartcredentials.camera.barcode;
 
-import android.graphics.Rect;
+import androidx.camera.core.ExperimentalGetImage;
 
-public interface CameraScannerView {
+import de.telekom.smartcredentials.camera.camera.CameraScanner;
+import de.telekom.smartcredentials.camera.usecases.BarcodeImageAnalysis;
+import de.telekom.smartcredentials.core.camera.ScannerCallback;
 
-    boolean isGooglePlayServicesAvailable();
 
-    void startCameraSource();
+public class BarcodeCameraScanner extends CameraScanner {
 
-    boolean hasLowStorage();
+    public BarcodeCameraScanner(ScannerCallback callback) {
+        super(callback);
+    }
 
-    boolean hasCameraPermission();
-
-    void initCameraSource();
-
-    void releaseCamera();
-
-    void stopCamera();
-
-    void prepareCameraStart();
-
-    Rect getRect();
+    @ExperimentalGetImage
+    @Override
+    public void addUseCases() {
+        mUseCaseGroupBuilder.addUseCase(new BarcodeImageAnalysis().create(mCallback));
+    }
 }
