@@ -28,6 +28,7 @@ import de.telekom.smartcredentials.camera.ocr.OcrCameraScanner;
 import de.telekom.smartcredentials.core.api.CameraApi;
 import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsFeatureSet;
 import de.telekom.smartcredentials.core.camera.BarcodeType;
+import de.telekom.smartcredentials.core.camera.OcrListener;
 import de.telekom.smartcredentials.core.camera.ScannerCallback;
 import de.telekom.smartcredentials.core.camera.SurfaceContainer;
 import de.telekom.smartcredentials.core.controllers.CoreController;
@@ -78,10 +79,10 @@ public class CameraController implements CameraApi<PreviewView> {
      * {@inheritDoc}
      */
     @Override
-    public SmartCredentialsApiResponse<Boolean> getOcrScannerView(@NonNull Context context,
-                                                                  SurfaceContainer<PreviewView> surfaceContainer,
-                                                                  LifecycleOwner lifecycleOwner,
-                                                                  @NonNull ScannerCallback callback) {
+    public SmartCredentialsApiResponse<OcrListener> getOcrScannerView(@NonNull Context context,
+                                                                      SurfaceContainer<PreviewView> surfaceContainer,
+                                                                      LifecycleOwner lifecycleOwner,
+                                                                      @NonNull ScannerCallback callback) {
         ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "getBarcodeScannerView");
         if (mCoreController.isSecurityCompromised()) {
             mCoreController.handleSecurityCompromised();
@@ -93,8 +94,8 @@ public class CameraController implements CameraApi<PreviewView> {
             return new SmartCredentialsResponse<>(new FeatureNotSupportedThrowable(errorMessage));
         }
 
-        new OcrCameraScanner(callback)
+        OcrListener listener = new OcrCameraScanner(callback)
                 .startCamera(context, surfaceContainer.getSurfaceHolder(), lifecycleOwner);
-        return new SmartCredentialsResponse<>(true);
+        return new SmartCredentialsResponse<>(listener);
     }
 }

@@ -16,17 +16,31 @@
 
 package de.telekom.smartcredentials.camera.ocr;
 
+import androidx.camera.core.ExperimentalGetImage;
+
 import de.telekom.smartcredentials.camera.camera.CameraScanner;
+import de.telekom.smartcredentials.camera.usecases.OcrImageCapture;
 import de.telekom.smartcredentials.core.camera.ScannerCallback;
 
 public class OcrCameraScanner extends CameraScanner {
 
+    private final OcrImageCapture mOcrImageCapture;
+
     public OcrCameraScanner(ScannerCallback callback) {
         super(callback);
+        mOcrImageCapture = new OcrImageCapture();
     }
-
+    
     @Override
     public void addUseCases() {
+        mUseCaseGroupBuilder.addUseCase(mOcrImageCapture.create(mCallback));
 
     }
+
+    @ExperimentalGetImage
+    @Override
+    public void doSomething() {
+        mOcrImageCapture.takePicture();
+    }
+
 }

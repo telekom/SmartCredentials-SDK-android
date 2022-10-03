@@ -19,4 +19,8 @@
     package="de.telekom.smartcredentials.camera">
 
     <uses-permission android:name="android.permission.CAMERA" />
+
+    <meta-data
+        android:name="com.google.mlkit.vision.DEPENDENCIES"
+        android:value="ocr" />
 </manifest>
