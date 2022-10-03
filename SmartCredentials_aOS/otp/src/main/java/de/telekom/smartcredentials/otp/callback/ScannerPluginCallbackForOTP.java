@@ -24,14 +24,13 @@ import java.util.Locale;
 
 import de.telekom.smartcredentials.core.api.StorageApi;
 import de.telekom.smartcredentials.core.camera.ScannerCallback;
-import de.telekom.smartcredentials.core.camera.ScannerPluginUnavailable;
 import de.telekom.smartcredentials.core.exceptions.EncryptionException;
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver;
 import de.telekom.smartcredentials.core.model.item.ItemDomainModel;
 import de.telekom.smartcredentials.core.plugins.callbacks.OTPScannerPluginCallback;
 import de.telekom.smartcredentials.otp.converters.UriToItemDomainModelConverter;
 
-public class ScannerPluginCallbackForOTP extends ScannerCallback {
+public class ScannerPluginCallbackForOTP implements ScannerCallback {
 
     private String mItemId;
     private String mUserId;
@@ -98,19 +97,8 @@ public class ScannerPluginCallbackForOTP extends ScannerCallback {
     }
 
     @Override
-    public void onSomethingHappened(Exception e) {
-
-    }
-
-    @Override
-    public void onInitialized() {
-        ApiLoggerResolver.logCallbackMethod(TAG, OTPScannerPluginCallback.TAG, "QROTPScanner: onScannerStarted");
-        mOTPScannerPluginCallback.onScannerStarted();
-    }
-
-    @Override
-    public void onScannerUnavailable(ScannerPluginUnavailable errorMessage) {
+    public void onScanFailed(Exception e) {
         ApiLoggerResolver.logCallbackMethod(TAG, OTPScannerPluginCallback.TAG, "QROTPScanner: onPluginUnavailable");
-        mOTPScannerPluginCallback.onPluginUnavailable(errorMessage);
+        mOTPScannerPluginCallback.onFailed(e);
     }
 }

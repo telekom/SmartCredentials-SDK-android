@@ -16,11 +16,15 @@
 
 package de.telekom.smartcredentials.core.camera;
 
-import androidx.lifecycle.LifecycleOwner;
+public class SurfaceContainer<SH> {
 
-public interface CameraScannerLayout<V> {
+    private final SH mSurfaceHolder;
 
-    V getView();
+    public SurfaceContainer(SH surfaceHolder) {
+        this.mSurfaceHolder = surfaceHolder;
+    }
 
-    void startCamera(LifecycleOwner lifecycleOwner);
+    public SH getSurfaceHolder() {
+        return mSurfaceHolder;
+    }
 }

@@ -18,7 +18,10 @@ package de.telekom.smartcredentials.otp.controllers;
 
 import android.content.Context;
 import android.os.Looper;
+
 import androidx.annotation.NonNull;
+import androidx.camera.view.PreviewView;
+import androidx.lifecycle.LifecycleOwner;
 
 import de.telekom.smartcredentials.core.api.CameraApi;
 import de.telekom.smartcredentials.core.api.OtpApi;
@@ -26,7 +29,7 @@ import de.telekom.smartcredentials.core.api.SecurityApi;
 import de.telekom.smartcredentials.core.api.StorageApi;
 import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsFeatureSet;
 import de.telekom.smartcredentials.core.camera.BarcodeType;
-import de.telekom.smartcredentials.core.camera.CameraScannerLayout;
+import de.telekom.smartcredentials.core.camera.SurfaceContainer;
 import de.telekom.smartcredentials.core.controllers.CoreController;
 import de.telekom.smartcredentials.core.filter.SmartCredentialsFilter;
 import de.telekom.smartcredentials.core.filter.SmartCredentialsFilterFactory;
@@ -47,11 +50,11 @@ import de.telekom.smartcredentials.otp.callback.ScannerPluginCallbackForOTP;
 import de.telekom.smartcredentials.otp.task.InitOTPTask;
 import de.telekom.smartcredentials.otp.task.TaskManager;
 
-public class OtpController implements OtpApi {
+public class OtpController implements OtpApi<SurfaceContainer<PreviewView>> {
 
     private final CoreController mCoreController;
     private final SecurityApi mSecurityApi;
-    private final CameraApi<CameraScannerLayout> mCameraApi;
+    private final CameraApi<SurfaceContainer<PreviewView>> mCameraApi;
     private final StorageApi mStorageApi;
     private final ScannerPluginCallbackForOTP mScannerPluginCallbackForOTP;
     private final TaskManager mTaskManager;
@@ -59,7 +62,7 @@ public class OtpController implements OtpApi {
     public OtpController(@NonNull final CoreController coreController,
                          @NonNull final SecurityApi securityApi,
                          @NonNull final StorageApi storageApi,
-                         @NonNull final CameraApi<CameraScannerLayout> cameraApi,
+                         @NonNull final CameraApi<SurfaceContainer<PreviewView>> cameraApi,
                          @NonNull final ScannerPluginCallbackForOTP scannerPluginCallbackForOTP,
                          @NonNull final TaskManager taskManager) {
         mCoreController = coreController;
@@ -90,12 +93,12 @@ public class OtpController implements OtpApi {
                 callback, OTPType.TOTP);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public SmartCredentialsApiResponse<CameraScannerLayout> importOTPItemViaQRForId(@NonNull Context context,
-                                                                                    @NonNull String itemId, OTPImporterCallback callback) {
+    public SmartCredentialsApiResponse<Boolean> importOTPItemViaQRForId(@NonNull Context context,
+                                                                        SurfaceContainer<SurfaceContainer<PreviewView>> surfaceContainer,
+                                                                        LifecycleOwner lifecycleOwner,
+                                                                        @NonNull String itemId,
+                                                                        OTPImporterCallback callback) {
         ApiLoggerResolver.logMethodAccess(getClass().getSimpleName(), "importOTPItemViaQRForId");
         if (mCoreController.isSecurityCompromised()) {
             mCoreController.handleSecurityCompromised();
@@ -112,9 +115,9 @@ public class OtpController implements OtpApi {
 
         mScannerPluginCallbackForOTP.init(itemId, mCoreController.getUserId(), pluginCallback);
 
-        CameraScannerLayout cameraScannerLayout = mCameraApi.getBarcodeScannerView(context,
-                mScannerPluginCallbackForOTP, BarcodeType.BARCODE_2D_QR_CODE).getData();
-        return new SmartCredentialsResponse<>(cameraScannerLayout);
+        mCameraApi.getBarcodeScannerView(context,
+                surfaceContainer, lifecycleOwner, mScannerPluginCallbackForOTP, BarcodeType.BARCODE_2D_QR_CODE).getData();
+        return new SmartCredentialsResponse<>(true);
     }
 
     /**

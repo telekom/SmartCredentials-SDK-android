@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package de.telekom.smartcredentials.core.plugins.callbacks;
+package de.telekom.smartcredentials.camera.ocr;
 
-public abstract class BaseScannerPluginCallback<ScannedResultType, PluginUnavailable> extends BasePluginCallback {
+import de.telekom.smartcredentials.camera.camera.CameraScanner;
+import de.telekom.smartcredentials.core.camera.ScannerCallback;
 
-    public static final String TAG = "BaseScannerPluginCallback";
+public class OcrCameraScanner extends CameraScanner {
 
-    public abstract void onScannerStarted();
+    public OcrCameraScanner(ScannerCallback callback) {
+        super(callback);
+    }
 
-    public abstract void onScanned(ScannedResultType result);
+    @Override
+    public void addUseCases() {
 
-    public abstract void onPluginUnavailable(PluginUnavailable errorMessage);
-
-    public abstract void onFailed(Exception e);
+    }
 }

@@ -75,7 +75,6 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:${rxJavaVersion}"
     implementation "io.reactivex.rxjava3:rxandroid:${rx3AndroidVersion}"
     implementation "io.reactivex.rxjava3:rxjava:${rx3JavaVersion}"
-    implementation 'androidx.camera:camera-view:1.1.0'
 
     testImplementation "org.hamcrest:hamcrest-library:${hamcrestVersion}"
     testImplementation "junit:junit:${junitVersion}"

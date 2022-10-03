@@ -14,23 +14,24 @@
  * limitations under the License.
  */
 
-package de.telekom.smartcredentials.camera.ocr;
+package de.telekom.smartcredentials.camera.barcode;
 
-import android.content.Context;
+import androidx.camera.core.ExperimentalGetImage;
 
-import androidx.lifecycle.LifecycleOwner;
-
-import de.telekom.smartcredentials.camera.camera.CameraScannerLayoutImpl;
+import de.telekom.smartcredentials.camera.camera.CameraScanner;
+import de.telekom.smartcredentials.camera.usecases.BarcodeImageAnalysis;
 import de.telekom.smartcredentials.core.camera.ScannerCallback;
 
-public class OcrCameraScannerLayoutImpl extends CameraScannerLayoutImpl {
 
-    public OcrCameraScannerLayoutImpl(Context context, ScannerCallback scannerCallback) {
-        super(context, scannerCallback);
+public class BarcodeCameraScanner extends CameraScanner {
+
+    public BarcodeCameraScanner(ScannerCallback callback) {
+        super(callback);
     }
 
+    @ExperimentalGetImage
     @Override
-    public void startCamera(LifecycleOwner lifecycleOwner) {
-
+    public void addUseCases() {
+        mUseCaseGroupBuilder.addUseCase(new BarcodeImageAnalysis().create(mCallback));
     }
 }
