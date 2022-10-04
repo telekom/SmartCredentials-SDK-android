@@ -36,10 +36,6 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
 
-    buildFeatures {
-        viewBinding true
-    }
-
     applicationVariants.all { variant ->
         variant.outputs.all {
             outputFileName = "camera_${archivesBaseName}_${variant.name}_${defaultConfig.versionName}.apk"
@@ -55,8 +51,8 @@ dependencies {
     implementation 'com.airbnb.android:lottie:5.2.0'
     implementation 'com.jakewharton.timber:timber:5.0.1'
 
-    implementation("de.telekom.smartcredentials:core:6.5.0-l")
-    implementation("de.telekom.smartcredentials:camera:6.5.0-l")
+    implementation("de.telekom.smartcredentials:core:${smartCredentialsVersion}")
+    implementation("de.telekom.smartcredentials:camera:${smartCredentialsVersion}")
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

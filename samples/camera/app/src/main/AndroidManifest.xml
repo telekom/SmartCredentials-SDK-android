@@ -2,9 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.telekom.camerademo">
 
-    <uses-feature android:name="android.hardware.camera.any" />
-    <uses-permission android:name="android.permission.CAMERA"/>
-
     <application
         android:name=".DemoApplication"
         android:allowBackup="false"
@@ -22,9 +19,5 @@
         </activity>
         <activity android:name=".ocr.OcrActivity" />
         <activity android:name=".qr.QrActivity" />
-        <meta-data
-            android:name="com.google.mlkit.vision.DEPENDENCIES"
-            android:value="ocr" />
     </application>
-
 </manifest>

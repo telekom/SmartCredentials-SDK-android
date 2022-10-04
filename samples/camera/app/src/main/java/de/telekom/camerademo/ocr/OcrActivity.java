@@ -22,9 +22,9 @@ import java.util.List;
 import de.telekom.camerademo.R;
 import de.telekom.smartcredentials.camera.factory.SmartCredentialsCameraFactory;
 import de.telekom.smartcredentials.core.api.CameraApi;
-import de.telekom.smartcredentials.core.camera.OcrListener;
 import de.telekom.smartcredentials.core.camera.ScannerCallback;
 import de.telekom.smartcredentials.core.camera.SurfaceContainer;
+import de.telekom.smartcredentials.core.camera.SurfaceContainerInteractor;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 
 //TODO: get results only from scanner viewport
@@ -35,9 +35,7 @@ public class OcrActivity extends AppCompatActivity implements OcrDialogInteracti
     private LottieAnimationView qrAnimationView;
     private PreviewView previewView;
     private boolean isProcessing = true;
-    private CameraApi<PreviewView> cameraApi;
-    private SurfaceContainer<PreviewView> surfaceContainer;
-    private SmartCredentialsApiResponse<OcrListener> response;
+    private SmartCredentialsApiResponse<SurfaceContainerInteractor> response;
 
     private final ScannerCallback scannerCallback = new ScannerCallback() {
         @Override
@@ -117,8 +115,8 @@ public class OcrActivity extends AppCompatActivity implements OcrDialogInteracti
     }
 
     private void startCamera() {
-        cameraApi = SmartCredentialsCameraFactory.getCameraApi();
-        surfaceContainer = new SurfaceContainer<>(previewView);
+        CameraApi<PreviewView> cameraApi = SmartCredentialsCameraFactory.getCameraApi();
+        SurfaceContainer<PreviewView> surfaceContainer = new SurfaceContainer<>(previewView);
         response = cameraApi.getOcrScannerView(this, surfaceContainer, this,
                 scannerCallback);
 
@@ -128,7 +126,7 @@ public class OcrActivity extends AppCompatActivity implements OcrDialogInteracti
 
     private void captureFrame() {
         if (response.isSuccessful()) {
-            response.getData().onTakePicture();
+            response.getData().takePicture();
         }
     }
 

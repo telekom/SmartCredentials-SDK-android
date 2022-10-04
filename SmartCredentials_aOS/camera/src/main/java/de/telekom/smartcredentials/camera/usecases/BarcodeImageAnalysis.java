@@ -7,6 +7,7 @@ import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.UseCase;
 
 import com.google.mlkit.vision.barcode.BarcodeScanner;
+import com.google.mlkit.vision.barcode.BarcodeScannerOptions;
 import com.google.mlkit.vision.barcode.BarcodeScanning;
 import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.common.InputImage;
@@ -19,6 +20,12 @@ import de.telekom.smartcredentials.core.camera.ScannerCallback;
 
 public class BarcodeImageAnalysis implements CameraUseCase {
 
+    private final int mBarcodeFormat;
+
+    public BarcodeImageAnalysis(int barcodeFormat) {
+        mBarcodeFormat = barcodeFormat;
+    }
+
     @ExperimentalGetImage
     @Override
     public UseCase create(ScannerCallback callback) {
@@ -30,7 +37,10 @@ public class BarcodeImageAnalysis implements CameraUseCase {
 
             if (mediaImage != null) {
                 InputImage image = InputImage.fromMediaImage(mediaImage, imageProxy.getImageInfo().getRotationDegrees());
-                BarcodeScanner scanner = BarcodeScanning.getClient();
+                BarcodeScannerOptions options = new BarcodeScannerOptions.Builder()
+                        .setBarcodeFormats(mBarcodeFormat)
+                        .build();
+                BarcodeScanner scanner = BarcodeScanning.getClient(options);
                 scanner.process(image)
                         .addOnSuccessListener(barcodes -> {
                             if (!barcodes.isEmpty()) {

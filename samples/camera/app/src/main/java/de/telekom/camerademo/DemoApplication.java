@@ -21,6 +21,7 @@ public class DemoApplication extends Application {
         super.onCreate();
         Timber.plant(new Timber.DebugTree());
         SmartCredentialsConfiguration configuration = new SmartCredentialsConfiguration.Builder(getApplicationContext(), getString(R.string.user_id))
+                .setLogger(new DemoLogger())
                 .setRootCheckerEnabled(RootDetectionOption.ALL)
                 .setAppAlias(getString(R.string.app_alias))
                 .build();
