@@ -2,7 +2,9 @@ package de.telekom.camerademo.ocr;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,6 +40,7 @@ public class OcrActivity extends AppCompatActivity implements OcrDialogInteracti
     private CameraApi<PreviewView> cameraApi;
     private SurfaceContainer<PreviewView> surfaceContainer;
     private SmartCredentialsApiResponse<OcrListener> response;
+    OcrDialogFragment dialogFragment;
 
     private final ScannerCallback scannerCallback = new ScannerCallback() {
         @Override
@@ -46,8 +49,11 @@ public class OcrActivity extends AppCompatActivity implements OcrDialogInteracti
                 isProcessing = false;
                 qrAnimationView.pauseAnimation();
 
-                OcrDialogFragment dialogFragment = OcrDialogFragment.newInstance((ArrayList<String>) detectedValues);
-                dialogFragment.show(getSupportFragmentManager(), OcrDialogFragment.TAG);
+                dialogFragment = OcrDialogFragment.newInstance((ArrayList<String>) detectedValues);
+
+                if(!getSupportFragmentManager().isDestroyed()){
+                    dialogFragment.show(getSupportFragmentManager(), OcrDialogFragment.TAG);
+                }
             }
         }
 

@@ -20,7 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ocr.OcrActivity" />
+        <activity android:name=".ocr.OcrActivity"/>
         <activity android:name=".qr.QrActivity" />
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
