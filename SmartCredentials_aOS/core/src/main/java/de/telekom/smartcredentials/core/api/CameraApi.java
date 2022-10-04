@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 
 import de.telekom.smartcredentials.core.camera.BarcodeType;
+import de.telekom.smartcredentials.core.camera.OcrListener;
 import de.telekom.smartcredentials.core.camera.ScannerCallback;
 import de.telekom.smartcredentials.core.camera.SurfaceContainer;
 import de.telekom.smartcredentials.core.responses.RootedThrowable;
@@ -55,8 +56,8 @@ public interface CameraApi<SH> {
      * or {@link RootedThrowable} if device is rooted
      */
     @SuppressWarnings("unused")
-    SmartCredentialsApiResponse<Boolean> getOcrScannerView(@NonNull Context context,
-                                                           SurfaceContainer<SH> cameraScannerLayout,
-                                                           LifecycleOwner lifecycleOwner,
-                                                           @NonNull ScannerCallback callback);
+    SmartCredentialsApiResponse<OcrListener> getOcrScannerView(@NonNull Context context,
+                                                               SurfaceContainer<SH> cameraScannerLayout,
+                                                               LifecycleOwner lifecycleOwner,
+                                                               @NonNull ScannerCallback callback);
 }

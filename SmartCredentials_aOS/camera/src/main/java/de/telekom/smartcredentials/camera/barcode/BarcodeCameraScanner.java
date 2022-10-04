@@ -34,4 +34,9 @@ public class BarcodeCameraScanner extends CameraScanner {
     public void addUseCases() {
         mUseCaseGroupBuilder.addUseCase(new BarcodeImageAnalysis().create(mCallback));
     }
+
+    @Override
+    public void doSomething() {
+        // no implementation
+    }
 }
