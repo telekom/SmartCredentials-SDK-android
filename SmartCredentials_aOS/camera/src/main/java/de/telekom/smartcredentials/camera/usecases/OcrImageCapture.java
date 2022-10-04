@@ -9,8 +9,6 @@ import androidx.camera.core.ImageCaptureException;
 import androidx.camera.core.ImageProxy;
 import androidx.camera.core.UseCase;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
@@ -42,31 +40,22 @@ public class OcrImageCapture implements CameraUseCase {
             @Override
             public void onCaptureSuccess(@NonNull ImageProxy imageProxy) {
                 super.onCaptureSuccess(imageProxy);
-
                 TextRecognizer textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
                 Image imageMedia = imageProxy.getImage();
 
                 if (imageMedia != null) {
                     InputImage inputImage = InputImage.fromMediaImage(imageMedia, imageProxy.getImageInfo().getRotationDegrees());
                     textRecognizer.process(inputImage)
-                            .addOnSuccessListener(new OnSuccessListener<Text>() {
-                                @Override
-                                public void onSuccess(Text visionText) {
-                                    ArrayList<String> ocrValues = new ArrayList<>();
-                                    for (Text.TextBlock textBlock : visionText.getTextBlocks()) {
-                                        for (Text.Line line : textBlock.getLines()) {
-                                            ocrValues.add(line.getText());
-                                        }
+                            .addOnSuccessListener(visionText -> {
+                                ArrayList<String> ocrValues = new ArrayList<>();
+                                for (Text.TextBlock textBlock : visionText.getTextBlocks()) {
+                                    for (Text.Line line : textBlock.getLines()) {
+                                        ocrValues.add(line.getText());
                                     }
-                                    mCallback.onDetected(ocrValues);
                                 }
+                                mCallback.onDetected(ocrValues);
                             })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    mCallback.onScanFailed(e);
-                                }
-                            });
+                            .addOnFailureListener(e -> mCallback.onScanFailed(e));
                 }
                 imageProxy.close();
             }
@@ -78,5 +67,4 @@ public class OcrImageCapture implements CameraUseCase {
             }
         });
     }
-
 }

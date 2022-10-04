@@ -14,7 +14,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.concurrent.ExecutionException;
 
-import de.telekom.smartcredentials.core.camera.OcrListener;
+import de.telekom.smartcredentials.core.camera.SurfaceContainerInteractor;
 import de.telekom.smartcredentials.core.camera.ScannerCallback;
 
 public abstract class CameraScanner {
@@ -27,7 +27,7 @@ public abstract class CameraScanner {
         mUseCaseGroupBuilder = new UseCaseGroup.Builder();
     }
 
-    public OcrListener startCamera(Context context, PreviewView previewView, LifecycleOwner lifecycleOwner) {
+    public SurfaceContainerInteractor startCamera(Context context, PreviewView previewView, LifecycleOwner lifecycleOwner) {
         ListenableFuture<ProcessCameraProvider> future = ProcessCameraProvider.getInstance(context);
         future.addListener(() -> {
             try {
@@ -38,7 +38,7 @@ public abstract class CameraScanner {
             }
         }, ContextCompat.getMainExecutor(context));
 
-        return this::doSomething;
+        return this::takePicture;
     }
 
     public void bindPreview(ProcessCameraProvider cameraProvider, PreviewView previewView,
@@ -57,5 +57,5 @@ public abstract class CameraScanner {
 
     public abstract void addUseCases();
 
-    public abstract void doSomething();
+    public abstract void takePicture();
 }

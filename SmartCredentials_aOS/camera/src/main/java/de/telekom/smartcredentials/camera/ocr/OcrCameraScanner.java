@@ -30,7 +30,7 @@ public class OcrCameraScanner extends CameraScanner {
         super(callback);
         mOcrImageCapture = new OcrImageCapture();
     }
-    
+
     @Override
     public void addUseCases() {
         mUseCaseGroupBuilder.addUseCase(mOcrImageCapture.create(mCallback));
@@ -39,7 +39,7 @@ public class OcrCameraScanner extends CameraScanner {
 
     @ExperimentalGetImage
     @Override
-    public void doSomething() {
+    public void takePicture() {
         mOcrImageCapture.takePicture();
     }
 

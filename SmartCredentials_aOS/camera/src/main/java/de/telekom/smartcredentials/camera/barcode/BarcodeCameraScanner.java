@@ -25,18 +25,21 @@ import de.telekom.smartcredentials.core.camera.ScannerCallback;
 
 public class BarcodeCameraScanner extends CameraScanner {
 
-    public BarcodeCameraScanner(ScannerCallback callback) {
+    private final int mBarcodeFormat;
+
+    public BarcodeCameraScanner(ScannerCallback callback, int barcodeFormat) {
         super(callback);
+        mBarcodeFormat = barcodeFormat;
     }
 
     @ExperimentalGetImage
     @Override
     public void addUseCases() {
-        mUseCaseGroupBuilder.addUseCase(new BarcodeImageAnalysis().create(mCallback));
+        mUseCaseGroupBuilder.addUseCase(new BarcodeImageAnalysis(mBarcodeFormat).create(mCallback));
     }
 
     @Override
-    public void doSomething() {
+    public void takePicture() {
         // no implementation
     }
 }

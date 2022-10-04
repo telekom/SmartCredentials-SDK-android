@@ -41,7 +41,7 @@ allprojects {
         androidMinSdkVersionEid = 24
         buildToolsVersion = "33.0.0"
         androidVersionCode = 5
-        androidVersionName = "6.5.0-l"
+        androidVersionName = "6.5.0"
         androidNdkVersion = "23.1.7779620"
 
         androidXAppcompat = "1.4.2"
@@ -51,6 +51,7 @@ allprojects {
         architectureComponentsVersion = "1.1.1"
         gsonVersion = "2.9.0"
         mobileVisionVersion = "17.0.2"
+        cameraXVersion = "1.2.0-beta02"
 
         retrofitVersion = "2.9.0"
         okHttpVersion = "4.9.3"
