@@ -27,7 +27,6 @@ import de.telekom.smartcredentials.core.camera.SurfaceContainer;
 import de.telekom.smartcredentials.core.camera.SurfaceContainerInteractor;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 
-//TODO: get results only from scanner viewport
 public class OcrActivity extends AppCompatActivity implements OcrDialogInteractionListener {
 
     private static final int CAMERA_PERMISSION_RQ = 1234;
@@ -51,7 +50,7 @@ public class OcrActivity extends AppCompatActivity implements OcrDialogInteracti
 
         @Override
         public void onScanFailed(Exception e) {
-            //TODO: handle error case
+            Toast.makeText(OcrActivity.this, R.string.ocr_scan_failed, Toast.LENGTH_SHORT).show();
         }
     };
 
