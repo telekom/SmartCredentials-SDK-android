@@ -34,7 +34,7 @@ import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 /**
  * Created by Lucian Iacob on November 12, 2018.
  */
-public interface OtpApi<S> {
+public interface OtpApi<SH> {
 
     /**
      * Method used to get a HOTP handler that will generate OTPs based on the item id received
@@ -73,7 +73,7 @@ public interface OtpApi<S> {
      */
     @SuppressWarnings("unused")
     SmartCredentialsApiResponse<Boolean> importOTPItemViaQRForId(@NonNull Context context,
-                                                                 SurfaceContainer<S> surfaceContainer,
+                                                                 SurfaceContainer<SH> surfaceContainer,
                                                                  LifecycleOwner lifecycleOwner,
                                                                  @NonNull String itemId,
                                                                  OTPImporterCallback callback);

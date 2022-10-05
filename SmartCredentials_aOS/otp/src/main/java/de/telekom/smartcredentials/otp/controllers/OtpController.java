@@ -50,11 +50,11 @@ import de.telekom.smartcredentials.otp.callback.ScannerPluginCallbackForOTP;
 import de.telekom.smartcredentials.otp.task.InitOTPTask;
 import de.telekom.smartcredentials.otp.task.TaskManager;
 
-public class OtpController implements OtpApi<SurfaceContainer<PreviewView>> {
+public class OtpController implements OtpApi<PreviewView> {
 
     private final CoreController mCoreController;
     private final SecurityApi mSecurityApi;
-    private final CameraApi<SurfaceContainer<PreviewView>> mCameraApi;
+    private final CameraApi<PreviewView> mCameraApi;
     private final StorageApi mStorageApi;
     private final ScannerPluginCallbackForOTP mScannerPluginCallbackForOTP;
     private final TaskManager mTaskManager;
@@ -62,7 +62,7 @@ public class OtpController implements OtpApi<SurfaceContainer<PreviewView>> {
     public OtpController(@NonNull final CoreController coreController,
                          @NonNull final SecurityApi securityApi,
                          @NonNull final StorageApi storageApi,
-                         @NonNull final CameraApi<SurfaceContainer<PreviewView>> cameraApi,
+                         @NonNull final CameraApi<PreviewView> cameraApi,
                          @NonNull final ScannerPluginCallbackForOTP scannerPluginCallbackForOTP,
                          @NonNull final TaskManager taskManager) {
         mCoreController = coreController;
@@ -95,7 +95,7 @@ public class OtpController implements OtpApi<SurfaceContainer<PreviewView>> {
 
     @Override
     public SmartCredentialsApiResponse<Boolean> importOTPItemViaQRForId(@NonNull Context context,
-                                                                        SurfaceContainer<SurfaceContainer<PreviewView>> surfaceContainer,
+                                                                        SurfaceContainer<PreviewView> surfaceContainer,
                                                                         LifecycleOwner lifecycleOwner,
                                                                         @NonNull String itemId,
                                                                         OTPImporterCallback callback) {
