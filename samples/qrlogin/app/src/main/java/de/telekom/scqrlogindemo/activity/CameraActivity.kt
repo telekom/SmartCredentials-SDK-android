@@ -5,30 +5,27 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
-import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import com.airbnb.lottie.LottieAnimationView
 import de.telekom.scqrlogindemo.R
 import de.telekom.smartcredentials.camera.factory.SmartCredentialsCameraFactory
 import de.telekom.smartcredentials.core.api.CameraApi
 import de.telekom.smartcredentials.core.camera.BarcodeType
-import de.telekom.smartcredentials.core.camera.CameraScannerLayout
 import de.telekom.smartcredentials.core.camera.ScannerCallback
-import de.telekom.smartcredentials.core.camera.ScannerPluginUnavailable
-import java.util.*
+import de.telekom.smartcredentials.core.camera.SurfaceContainer
+
+const val CAMERA_PERMISSION_RQ = 1234
 
 class CameraActivity : AppCompatActivity() {
 
-    private val CAMERA_PERMISSION_RQ = 1234
-
-    private var cameraWrapper: FrameLayout? = null
     private var qrAnimationView: LottieAnimationView? = null
-    private var cameraScannerLayout: CameraScannerLayout? = null
+    private var previewView: PreviewView? = null
     private var isProcessing = true
 
-    private val scannerCallback: ScannerCallback = object : ScannerCallback() {
+    private val scannerCallback: ScannerCallback = object : ScannerCallback {
         override fun onDetected(detectedValues: List<String>) {
             runOnUiThread {
                 if (isProcessing) {
@@ -43,19 +40,15 @@ class CameraActivity : AppCompatActivity() {
             }
         }
 
-        override fun onInitialized() {
-            // no implementation
-        }
-
-        override fun onScannerUnavailable(errorMessage: ScannerPluginUnavailable) {
-            // no implementation
+        override fun onScanFailed(e: Exception?) {
+            Toast.makeText(this@CameraActivity, R.string.qr_scan_failed, Toast.LENGTH_SHORT).show()
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
-        cameraWrapper = findViewById(R.id.camera_wrapper)
+        previewView = findViewById(R.id.preview_view)
         qrAnimationView = findViewById(R.id.scan_qr_animation_view)
         this.supportActionBar?.setTitle(R.string.qr_scanning)
         this.supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -75,23 +68,15 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-        if (cameraScannerLayout != null) {
-            cameraScannerLayout!!.stopScanner()
-            cameraScannerLayout!!.releaseCamera()
-        }
-    }
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String?>,
         grantResults: IntArray
     ) {
         if (requestCode == CAMERA_PERMISSION_RQ) {
-            if (grantResults.size != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getBarcodeScanner()
-            } else if (grantResults.size != 0) {
+            } else if (grantResults.isNotEmpty()) {
                 Toast.makeText(this, R.string.camera_permission_not_granted, Toast.LENGTH_SHORT)
                     .show()
             }
@@ -115,21 +100,16 @@ class CameraActivity : AppCompatActivity() {
         )
     }
 
-    private fun startScanner() {
-        cameraWrapper!!.removeAllViews()
-        cameraWrapper!!.addView(cameraScannerLayout)
-        cameraScannerLayout!!.startScanner()
-        qrAnimationView!!.visibility = View.VISIBLE
-        qrAnimationView!!.playAnimation()
-    }
-
     private fun getBarcodeScanner() {
-        val cameraApi: CameraApi = SmartCredentialsCameraFactory.getCameraApi()
-        val response =
-            cameraApi.getBarcodeScannerView(this, scannerCallback, BarcodeType.BARCODE_2D_QR_CODE)
+        val cameraApi: CameraApi<PreviewView> = SmartCredentialsCameraFactory.getCameraApi()
+        val response = cameraApi.getBarcodeScannerView(
+            this, SurfaceContainer(previewView),
+            this, scannerCallback, BarcodeType.BARCODE_2D_QR_CODE
+        )
+
         if (response.isSuccessful) {
-            cameraScannerLayout = response.data
-            startScanner()
+            qrAnimationView!!.visibility = View.VISIBLE
+            qrAnimationView!!.playAnimation()
         } else {
             Toast.makeText(this, R.string.camera_scanner_layout_failed, Toast.LENGTH_SHORT).show()
         }
