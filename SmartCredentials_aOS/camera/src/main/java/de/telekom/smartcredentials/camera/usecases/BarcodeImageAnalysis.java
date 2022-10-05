@@ -46,7 +46,7 @@ public class BarcodeImageAnalysis implements CameraUseCase {
                             if (!barcodes.isEmpty()) {
                                 List<String> barcodesList = new ArrayList<>();
                                 for (Barcode barcode : barcodes) {
-                                    barcodesList.add(barcode.getDisplayValue());
+                                    barcodesList.add(barcode.getRawValue());
                                 }
                                 callback.onDetected(barcodesList);
                             }
