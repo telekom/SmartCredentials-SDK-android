@@ -3,6 +3,7 @@ package de.telekom.camerademo.qr;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,6 +36,7 @@ public class QrActivity extends AppCompatActivity implements QrDialogInteraction
         public void onDetected(List<String> detectedValues) {
             if (isProcessing) {
                 isProcessing = false;
+                qrAnimationView.pauseAnimation();
 
                 QrDialogFragment dialogFragment = QrDialogFragment.newInstance((ArrayList<String>) detectedValues);
                 dialogFragment.show(getSupportFragmentManager(), QrDialogFragment.TAG);
@@ -43,7 +45,7 @@ public class QrActivity extends AppCompatActivity implements QrDialogInteraction
 
         @Override
         public void onScanFailed(Exception e) {
-            //TODO: handle error case
+            Toast.makeText(QrActivity.this, R.string.qr_scan_failed, Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -93,6 +95,9 @@ public class QrActivity extends AppCompatActivity implements QrDialogInteraction
         SurfaceContainer<PreviewView> surfaceContainer = new SurfaceContainer<>(previewView);
         cameraApi.getBarcodeScannerView(this, surfaceContainer, this,
                 scannerCallback, BarcodeType.BARCODE_2D_QR_CODE);
+
+        qrAnimationView.setVisibility(View.VISIBLE);
+        qrAnimationView.playAnimation();
     }
 
     @Override
