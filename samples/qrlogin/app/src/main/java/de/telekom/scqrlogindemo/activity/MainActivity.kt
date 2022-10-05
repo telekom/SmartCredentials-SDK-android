@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity(), RetrieveConfigurationCallback {
                 val intent = result.data
                 if (intent?.getStringExtra(KEY_BARCODE) != null) {
                     Timber.tag(DemoApplication.TAG)
-                        .d("QrCode: " + intent.getStringExtra(KEY_BARCODE))
+                        .d("QrCode: %s", intent.getStringExtra(KEY_BARCODE))
                     scannedBarcode = intent.getStringExtra(KEY_BARCODE)!!
                     val configurationMapper = ConfigurationMapper(this)
                     configurationMapper.retrieveUserConfiguration(this)
