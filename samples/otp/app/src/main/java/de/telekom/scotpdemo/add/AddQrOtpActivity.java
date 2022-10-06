@@ -4,20 +4,20 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 
-import de.telekom.scotpdemo.R;
 import de.telekom.scotpdemo.BaseUpActivity;
+import de.telekom.scotpdemo.R;
 import de.telekom.smartcredentials.core.api.OtpApi;
-import de.telekom.smartcredentials.core.camera.CameraScannerLayout;
 import de.telekom.smartcredentials.core.camera.ScannerPluginUnavailable;
+import de.telekom.smartcredentials.core.camera.SurfaceContainer;
 import de.telekom.smartcredentials.core.otp.OTPImportFailed;
 import de.telekom.smartcredentials.core.otp.OTPImportItem;
 import de.telekom.smartcredentials.core.otp.OTPImporterCallback;
@@ -31,16 +31,15 @@ public class AddQrOtpActivity extends BaseUpActivity {
 
     private static final int CAMERA_PERMISSION_RQ = 1234;
 
-    private FrameLayout cameraWrapper;
     private LottieAnimationView qrAnimationView;
-    private CameraScannerLayout cameraScannerLayout;
+    private PreviewView previewView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_qr_layout);
 
-        cameraWrapper = findViewById(R.id.camera_wrapper);
+        previewView = findViewById(R.id.preview_view);
         qrAnimationView = findViewById(R.id.scan_qr_animation_view);
     }
 
@@ -81,15 +80,6 @@ public class AddQrOtpActivity extends BaseUpActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        if (cameraScannerLayout != null) {
-            cameraScannerLayout.stopScanner();
-            cameraScannerLayout.releaseCamera();
-        }
-    }
-
-    @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -113,21 +103,19 @@ public class AddQrOtpActivity extends BaseUpActivity {
     }
 
     private void startScanner() {
-        cameraWrapper.removeAllViews();
-        cameraWrapper.addView(cameraScannerLayout);
-        cameraScannerLayout.startScanner();
         qrAnimationView.setVisibility(View.VISIBLE);
         qrAnimationView.playAnimation();
     }
 
     private void getScanner() {
-        OtpApi cameraApi = SmartCredentialsOtpFactory.getOtpApi();
-        SmartCredentialsApiResponse<CameraScannerLayout> response =
-                cameraApi.importOTPItemViaQRForId(this, String.valueOf(System.currentTimeMillis()),
+        OtpApi<PreviewView> otpApi = SmartCredentialsOtpFactory.getOtpApi();
+        SmartCredentialsApiResponse<Boolean> response =
+                otpApi.importOTPItemViaQRForId(this, new SurfaceContainer<>(previewView),
+                        AddQrOtpActivity.this,
+                        String.valueOf(System.currentTimeMillis()),
                         otpImporterCallback);
 
         if (response.isSuccessful()) {
-            cameraScannerLayout = response.getData();
             startScanner();
         } else {
             Toast.makeText(this, R.string.camera_scanner_layout_failed, Toast.LENGTH_SHORT).show();

@@ -2,17 +2,16 @@ package de.telekom.camerademo.ocr;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -22,23 +21,20 @@ import java.util.List;
 
 import de.telekom.camerademo.R;
 import de.telekom.smartcredentials.camera.factory.SmartCredentialsCameraFactory;
-import de.telekom.smartcredentials.camera.ocr.OcrCameraScannerLayout;
 import de.telekom.smartcredentials.core.api.CameraApi;
-import de.telekom.smartcredentials.core.camera.CameraScannerLayout;
 import de.telekom.smartcredentials.core.camera.ScannerCallback;
-import de.telekom.smartcredentials.core.camera.ScannerPluginUnavailable;
+import de.telekom.smartcredentials.core.camera.SurfaceContainer;
+import de.telekom.smartcredentials.core.camera.SurfaceContainerInteractor;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 
 public class OcrActivity extends AppCompatActivity implements OcrDialogInteractionListener {
 
     private static final int CAMERA_PERMISSION_RQ = 1234;
 
-    private FrameLayout cameraWrapper;
     private LottieAnimationView qrAnimationView;
-    private View topLeftView;
-    private View bottomRightView;
-    private CameraScannerLayout cameraScannerLayout;
+    private PreviewView previewView;
     private boolean isProcessing = true;
+    private SmartCredentialsApiResponse<SurfaceContainerInteractor> response;
 
     private final ScannerCallback scannerCallback = new ScannerCallback() {
         @Override
@@ -46,20 +42,15 @@ public class OcrActivity extends AppCompatActivity implements OcrDialogInteracti
             if (isProcessing) {
                 isProcessing = false;
                 qrAnimationView.pauseAnimation();
-                ArrayList<String> ocrValues = new ArrayList<>(detectedValues);
-                OcrDialogFragment dialogFragment = OcrDialogFragment.newInstance(ocrValues);
+
+                OcrDialogFragment dialogFragment = OcrDialogFragment.newInstance((ArrayList<String>) detectedValues);
                 dialogFragment.show(getSupportFragmentManager(), OcrDialogFragment.TAG);
             }
         }
 
         @Override
-        public void onInitialized() {
-            // no implementation
-        }
-
-        @Override
-        public void onScannerUnavailable(ScannerPluginUnavailable errorMessage) {
-            // no implementation
+        public void onScanFailed(Exception e) {
+            Toast.makeText(OcrActivity.this, R.string.ocr_scan_failed, Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -68,10 +59,8 @@ public class OcrActivity extends AppCompatActivity implements OcrDialogInteracti
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
-        cameraWrapper = findViewById(R.id.camera_wrapper);
+        previewView = findViewById(R.id.preview_view);
         qrAnimationView = findViewById(R.id.scan_qr_animation_view);
-        topLeftView = findViewById(R.id.top_left_joint);
-        bottomRightView = findViewById(R.id.bottom_right_joint);
     }
 
     @Override
@@ -80,16 +69,7 @@ public class OcrActivity extends AppCompatActivity implements OcrDialogInteracti
         if (!hasCameraPermission()) {
             requestCameraPermission();
         } else {
-            getOcrScanner();
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (cameraScannerLayout != null) {
-            cameraScannerLayout.stopScanner();
-            cameraScannerLayout.releaseCamera();
+            startCamera();
         }
     }
 
@@ -103,15 +83,8 @@ public class OcrActivity extends AppCompatActivity implements OcrDialogInteracti
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.take_picture_item) {
-            int left = topLeftView.getRight();
-            int top = topLeftView.getBottom();
-            int right = bottomRightView.getLeft();
-            int bottom = bottomRightView.getTop();
-            Rect rect = new Rect(left, top, right, bottom);
-            OcrCameraScannerLayout ocrScanner = (OcrCameraScannerLayout) cameraScannerLayout;
-            ocrScanner.detect(bitmap -> {
-                qrAnimationView.pauseAnimation();
-            }, rect);
+            captureFrame();
+
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -123,7 +96,7 @@ public class OcrActivity extends AppCompatActivity implements OcrDialogInteracti
                                            @NonNull int[] grantResults) {
         if (requestCode == CAMERA_PERMISSION_RQ) {
             if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getOcrScanner();
+                startCamera();
             } else if (grantResults.length != 0) {
                 Toast.makeText(this, R.string.camera_permission_not_granted, Toast.LENGTH_SHORT).show();
             }
@@ -140,25 +113,22 @@ public class OcrActivity extends AppCompatActivity implements OcrDialogInteracti
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_RQ);
     }
 
-    private void startScanner() {
-        cameraWrapper.removeAllViews();
-        cameraWrapper.addView(cameraScannerLayout);
-        cameraScannerLayout.startScanner();
+    private void startCamera() {
+        CameraApi<PreviewView> cameraApi = SmartCredentialsCameraFactory.getCameraApi();
+        SurfaceContainer<PreviewView> surfaceContainer = new SurfaceContainer<>(previewView);
+        response = cameraApi.getOcrScannerView(this, surfaceContainer, this,
+                scannerCallback);
+
         qrAnimationView.setVisibility(View.VISIBLE);
         qrAnimationView.playAnimation();
     }
 
-    private void getOcrScanner() {
-        CameraApi cameraApi = SmartCredentialsCameraFactory.getCameraApi();
-        SmartCredentialsApiResponse<CameraScannerLayout> response = cameraApi
-                .getOcrScannerView(this, scannerCallback);
+    private void captureFrame() {
         if (response.isSuccessful()) {
-            cameraScannerLayout = response.getData();
-            startScanner();
-        } else {
-            Toast.makeText(this, R.string.camera_scanner_layout_failed, Toast.LENGTH_SHORT).show();
+            response.getData().takePicture();
         }
     }
+
 
     @Override
     public void onOkButtonClicked() {

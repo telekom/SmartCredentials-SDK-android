@@ -17,38 +17,47 @@
 package de.telekom.smartcredentials.core.api;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 
 import de.telekom.smartcredentials.core.camera.BarcodeType;
-import de.telekom.smartcredentials.core.camera.CameraScannerLayout;
+import de.telekom.smartcredentials.core.camera.SurfaceContainerInteractor;
 import de.telekom.smartcredentials.core.camera.ScannerCallback;
+import de.telekom.smartcredentials.core.camera.SurfaceContainer;
 import de.telekom.smartcredentials.core.responses.RootedThrowable;
 import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 
 /**
  * Created by Lucian Iacob on November 09, 2018.
  */
-public interface CameraApi {
+public interface CameraApi<SH> {
 
     /**
      * Method used to get a QR Scanner.
      *
      * @param callback    {@link ScannerCallback} for retrieving success or failure events
      * @param barcodeType {@link BarcodeType} type of wanted barcode. If argument is null, all barcodes will be detected
-     * @return {@link SmartCredentialsApiResponse} containing a {@link CameraScannerLayout} if response was successful,
+     * @return {@link SmartCredentialsApiResponse} containing a {@link SurfaceContainer} if response was successful,
      * or {@link RootedThrowable} if device is rooted
      */
     @SuppressWarnings("unused")
-    SmartCredentialsApiResponse<CameraScannerLayout> getBarcodeScannerView(@NonNull Context context, @NonNull ScannerCallback callback, BarcodeType barcodeType);
+    SmartCredentialsApiResponse<Boolean> getBarcodeScannerView(@NonNull Context context,
+                                                               SurfaceContainer<SH> cameraScannerLayout,
+                                                               LifecycleOwner lifecycleOwner,
+                                                               @NonNull ScannerCallback callback,
+                                                               BarcodeType barcodeType);
 
     /**
      * Method used to get a OCR Scanner View.
      *
      * @param callback {@link ScannerCallback} for retrieving success or failure events
-     * @return {@link SmartCredentialsApiResponse} containing a {@link CameraScannerLayout} if response was successful,
+     * @return {@link SmartCredentialsApiResponse} containing a {@link SurfaceContainer} if response was successful,
      * or {@link RootedThrowable} if device is rooted
      */
     @SuppressWarnings("unused")
-    SmartCredentialsApiResponse<CameraScannerLayout> getOcrScannerView(@NonNull Context context,
-                                                                       @NonNull ScannerCallback callback);
+    SmartCredentialsApiResponse<SurfaceContainerInteractor> getOcrScannerView(@NonNull Context context,
+                                                                              SurfaceContainer<SH> cameraScannerLayout,
+                                                                              LifecycleOwner lifecycleOwner,
+                                                                              @NonNull ScannerCallback callback);
 }

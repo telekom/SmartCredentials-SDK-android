@@ -65,6 +65,15 @@ public class PluginCallbackDocScannerConverter {
             }
 
             @Override
+            public void onFailed(Exception e) {
+                ApiLoggerResolver.logCallbackMethod(tag, DocumentScannerCallback.TAG, "onFailed");
+                if (callback == null) {
+                    return;
+                }
+                callback.onScannedFailed();
+            }
+
+            @Override
             public void onScannedFailed() {
                 ApiLoggerResolver.logCallbackMethod(tag, DocumentScannerCallback.TAG, "onScannedFailed");
                 if (callback == null) {
