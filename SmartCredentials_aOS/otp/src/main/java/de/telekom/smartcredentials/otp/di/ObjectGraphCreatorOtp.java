@@ -17,6 +17,7 @@
 package de.telekom.smartcredentials.otp.di;
 
 import androidx.annotation.NonNull;
+import androidx.camera.view.PreviewView;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -42,7 +43,7 @@ public class ObjectGraphCreatorOtp {
 
     private SecurityApi mSecurityApi;
     private StorageApi mStorageApi;
-    private CameraApi mCameraApi;
+    private CameraApi<PreviewView> mCameraApi;
     private Set<String> mAcceptedMacAlgorithms;
 
     private ObjectGraphCreatorOtp() {
@@ -56,7 +57,7 @@ public class ObjectGraphCreatorOtp {
         return sInstance;
     }
 
-    public void init(SecurityApi securityApi, StorageApi storageApi, CameraApi cameraApi) {
+    public void init(SecurityApi securityApi, StorageApi storageApi, CameraApi<PreviewView> cameraApi) {
         mSecurityApi = securityApi;
         mStorageApi = storageApi;
         mCameraApi = cameraApi;
@@ -117,7 +118,7 @@ public class ObjectGraphCreatorOtp {
         return mStorageApi;
     }
 
-    private CameraApi getCameraApi() {
+    private CameraApi<PreviewView> getCameraApi() {
         if (mCameraApi == null) {
             throw new RuntimeException(SmartCredentialsModuleSet.CAMERA_MODULE + " from "
                     + SmartCredentialsModuleSet.OTP_MODULE + " has not been initialized");

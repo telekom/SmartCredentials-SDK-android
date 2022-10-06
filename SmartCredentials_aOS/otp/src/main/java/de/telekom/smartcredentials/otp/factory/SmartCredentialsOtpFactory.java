@@ -17,6 +17,7 @@
 package de.telekom.smartcredentials.otp.factory;
 
 import androidx.annotation.NonNull;
+import androidx.camera.view.PreviewView;
 
 import java.util.List;
 
@@ -44,10 +45,10 @@ public class SmartCredentialsOtpFactory {
 
     @NonNull
     @SuppressWarnings("unused")
-    public static synchronized OtpApi initSmartCredentialsOtpModule(@NonNull final CoreApi coreApi,
-                                                                    @NonNull final SecurityApi securityApi,
-                                                                    @NonNull final StorageApi storageApi,
-                                                                    @NonNull final CameraApi cameraApi) {
+    public static synchronized OtpApi<PreviewView> initSmartCredentialsOtpModule(@NonNull final CoreApi coreApi,
+                                                                                 @NonNull final SecurityApi securityApi,
+                                                                                 @NonNull final StorageApi storageApi,
+                                                                                 @NonNull final CameraApi<PreviewView> cameraApi) {
         CoreController coreController;
 
         if (coreApi instanceof CoreController) {
@@ -67,7 +68,7 @@ public class SmartCredentialsOtpFactory {
 
     @NonNull
     @SuppressWarnings("unused")
-    public static synchronized OtpApi getOtpApi() {
+    public static synchronized OtpApi<PreviewView> getOtpApi() {
         if (sOtpController == null) {
             throw new RuntimeException(MODULE_NOT_INITIALIZED_EXCEPTION);
         }

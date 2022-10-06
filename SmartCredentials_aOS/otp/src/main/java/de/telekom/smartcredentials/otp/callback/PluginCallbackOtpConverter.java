@@ -60,6 +60,15 @@ public class PluginCallbackOtpConverter {
             }
 
             @Override
+            public void onFailed(Exception e) {
+                ApiLoggerResolver.logCallbackMethod(tag, OTPImporterCallback.TAG, "onFailed");
+                if (callback == null) {
+                    return;
+                }
+                callback.onScannerUnavailable(ScannerPluginUnavailable.SURFACE_UNAVAILABLE);
+            }
+
+            @Override
             public void onSaveFailed() {
                 ApiLoggerResolver.logCallbackMethod(tag, OTPImporterCallback.TAG, "onSaveFailed; see logs for more info");
                 if (callback == null) {

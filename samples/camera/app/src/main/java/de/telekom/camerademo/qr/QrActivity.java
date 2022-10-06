@@ -4,11 +4,11 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -20,42 +20,32 @@ import de.telekom.camerademo.R;
 import de.telekom.smartcredentials.camera.factory.SmartCredentialsCameraFactory;
 import de.telekom.smartcredentials.core.api.CameraApi;
 import de.telekom.smartcredentials.core.camera.BarcodeType;
-import de.telekom.smartcredentials.core.camera.CameraScannerLayout;
 import de.telekom.smartcredentials.core.camera.ScannerCallback;
-import de.telekom.smartcredentials.core.camera.ScannerPluginUnavailable;
-import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
+import de.telekom.smartcredentials.core.camera.SurfaceContainer;
 
 public class QrActivity extends AppCompatActivity implements QrDialogInteractionListener {
 
     private static final int CAMERA_PERMISSION_RQ = 1234;
 
-    private FrameLayout cameraWrapper;
     private LottieAnimationView qrAnimationView;
-    private CameraScannerLayout cameraScannerLayout;
+    private PreviewView previewView;
     private boolean isProcessing = true;
 
     private final ScannerCallback scannerCallback = new ScannerCallback() {
         @Override
         public void onDetected(List<String> detectedValues) {
-            runOnUiThread(() -> {
-                if (isProcessing) {
-                    isProcessing = false;
-                    qrAnimationView.pauseAnimation();
-                    ArrayList<String> qrValues = new ArrayList<>(detectedValues);
-                    QrDialogFragment dialogFragment = QrDialogFragment.newInstance(qrValues);
-                    dialogFragment.show(getSupportFragmentManager(), QrDialogFragment.TAG);
-                }
-            });
+            if (isProcessing) {
+                isProcessing = false;
+                qrAnimationView.pauseAnimation();
+
+                QrDialogFragment dialogFragment = QrDialogFragment.newInstance((ArrayList<String>) detectedValues);
+                dialogFragment.show(getSupportFragmentManager(), QrDialogFragment.TAG);
+            }
         }
 
         @Override
-        public void onInitialized() {
-            // no implementation
-        }
-
-        @Override
-        public void onScannerUnavailable(ScannerPluginUnavailable errorMessage) {
-            // no implementation
+        public void onScanFailed(Exception e) {
+            Toast.makeText(QrActivity.this, R.string.qr_scan_failed, Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -63,9 +53,8 @@ public class QrActivity extends AppCompatActivity implements QrDialogInteraction
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
-
-        cameraWrapper = findViewById(R.id.camera_wrapper);
         qrAnimationView = findViewById(R.id.scan_qr_animation_view);
+        previewView = findViewById(R.id.preview_view);
     }
 
     @Override
@@ -74,16 +63,7 @@ public class QrActivity extends AppCompatActivity implements QrDialogInteraction
         if (!hasCameraPermission()) {
             requestCameraPermission();
         } else {
-            getBarcodeScanner();
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (cameraScannerLayout != null) {
-            cameraScannerLayout.stopScanner();
-            cameraScannerLayout.releaseCamera();
+            startCamera();
         }
     }
 
@@ -93,7 +73,7 @@ public class QrActivity extends AppCompatActivity implements QrDialogInteraction
                                            @NonNull int[] grantResults) {
         if (requestCode == CAMERA_PERMISSION_RQ) {
             if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getBarcodeScanner();
+                startCamera();
             } else if (grantResults.length != 0) {
                 Toast.makeText(this, R.string.camera_permission_not_granted, Toast.LENGTH_SHORT).show();
             }
@@ -110,24 +90,14 @@ public class QrActivity extends AppCompatActivity implements QrDialogInteraction
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_RQ);
     }
 
-    private void startScanner() {
-        cameraWrapper.removeAllViews();
-        cameraWrapper.addView(cameraScannerLayout);
-        cameraScannerLayout.startScanner();
+    public void startCamera() {
+        CameraApi<PreviewView> cameraApi = SmartCredentialsCameraFactory.getCameraApi();
+        SurfaceContainer<PreviewView> surfaceContainer = new SurfaceContainer<>(previewView);
+        cameraApi.getBarcodeScannerView(this, surfaceContainer, this,
+                scannerCallback, BarcodeType.BARCODE_2D_QR_CODE);
+
         qrAnimationView.setVisibility(View.VISIBLE);
         qrAnimationView.playAnimation();
-    }
-
-    private void getBarcodeScanner() {
-        CameraApi cameraApi = SmartCredentialsCameraFactory.getCameraApi();
-        SmartCredentialsApiResponse<CameraScannerLayout> response =
-                cameraApi.getBarcodeScannerView(this, scannerCallback, BarcodeType.BARCODE_ALL_FORMATS);
-        if (response.isSuccessful()) {
-            cameraScannerLayout = response.getData();
-            startScanner();
-        } else {
-            Toast.makeText(this, R.string.camera_scanner_layout_failed, Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override
