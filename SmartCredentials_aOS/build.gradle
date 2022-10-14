@@ -40,8 +40,8 @@ allprojects {
         androidMinSdkVersion = 21
         androidMinSdkVersionEid = 24
         buildToolsVersion = "33.0.0"
-        androidVersionCode = 5
-        androidVersionName = "6.5.0"
+        androidVersionCode = 6
+        androidVersionName = "6.5.1"
         androidNdkVersion = "23.1.7779620"
 
         androidXAppcompat = "1.4.2"
