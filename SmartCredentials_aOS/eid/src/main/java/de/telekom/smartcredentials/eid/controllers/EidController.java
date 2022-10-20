@@ -197,8 +197,12 @@ public class EidController implements EidApi, EidCallbackSubject {
 
         try {
             if (mServiceConnection != null) {
-                mServiceConnection.getAusweisSdk().updateNfcTag(mAusweisCallback.mSessionId, tag);
-                callback.onSuccess();
+                if (mServiceConnection.getAusweisSdk() != null) {
+                    mServiceConnection.getAusweisSdk().updateNfcTag(mAusweisCallback.mSessionId, tag);
+                    callback.onSuccess();
+                } else {
+                    callback.onFailed(new Exception("mAusweisCallback is null."));
+                }
             } else {
                 callback.onFailed(new Exception("Service connection was lost."));
             }
