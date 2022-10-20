@@ -163,7 +163,15 @@ public class EidController implements EidApi, EidCallbackSubject {
 
         try {
             if (mServiceConnection != null) {
-                mServiceConnection.getAusweisSdk().send(mAusweisCallback.mSessionId, mGson.toJson(command));
+                if (mServiceConnection.getAusweisSdk() != null) {
+                    if (mAusweisCallback != null) {
+                        mServiceConnection.getAusweisSdk().send(mAusweisCallback.mSessionId, mGson.toJson(command));
+                    } else {
+                        callback.onFailed(new Exception("mAusweisCallback is null."));
+                    }
+              } else {
+                    callback.onFailed(new Exception("AusweisApp2 SDK is null."));
+                }
             } else {
                 callback.onFailed(new Exception("Service connection was lost."));
             }

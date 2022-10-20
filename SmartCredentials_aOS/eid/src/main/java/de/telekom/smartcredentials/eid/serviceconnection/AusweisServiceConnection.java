@@ -21,6 +21,8 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
 
+import androidx.annotation.Nullable;
+
 import com.governikus.ausweisapp2.IAusweisApp2Sdk;
 
 import de.telekom.smartcredentials.core.eid.callbacks.EidMessageReceivedCallback;
@@ -76,6 +78,7 @@ public class AusweisServiceConnection implements ServiceConnection, EidCallbackO
         }
     }
 
+    @Nullable
     public IAusweisApp2Sdk getAusweisSdk() {
         return mSdk;
     }
