@@ -52,6 +52,11 @@ public class JsonParser {
         return value;
     }
 
+    @Nullable
+    public JSONObject optJSONObject(@NonNull String key) {
+        return  mJsonObject.optJSONObject(key);
+    }
+
     public String getRequiredString(String key) throws InvalidConfigurationException {
         String value = getString(key);
 

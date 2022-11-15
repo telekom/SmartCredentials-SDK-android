@@ -41,6 +41,8 @@ import net.openid.appauth.RegistrationResponse;
 import net.openid.appauth.ResponseTypeValues;
 import net.openid.appauth.browser.BrowserSelector;
 
+import org.json.JSONObject;
+
 import java.lang.ref.WeakReference;
 import java.security.SecureRandom;
 import java.util.Collections;
@@ -440,6 +442,14 @@ public class AuthenticationController implements AuthenticationApi {
                         ResponseTypeValues.CODE,
                         mConfiguration.getRedirectUri())
                         .setScope(mConfiguration.getScope());
+
+        {
+            JSONObject claims = mConfiguration.getClaims();
+            if (claims != null) {
+                ApiLoggerResolver.logInfo(String.format("requesting claim %s", claims));
+                authRequestBuilder.setClaims(claims);
+            }
+        }
 
         if (mPkceConfiguration.getCodeVerifier() != null) {
             ApiLoggerResolver.logInfo("Using PKCE Extension.");

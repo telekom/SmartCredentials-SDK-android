@@ -34,30 +34,38 @@ import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
 public interface CameraApi<SH> {
 
     /**
-     * Method used to get a QR Scanner.
+     * Method used to read the content from the surface holder provided as a parameter and extract the
+     * present barcodes. The results are delivered asynchronously on the scanner callback.
      *
-     * @param callback    {@link ScannerCallback} for retrieving success or failure events
+     * @param surfaceContainer    {@link SurfaceContainer} is a container for a {@link android.view.TextureView},
+     *                                                     {@link android.view.SurfaceView} or any kind of view
+     *                                                      that can display the camera feed
+     * @param callback  {@link ScannerCallback} used to return the scan results or failure events
      * @param barcodeType {@link BarcodeType} type of wanted barcode. If argument is null, all barcodes will be detected
-     * @return {@link SmartCredentialsApiResponse} containing a {@link SurfaceContainer} if response was successful,
-     * or {@link RootedThrowable} if device is rooted
+     * @return {@link SmartCredentialsApiResponse} true if the barcode scanner was initialized successfully,
+     * false otherwise
      */
     @SuppressWarnings("unused")
     SmartCredentialsApiResponse<Boolean> getBarcodeScannerView(@NonNull Context context,
-                                                               SurfaceContainer<SH> cameraScannerLayout,
+                                                               SurfaceContainer<SH> surfaceContainer,
                                                                LifecycleOwner lifecycleOwner,
                                                                @NonNull ScannerCallback callback,
                                                                BarcodeType barcodeType);
 
     /**
-     * Method used to get a OCR Scanner View.
+     * Method used to read the content from the surface holder provided as a parameter and extract the present
+     * text. The results are delivered asynchronously on the scanner callback.
      *
-     * @param callback {@link ScannerCallback} for retrieving success or failure events
-     * @return {@link SmartCredentialsApiResponse} containing a {@link SurfaceContainer} if response was successful,
-     * or {@link RootedThrowable} if device is rooted
+     * @param surfaceContainer {@link SurfaceContainer} is a container for a {@link android.view.TextureView},
+     *                                                  {@link android.view.SurfaceView} or any kind of view
+     *                                                  that can display the camera feed
+     * @param callback {@link ScannerCallback} used to return the scanner results or failure events
+     * @return {@link SmartCredentialsApiResponse} an interactor of type {@link SurfaceContainerInteractor} that
+     * can be used to capture the image on which OCR is performed.
      */
     @SuppressWarnings("unused")
     SmartCredentialsApiResponse<SurfaceContainerInteractor> getOcrScannerView(@NonNull Context context,
-                                                                              SurfaceContainer<SH> cameraScannerLayout,
+                                                                              SurfaceContainer<SH> surfaceContainer,
                                                                               LifecycleOwner lifecycleOwner,
                                                                               @NonNull ScannerCallback callback);
 }
