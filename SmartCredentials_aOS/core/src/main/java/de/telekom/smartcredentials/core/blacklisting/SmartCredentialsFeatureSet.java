@@ -66,6 +66,8 @@ public enum SmartCredentialsFeatureSet {
             "The Set Token Refreshed Callback feature is not supported on this device model."),
     GET_TRANSACTION_TOKEN("Get Transaction Token", SmartCredentialsModuleSet.ONE_CLICK_BUSINESS_MODULE,
             "The retrieve of the transaction token feature is not supported on this device model."),
+    GET_TEMPORARY_TOKEN("Get Temporary Token", SmartCredentialsModuleSet.SIM_MODULE,
+            "The retrieve of the temporary token feature is not supported on this device model."),
     GET_DEVICE_TOKEN("Get Device Token", SmartCredentialsModuleSet.SIM_MODULE,
             "The retrieve of the device token feature is not supported on this device model."),
     BIND("Bind", SmartCredentialsModuleSet.EID_MODULE,
