@@ -10,7 +10,7 @@ public interface SimApi {
 
     SmartCredentialsApiResponse<String> getDeviceToken();
 
-    void setDebugDeviceToken(String debugDeviceToken);
+    SmartCredentialsApiResponse<String> getTemporaryToken(String deviceToken);
 
-    String getDebugDeviceToken();
+    SmartCredentialsApiResponse<String> getOperatorToken(String clientId, String temporaryToken);
 }
