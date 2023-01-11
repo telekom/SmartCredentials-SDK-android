@@ -65,7 +65,7 @@ dependencies {
     implementation "androidx.camera:camera-view:${cameraXVersion}"
     implementation "androidx.camera:camera-extensions:${cameraXVersion}"
 
-    implementation 'com.google.mlkit:barcode-scanning:17.0.2'
+    implementation 'com.google.mlkit:barcode-scanning:17.0.3'
     implementation 'com.google.android.gms:play-services-mlkit-text-recognition:18.0.2'
 
     testImplementation "junit:junit:${junitVersion}"
