@@ -49,7 +49,7 @@ allprojects {
         androidXFragment = "1.5.1"
         constraintLayoutVersion = "2.1.4"
         architectureComponentsVersion = "1.1.1"
-        gsonVersion = "2.9.0"
+        gsonVersion = "2.10.1"
         mobileVisionVersion = "17.0.2"
         cameraXVersion = "1.2.0-beta02"
 
