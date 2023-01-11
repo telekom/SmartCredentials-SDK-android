@@ -15,7 +15,7 @@
  */
 
 buildscript {
-    ext.kotlin_version = '1.7.10'
+    ext.kotlin_version = '1.7.20'
     repositories {
         google()
         mavenCentral()
@@ -45,11 +45,11 @@ allprojects {
         androidNdkVersion = "23.1.7779620"
 
         androidXAppcompat = "1.4.2"
-        androidXAnnotation = "1.4.0"
+        androidXAnnotation = "1.5.0"
         androidXFragment = "1.5.1"
         constraintLayoutVersion = "2.1.4"
         architectureComponentsVersion = "1.1.1"
-        gsonVersion = "2.9.0"
+        gsonVersion = "2.10.1"
         mobileVisionVersion = "17.0.2"
         cameraXVersion = "1.2.0-beta02"
 
