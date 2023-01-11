@@ -44,7 +44,7 @@ allprojects {
         androidVersionName = "6.5.3"
         androidNdkVersion = "23.1.7779620"
 
-        androidXAppcompat = "1.4.2"
+        androidXAppcompat = "1.5.1"
         androidXAnnotation = "1.5.0"
         androidXFragment = "1.5.5"
         constraintLayoutVersion = "2.1.4"
