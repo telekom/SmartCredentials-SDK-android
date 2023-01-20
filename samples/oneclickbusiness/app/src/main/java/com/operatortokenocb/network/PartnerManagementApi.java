@@ -11,6 +11,6 @@ public interface PartnerManagementApi {
     @GET("access-token/{credentials}")
     Observable<String> observeAccessToken(@Path("credentials") String credentials);
 
-    @POST("bearer-token-hackaton")
+    @POST("bearer-token-hackathon")
     Observable<String> observeBearerToken(@Body GetBearerBody body);
 }
