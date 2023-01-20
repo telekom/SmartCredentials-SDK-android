@@ -56,7 +56,7 @@ class TokenFetchFragment : Fragment(), TransactionTokenListener {
             RetrofitClient().createRetrofitClient(BaseRetrofitClient.PARTNER_APPLICATION_URL)
         val api: PartnerManagementApi = retrofitClient.create(PartnerManagementApi::class.java)
 
-        compositeDisposable.add(api.observeAccessToken("Hackaton-Sample-App-0ae7264a-0f3d-4859-a9aa-97788446e9e2")
+        compositeDisposable.add(api.observeAccessToken("Hackathon-Sample-App-0ae7264a-0f3d-4859-a9aa-97788446e9e2")
             .flatMap { accessToken ->
                 val body = GetBearerBody(accessToken, null, requireActivity().packageName)
                 api.observeBearerToken(body)
