@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 7.2.2" type="baseline" client="gradle" dependencies="false" name="AGP (7.2.2)" variant="fatal" version="7.2.2">
+
+    <issue
+        id="PackagedPrivateKey"
+        message="The `raw/tphonehack_private_key` file seems to be a private key file. Please make sure not to embed this in your APK file.">
+        <location
+            file="src/main/res/raw/tphonehack_private_key"/>
+    </issue>
+
+</issues>
