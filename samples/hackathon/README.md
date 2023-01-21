@@ -7,3 +7,8 @@ How events happen:
 - DIFFERENT SIM is inserted
 - APP uses API to determine the new token and compare
 - APP tells user that a different SIM is inserted
+### Usage
+To run/configure the app:
+- Host a php client with `php -S localhost:port` in local device (fill in other port if necessary)
+- Determine the device's IP to direct the app on phone device
+- Change the IP in the app config files
