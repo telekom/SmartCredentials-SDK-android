@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/token_fetch_fragment">
+
+    <fragment
+        android:id="@+id/token_fetch_fragment"
+        android:name="com.operatortokenocb.ui.TokenFetchFragment"
+        android:label="token_fetch_fragment"
+        tools:layout="@layout/fragment_token_fetch" />
+
+</navigation>
