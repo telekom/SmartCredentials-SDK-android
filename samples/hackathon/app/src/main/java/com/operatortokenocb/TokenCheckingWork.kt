@@ -1,10 +1,12 @@
 package com.operatortokenocb
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.work.RxWorker
 import androidx.work.WorkerParameters
 import com.operatortokenocb.contentprovider.ContentProvider
 import com.operatortokenocb.contentprovider.TransactionTokenDecrypt
+import com.operatortokenocb.data.TokenRepository
 import com.operatortokenocb.network.BaseRetrofitClient
 import com.operatortokenocb.network.GetBearerBody
 import com.operatortokenocb.network.PartnerManagementApi
@@ -20,7 +22,6 @@ class TokenCheckingWork(
     appContext: Context,
     workerParams: WorkerParameters,
 ) : RxWorker(appContext, workerParams) {
-
     override fun createWork(): Single<Result> {
         Timber.tag("TCW").d("work running")
 
@@ -38,12 +39,25 @@ class TokenCheckingWork(
                 val data = TransactionTokenDecrypt(applicationContext).getClaimsFromTransactionToken(token)
                 Timber.tag("TCW").d(data)
 
+                val repo = TokenRepository(
+                    applicationContext.getSharedPreferences("fuck", Context.MODE_PRIVATE)
+                )
+
+                val oldToken = repo.getToken()
+                if (oldToken.isNullOrBlank()) {
+                    repo.storeToken(data)
+                } else if (oldToken == data) {
+                    Timber.tag("asdfasf").d("same device")
+                } else {
+                    Timber.tag("asdfasf").d("TODO send alert")
+                }
+
                 data
             }
             .singleOrError()
             .map {
                 when {
-                    it.isNullOrBlank() -> Result.failure()
+                    it.isBlank() -> Result.failure()
                     else -> Result.success()
                 }
             }
