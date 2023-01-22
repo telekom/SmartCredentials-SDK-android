@@ -30,4 +30,8 @@ class SimChangedReceiver : BroadcastReceiver() {
 
         Timber.tag("SCR").d("work scheduled")
     }
+            "android.intent.action.SIM_STATE_CHANGED" -> TODO("trigger all the api check")
+            else -> error("$intentAction is not expected.")
+        }
+    }
 }
