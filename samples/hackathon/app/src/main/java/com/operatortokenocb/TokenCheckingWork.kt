@@ -1,21 +1,21 @@
 package com.operatortokenocb
 
 import android.content.Context
-import android.content.SharedPreferences
 import androidx.work.RxWorker
 import androidx.work.WorkerParameters
 import com.operatortokenocb.contentprovider.ContentProvider
 import com.operatortokenocb.contentprovider.TransactionTokenDecrypt
+import com.operatortokenocb.data.AlertApi
+import com.operatortokenocb.data.AlertRepository
+import com.operatortokenocb.data.ContactRepository
 import com.operatortokenocb.data.TokenRepository
 import com.operatortokenocb.network.BaseRetrofitClient
 import com.operatortokenocb.network.GetBearerBody
 import com.operatortokenocb.network.PartnerManagementApi
 import com.operatortokenocb.network.RetrofitClient
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import retrofit2.Retrofit
+import retrofit2.create
 import timber.log.Timber
 
 class TokenCheckingWork(
@@ -39,17 +39,20 @@ class TokenCheckingWork(
                 val data = TransactionTokenDecrypt(applicationContext).getClaimsFromTransactionToken(token)
                 Timber.tag("TCW").d(data)
 
-                val repo = TokenRepository(
-                    applicationContext.getSharedPreferences("fuck", Context.MODE_PRIVATE)
-                )
+                val sharePref = applicationContext.getSharedPreferences("fuck", Context.MODE_PRIVATE)
+                val tokenRepo = TokenRepository(sharePref)
+                val contactRepo = ContactRepository(sharePref)
+                val email = contactRepo.getInfo()?.email
 
-                val oldToken = repo.getToken()
+                val oldToken = tokenRepo.getToken()
                 if (oldToken.isNullOrBlank()) {
-                    repo.storeToken(data)
+                    tokenRepo.storeToken(data)
                 } else if (oldToken == data) {
-                    Timber.tag("asdfasf").d("same device")
+                    Timber.tag("TCW").d("same device")
                 } else {
-                    Timber.tag("asdfasf").d("TODO send alert")
+//                    AlertRepository(getAlertApi())
+//                        .sendAlert()
+                    Timber.tag("TCW").d("TODO")
                 }
 
                 data
@@ -70,4 +73,10 @@ class TokenCheckingWork(
         return retrofitClient.create(PartnerManagementApi::class.java)
     }
 
+    private fun getAlertApi(): AlertApi {
+        val retrofitClient: Retrofit =
+            RetrofitClient().createRetrofitClient(TODO("our fake server url"))
+
+        return retrofitClient.create()
+    }
 }
