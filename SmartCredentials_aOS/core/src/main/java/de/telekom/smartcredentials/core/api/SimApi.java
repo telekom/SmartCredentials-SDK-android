@@ -64,24 +64,5 @@ public interface SimApi {
      *              - pairwise subscription identifier
      *              - MSISDN
      */
-    SmartCredentialsApiResponse<String> getOperatorToken(String clientId, String temporaryToken);
-
-    /**
-     * Returns a pairwise subscription identifier for the default voice subscription.
-     * Multiple SIM cards are currently not supported
-     *
-     * Using this method without a partner agreement is forbidden.
-     *
-     * This is a privileged operation and in Beta.
-     * Install the privileged application SmartAgent.
-     * Also, 3rd party applications using this API need to be registered.
-     *
-     * @return      a pairwise identifier for this client.
-     *              Other clients get a different identifier.
-     *              A sector identifier can be used by special agreement.
-     */
-    SmartCredentialsApiResponse<String> getPairwiseSubscriptionIdentifier(
-            String clientId,
-            String temporaryToken);
-
+    SmartCredentialsApiResponse<String> getOperatorToken(String clientId, String temporaryToken, String scope);
 }
