@@ -37,7 +37,13 @@ public class ConfigurationMapper {
                     SmartCredentialsApiResponse<ItemEnvelope> response =
                             (SmartCredentialsApiResponse<ItemEnvelope>) result;
                     if (response != null && response.isSuccessful()) {
-                        callback.onConfigurationRetrieved(generateConfiguration(response.getData()));
+                        AuthorizationConfiguration configuration = generateConfiguration(response.getData());
+                        if (!configuration.getAuthorizationView().getTitle().equals("Null")) {
+                            callback.onConfigurationRetrieved(configuration);
+                        } else {
+                            callback.onFailedToRetrieveConfiguration();
+                            Timber.tag(DemoApplication.TAG).d("Title must not be null.");
+                        }
                     } else {
                         callback.onFailedToRetrieveConfiguration();
                         Timber.tag(DemoApplication.TAG).d("Failed to fetch item details.");
@@ -49,8 +55,14 @@ public class ConfigurationMapper {
     private AuthorizationConfiguration generateConfiguration(ItemEnvelope itemEnvelope) {
         AuthorizationConfiguration authorizationConfiguration = null;
         try {
+
+            String title = itemEnvelope.getDetails().getString(ConfigurationActivity.ITEM_KEY_TITLE);
+            if (title.isEmpty()) {
+                title = "Null";
+            }
+
             AuthorizationView.Builder authorizationViewBuilder = new AuthorizationView.Builder(
-                    itemEnvelope.getDetails().getString(ConfigurationActivity.ITEM_KEY_TITLE),
+                    title,
                     itemEnvelope.getDetails().getString(ConfigurationActivity.ITEM_KEY_NEGATIVE_BUTTON_TEXT));
 
             String subtitle = itemEnvelope.getDetails().getString(ConfigurationActivity.ITEM_KEY_SUBTITLE);
