@@ -16,12 +16,21 @@
 
 package de.telekom.smartcredentials.eid.rest;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface Rx2EidService {
+
+    @GET("log-failure")
+    Completable logFailure(@Query("errorCode") String errorCode,
+                           @Query("jwt") String jwt,
+                           @Query("OS") String os,
+                           @Query("vendor") String vendor,
+                           @Query("model") String model,
+                           @Query("sicv") String sicv);
 
     @GET("error")
     Observable<String> getError(@Query("errorCode") String errorCode);
