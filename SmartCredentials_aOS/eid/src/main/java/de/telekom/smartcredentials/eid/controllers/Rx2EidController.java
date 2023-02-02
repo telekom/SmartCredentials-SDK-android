@@ -68,6 +68,15 @@ public class Rx2EidController implements Rx2EidApi {
     }
 
     @Override
+    public Completable observeLogFailure(String errorCode, String jwt, String os,
+                                              String vendor, String model, String sicv,
+                                              boolean isProduction) {
+        RetrofitClient retrofitClient = new RetrofitClient(eidController.getEidConfiguration());
+        return retrofitClient.getRx2EidService(isProduction)
+                .logFailure(errorCode, jwt, os, vendor, model, sicv);
+    }
+
+    @Override
     public Observable<String> observeLoadingErrorCode(String jwt, boolean isProduction) {
         RetrofitClient retrofitClient = new RetrofitClient(eidController.getEidConfiguration());
         return retrofitClient.getRx2EidService(isProduction).getError(jwt);

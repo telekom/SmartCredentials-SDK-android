@@ -45,6 +45,10 @@ public interface Rx3EidApi {
     Completable updateNfcTag(Tag tag);
 
     @SuppressWarnings("unused")
+    Completable observeLogFailure(String errorCode, String jwt, String os, String vendor,
+                                       String model, String sicv, boolean isProduction);
+
+    @SuppressWarnings("unused")
     Observable<String> observeLoadingErrorCode(String jwt, boolean isProduction);
 
     @SuppressWarnings("unused")
