@@ -64,6 +64,11 @@ public class AddManualOtpActivity extends BaseUpActivity {
     private void addItem() {
         String name = accountName.getText().toString();
         String key = accountKey.getText().toString();
+
+        if (name.isEmpty() || key.isEmpty()){
+            finish();
+            return;
+        }
         OTPType type = (OTPType) otpTypeSpinner.getSelectedItem();
 
         JSONObject identifierJson = new JSONObject();
