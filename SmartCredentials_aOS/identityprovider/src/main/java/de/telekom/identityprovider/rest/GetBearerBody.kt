@@ -13,18 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package de.telekom.identityprovider.rest
 
-include ':core'
-include ':authentication'
-include ':authorization'
-include ':camera'
-include ':eid'
-include ':networking'
-include ':storage'
-include ':security'
-include ':otp'
-include ':documentscanner'
-include ':qrlogin'
-include ':persistentlogging'
-include ':pushnotifications'
-include ':identityprovider'
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
+
+/**
+ * Created by teodorionut.ganga@endava.com at 23/02/2023
+ */
+class GetBearerBody(
+    @Expose @SerializedName("accessToken") var accessToken: String,
+    @Expose @SerializedName("clientId") var clientId: String,
+    @Expose @SerializedName("bundleId") var bundleId: String?,
+    @Expose @SerializedName("packageName") var packageName: String
+)
