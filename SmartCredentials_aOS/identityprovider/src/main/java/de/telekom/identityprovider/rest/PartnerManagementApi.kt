@@ -13,18 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package de.telekom.identityprovider.rest
 
-include ':core'
-include ':authentication'
-include ':authorization'
-include ':camera'
-include ':eid'
-include ':networking'
-include ':storage'
-include ':security'
-include ':otp'
-include ':documentscanner'
-include ':qrlogin'
-include ':persistentlogging'
-include ':pushnotifications'
-include ':identityprovider'
+import io.reactivex.Observable
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Path
+
+/**
+ * Created by teodorionut.ganga@endava.com at 23/02/2023
+ */
+interface PartnerManagementApi {
+
+    @GET("access-token/{credentials}")
+    fun observeAccessToken(@Path("credentials") credentials: String): Observable<String>
+
+    @POST("bearer-token-hackathon")
+    fun observeBearerToken(@Body body: GetBearerBody): Observable<String>
+}
