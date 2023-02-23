@@ -56,10 +56,10 @@ class IdentityProviderController(
         with(OperatorTokenManager(baseUrl)) {
             return try {
                 SmartCredentialsResponse(
-                    this.getOperatorToken(
+                    getOperatorToken(
                         context,
-                        this.getBearerToken(
-                            this.getAccessToken(credentials),
+                        getBearerToken(
+                            getAccessToken(credentials),
                             clientId,
                             context.packageName
                         ),

@@ -23,6 +23,11 @@ import android.net.Uri
  */
 class ContentProviderManager(private val context: Context) {
 
+    companion object {
+        const val URI = "content://de.telekom.entitlements/tokens"
+        const val COLUMN_NAME = "transaction"
+    }
+
     @Throws(Exception::class)
     fun getOperatorToken(bearerToken: String, clientId: String, scope: String): String {
         val CONTENT_URI = Uri.parse(URI)
@@ -50,10 +55,5 @@ class ContentProviderManager(private val context: Context) {
                 tokenBuilder.toString()
             }
         }
-    }
-
-    companion object {
-        const val URI = "content://de.telekom.entitlements/tokens"
-        const val COLUMN_NAME = "transaction"
     }
 }

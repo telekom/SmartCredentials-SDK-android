@@ -35,6 +35,15 @@ object SmartCredentialsIdentityProviderFactory {
         "SmartCredentials IdentityProvider Module have not been initialized"
     private var sIdentityProviderController: IdentityProviderController? = null
 
+    @get:Synchronized
+    val identityProviderApi: IdentityProviderApi
+        get() {
+            if (sIdentityProviderController == null) {
+                throw RuntimeException(MODULE_NOT_INITIALIZED_EXCEPTION)
+            }
+            return sIdentityProviderController!!
+        }
+
     @Synchronized
     fun initSmartCredentialsIdentityProviderModule(
         coreApi: CoreApi,
@@ -50,15 +59,6 @@ object SmartCredentialsIdentityProviderFactory {
             .provideApiControllerIdentityProvider(coreController, baseUrl, credentials)
         return sIdentityProviderController!!
     }
-
-    @get:Synchronized
-    val identityProviderApi: IdentityProviderApi
-        get() {
-            if (sIdentityProviderController == null) {
-                throw RuntimeException(MODULE_NOT_INITIALIZED_EXCEPTION)
-            }
-            return sIdentityProviderController!!
-        }
 
     fun clear() {
         ObjectGraphCreatorIdentityProvider.destroy()
