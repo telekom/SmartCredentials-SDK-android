@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="one_click_dialog_title">5G Speed is available to you</string>
+    <string name="one_click_after_description">You experienced a few drop-outs and jitter. We can help you by making your app more reactive, faster and more secure.</string>
+    <string name="one_click_dialog_positive_button">Let me try it!</string>
+    <string name="one_click_dialog_negative_button">No, I\'m happy</string>
+    <string name="partnership_text">Recommendation offered by Odysee through a partnership with Telekom Deutschland GmbH.</string>
+    <string name="processing">Processing …</string>
+    <string name="loading_text_retrieving_transaction_token">Retrieving subscriber information</string>
+    <string name="ellipsize">...</string>
+    <string name="loading_text_transferring_to_portal">Transferring to Telekom booking portal</string>
+    <string name="dismiss">Dismiss</string>
+
+</resources>

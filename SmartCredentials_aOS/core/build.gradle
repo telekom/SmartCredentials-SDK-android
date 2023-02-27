@@ -75,6 +75,7 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:${rxJavaVersion}"
     implementation "io.reactivex.rxjava3:rxandroid:${rx3AndroidVersion}"
     implementation "io.reactivex.rxjava3:rxjava:${rx3JavaVersion}"
+    implementation 'androidx.appcompat:appcompat:1.6.1'
 
     testImplementation "org.hamcrest:hamcrest-library:${hamcrestVersion}"
     testImplementation "junit:junit:${junitVersion}"

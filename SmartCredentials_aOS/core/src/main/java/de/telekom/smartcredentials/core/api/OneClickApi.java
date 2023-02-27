@@ -16,6 +16,8 @@
 
 package de.telekom.smartcredentials.core.api;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.List;
 import java.util.Map;
 
@@ -23,11 +25,11 @@ public interface OneClickApi {
 
     /**
      * Used to force a recommendation delivery. To be removed in future versions.
-     *
+     * <p>
      * A list of productIds is required to make a recommendation.
      */
     @Deprecated
-    void makeRecommendation(List<String> productIds);
+    void makeRecommendation(List<String> productIds, String firebaseServerKey);
 
     /**
      * Used to pass messages from a FirebaseMessagingService to the OneClickApi implementation.
@@ -39,4 +41,7 @@ public interface OneClickApi {
      */
     void updateFirebaseToken(String token);
 
+    void bind(AppCompatActivity activity);
+
+    void unbind();
 }
