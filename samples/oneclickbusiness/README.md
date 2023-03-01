@@ -1,8 +1,22 @@
 # 1CB Client App
 
+**Disclaimer:
+Everything described here is for demo purposes and not a product. Everything is provided as is without any warranty or promises that it continues to work.**
+
 1CB Client App's purpose is to demonstrate how a client application can use the OneClickBusiness API. 
 
-1CB Client App fetches an Operator Token which carries sensitive information about the subscription (SIM card) like MSISDN, imsi, and pairwise subscription identifier.
+1CB Client App fetches an Operator Token which carries sensitive information about the subscription (SIM card) like [MSISDN](https://en.wikipedia.org/wiki/MSISDN) (telephone number), [IMSI](https://en.wikipedia.org/wiki/International_mobile_subscriber_identity), and pairwise subscription identifier (similar to [OpenId Connect](https://openid.net/wg/connect/)'s [pairwise identifier](https://openid.net/specs/openid-connect-core-1_0.html#PairwiseAlg)).
+
+The operator token contains data that is not easily available to _normal_ Android applications.
+
+## What is the opertor token good for?
+- **number verification**: Many mobile apps ask the user for their telephone number and then verify that telephone number by having a backend send an SMS containing an one-time code or one-time link to that number. Entering the code or clicking on the link verfies the telephone number. 
+The operator token verifies the telephone number without user interaction and without SMS cost.
+- **provide carrier network products**: A carrier backend can use the IMSI to provide network products (e.g. [5G Slicing](https://en.wikipedia.org/wiki/5G_network_slicing) or Quality on Demand or ...) to a specific SIM-Card. 
+Using the IMSI for this purpose is preferrable to using the MSISDN because there can be several SIM-cards with the same MSISDN but only one IMSI per SIM-Card.
+- **provide unlinkable identifiers to 3rd parties**: The pairwise subscription identifier is an identifier for _this_ SIM-card. It is different for each party getting it provided by the carrier. E.g. Facebook gets a different identifier then Tiktok
+If the user puts the Sim-Card into another mobile device the pairwise subscription identifier stays the same.
+The pairwise subscribtion identifier can be used as a Generic Public Subscription Identifier (GPSI).
 
 For demo purposes this application decrypts the Operator Token and thus the source code contains the private key.
 In the usual OneClickBusiness flow the Operator Token is sent to some backend and is decrypted there.
