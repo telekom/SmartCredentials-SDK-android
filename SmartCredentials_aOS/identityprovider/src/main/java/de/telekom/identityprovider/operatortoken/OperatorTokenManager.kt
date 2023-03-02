@@ -24,9 +24,13 @@ import io.reactivex.schedulers.Schedulers
  * Created by teodorionut.ganga@endava.com at 23/02/2023
  */
 
-class OperatorTokenManager(baseUrl: String) {
+internal class OperatorTokenManager(baseUrl: String) {
 
     private val restController: RestController
+
+    init {
+        restController = RestController(baseUrl)
+    }
 
     fun getAccessToken(credentials: String): String {
         return restController.getAccessToken(credentials)
@@ -51,9 +55,5 @@ class OperatorTokenManager(baseUrl: String) {
     ): String {
         val contentProviderManager = ContentProviderManager(context)
         return contentProviderManager.getOperatorToken(bearerToken, clientId, scope)
-    }
-
-    init {
-        restController = RestController(baseUrl)
     }
 }

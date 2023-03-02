@@ -1,4 +1,4 @@
-package com.operatortokenocb.contentprovider
+package com.operatortokenocb.tokendecrypt
 
 import android.content.Context
 import android.util.Base64
