@@ -75,7 +75,11 @@ jobs:
           echo 'Create storage module signing key'
           cd $GITHUB_WORKSPACE/SmartCredentials_aOS/storage
           echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
-          gpg --quiet --output ./release.gpg --dearmor ./release.asc      
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc 
+          echo 'Create identityprovider module signing key'
+          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/identityprovider
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
       - name: Assemble all subproject aar files
         run: cd SmartCredentials_aOS && ./gradlew assembleRelease
         env:
@@ -148,6 +152,11 @@ jobs:
         with:
             name: storage
             path: SmartCredentials_aOS/storage/build/outputs/aar/ 
+      - name: Upload Identity Provider AAR
+        uses: actions/upload-artifact@v2
+        with:
+            name: identityprovider
+            path: SmartCredentials_aOS/identityprovider/build/outputs/aar/ 
       - name: Sonatype Upload
         env:
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
