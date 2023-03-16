@@ -11,13 +11,17 @@ public class GetBearerBody {
     @SerializedName("bundleId")
     @Expose
     private String bundleId;
+    @SerializedName("clientId")
+    @Expose
+    private String clientId;
     @SerializedName("packageName")
     @Expose
     private String packageName;
 
-    public GetBearerBody(String accessToken, String bundleId, String packageName) {
+    public GetBearerBody(String accessToken, String bundleId, String clientId, String packageName) {
         this.accessToken = accessToken;
         this.bundleId = bundleId;
+        this.clientId = clientId;
         this.packageName = packageName;
     }
 
@@ -35,6 +39,14 @@ public class GetBearerBody {
 
     public void setBundleId(String bundleId) {
         this.bundleId = bundleId;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
     }
 
     public String getPackageName() {

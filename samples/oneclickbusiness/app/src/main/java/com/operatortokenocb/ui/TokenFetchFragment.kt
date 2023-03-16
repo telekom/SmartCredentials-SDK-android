@@ -58,7 +58,7 @@ class TokenFetchFragment : Fragment(), TransactionTokenListener {
 
         compositeDisposable.add(api.observeAccessToken("Hackaton-Sample-App-0ae7264a-0f3d-4859-a9aa-97788446e9e2")
             .flatMap { accessToken ->
-                val body = GetBearerBody(accessToken, null, requireActivity().packageName)
+                val body = GetBearerBody(accessToken, null, "tphonehack", requireActivity().packageName)
                 api.observeBearerToken(body)
             }
             .subscribeOn(Schedulers.io())
