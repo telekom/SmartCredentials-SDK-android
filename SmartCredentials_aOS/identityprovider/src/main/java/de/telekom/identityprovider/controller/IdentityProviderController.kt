@@ -16,6 +16,7 @@
 package de.telekom.identityprovider.controller
 
 import android.content.Context
+import de.telekom.identityprovider.apptoken.AppTokenManager
 import de.telekom.identityprovider.operatortoken.OperatorTokenManager
 import de.telekom.smartcredentials.core.api.IdentityProviderApi
 import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsFeatureSet
@@ -30,17 +31,18 @@ import de.telekom.smartcredentials.core.responses.SmartCredentialsResponse
  * Created by teodorionut.ganga@endava.com at 23/02/2023
  */
 class IdentityProviderController(
-    private val mCoreController: CoreController,
-    private val baseUrl: String,
-    private val credentials: String
+    private val mCoreController: CoreController
 ) : IdentityProviderApi {
 
     override fun getOperatorToken(
         context: Context,
+        baseUrl: String,
+        credentials: String,
         clientId: String,
-        scope: String
+        scope: String,
     ): SmartCredentialsApiResponse<String> {
         ApiLoggerResolver.logMethodAccess(javaClass.simpleName, "getOperatorToken")
+
         if (mCoreController.isSecurityCompromised) {
             mCoreController.handleSecurityCompromised()
             return SmartCredentialsResponse(RootedThrowable())
@@ -53,23 +55,69 @@ class IdentityProviderController(
             )
         }
 
-        with(OperatorTokenManager(baseUrl)) {
+        with(AppTokenManager(baseUrl)) {
             return try {
-                SmartCredentialsResponse(
-                    getOperatorToken(
-                        context,
-                        getBearerToken(
-                            getAccessToken(credentials),
-                            clientId,
-                            context.packageName
-                        ),
+                getOperatorToken(
+                    context,
+                    getBearerToken(
+                        getAccessToken(credentials),
                         clientId,
-                        scope
-                    )
+                        context.packageName
+                    ),
+                    clientId,
+                    scope,
+                    true
                 )
             } catch (e: Exception) {
                 SmartCredentialsResponse(e)
             }
+        }
+    }
+
+    override fun getOperatorToken(
+        context: Context,
+        appToken: String,
+        clientId: String,
+        scope: String
+    ): SmartCredentialsApiResponse<String> {
+        ApiLoggerResolver.logMethodAccess(javaClass.simpleName, "getOperatorToken")
+
+        return getOperatorToken(context, appToken, clientId, scope, false)
+    }
+
+    private fun getOperatorToken(
+        context: Context,
+        appToken: String,
+        clientId: String,
+        scope: String,
+        securityCheckPerformed: Boolean
+    ): SmartCredentialsApiResponse<String> {
+
+        if (!securityCheckPerformed) {
+            if (mCoreController.isSecurityCompromised) {
+                mCoreController.handleSecurityCompromised()
+                return SmartCredentialsResponse(RootedThrowable())
+            }
+            if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.IDENTITY_PROVIDER)) {
+                return SmartCredentialsResponse(
+                    FeatureNotSupportedThrowable(
+                        SmartCredentialsFeatureSet.IDENTITY_PROVIDER.notSupportedDesc
+                    )
+                )
+            }
+        }
+
+        return try {
+            SmartCredentialsResponse(
+                OperatorTokenManager().getOperatorToken(
+                    context,
+                    appToken,
+                    clientId,
+                    scope
+                )
+            )
+        } catch (e: Exception) {
+            SmartCredentialsResponse(e)
         }
     }
 }

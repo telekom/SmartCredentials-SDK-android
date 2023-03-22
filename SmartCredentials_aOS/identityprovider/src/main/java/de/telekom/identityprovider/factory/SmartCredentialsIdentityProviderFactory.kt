@@ -26,8 +26,6 @@ import de.telekom.smartcredentials.core.exceptions.InvalidCoreApiException
 /**
  * Created by teodorionut.ganga@endava.com at 23/02/2023
  */
-
-
 @Suppress("unused")
 object SmartCredentialsIdentityProviderFactory {
 
@@ -46,9 +44,7 @@ object SmartCredentialsIdentityProviderFactory {
 
     @Synchronized
     fun initSmartCredentialsIdentityProviderModule(
-        coreApi: CoreApi,
-        baseUrl: String,
-        credentials: String
+        coreApi: CoreApi
     ): IdentityProviderApi {
         val coreController: CoreController = if (coreApi is CoreController) {
             coreApi
@@ -56,7 +52,7 @@ object SmartCredentialsIdentityProviderFactory {
             throw InvalidCoreApiException(SmartCredentialsModuleSet.IDENTITY_PROVIDER.moduleName)
         }
         sIdentityProviderController = ObjectGraphCreatorIdentityProvider.getInstance()
-            .provideApiControllerIdentityProvider(coreController, baseUrl, credentials)
+            .provideApiControllerIdentityProvider(coreController)
         return sIdentityProviderController!!
     }
 

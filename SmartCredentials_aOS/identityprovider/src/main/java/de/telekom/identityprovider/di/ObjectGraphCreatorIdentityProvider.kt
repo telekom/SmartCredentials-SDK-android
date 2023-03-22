@@ -29,13 +29,10 @@ object ObjectGraphCreatorIdentityProvider {
         return sInstance as ObjectGraphCreatorIdentityProvider
     }
 
-
     fun provideApiControllerIdentityProvider(
-        coreController: CoreController,
-        baseUrl: String,
-        credentials: String
+        coreController: CoreController
     ): IdentityProviderController {
-        return IdentityProviderController(coreController, baseUrl, credentials)
+        return IdentityProviderController(coreController)
     }
 
     fun destroy() {

@@ -17,34 +17,11 @@ package de.telekom.identityprovider.operatortoken
 
 import android.content.Context
 import de.telekom.identityprovider.provider.ContentProviderManager
-import de.telekom.identityprovider.rest.RestController
-import io.reactivex.schedulers.Schedulers
 
 /**
  * Created by teodorionut.ganga@endava.com at 23/02/2023
  */
-
-internal class OperatorTokenManager(baseUrl: String) {
-
-    private val restController: RestController
-
-    init {
-        restController = RestController(baseUrl)
-    }
-
-    fun getAccessToken(credentials: String): String {
-        return restController.getAccessToken(credentials)
-            .map { string: String -> string }
-            .subscribeOn(Schedulers.io())
-            .blockingFirst()
-    }
-
-    fun getBearerToken(accessToken: String, clientId: String, packageName: String): String {
-        return restController.getBearerToken(accessToken, clientId, packageName)
-            .map { string: String -> string }
-            .subscribeOn(Schedulers.io())
-            .blockingFirst()
-    }
+internal class OperatorTokenManager {
 
     @Throws(Exception::class)
     fun getOperatorToken(
