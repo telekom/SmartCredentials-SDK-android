@@ -16,6 +16,7 @@
 
 package de.telekom.smartcredentials.core.api;
 
+import androidx.annotation.NonNull;
 import android.content.Context;
 
 import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
@@ -24,21 +25,47 @@ public interface IdentityProviderApi {
 
     /**
      * Returns an operator token from the Entitlement Server via a Carrier Privileged application.
-     *
+     * <p>
      * Using this method without a partner agreement is forbidden.
-     *
+     * <p>
      * This is a privileged operation and in Beta.
      * Install the privileged application SmartAgent.
      * Also, 3rd party applications using this API need to be registered.
+     * <p>
+     * Should be used when the designated back-end supports standard appToken retrieval endpoints.
      *
-     * @return      the operator token. This is encrypted for the clientId. So the clients
-     *              public key needs to be known to the Entitlement Server.
-     *              The content of the operator token is specific for the client.
-     *              In the Beta phase the following fields are defined
-     *              - IMSI
-     *              - pairwise subscription identifier
-     *              - MSISDN
+     * @return the operator token. This is encrypted for the clientId. So the clients
+     * public key needs to be known to the Entitlement Server.
+     * The content of the operator token is specific for the client.
+     * In the Beta phase the following fields are defined
+     * - IMSI
+     * - pairwise subscription identifier
+     * - MSISDN
      */
-    SmartCredentialsApiResponse<String> getOperatorToken(Context context, String clientId,
-                                                         String scope);
+    SmartCredentialsApiResponse<String> getOperatorToken(@NonNull Context context, @NonNull String baseUrl,
+                                                         @NonNull String credentials, @NonNull String clientId,
+                                                         @NonNull String scope);
+
+    /**
+     * Returns an operator token from the Entitlement Server via a Carrier Privileged application.
+     * <p>
+     * Using this method without a partner agreement is forbidden.
+     * <p>
+     * This is a privileged operation and in Beta.
+     * Install the privileged application SmartAgent.
+     * Also, 3rd party applications using this API need to be registered.
+     * <p>
+     * Should only be used for custom implementations of appToken retrieval.
+     *
+     * @return the operator token. This is encrypted for the clientId. So the clients
+     * public key needs to be known to the Entitlement Server.
+     * The content of the operator token is specific for the client.
+     * In the Beta phase the following fields are defined
+     * - IMSI
+     * - pairwise subscription identifier
+     * - MSISDN
+     */
+    SmartCredentialsApiResponse<String> getOperatorToken(@NonNull Context context, @NonNull String appToken,
+                                                         @NonNull String clientId,
+                                                         @NonNull String scope);
 }
