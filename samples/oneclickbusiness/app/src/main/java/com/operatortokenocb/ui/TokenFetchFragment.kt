@@ -5,8 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.operatortokenocb.tokendecrypt.TransactionTokenDecrypt
+import com.operatortokenocb.OcbApplication
 import com.operatortokenocb.databinding.FragmentTokenFetchBinding
+import com.operatortokenocb.tokendecrypt.TransactionTokenDecrypt
 import de.telekom.identityprovider.factory.SmartCredentialsIdentityProviderFactory
 import de.telekom.smartcredentials.core.api.IdentityProviderApi
 import retrofit2.HttpException
@@ -17,6 +18,11 @@ class TokenFetchFragment : Fragment() {
 
     private lateinit var binding: FragmentTokenFetchBinding
     private lateinit var transactionTokenDecrypt: TransactionTokenDecrypt
+
+    companion object {
+        const val PARTNER_APPLICATION_URL = "https://lbl-partmgmr.superdtaglb.cf/"
+        const val CREDENTIALS = "Moonlight-017e56d0-7997-44da-bac6-a3c3f4a42bea"
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +48,13 @@ class TokenFetchFragment : Fragment() {
     private fun getToken(scope: String) {
         val identityProviderApi: IdentityProviderApi =
             SmartCredentialsIdentityProviderFactory.identityProviderApi
-        val data = identityProviderApi.getOperatorToken(context, "oneclickdemo", scope)
+        val data = identityProviderApi.getOperatorToken(
+            requireContext(),
+            PARTNER_APPLICATION_URL,
+            CREDENTIALS,
+            "oneclickdemo",
+            scope
+        )
         if (data.isSuccessful) {
             binding.operatorTokenDescriptionTextView.text = data.data
         } else {
