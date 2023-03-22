@@ -25,7 +25,7 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion rootProject.ext.androidMinSdkVersionEid
+        minSdkVersion rootProject.ext.androidMinSdkVersion
         targetSdkVersion rootProject.ext.androidTargetSdkVersion
         versionCode rootProject.ext.androidVersionCode
         versionName rootProject.ext.androidVersionName

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="white">#FFFFFF</color>
-    <color name="colorPrimary">#FFE50054</color>
-    <color name="uncheckedColor">#dedede</color>
-    <color name="textColor">#444444</color>
-    <color name="magentaColorPrimary">#e20074</color>
-</resources>

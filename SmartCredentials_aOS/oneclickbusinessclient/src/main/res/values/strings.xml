@@ -10,5 +10,11 @@
     <string name="ellipsize">...</string>
     <string name="loading_text_transferring_to_portal">Transferring to Telekom booking portal</string>
     <string name="dismiss">Dismiss</string>
-
+    <string name="one_click_portal">One-Click Portal</string>
+    <string name="website_error_title">Booking portal could not be loaded</string>
+    <string name="website_error_description">Please check your Internet connection before accessing it or try again later.</string>
+    <string name="loading_text">Please wait …</string>
+    <string name="close">Close</string>
+    <string name="error">ERROR</string>
+    <string name="invalid_retrieve_error_message">Unfortunately, the transaction token could not be retrieved.\n\nPlease make sure that you have installed the carrier agent application, Smart Radio.</string>
 </resources>
