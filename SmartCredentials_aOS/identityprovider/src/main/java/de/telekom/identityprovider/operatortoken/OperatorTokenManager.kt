@@ -13,18 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package de.telekom.identityprovider.operatortoken
 
-include ':core'
-include ':authentication'
-include ':authorization'
-include ':camera'
-include ':eid'
-include ':networking'
-include ':storage'
-include ':security'
-include ':otp'
-include ':documentscanner'
-include ':qrlogin'
-include ':persistentlogging'
-include ':pushnotifications'
-include ':identityprovider'
+import android.content.Context
+import de.telekom.identityprovider.provider.ContentProviderManager
+
+/**
+ * Created by teodorionut.ganga@endava.com at 23/02/2023
+ */
+internal class OperatorTokenManager {
+
+    @Throws(Exception::class)
+    fun getOperatorToken(
+        context: Context,
+        bearerToken: String,
+        clientId: String,
+        scope: String
+    ): String {
+        val contentProviderManager = ContentProviderManager(context)
+        return contentProviderManager.getOperatorToken(bearerToken, clientId, scope)
+    }
+}
