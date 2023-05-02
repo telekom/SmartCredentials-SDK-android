@@ -229,5 +229,3 @@ jobs:
         with:
             name: identityprovider
             path: SmartCredentials_aOS/identityprovider/build/outputs/aar/
-      - name: Build Identity Provider Sample Application
-        run: cd samples/oneclickbusiness && chmod +x ./gradlew && ./gradlew build && ./gradlew assembleRelease  
