@@ -26,30 +26,12 @@ import de.telekom.smartcredentials.core.exceptions.InvalidCoreApiException
 /**
  * Created by teodorionut.ganga@endava.com at 23/02/2023
  */
-
-
 @Suppress("unused")
 object SmartCredentialsIdentityProviderFactory {
 
     private const val MODULE_NOT_INITIALIZED_EXCEPTION =
         "SmartCredentials IdentityProvider Module have not been initialized"
     private var sIdentityProviderController: IdentityProviderController? = null
-
-    @Synchronized
-    fun initSmartCredentialsIdentityProviderModule(
-        coreApi: CoreApi,
-        baseUrl: String,
-        credentials: String
-    ): IdentityProviderApi {
-        val coreController: CoreController = if (coreApi is CoreController) {
-            coreApi
-        } else {
-            throw InvalidCoreApiException(SmartCredentialsModuleSet.IDENTITY_PROVIDER.moduleName)
-        }
-        sIdentityProviderController = ObjectGraphCreatorIdentityProvider.getInstance()
-            .provideApiControllerIdentityProvider(coreController, baseUrl, credentials)
-        return sIdentityProviderController!!
-    }
 
     @get:Synchronized
     val identityProviderApi: IdentityProviderApi
@@ -59,6 +41,20 @@ object SmartCredentialsIdentityProviderFactory {
             }
             return sIdentityProviderController!!
         }
+
+    @Synchronized
+    fun initSmartCredentialsIdentityProviderModule(
+        coreApi: CoreApi
+    ): IdentityProviderApi {
+        val coreController: CoreController = if (coreApi is CoreController) {
+            coreApi
+        } else {
+            throw InvalidCoreApiException(SmartCredentialsModuleSet.IDENTITY_PROVIDER.moduleName)
+        }
+        sIdentityProviderController = ObjectGraphCreatorIdentityProvider.getInstance()
+            .provideApiControllerIdentityProvider(coreController)
+        return sIdentityProviderController!!
+    }
 
     fun clear() {
         ObjectGraphCreatorIdentityProvider.destroy()

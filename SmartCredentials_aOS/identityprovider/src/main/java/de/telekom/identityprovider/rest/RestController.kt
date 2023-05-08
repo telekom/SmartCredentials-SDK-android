@@ -25,6 +25,10 @@ class RestController(baseUrl: String) {
 
     private val retrofitClient: Retrofit
 
+    init {
+        retrofitClient = RetrofitClient().createRetrofitClient(baseUrl)
+    }
+
     fun getAccessToken(credentials: String): Observable<String> {
         val api = retrofitClient.create(
             PartnerManagementApi::class.java
@@ -42,9 +46,5 @@ class RestController(baseUrl: String) {
         )
         val body = GetBearerBody(accessToken, clientId, null, packageName)
         return api.observeBearerToken(body)
-    }
-
-    init {
-        retrofitClient = RetrofitClient().createRetrofitClient(baseUrl)
     }
 }

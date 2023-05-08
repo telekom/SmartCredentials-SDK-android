@@ -23,25 +23,42 @@ import android.net.Uri
  */
 class ContentProviderManager(private val context: Context) {
 
-    @Throws(Exception::class)
+    companion object {
+        const val URI = "content://de.telekom.entitlements/tokens"
+        const val SUCCESSFUL_COLUMN_NAME = "is_successful"
+        const val TRANSACTION_COLUMN_NAME = "transaction"
+        const val ERROR_COLUMN_NAME = "error"
+    }
+
     fun getOperatorToken(bearerToken: String, clientId: String, scope: String): String {
-        val CONTENT_URI = Uri.parse(URI)
         val cursor = context.contentResolver.query(
-            CONTENT_URI,
+            Uri.parse(URI),
             null,
             null,
             arrayOf(bearerToken, clientId, scope),
             null
         )
         return if (cursor == null) {
-            throw Exception("Invalid getOperatorToken fetch")
+            throw Exception("Invalid Content Provider")
         } else if (!cursor.moveToFirst()) {
-            throw Exception("Unsuccessful getOperatorToken fetch")
+            throw Exception("Unsuccessful getOperatorToken fetch; Cursor empty")
         } else {
             val tokenBuilder = StringBuilder()
             while (!cursor.isAfterLast) {
-                tokenBuilder.append(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME)))
-                cursor.moveToNext()
+                if (cursor.getString(cursor
+                        .getColumnIndexOrThrow(SUCCESSFUL_COLUMN_NAME)
+                    ).toBoolean()
+                ) {
+                    tokenBuilder.append(
+                        cursor.getString(cursor.getColumnIndexOrThrow(TRANSACTION_COLUMN_NAME))
+                    )
+                    cursor.moveToNext()
+                } else {
+                    throw Exception(
+                            cursor.getString(cursor.getColumnIndexOrThrow(ERROR_COLUMN_NAME)
+                        )
+                    )
+                }
             }
             if (tokenBuilder.toString().isEmpty()) {
                 throw Exception("Unsuccessful getOperatorToken fetch")
@@ -50,10 +67,5 @@ class ContentProviderManager(private val context: Context) {
                 tokenBuilder.toString()
             }
         }
-    }
-
-    companion object {
-        const val URI = "content://de.telekom.entitlements/tokens"
-        const val COLUMN_NAME = "transaction"
     }
 }

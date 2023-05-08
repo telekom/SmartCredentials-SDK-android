@@ -5,37 +5,31 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.operatortokenocb.R
-import com.operatortokenocb.contentprovider.ContentProvider
-import com.operatortokenocb.contentprovider.TransactionTokenDecrypt
-import com.operatortokenocb.contentprovider.TransactionTokenListener
+import com.operatortokenocb.OcbApplication
 import com.operatortokenocb.databinding.FragmentTokenFetchBinding
-import com.operatortokenocb.network.BaseRetrofitClient
-import com.operatortokenocb.network.GetBearerBody
-import com.operatortokenocb.network.PartnerManagementApi
-import com.operatortokenocb.network.RetrofitClient
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
-import retrofit2.Retrofit
+import com.operatortokenocb.tokendecrypt.TransactionTokenDecrypt
+import de.telekom.identityprovider.factory.SmartCredentialsIdentityProviderFactory
+import de.telekom.smartcredentials.core.api.IdentityProviderApi
+import retrofit2.HttpException
 import timber.log.Timber
 
-class TokenFetchFragment : Fragment(), TransactionTokenListener {
+class TokenFetchFragment : Fragment() {
     private val TAG = "token_fetch_fragment"
 
     private lateinit var binding: FragmentTokenFetchBinding
-    private lateinit var contentProvider: ContentProvider
-    private lateinit var compositeDisposable: CompositeDisposable
     private lateinit var transactionTokenDecrypt: TransactionTokenDecrypt
+
+    companion object {
+        const val PARTNER_APPLICATION_URL = "https://lbl-partmgmr.superdtaglb.cf/"
+        const val CREDENTIALS = "Moonlight-017e56d0-7997-44da-bac6-a3c3f4a42bea"
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentTokenFetchBinding.inflate(layoutInflater)
-        contentProvider = ContentProvider(requireContext())
         transactionTokenDecrypt = TransactionTokenDecrypt(requireContext())
-        compositeDisposable = CompositeDisposable()
         return binding.root
     }
 
@@ -52,44 +46,24 @@ class TokenFetchFragment : Fragment(), TransactionTokenListener {
     }
 
     private fun getToken(scope: String) {
-        val retrofitClient: Retrofit =
-            RetrofitClient().createRetrofitClient(BaseRetrofitClient.PARTNER_APPLICATION_URL)
-        val api: PartnerManagementApi = retrofitClient.create(PartnerManagementApi::class.java)
-
-        compositeDisposable.add(api.observeAccessToken("Hackaton-Sample-App-0ae7264a-0f3d-4859-a9aa-97788446e9e2")
-            .flatMap { accessToken ->
-                val body = GetBearerBody(accessToken, null, requireActivity().packageName)
-                api.observeBearerToken(body)
+        val identityProviderApi: IdentityProviderApi =
+            SmartCredentialsIdentityProviderFactory.identityProviderApi
+        val data = identityProviderApi.getOperatorToken(
+            requireContext(),
+            PARTNER_APPLICATION_URL,
+            CREDENTIALS,
+            "oneclickdemo",
+            scope
+        )
+        if (data.isSuccessful) {
+            binding.operatorTokenDescriptionTextView.text = data.data
+        } else {
+            if (data.error is HttpException) {
+                Timber.tag(TAG).e((data.error as HttpException).response()!!.errorBody()!!.string())
+            } else {
+                Timber.tag(TAG).e(data.error.toString())
             }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ bearerToken ->
-                contentProvider.getTransactionToken(
-                    bearerToken,
-                    "tphonehack",
-                    scope,
-                    this
-                )
-            }
-            ) { throwable ->
-                Timber.tag(TAG).e(throwable.stackTraceToString())
-            })
-    }
-
-    override fun onSuccessfulFetch(token: String?) {
-        val data = transactionTokenDecrypt.getClaimsFromTransactionToken(token.toString())
-        binding.operatorTokenDescriptionTextView.text = data
-        Timber.tag(TAG).d(token.toString())
-    }
-
-    override fun onUnsuccessfulFetch() {
-        binding.operatorTokenDescriptionTextView.text =
-            resources.getString(R.string.unsuccessful_fetch)
-    }
-
-    override fun onInvalidFetch() {
-        binding.operatorTokenDescriptionTextView.text =
-            resources.getString(R.string.invalid_fetch)
+        }
     }
 }
 

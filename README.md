@@ -21,7 +21,7 @@ repositories {
     ...
 }
 ```
-Continue by adding one or more Smart Credentials dependecies to your application or SDK build.gradle file, using the latest Smart Credentials version available.
+Continue by adding one or more Smart Credentials dependencies to your application or SDK build.gradle file, using the latest Smart Credentials version available.
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.telekom.smartcredentials/core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/de.telekom.smartcredentials/core)
 ```
@@ -33,6 +33,7 @@ implementation("de.telekom.smartcredentials:documentscanner:$smartCredentialsVer
 	transitive = true
 }
 implementation("de.telekom.smartcredentials:eid:$smartCredentialsVersion")
+implementation("de.telekom.smartcredentials:identityprovider:$smartCredentialsVersion")
 implementation("de.telekom.smartcredentials:networking:$smartCredentialsVersion")
 implementation("de.telekom.smartcredentials:oneclickbusinessclient:$smartCredentialsVersion")
 implementation("de.telekom.smartcredentials:otp:$smartCredentialsVersion")
@@ -77,13 +78,15 @@ An user guide for the Core module can be found [here](https://github.com/telekom
 An user guide for the Document Scanner module can be found [here](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/SmartCredentials_aOS/documentscanner), as well as a [demo application](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/samples/documentscanner).
 6. eID module  
 An user guide for the eID module can be found [here](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/SmartCredentials_aOS/eid).
-7. OTP module  
+7. Identity Provider module
+An user guide for the identity provider module can be found [here](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/SmartCredentials_aOS/identityprovider), as well as a [demo application](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/samples/oneclickbusiness).
+8. OTP module
 An user guide for the OTP module can be found [here](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/SmartCredentials_aOS/otp), as well as a [demo application](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/samples/otp).
-8. OneClick Business client module  
+9. OneClick Business client module  
 An user guide for the OneClick Business client module can be found [here](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/SmartCredentials_aOS/oneclickbusinessclient), as well as a [demo application](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/samples/oneclickbusiness).
-9. Push notifications module  
+10. Push notifications module  
 An user guide for the Push notifications module can be found [here](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/SmartCredentials_aOS/pushnotifications), as well as a [demo application](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/samples/pushnotifications).
-10. Storage module  
+11. Storage module  
 An user guide for the Storage module can be found [here](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/SmartCredentials_aOS/storage), as well as a [demo application](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/samples/storage).
  
 ## Support
@@ -113,12 +116,13 @@ Currently, there are 13 extendable modules:
 5.  Eid
 6.  Networking
 7.  OneClick Business client
-8.  Otp
-9.  Persistent logging
-10. Push notifications
-11. QR login
-12. Security
-13. Storage
+8.  Identity Provider
+9.  Otp
+10. Persistent logging
+11. Push notifications
+12. QR login
+13. Security
+14. Storage
 
 In order to implement your own module you have to follow the next steps:
 
