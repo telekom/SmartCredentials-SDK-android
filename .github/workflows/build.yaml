@@ -77,6 +77,10 @@ jobs:
           cd $GITHUB_WORKSPACE/SmartCredentials_aOS/identityprovider
           echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
           gpg --quiet --output ./release.gpg --dearmor ./release.asc
+          echo 'Create oneclickbusinessclient module signing key'
+          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/oneclickbusinessclient
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
       - name: Assemble all subproject aar files
         run: cd SmartCredentials_aOS && ./gradlew assembleRelease && ./gradlew publishToMavenLocal
         env:
@@ -229,3 +233,8 @@ jobs:
         with:
             name: identityprovider
             path: SmartCredentials_aOS/identityprovider/build/outputs/aar/
+      - name: Upload OneClickBusinessClient AAR
+        uses: actions/upload-artifact@v2
+        with:
+            name: oneclickbusinessclient
+            path: SmartCredentials_aOS/oneclickbusinessclient/build/outputs/aar/
