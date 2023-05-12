@@ -35,6 +35,7 @@ implementation("de.telekom.smartcredentials:documentscanner:$smartCredentialsVer
 implementation("de.telekom.smartcredentials:eid:$smartCredentialsVersion")
 implementation("de.telekom.smartcredentials:identityprovider:$smartCredentialsVersion")
 implementation("de.telekom.smartcredentials:networking:$smartCredentialsVersion")
+implementation("de.telekom.smartcredentials:oneclickbusinessclient:$smartCredentialsVersion")
 implementation("de.telekom.smartcredentials:otp:$smartCredentialsVersion")
 implementation("de.telekom.smartcredentials:persistentlogging:$smartCredentialsVersion")
 implementation("de.telekom.smartcredentials:pushnotifications:$smartCredentialsVersion")
@@ -81,9 +82,11 @@ An user guide for the eID module can be found [here](https://github.com/telekom/
 An user guide for the identity provider module can be found [here](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/SmartCredentials_aOS/identityprovider), as well as a [demo application](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/samples/oneclickbusiness).
 8. OTP module
 An user guide for the OTP module can be found [here](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/SmartCredentials_aOS/otp), as well as a [demo application](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/samples/otp).
-9. Push notifications module
+9. OneClick Business client module  
+An user guide for the OneClick Business client module can be found [here](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/SmartCredentials_aOS/oneclickbusinessclient), as well as a [demo application](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/samples/oneclickbusiness).
+10. Push notifications module  
 An user guide for the Push notifications module can be found [here](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/SmartCredentials_aOS/pushnotifications), as well as a [demo application](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/samples/pushnotifications).
-10. Storage module
+11. Storage module  
 An user guide for the Storage module can be found [here](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/SmartCredentials_aOS/storage), as well as a [demo application](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/samples/storage).
  
 ## Support
@@ -104,7 +107,7 @@ Smart Credentials is an open and easily extendable library. In fact, it is so op
 
 By using Smart Credentials to build your module, not only you save time and energy for your implementation by making use of the existing features, but the new created module can also be used by others in combination with any of Smart Credentials existing modules.
 
-Currently, there are 12 extendable modules:
+Currently, there are 13 extendable modules:
 
 1.  Authentication
 2.  Authorization
@@ -112,13 +115,14 @@ Currently, there are 12 extendable modules:
 4.  Document scanner
 5.  Eid
 6.  Networking
-7.  Otp
+7.  OneClick Business client
 8.  Identity Provider
-9.  Persistent logging
-10.  Push notifications
-11. QR login
-12. Security
-13. Storage
+9.  Otp
+10. Persistent logging
+11. Push notifications
+12. QR login
+13. Security
+14. Storage
 
 In order to implement your own module you have to follow the next steps:
 

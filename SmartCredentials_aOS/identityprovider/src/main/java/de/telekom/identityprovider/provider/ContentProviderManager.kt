@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.telekom.identityprovider.provider
 
 import android.content.Context
@@ -25,35 +26,48 @@ class ContentProviderManager(private val context: Context) {
 
     companion object {
         const val URI = "content://de.telekom.entitlements/tokens"
-        const val COLUMN_NAME = "transaction"
+        const val SUCCESSFUL_COLUMN_NAME = "is_successful"
+        const val TRANSACTION_COLUMN_NAME = "transaction"
+        const val ERROR_COLUMN_NAME = "error"
     }
 
-    @Throws(Exception::class)
     fun getOperatorToken(bearerToken: String, clientId: String, scope: String): String {
-        val CONTENT_URI = Uri.parse(URI)
         val cursor = context.contentResolver.query(
-            CONTENT_URI,
+            Uri.parse(URI),
             null,
             null,
             arrayOf(bearerToken, clientId, scope),
             null
         )
-        return if (cursor == null) {
-            throw Exception("Invalid getOperatorToken fetch")
-        } else if (!cursor.moveToFirst()) {
-            throw Exception("Unsuccessful getOperatorToken fetch")
-        } else {
-            val tokenBuilder = StringBuilder()
-            while (!cursor.isAfterLast) {
-                tokenBuilder.append(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME)))
-                cursor.moveToNext()
-            }
-            if (tokenBuilder.toString().isEmpty()) {
-                throw Exception("Unsuccessful getOperatorToken fetch")
+        return cursor?.use {
+            if (!cursor.moveToFirst()) {
+                throw Exception("Unsuccessful getOperatorToken fetch; Cursor empty")
             } else {
-                cursor.close()
-                tokenBuilder.toString()
+                val tokenBuilder = StringBuilder()
+                while (!cursor.isAfterLast) {
+                    if (cursor.getString(
+                            cursor
+                                .getColumnIndexOrThrow(SUCCESSFUL_COLUMN_NAME)
+                        ).toBoolean()
+                    ) {
+                        tokenBuilder.append(
+                            cursor.getString(cursor.getColumnIndexOrThrow(TRANSACTION_COLUMN_NAME))
+                        )
+                        cursor.moveToNext()
+                    } else {
+                        throw Exception(
+                            cursor.getString(
+                                cursor.getColumnIndexOrThrow(ERROR_COLUMN_NAME)
+                            )
+                        )
+                    }
+                }
+                if (tokenBuilder.toString().isEmpty()) {
+                    throw Exception("Unsuccessful getOperatorToken fetch")
+                } else {
+                    tokenBuilder.toString()
+                }
             }
-        }
+        } ?: throw Exception("Invalid Content Provider")
     }
 }

@@ -16,15 +16,16 @@
 
 package de.telekom.smartcredentials.core.api;
 
-import androidx.annotation.NonNull;
 import android.content.Context;
 
-import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse;
+import androidx.annotation.NonNull;
+
+import de.telekom.smartcredentials.core.identityprovider.IdentityProviderCallback;
 
 public interface IdentityProviderApi {
 
     /**
-     * Returns an operator token from the Entitlement Server via a Carrier Privileged application.
+     * Provides an operator token from the Entitlement Server via a Carrier Privileged application.
      * <p>
      * Using this method without a partner agreement is forbidden.
      * <p>
@@ -33,21 +34,29 @@ public interface IdentityProviderApi {
      * Also, 3rd party applications using this API need to be registered.
      * <p>
      * Should be used when the designated back-end supports standard appToken retrieval endpoints.
-     *
-     * @return the operator token. This is encrypted for the clientId. So the clients
+     * <p>
+     * A result is dispatched to the IdentityProviderCallback containing the operator token, if successful.
+     * This is encrypted for the clientId. So the clients
      * public key needs to be known to the Entitlement Server.
      * The content of the operator token is specific for the client.
      * In the Beta phase the following fields are defined
      * - IMSI
      * - pairwise subscription identifier
      * - MSISDN
+     *
+     * @param context     - context instance
+     * @param baseUrl     - base url towards of registered partner back-end
+     * @param credentials - partner back-end credentials
+     * @param clientId    - clientId for which the calling application was registered
+     * @param scope       - scope for which the calling application was registered
+     * @param callback    - callback to retrieve the SmartCredentialsApiResponse containing the result
      */
-    SmartCredentialsApiResponse<String> getOperatorToken(@NonNull Context context, @NonNull String baseUrl,
-                                                         @NonNull String credentials, @NonNull String clientId,
-                                                         @NonNull String scope);
+    void getOperatorToken(@NonNull Context context, @NonNull String baseUrl,
+                          @NonNull String credentials, @NonNull String clientId,
+                          @NonNull String scope, @NonNull IdentityProviderCallback callback);
 
     /**
-     * Returns an operator token from the Entitlement Server via a Carrier Privileged application.
+     * Provides an operator token from the Entitlement Server via a Carrier Privileged application.
      * <p>
      * Using this method without a partner agreement is forbidden.
      * <p>
@@ -56,16 +65,23 @@ public interface IdentityProviderApi {
      * Also, 3rd party applications using this API need to be registered.
      * <p>
      * Should only be used for custom implementations of appToken retrieval.
-     *
-     * @return the operator token. This is encrypted for the clientId. So the clients
+     * <p>
+     * A result is dispatched to the IdentityProviderCallback containing the operator token, if successful.
+     * This is encrypted for the clientId. So the clients
      * public key needs to be known to the Entitlement Server.
      * The content of the operator token is specific for the client.
      * In the Beta phase the following fields are defined
      * - IMSI
      * - pairwise subscription identifier
      * - MSISDN
+     *
+     * @param context  - context instance
+     * @param appToken - valid appToken
+     * @param clientId - clientId for which the calling application was registered
+     * @param scope    - scope for which the calling application was registered
+     * @param callback - callback to retrieve the SmartCredentialsApiResponse containing the result
      */
-    SmartCredentialsApiResponse<String> getOperatorToken(@NonNull Context context, @NonNull String appToken,
-                                                         @NonNull String clientId,
-                                                         @NonNull String scope);
+    void getOperatorToken(@NonNull Context context, @NonNull String appToken,
+                          @NonNull String clientId, @NonNull String scope,
+                          @NonNull IdentityProviderCallback callback);
 }

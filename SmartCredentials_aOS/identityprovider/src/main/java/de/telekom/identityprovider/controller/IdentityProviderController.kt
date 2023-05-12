@@ -13,19 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.telekom.identityprovider.controller
 
+import android.annotation.SuppressLint
 import android.content.Context
 import de.telekom.identityprovider.apptoken.AppTokenManager
 import de.telekom.identityprovider.operatortoken.OperatorTokenManager
 import de.telekom.smartcredentials.core.api.IdentityProviderApi
 import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsFeatureSet
 import de.telekom.smartcredentials.core.controllers.CoreController
+import de.telekom.smartcredentials.core.identityprovider.IdentityProviderCallback
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver
 import de.telekom.smartcredentials.core.responses.FeatureNotSupportedThrowable
 import de.telekom.smartcredentials.core.responses.RootedThrowable
 import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse
 import de.telekom.smartcredentials.core.responses.SmartCredentialsResponse
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import java.lang.ref.WeakReference
 
 /**
  * Created by teodorionut.ganga@endava.com at 23/02/2023
@@ -40,49 +47,69 @@ class IdentityProviderController(
         credentials: String,
         clientId: String,
         scope: String,
-    ): SmartCredentialsApiResponse<String> {
+        callback: IdentityProviderCallback
+    ) {
         ApiLoggerResolver.logMethodAccess(javaClass.simpleName, "getOperatorToken")
-
+        val callbackReference = WeakReference(callback)
         if (mCoreController.isSecurityCompromised) {
             mCoreController.handleSecurityCompromised()
-            return SmartCredentialsResponse(RootedThrowable())
+            callbackReference.get()?.onResult(SmartCredentialsResponse(RootedThrowable()))
+            return
         }
         if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.IDENTITY_PROVIDER)) {
-            return SmartCredentialsResponse(
-                FeatureNotSupportedThrowable(
-                    SmartCredentialsFeatureSet.IDENTITY_PROVIDER.notSupportedDesc
+            callbackReference.get()?.onResult(
+                SmartCredentialsResponse(
+                    FeatureNotSupportedThrowable(
+                        SmartCredentialsFeatureSet.IDENTITY_PROVIDER.notSupportedDesc
+                    )
                 )
             )
         }
 
         with(AppTokenManager(baseUrl)) {
-            return try {
-                getOperatorToken(
+            getAccessToken(credentials).flatMap {
+                return@flatMap getBearerToken(
+                    it,
+                    clientId,
+                    context.packageName
+                )
+            }.map {
+                return@map getOperatorToken(
                     context,
-                    getBearerToken(
-                        getAccessToken(credentials),
-                        clientId,
-                        context.packageName
-                    ),
+                    it,
                     clientId,
                     scope,
                     true
                 )
-            } catch (e: Exception) {
-                SmartCredentialsResponse(e)
             }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    callbackReference.get()?.onResult(it)
+                }, {
+                    callbackReference.get()?.onResult(SmartCredentialsResponse(it))
+                })
         }
     }
 
+    @SuppressLint("CheckResult")
     override fun getOperatorToken(
         context: Context,
         appToken: String,
         clientId: String,
-        scope: String
-    ): SmartCredentialsApiResponse<String> {
+        scope: String,
+        callback: IdentityProviderCallback
+    ) {
         ApiLoggerResolver.logMethodAccess(javaClass.simpleName, "getOperatorToken")
-
-        return getOperatorToken(context, appToken, clientId, scope, false)
+        val callbackReference = WeakReference(callback)
+        Single.just(getOperatorToken(context, appToken, clientId, scope, false))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                callbackReference.get()?.onResult(it)
+            }, {
+                callbackReference.get()?.onResult(SmartCredentialsResponse(it))
+            })
     }
 
     private fun getOperatorToken(

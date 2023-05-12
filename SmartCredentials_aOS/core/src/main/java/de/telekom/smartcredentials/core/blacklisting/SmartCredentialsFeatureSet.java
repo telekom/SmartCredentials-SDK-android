@@ -85,7 +85,9 @@ public enum SmartCredentialsFeatureSet {
     CHECK_PATCH_LEVEL("Check Patch Level", SmartCredentialsModuleSet.EID_MODULE,
             "The Check Patch Level feature is not supported on this device model."),
     IDENTITY_PROVIDER("Identity Provider", SmartCredentialsModuleSet.IDENTITY_PROVIDER,
-            "The Identity Provider feature is not supported on this device model.");
+            "The Identity Provider feature is not supported on this device model."),
+    ONE_CLICK_CLIENT("One Click Client", SmartCredentialsModuleSet.ONE_CLICK_BUSINESS_CLIENT_MODULE,
+            "The One Click Client feature is not supported on this device model.");
 
     private final SmartCredentialsModuleSet mModule;
     private final String mFeatureName;

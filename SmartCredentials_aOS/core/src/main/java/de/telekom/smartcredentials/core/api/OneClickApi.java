@@ -16,26 +16,57 @@
 
 package de.telekom.smartcredentials.core.api;
 
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.compose.ui.platform.ComposeView;
+
 import java.util.List;
 import java.util.Map;
 
 public interface OneClickApi {
 
     /**
-     * Used to force a recommendation delivery. To be removed in future versions.
+     * Method used for UI integration. Must be bound to an activity in onCreate.
      *
-     * A list of productIds is required to make a recommendation.
+     * @param activity - needs to be AppCompatActivity
+     */
+    void bind(@NonNull AppCompatActivity activity);
+
+    /**
+     * Method used for UI integration. A ComposeView needs to be passed.
+     *
+     * @param composeView - compose view to build the OCB UI within
+     */
+    void setComposeView(ComposeView composeView);
+
+    /**
+     * Method used for UI integration.
+     * Needs to be called on the bound activities onDestroy.
+     */
+    void unbind();
+
+    /**
+     * Method used to force a recommendation delivery. To be removed in future versions.
+     * <p>
+     *
+     * @param productIds - list of productIds needed to make a recommendation.
      */
     @Deprecated
     void makeRecommendation(List<String> productIds);
 
     /**
-     * Used to pass messages from a FirebaseMessagingService to the OneClickApi implementation.
+     * Method used to pass messages from a FirebaseMessagingService to the OneClickApi implementation.
+     *
+     * @param data - data field of RemoteMessage from the onReceive method of a FirebaseMessagingService
      */
     void pushRecommendationMessage(Map<String, String> data);
 
     /**
-     * Used to pass the latest Firebase Token to the OneClickApi implementation.
+     * Method used to pass the latest Firebase Token to the OneClickApi implementation.
+     *
+     * @param token - Firebase token - needs to be passed during app initialization and whenever it
+     *              changes
      */
     void updateFirebaseToken(String token);
 

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (c) 2019 Telekom Deutschland AG
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<resources>
+    <string name="one_click_dialog_title">5G Speed is available to you</string>
+    <string name="one_click_after_description">You experienced a few drop-outs and jitter. We can help you by making your app more reactive, faster and more secure.</string>
+    <string name="one_click_dialog_positive_button">Let me try it!</string>
+    <string name="one_click_dialog_negative_button">No, I\'m happy</string>
+    <string name="partnership_text">Recommendation offered by %1$s through a partnership with Telekom Deutschland GmbH.</string>
+    <string name="processing">Processing …</string>
+    <string name="loading_text_retrieving_operator_token">Retrieving subscriber information</string>
+    <string name="ellipsize">...</string>
+    <string name="loading_text_transferring_to_portal">Transferring to Telekom booking portal</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="one_click_portal">One-Click Portal</string>
+    <string name="website_error_title">Booking portal could not be loaded</string>
+    <string name="website_error_description">Please check your Internet connection before accessing it or try again later.</string>
+    <string name="loading_text">Please wait …</string>
+    <string name="close">Close</string>
+    <string name="error">ERROR</string>
+    <string name="invalid_retrieve_error_message">Unfortunately, the transaction token could not be retrieved.\n\nPlease make sure that you have installed the carrier agent application, Smart Radio.</string>
+</resources>

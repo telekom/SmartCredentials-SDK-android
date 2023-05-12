@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.telekom.identityprovider.factory
 
 import de.telekom.identityprovider.controller.IdentityProviderController
@@ -43,6 +44,7 @@ object SmartCredentialsIdentityProviderFactory {
         }
 
     @Synchronized
+    @JvmStatic
     fun initSmartCredentialsIdentityProviderModule(
         coreApi: CoreApi
     ): IdentityProviderApi {
