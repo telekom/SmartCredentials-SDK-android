@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.telekom.smartcredentials.oneclickbusinessclient.repository
 
 import de.telekom.smartcredentials.core.api.StorageApi
@@ -34,7 +35,6 @@ class StorageRepoImplementation(
         ItemContextFactory.createEncryptedSensitiveItemContext(
             KEY_1CB_CLIENT_CONFIG_TYPE_TOKEN
         )
-
     private val itemContextRecommendation: ItemContext =
         ItemContextFactory.createEncryptedSensitiveItemContext(
             KEY_1CB_CLIENT_CONFIG_TYPE_RECOMMENDATION
@@ -122,14 +122,18 @@ class StorageRepoImplementation(
         updateRecommendationList()
     }
 
-    override val getRecommendation: Recommendation
+    override val getRecommendation: Recommendation?
         get() {
             ApiLoggerResolver.logEvent("retrieveRecommendation")
-            val itemEnvelope = recommendationList.last()
-            return Recommendation(
-                itemEnvelope.identifier.getString(KEY_RECOMMENDATION),
-                itemEnvelope.details.getString(KEY_RECOMMENDATION)
-            )
+            return try {
+                val itemEnvelope = recommendationList.last()
+                Recommendation(
+                    itemEnvelope.identifier.getString(KEY_RECOMMENDATION),
+                    itemEnvelope.details.getString(KEY_RECOMMENDATION)
+                )
+            } catch (e: NoSuchElementException) {
+                null
+            }
         }
 
     private fun updateTokenList() {

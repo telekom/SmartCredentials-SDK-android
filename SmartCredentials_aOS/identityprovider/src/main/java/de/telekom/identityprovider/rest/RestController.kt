@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.telekom.identityprovider.rest
 
-import io.reactivex.Observable
+import io.reactivex.Single
 import retrofit2.Retrofit
 
 /**
@@ -29,7 +30,7 @@ class RestController(baseUrl: String) {
         retrofitClient = RetrofitClient().createRetrofitClient(baseUrl)
     }
 
-    fun getAccessToken(credentials: String): Observable<String> {
+    fun getAccessToken(credentials: String): Single<String> {
         val api = retrofitClient.create(
             PartnerManagementApi::class.java
         )
@@ -40,7 +41,7 @@ class RestController(baseUrl: String) {
         accessToken: String,
         clientId: String,
         packageName: String
-    ): Observable<String> {
+    ): Single<String> {
         val api = retrofitClient.create(
             PartnerManagementApi::class.java
         )

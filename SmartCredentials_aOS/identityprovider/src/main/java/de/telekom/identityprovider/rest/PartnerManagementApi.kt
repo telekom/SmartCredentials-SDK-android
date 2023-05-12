@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.telekom.identityprovider.rest
 
-import io.reactivex.Observable
+import io.reactivex.Single
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -27,8 +28,8 @@ import retrofit2.http.Path
 interface PartnerManagementApi {
 
     @GET("access-token/{credentials}")
-    fun observeAccessToken(@Path("credentials") credentials: String): Observable<String>
+    fun observeAccessToken(@Path("credentials") credentials: String): Single<String>
 
     @POST("bearer-token-hackathon")
-    fun observeBearerToken(@Body body: GetBearerBody): Observable<String>
+    fun observeBearerToken(@Body body: GetBearerBody): Single<String>
 }

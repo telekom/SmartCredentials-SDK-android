@@ -18,12 +18,12 @@ package de.telekom.smartcredentials.oneclickbusinessclient.ui
 import java.io.Serializable
 
 
-class PortalOffer(builder: PortalOfferBuilder) : Serializable {
-    private val url: String
-    private val transactionToken: String
-    private val firebaseId: String
-    private val recommendationId: String
-    private val serverKey: String
+class PortalOffer private constructor(builder: PortalOfferBuilder) : Serializable {
+    val url: String
+    val operatorToken: String
+    val firebaseId: String
+    val recommendationId: String
+    val serverKey: String
 
     companion object {
         const val PORTAL_OFFER_EXTRA = "extra:portal_offer"
@@ -31,27 +31,21 @@ class PortalOffer(builder: PortalOfferBuilder) : Serializable {
 
     init {
         url = builder.url
-        transactionToken = builder.transactionToken
+        operatorToken = builder.operatorToken
         firebaseId = builder.firebaseId
         recommendationId = builder.recommendationId
         serverKey = builder.serverKey
     }
 
-    fun getUrl(): String = this.url
-    fun getTransactionToken(): String = this.transactionToken
-    fun getFirebaseId(): String = this.firebaseId
-    fun getRecommendationId(): String = this.recommendationId
-    fun getServerKey(): String = this.serverKey
-
     class PortalOfferBuilder {
         internal var url = "https://one-click-portal.onrender.com/"
-        internal var transactionToken = ""
+        internal var operatorToken = ""
         internal var recommendationId = ""
         internal var firebaseId = ""
         internal var serverKey = ""
 
-        fun setTransactionToken(transactionToken: String): PortalOfferBuilder {
-            this.transactionToken = transactionToken
+        fun setOperatorToken(operatorToken: String): PortalOfferBuilder {
+            this.operatorToken = operatorToken
             return this
         }
 

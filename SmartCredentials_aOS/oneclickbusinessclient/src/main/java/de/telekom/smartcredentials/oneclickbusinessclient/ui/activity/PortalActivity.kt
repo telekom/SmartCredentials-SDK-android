@@ -37,7 +37,7 @@ import de.telekom.smartcredentials.oneclickbusinessclient.ui.webViews.WebViewCon
 class PortalActivity : ComponentActivity() {
 
     companion object {
-        val TRANSACTION_TOKEN_QUERY = "token="
+        val OPERATOR_TOKEN_QUERY = "token="
         val FIREBASE_ID_QUERY = "firebaseId="
         val RECOMMENDATION_ID_QUERY = "recommendationId="
         val SERVER_KEY_QUERY = "serverKey="
@@ -62,11 +62,11 @@ class PortalActivity : ComponentActivity() {
             val portalOffer =
                 intent.getSerializableExtra(PortalOffer.PORTAL_OFFER_EXTRA) as PortalOffer
             finalUrl(
-                url = portalOffer.getUrl(),
-                transactionToken = portalOffer.getTransactionToken(),
-                firebaseId = portalOffer.getFirebaseId(),
-                recommendationId = portalOffer.getRecommendationId(),
-                serverKey = portalOffer.getServerKey()
+                url = portalOffer.url,
+                operatorToken = portalOffer.operatorToken,
+                firebaseId = portalOffer.firebaseId,
+                recommendationId = portalOffer.recommendationId,
+                serverKey = portalOffer.serverKey
             )
         }
     }
@@ -81,22 +81,20 @@ class PortalActivity : ComponentActivity() {
                     onClose = { finish() }
                 )
             },
-            content = {
-                WebViewContent(finalUrl)
-            }
+            content = { padding -> WebViewContent(finalUrl, padding) }
         )
     }
 
     private fun finalUrl(
         url: String,
-        transactionToken: String,
+        operatorToken: String,
         firebaseId: String,
         recommendationId: String,
         serverKey: String
     ) {
         finalUrl.value = url + "?" +
-                TRANSACTION_TOKEN_QUERY +
-                transactionToken + "&" +
+                OPERATOR_TOKEN_QUERY +
+                operatorToken + "&" +
                 FIREBASE_ID_QUERY +
                 firebaseId + "&" +
                 RECOMMENDATION_ID_QUERY +

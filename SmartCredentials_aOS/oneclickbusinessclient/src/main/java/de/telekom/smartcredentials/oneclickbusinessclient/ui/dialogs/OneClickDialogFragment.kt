@@ -37,6 +37,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import de.telekom.smartcredentials.oneclickbusinessclient.OneClickClientConfiguration
 import de.telekom.smartcredentials.oneclickbusinessclient.R
 import de.telekom.smartcredentials.oneclickbusinessclient.ui.ui.theme.ColorPrimary
 import de.telekom.smartcredentials.oneclickbusinessclient.ui.ui.theme.LightGrey
@@ -48,6 +49,7 @@ import de.telekom.smartcredentials.oneclickbusinessclient.ui.ui.theme.TextColor
 @Composable
 fun OneClickDialogFragment(
     showDialog: Boolean,
+    config: OneClickClientConfiguration,
     onPositiveButtonClicked: () -> Unit,
     onDismissRequest: () -> Unit
 ) {
@@ -147,7 +149,7 @@ fun OneClickDialogFragment(
                                 .fillMaxWidth()
                                 .wrapContentHeight()
                                 .padding(top = 16.dp),
-                            text = stringResource(id = R.string.partnership_text),
+                            text = stringResource(id = R.string.partnership_text, config.clientAppName),
                             style = TextStyle(
                                 color = LightGrey,
                                 fontSize = 12.sp,
@@ -173,7 +175,7 @@ fun OneClickDialogFragment(
                                 modifier = Modifier
                                     .width(20.dp)
                                     .height(20.dp),
-                                painter = painterResource(id = R.drawable.ic_launcher),
+                                painter = painterResource(id = config.logoResId),
                                 contentDescription = "Icon Odysee"
                             )
                         }

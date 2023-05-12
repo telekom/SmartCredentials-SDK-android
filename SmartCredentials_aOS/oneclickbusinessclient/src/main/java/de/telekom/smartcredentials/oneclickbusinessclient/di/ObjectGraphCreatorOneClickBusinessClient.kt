@@ -24,9 +24,11 @@ import de.telekom.smartcredentials.core.api.StorageApi
 import de.telekom.smartcredentials.core.controllers.CoreController
 import de.telekom.smartcredentials.oneclickbusinessclient.OneClickClientConfiguration
 import de.telekom.smartcredentials.oneclickbusinessclient.controllers.OneClickBusinessClientController
+import de.telekom.smartcredentials.oneclickbusinessclient.operatortoken.OperatorTokenManager
 import de.telekom.smartcredentials.oneclickbusinessclient.repository.StorageRepoImplementation
 import de.telekom.smartcredentials.oneclickbusinessclient.viewmodel.OneClickViewModel
 import de.telekom.smartcredentials.oneclickbusinessclient.viewmodel.OneClickViewModelFactory
+import java.lang.ref.WeakReference
 
 /**
  * Created by larisa-maria.suciu@endava.com at 22/03/2023
@@ -34,6 +36,7 @@ import de.telekom.smartcredentials.oneclickbusinessclient.viewmodel.OneClickView
 object ObjectGraphCreatorOneClickBusinessClient {
 
     private var sInstance: ObjectGraphCreatorOneClickBusinessClient? = null
+    private var mOperatorTokenManager: OperatorTokenManager? = null
 
     fun getInstance(): ObjectGraphCreatorOneClickBusinessClient {
         if (sInstance == null) {
@@ -41,7 +44,6 @@ object ObjectGraphCreatorOneClickBusinessClient {
         }
         return sInstance!!
     }
-
 
     fun provideApiControllerOneClickBusinessClient(
         context: Context,
@@ -51,21 +53,25 @@ object ObjectGraphCreatorOneClickBusinessClient {
         config: OneClickClientConfiguration
     ): OneClickBusinessClientController {
         val storageRepo = StorageRepoImplementation(storageApi)
-
+        mOperatorTokenManager =
+            OperatorTokenManager(WeakReference(context), identityProviderApi, config)
         return OneClickBusinessClientController(
-            context,
             coreController,
-            identityProviderApi,
             storageRepo,
             config
         )
     }
 
+    fun provideOperatorTokenManager(): OperatorTokenManager {
+        if (mOperatorTokenManager == null) {
+            throw Exception()
+        }
+        return mOperatorTokenManager!!
+    }
+
     @Composable
-    fun provideViewModelOneClickClient(
-        oneClickBusinessClientController: OneClickBusinessClientController
-    ): OneClickViewModel{
-        return viewModel(factory = OneClickViewModelFactory(oneClickBusinessClientController)) as OneClickViewModel
+    fun provideViewModelOneClickClient(): OneClickViewModel {
+        return viewModel(factory = OneClickViewModelFactory(provideOperatorTokenManager())) as OneClickViewModel
     }
 
     fun destroy() {

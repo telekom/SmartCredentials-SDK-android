@@ -60,6 +60,7 @@ allprojects {
         okHttpVersion = "4.9.3"
         blinkIDVersion = "5.8.0"
         rxJavaVersion = "2.1.1"
+        rxAndroidVersion = "2.1.1"
         rx3JavaVersion = "3.1.5"
         rx3AndroidVersion = "3.0.0"
 
@@ -73,7 +74,15 @@ allprojects {
 
         kotlin_core_version = "1.9.0"
         compose_ui_version = "1.3.0"
+
+        ocbClientId = getEnvOrProperty('OCB_CLIENT_ID')
+        ocbScope = getEnvOrProperty('OCB_SCOPE')
+        ocbRecommenderUrl = getEnvOrProperty('OCB_RECOMMENDER_URL')
     }
+}
+
+def getEnvOrProperty(String name, String fallback = null) {
+    return System.getenv(name) ?: project.hasProperty(name) ? project[name] : fallback
 }
 
 task clean(type: Delete) {

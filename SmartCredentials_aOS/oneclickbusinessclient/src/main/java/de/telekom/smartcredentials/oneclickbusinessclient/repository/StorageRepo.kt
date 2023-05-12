@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.telekom.smartcredentials.oneclickbusinessclient.repository
 
 import de.telekom.smartcredentials.oneclickbusinessclient.recommendation.Recommendation
@@ -31,5 +32,5 @@ interface StorageRepo {
 
     fun clearRecommendations()
 
-    val getRecommendation: Recommendation
+    val getRecommendation: Recommendation?
 }

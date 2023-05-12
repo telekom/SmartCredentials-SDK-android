@@ -15,24 +15,26 @@
  */
 package de.telekom.smartcredentials.oneclickbusinessclient.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import de.telekom.smartcredentials.core.identityprovider.IdentityProviderCallback
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver
 import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse
-import de.telekom.smartcredentials.oneclickbusinessclient.controllers.OneClickBusinessClientController
-import de.telekom.smartcredentials.oneclickbusinessclient.identityProvider.TokenResponse
-import de.telekom.smartcredentials.oneclickbusinessclient.identityProvider.TokenRetrieveState
-import de.telekom.smartcredentials.oneclickbusinessclient.recommendation.RecommendationConstants
-import kotlinx.coroutines.*
+import de.telekom.smartcredentials.oneclickbusinessclient.operatortoken.OperatorTokenManager
+import de.telekom.smartcredentials.oneclickbusinessclient.operatortoken.TokenResponse
+import de.telekom.smartcredentials.oneclickbusinessclient.operatortoken.TokenRetrieveState
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  * Created by larisa-maria.suciu@endava.com at 22/03/2023
  */
 class OneClickViewModel(
-    private val oneClickBusinessClientController: OneClickBusinessClientController
-) : ViewModel() {
+    private val operatorTokenManager: OperatorTokenManager
+) : ViewModel(), IdentityProviderCallback {
 
     companion object {
         private const val DEFAULT_DELAY: Long = 500
@@ -41,7 +43,7 @@ class OneClickViewModel(
 
     val loadingDialogState = mutableStateOf(LoadingDialogState())
     val showErrorDialogState = mutableStateOf(false)
-    val tokenResponse = mutableStateOf(TokenResponse(TokenRetrieveState.UNRETRIEVED, ""))
+    val tokenResponse = mutableStateOf(TokenResponse(TokenRetrieveState.NOT_RETRIEVED, ""))
     private var job = Job()
         get() {
             if (field.isCancelled) field = Job()
@@ -57,18 +59,7 @@ class OneClickViewModel(
                 retrieveInfoDone = false,
                 openPortalDone = false
             )
-            withContext(Dispatchers.IO) {
-                val response: SmartCredentialsApiResponse<String> =
-                    oneClickBusinessClientController.getOperatorToken()
-
-                withContext(job) {
-                    if (response.isSuccessful) {
-                        onSuccessfulFetch(response.data)
-                    } else {
-                        handleUnsuccessfulFetch()
-                    }
-                }
-            }
+            operatorTokenManager.requestOperatorToken(this@OneClickViewModel)
         }
 
     private fun onSuccessfulFetch(token: String) = viewModelScope.launch(job) {
@@ -88,7 +79,6 @@ class OneClickViewModel(
             )
         )
     }
-
 
     private fun handleUnsuccessfulFetch() = viewModelScope.launch(job) {
         delay(FINISH_DELAY)
@@ -117,7 +107,7 @@ class OneClickViewModel(
             retrieveInfoDone = true,
             openPortalDone = true
         )
-        if (response.state.name == TokenRetrieveState.UNSUCCESSFUL.name) {
+        if (response.state == TokenRetrieveState.UNSUCCESSFUL) {
             showErrorDialogState.value = true
         } else {
             tokenResponse.value = response
@@ -128,7 +118,7 @@ class OneClickViewModel(
     fun stopComputation() {
         job.cancelChildren()
         showErrorDialogState.value = false
-        tokenResponse.value = TokenResponse(TokenRetrieveState.UNRETRIEVED, "")
+        tokenResponse.value = TokenResponse(TokenRetrieveState.NOT_RETRIEVED, "")
         resetState()
     }
 
@@ -136,4 +126,11 @@ class OneClickViewModel(
         loadingDialogState.value = LoadingDialogState()
     }
 
+    override fun onResult(result: SmartCredentialsApiResponse<String>) {
+        if (result.isSuccessful) {
+            onSuccessfulFetch(result.data)
+        } else {
+            handleUnsuccessfulFetch()
+        }
+    }
 }

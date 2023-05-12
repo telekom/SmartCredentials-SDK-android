@@ -104,7 +104,7 @@ fun LoadingDialogFragment(
                     ) {
                         if (retrieveInfoInProgress) {
                             Text(
-                                text = stringResource(id = R.string.loading_text_retrieving_transaction_token),
+                                text = stringResource(id = R.string.loading_text_retrieving_operator_token),
                                 style = TextStyle(
                                     color = Color.Black,
                                     fontSize = 14.sp,
@@ -113,7 +113,7 @@ fun LoadingDialogFragment(
                             )
                         } else {
                             Text(
-                                text = stringResource(id = R.string.loading_text_retrieving_transaction_token),
+                                text = stringResource(id = R.string.loading_text_retrieving_operator_token),
                                 style = TextStyle(
                                     color = LightGrey,
                                     fontSize = 14.sp,

@@ -13,19 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.telekom.smartcredentials.oneclickbusinessclient.controllers
 
-import android.content.Context
-import androidx.compose.runtime.*
-import androidx.lifecycle.viewmodel.compose.viewModel
-import de.telekom.smartcredentials.core.api.IdentityProviderApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.platform.ComposeView
 import de.telekom.smartcredentials.core.api.OneClickApi
 import de.telekom.smartcredentials.core.blacklisting.SmartCredentialsFeatureSet
 import de.telekom.smartcredentials.core.controllers.CoreController
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver
 import de.telekom.smartcredentials.core.responses.FeatureNotSupportedThrowable
 import de.telekom.smartcredentials.core.responses.RootedThrowable
-import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse
+import de.telekom.smartcredentials.oneclickbusinessclient.BuildConfig
 import de.telekom.smartcredentials.oneclickbusinessclient.OneClickClientConfiguration
 import de.telekom.smartcredentials.oneclickbusinessclient.recommendation.Recommendation
 import de.telekom.smartcredentials.oneclickbusinessclient.recommendation.RecommendationConstants
@@ -35,8 +34,6 @@ import de.telekom.smartcredentials.oneclickbusinessclient.rest.RecommenderApi
 import de.telekom.smartcredentials.oneclickbusinessclient.rest.RetrofitClient
 import de.telekom.smartcredentials.oneclickbusinessclient.ui.PortalOffer
 import de.telekom.smartcredentials.oneclickbusinessclient.ui.UIHandler
-import de.telekom.smartcredentials.oneclickbusinessclient.viewmodel.OneClickViewModel
-import de.telekom.smartcredentials.oneclickbusinessclient.viewmodel.OneClickViewModelFactory
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -46,20 +43,23 @@ import org.json.JSONException
  * Created by larisa-maria.suciu@endava.com at 22/03/2023
  */
 class OneClickBusinessClientController(
-    private val mContext: Context,
     private val mCoreController: CoreController,
-    private val mIdentityProviderApi: IdentityProviderApi,
     private val mStorageRepository: StorageRepo,
     private val config: OneClickClientConfiguration
 ) : OneClickApi {
 
-    private var oneClickListener: OneClickListener
+    private var uiHandler = UIHandler(this, config)
 
-    internal fun getOperatorToken(): SmartCredentialsApiResponse<String> =
-        mIdentityProviderApi.getOperatorToken(mContext, config.getClientId(), config.getScope())
+    override fun bind(activity: AppCompatActivity) {
+        uiHandler.bind(activity)
+    }
 
-    init {
-        oneClickListener = UIHandler(this)
+    override fun setComposeView(composeView: ComposeView?) {
+        uiHandler.setComposeView(composeView)
+    }
+
+    override fun unbind() {
+        uiHandler.unbind()
     }
 
     @Deprecated("Deprecated in Java")
@@ -80,7 +80,7 @@ class OneClickBusinessClientController(
             throw RuntimeException("Firebase token is null")
         }
 
-        val retrofit = RetrofitClient().createRetrofitClient(config.getServerUrl())
+        val retrofit = RetrofitClient().createRetrofitClient(BuildConfig.RECOMMENDER_URL)
         val recommenderApi = retrofit.create(RecommenderApi::class.java)
         try {
             val token = mStorageRepository.firebaseToken
@@ -89,7 +89,7 @@ class OneClickBusinessClientController(
                     val body = MakeRecommendationsBody(
                         firebaseToken,
                         productIds,
-                        config.getFirebaseServerKey()
+                        config.firebaseServerKey
                     )
                     recommenderApi.observeMakeRecommendations(body)
                 }
@@ -124,7 +124,7 @@ class OneClickBusinessClientController(
         val recommendation = Recommendation(recommendationId, clientId)
         mStorageRepository.saveRecommendation(recommendation)
         ApiLoggerResolver.logEvent("pushRecommendationMessage: clientId = $clientId and recommendationId = $recommendationId")
-        oneClickListener.onRecommendationReceived()
+        uiHandler.onRecommendationReceived()
     }
 
     override fun updateFirebaseToken(
@@ -143,7 +143,7 @@ class OneClickBusinessClientController(
     }
 
 
-    override fun createPortalOffer(
+    internal fun createPortalOffer(
         token: String
     ) {
         ApiLoggerResolver.logMethodAccess(javaClass.simpleName, "createPortalOffer")
@@ -165,13 +165,13 @@ class OneClickBusinessClientController(
                 val portalOffer = recommendation?.recommendationId?.let { recommendationId ->
 
                     PortalOffer.PortalOfferBuilder()
-                        .setTransactionToken(token)
+                        .setOperatorToken(token)
                         .setFirebaseId(firebaseToken)
                         .setRecommendationId(recommendationId)
-                        .setServerKey(config.getFirebaseServerKey())
+                        .setServerKey(config.firebaseServerKey)
                         .build()
                 }
-                portalOffer?.let { offer -> oneClickListener.onOfferAvailable(offer) }
+                portalOffer?.let { offer -> uiHandler.onOfferAvailable(offer) }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
