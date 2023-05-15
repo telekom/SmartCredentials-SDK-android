@@ -2,6 +2,7 @@ name: Build
 on: [pull_request, push]
 jobs:
   build:
+    environment: Default
     runs-on: ubuntu-latest
     steps:
       - name: Install and Fix Build Tools
@@ -233,6 +234,11 @@ jobs:
         with:
             name: identityprovider
             path: SmartCredentials_aOS/identityprovider/build/outputs/aar/
+      - name: Upload Identity Provider Sample APK
+          uses: actions/upload-artifact@v2
+          with:
+            name: sampleApplications
+            path: samples/oneclickbusiness/app/build/outputs/apk/release/
       - name: Upload OneClickBusinessClient AAR
         uses: actions/upload-artifact@v2
         with:

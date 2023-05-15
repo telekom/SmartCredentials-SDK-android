@@ -5,6 +5,7 @@ on:
             - master
 jobs:
   build:
+    environment: Default
     runs-on: ubuntu-latest
     steps:
       - name: Install and Fix Build Tools

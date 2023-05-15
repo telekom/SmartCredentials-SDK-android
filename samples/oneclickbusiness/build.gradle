@@ -30,8 +30,12 @@ allprojects {
     }
 }
 
-def getEnvOrProperty(String name, String fallback = null) {
-    return System.getenv(name) ?: project.hasProperty(name) ? project[name] : fallback
+def getEnvOrProperty(String name) {
+    var result = System.getenv(name) ?: project.hasProperty(name) ? project[name] : null
+    if (result == null) {
+        throw new GradleException("$name not set in environment")
+    }
+    return result
 }
 
 task clean(type: Delete) {
