@@ -247,8 +247,8 @@ jobs:
             name: identityprovider
             path: SmartCredentials_aOS/identityprovider/build/outputs/aar/
       - name: Upload Identity Provider Sample APK
-          uses: actions/upload-artifact@v2
-          with:
+        uses: actions/upload-artifact@v2
+        with:
             name: sampleApplications
             path: samples/oneclickbusiness/app/build/outputs/apk/release/
       - name: Upload OneClickBusinessClient AAR
