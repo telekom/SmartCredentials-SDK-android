@@ -24,7 +24,6 @@ import androidx.fragment.app.Fragment
 import com.operatortokenocb.BuildConfig
 import com.operatortokenocb.databinding.FragmentTokenFetchBinding
 import com.operatortokenocb.tokendecrypt.TransactionTokenDecrypt
-import com.operatortokenocb.ui.TokenFetchFragment.Companion.CLIENT_ID
 import de.telekom.identityprovider.factory.SmartCredentialsIdentityProviderFactory
 import de.telekom.smartcredentials.core.api.IdentityProviderApi
 import de.telekom.smartcredentials.core.identityprovider.IdentityProviderCallback
@@ -80,7 +79,8 @@ class TokenFetchFragment : Fragment(), IdentityProviderCallback {
 
     override fun onResult(result: SmartCredentialsApiResponse<String>?) {
         if (result!!.isSuccessful) {
-            binding.operatorTokenDescriptionTextView.text = result.data
+            binding.operatorTokenDescriptionTextView.text =
+                TransactionTokenDecrypt(requireContext()).getClaimsFromTransactionToken(result.data)
         } else {
             if (result.error is HttpException) {
                 Timber.tag(TAG)

@@ -17,6 +17,10 @@
 package com.operatortokenocb
 
 import android.app.Application
+import de.telekom.identityprovider.factory.SmartCredentialsIdentityProviderFactory
+import de.telekom.smartcredentials.core.configurations.SmartCredentialsConfiguration
+import de.telekom.smartcredentials.core.factory.SmartCredentialsCoreFactory
+import de.telekom.smartcredentials.core.rootdetector.RootDetectionOption
 import timber.log.Timber
 
 
