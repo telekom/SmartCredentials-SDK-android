@@ -2,6 +2,7 @@ name: Build
 on: [pull_request, push]
 jobs:
   build:
+    environment: Default
     runs-on: ubuntu-latest
     steps:
       - name: Install and Fix Build Tools
@@ -14,8 +15,22 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v3
       - name: Lint
+        env:
+          OCB_CLIENT_ID: ${{ secrets.OCB_CLIENT_ID }}
+          OCB_SCOPE: ${{ secrets.OCB_SCOPE }}
+          OCB_RECOMMENDER_URL: ${{ secrets.OCB_RECOMMENDER_URL }}
+          PARTNER_BE_URL: ${{ secrets.PARTNER_BE_URL }}
+          PARTNER_CREDENTIALS: ${{ secrets.PARTNER_CREDENTIALS }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
         run: cd SmartCredentials_aOS && ./gradlew lint 
       - name: Test
+        env:
+          OCB_CLIENT_ID: ${{ secrets.OCB_CLIENT_ID }}
+          OCB_SCOPE: ${{ secrets.OCB_SCOPE }}
+          OCB_RECOMMENDER_URL: ${{ secrets.OCB_RECOMMENDER_URL }}
+          PARTNER_BE_URL: ${{ secrets.PARTNER_BE_URL }}
+          PARTNER_CREDENTIALS: ${{ secrets.PARTNER_CREDENTIALS }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
         run: cd SmartCredentials_aOS && ./gradlew test
       - name: Prepare signing keys
         env:
@@ -73,9 +88,23 @@ jobs:
           cd $GITHUB_WORKSPACE/SmartCredentials_aOS/storage
           echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
           gpg --quiet --output ./release.gpg --dearmor ./release.asc
+          echo 'Create identity provider module signing key'
+          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/identityprovider
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
+          echo 'Create oneclickbusinessclient module signing key'
+          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/oneclickbusinessclient
+          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
+          gpg --quiet --output ./release.gpg --dearmor ./release.asc
       - name: Assemble all subproject aar files
         run: cd SmartCredentials_aOS && ./gradlew assembleRelease && ./gradlew publishToMavenLocal
         env:
+          OCB_CLIENT_ID: ${{ secrets.OCB_CLIENT_ID }}
+          OCB_SCOPE: ${{ secrets.OCB_SCOPE }}
+          OCB_RECOMMENDER_URL: ${{ secrets.OCB_RECOMMENDER_URL }}
+          PARTNER_BE_URL: ${{ secrets.PARTNER_BE_URL }}
+          PARTNER_CREDENTIALS: ${{ secrets.PARTNER_CREDENTIALS }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
           OSSRH_GPG_SECRET_KEY_ID: ${{ secrets.OSSRH_GPG_SECRET_KEY_ID }}
           OSSRH_GPG_SECRET_KEY_BASE64: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
           OSSRH_GPG_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
@@ -220,3 +249,18 @@ jobs:
         with:
             name: sampleApplications
             path: samples/storage/app/build/outputs/apk/release/
+      - name: Upload Identity Provider AAR
+        uses: actions/upload-artifact@v2
+        with:
+            name: identityprovider
+            path: SmartCredentials_aOS/identityprovider/build/outputs/aar/
+      - name: Upload Identity Provider Sample APK
+        uses: actions/upload-artifact@v2
+        with:
+            name: sampleApplications
+            path: samples/oneclickbusiness/app/build/outputs/apk/release/
+      - name: Upload OneClickBusinessClient AAR
+        uses: actions/upload-artifact@v2
+        with:
+            name: oneclickbusinessclient
+            path: SmartCredentials_aOS/oneclickbusinessclient/build/outputs/aar/

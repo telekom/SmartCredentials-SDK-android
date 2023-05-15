@@ -1,0 +1,28 @@
+<!--
+Copyright (c) 2019 Telekom Deutschland AG
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="16dp"
+    android:height="16dp"
+    android:viewportWidth="16"
+    android:viewportHeight="16">
+    <path
+        android:fillColor="#E20074"
+        android:pathData="M8,8m-8,0a8,8 0,1 1,16 0a8,8 0,1 1,-16 0" />
+    <path
+        android:fillColor="#ffffff"
+        android:fillType="evenOdd"
+        android:pathData="M1,8C1,4.134 4.134,1 8,1C9.8565,1 11.637,1.7375 12.9497,3.0503C14.2625,4.363 15,6.1435 15,8C15,11.866 11.866,15 8,15C4.134,15 1,11.866 1,8ZM7.1505,10.6473L11.5191,6.2787C11.6093,6.1896 11.66,6.0681 11.66,5.9414C11.66,5.8147 11.6093,5.6932 11.5191,5.6041C11.332,5.4198 11.0316,5.4198 10.8445,5.6041L7.1505,9.2982L5.1554,7.3032C5.0365,7.1755 4.8573,7.123 4.6882,7.1662C4.5191,7.2093 4.387,7.3414 4.3438,7.5105C4.3007,7.6796 4.3532,7.8588 4.4809,7.9778L7.1505,10.6473Z" />
+</vector>

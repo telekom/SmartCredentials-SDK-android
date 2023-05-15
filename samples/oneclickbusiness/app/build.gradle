@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2019 Telekom Deutschland AG
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
@@ -17,9 +33,17 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "PARTNER_BE_URL", "${rootProject.ext.partnerBeUrl}")
+            buildConfigField("String", "PARTNER_CREDENTIALS", "${rootProject.ext.partnerCredentials}")
+            buildConfigField("String", "CLIENT_ID", "${rootProject.ext.clientId}")
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "PARTNER_BE_URL", "${rootProject.ext.partnerBeUrl}")
+            buildConfigField("String", "PARTNER_CREDENTIALS", "${rootProject.ext.partnerCredentials}")
+            buildConfigField("String", "CLIENT_ID", "${rootProject.ext.clientId}")
         }
     }
 
@@ -61,6 +85,8 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.2.14'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation "de.telekom.smartcredentials:core:${project.ext.smartCredentialsPublicVersion}"
+    implementation "de.telekom.smartcredentials:identityprovider:${project.ext.smartCredentialsPublicVersion}"
 
     // https://mvnrepository.com/artifact/com.nimbusds/nimbus-jose-jwt
     implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.28'
