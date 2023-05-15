@@ -23,6 +23,12 @@ jobs:
         run: cd SmartCredentials_aOS && ./gradlew test
       - name: Prepare signing keys
         env:
+          OCB_CLIENT_ID: ${{ secrets.OCB_CLIENT_ID }}
+          OCB_SCOPE: ${{ secrets.OCB_SCOPE }}
+          OCB_RECOMMENDER_URL: ${{ secrets.OCB_RECOMMENDER_URL }}
+          PARTNER_BE_URL: ${{ secrets.PARTNER_BE_URL }}
+          PARTNER_CREDENTIALS: ${{ secrets.PARTNER_CREDENTIALS }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
           GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
         run: |
           echo 'Create authentication module signing key'
@@ -88,6 +94,12 @@ jobs:
       - name: Assemble all subproject aar files
         run: cd SmartCredentials_aOS && ./gradlew assembleRelease
         env:
+          OCB_CLIENT_ID: ${{ secrets.OCB_CLIENT_ID }}
+          OCB_SCOPE: ${{ secrets.OCB_SCOPE }}
+          OCB_RECOMMENDER_URL: ${{ secrets.OCB_RECOMMENDER_URL }}
+          PARTNER_BE_URL: ${{ secrets.PARTNER_BE_URL }}
+          PARTNER_CREDENTIALS: ${{ secrets.PARTNER_CREDENTIALS }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
           OSSRH_GPG_SECRET_KEY_ID: ${{ secrets.OSSRH_GPG_SECRET_KEY_ID }}
           OSSRH_GPG_SECRET_KEY_BASE64: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
           OSSRH_GPG_SECRET_KEY_RING_FILE: ${{ secrets.OSSRH_GPG_SECRET_KEY_RING_FILE }}
