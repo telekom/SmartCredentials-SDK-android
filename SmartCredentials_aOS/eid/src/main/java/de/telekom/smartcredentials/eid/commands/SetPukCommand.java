@@ -16,6 +16,12 @@
 
 package de.telekom.smartcredentials.eid.commands;
 
+import androidx.annotation.NonNull;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import de.telekom.smartcredentials.eid.commands.builder.CommandBuilder;
 import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
 
 /**
@@ -24,7 +30,38 @@ import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
 @SuppressWarnings("unused")
 public class SetPukCommand extends SmartEidCommand {
 
-    public SetPukCommand() {
+    @SerializedName("value")
+    @Expose
+    private String mValue;
+
+    public SetPukCommand(Builder builder) {
         super(EidCommandType.SET_PUK.getCommandType());
+        mValue = builder.mValue;
+    }
+
+    public String getValue() {
+        return mValue;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "SetPukCommand{" +
+                "mValue='" + mValue + '\'' +
+                '}';
+    }
+
+    public static class Builder implements CommandBuilder<SetPukCommand> {
+
+        private final String mValue;
+
+        public Builder(String value) {
+            mValue = value;
+        }
+
+        @Override
+        public SetPukCommand build() {
+            return new SetPukCommand(this);
+        }
     }
 }

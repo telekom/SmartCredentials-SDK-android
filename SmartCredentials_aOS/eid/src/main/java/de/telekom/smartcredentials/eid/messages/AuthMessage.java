@@ -38,10 +38,6 @@ public class AuthMessage extends SmartEidMessage {
     @Expose
     private String mError;
 
-    public AuthMessage() {
-
-    }
-
     public String getUrl() {
         return mUrl;
     }

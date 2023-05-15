@@ -22,6 +22,7 @@ package de.telekom.smartcredentials.eid.commands.types;
 public enum EidCommandType {
 
     GET_INFO("GET_INFO"),
+    GET_STATUS("GET_STATUS"),
     GET_API_LEVEL("GET_API_LEVEL"),
     SET_API_LEVEL("SET_API_LEVEL"),
     GET_READER("GET_READER"),

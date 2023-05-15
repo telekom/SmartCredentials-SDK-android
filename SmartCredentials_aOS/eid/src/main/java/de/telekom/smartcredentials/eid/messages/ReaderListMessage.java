@@ -16,6 +16,8 @@
 
 package de.telekom.smartcredentials.eid.messages;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -27,19 +29,23 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class ReaderListMessage extends SmartEidMessage {
 
-    @SerializedName("reader")
+    @SerializedName("readers")
     @Expose
-    private List<Reader> mReader;
-
-    public ReaderListMessage() {
-
-    }
+    private List<Reader> mReaders;
 
     public List<Reader> getReader() {
-        return mReader;
+        return mReaders;
     }
 
     public void setReader(List<Reader> reader) {
-        this.mReader = reader;
+        this.mReaders = reader;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "ReaderListMessage{" +
+                "mReaders=" + mReaders +
+                '}';
     }
 }

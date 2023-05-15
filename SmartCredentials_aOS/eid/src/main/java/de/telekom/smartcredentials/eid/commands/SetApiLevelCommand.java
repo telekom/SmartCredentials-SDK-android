@@ -16,6 +16,11 @@
 
 package de.telekom.smartcredentials.eid.commands;
 
+import androidx.annotation.NonNull;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
 
 /**
@@ -24,7 +29,37 @@ import de.telekom.smartcredentials.eid.commands.types.EidCommandType;
 @SuppressWarnings("unused")
 public class SetApiLevelCommand extends SmartEidCommand {
 
-    public SetApiLevelCommand() {
+    @SerializedName("level")
+    @Expose
+    private int mLevel;
+
+    private SetApiLevelCommand(Builder builder) {
         super(EidCommandType.SET_API_LEVEL.getCommandType());
+        mLevel = builder.mLevel;
+    }
+
+    public int getLevel() {
+        return mLevel;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "SetApiLevelCommand{" +
+                "mLevel=" + mLevel +
+                '}';
+    }
+
+    public static class Builder {
+
+        private final int mLevel;
+
+        public Builder(int level) {
+            mLevel = level;
+        }
+
+        public SetApiLevelCommand build() {
+            return new SetApiLevelCommand(this);
+        }
     }
 }

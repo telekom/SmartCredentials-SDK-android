@@ -33,10 +33,6 @@ public class EnterPinMessage extends SmartEidMessage {
     @Expose
     private Reader mReader;
 
-    public EnterPinMessage() {
-
-    }
-
     public Reader getReader() {
         return mReader;
     }

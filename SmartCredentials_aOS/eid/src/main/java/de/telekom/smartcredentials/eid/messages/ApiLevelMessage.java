@@ -16,6 +16,8 @@
 
 package de.telekom.smartcredentials.eid.messages;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -38,10 +40,6 @@ public class ApiLevelMessage extends SmartEidMessage {
     @SerializedName("current")
     @Expose
     private int mCurrent;
-
-    public ApiLevelMessage() {
-
-    }
 
     public String getMsg() {
         return mMsg;
@@ -73,5 +71,16 @@ public class ApiLevelMessage extends SmartEidMessage {
 
     public void setCurrent(int current) {
         this.mCurrent = current;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "ApiLevelMessage{" +
+                "mMsg='" + mMsg + '\'' +
+                ", mError='" + mError + '\'' +
+                ", mAvailable=" + mAvailable +
+                ", mCurrent=" + mCurrent +
+                '}';
     }
 }

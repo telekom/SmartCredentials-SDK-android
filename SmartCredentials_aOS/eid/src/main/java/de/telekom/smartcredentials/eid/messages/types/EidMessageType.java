@@ -42,7 +42,8 @@ public enum EidMessageType {
     SESSION_GENERATED("SESSION_GENERATED"),
     CHANGE_PIN("CHANGE_PIN"),
     ENTER_NEW_PIN("ENTER_NEW_PIN"),
-    UNKNOWN_COMMAND("UNKNOWN_COMMAND");
+    UNKNOWN_COMMAND("UNKNOWN_COMMAND"),
+    STATUS("STATUS");
 
     private final String mMessageType;
 
