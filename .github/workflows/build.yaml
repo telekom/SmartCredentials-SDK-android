@@ -15,10 +15,6 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v3
       - name: Lint
-        run: cd SmartCredentials_aOS && ./gradlew lint 
-      - name: Test
-        run: cd SmartCredentials_aOS && ./gradlew test
-      - name: Prepare signing keys
         env:
           OCB_CLIENT_ID: ${{ secrets.OCB_CLIENT_ID }}
           OCB_SCOPE: ${{ secrets.OCB_SCOPE }}
@@ -26,6 +22,18 @@ jobs:
           PARTNER_BE_URL: ${{ secrets.PARTNER_BE_URL }}
           PARTNER_CREDENTIALS: ${{ secrets.PARTNER_CREDENTIALS }}
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
+        run: cd SmartCredentials_aOS && ./gradlew lint 
+      - name: Test
+        env:
+          OCB_CLIENT_ID: ${{ secrets.OCB_CLIENT_ID }}
+          OCB_SCOPE: ${{ secrets.OCB_SCOPE }}
+          OCB_RECOMMENDER_URL: ${{ secrets.OCB_RECOMMENDER_URL }}
+          PARTNER_BE_URL: ${{ secrets.PARTNER_BE_URL }}
+          PARTNER_CREDENTIALS: ${{ secrets.PARTNER_CREDENTIALS }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+        run: cd SmartCredentials_aOS && ./gradlew test
+      - name: Prepare signing keys
+        env:
           GPG_KEY_CONTENTS: ${{ secrets.OSSRH_GPG_SECRET_KEY_BASE64 }}
         run: |
           echo 'Create authentication module signing key'
