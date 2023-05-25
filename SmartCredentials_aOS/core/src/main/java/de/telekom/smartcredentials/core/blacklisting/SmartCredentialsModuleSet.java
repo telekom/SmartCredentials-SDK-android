@@ -33,7 +33,8 @@ public enum SmartCredentialsModuleSet {
     ONE_CLICK_BUSINESS_MODULE("One Click Business Module"),
     SIM_MODULE("Sim Module"),
     IDENTITY_PROVIDER("Identity Provider Module"),
-    ONE_CLICK_BUSINESS_CLIENT_MODULE("One Click Business Client Module");
+    ONE_CLICK_BUSINESS_CLIENT_MODULE("One Click Business Client Module"),
+    CARRIER_SETTINGS_MODULE("Carrier Settings Module");
 
     private final String mModuleName;
 
