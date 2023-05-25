@@ -17,6 +17,7 @@
 package de.telekom.smartcredentials.core.api;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.os.PersistableBundle;
 
 import java.util.HashMap;
@@ -31,23 +32,26 @@ public interface CarrierSettingsApi {
     /**
      * Method used to get the SIM's list of APNs and their respective details.
      *
+     * @param context {@link Context} the context of the application
      * @return {@link SmartCredentialsApiResponse} a {@link HashMap} containing APN-details pairs if the
      * APN list was accessed successfully; otherwise returns an empty {@link HashMap}
      */
-    SmartCredentialsApiResponse<HashMap<String, PersistableBundle>> getApnList();
+    SmartCredentialsApiResponse<HashMap<String, PersistableBundle>> getApnList(Context context);
 
     /**
      * Method used to add a new APN in the APN list.
      *
-     * @param apn {@link ContentValues} is the APN to be added. Its details are represented by key-value
-     *            pairs, where the keys are attributes from the {@link android.provider.Telephony.Carriers} class
+     * @param context {@link Context} the context of the application
+     * @param apn     {@link ContentValues} is the APN to be added. Its details are represented by key-value
+     *                pairs, where the keys are attributes from the {@link android.provider.Telephony.Carriers} class
      * @return true if the APN was successfully inserted into the APN list, false otherwise
      */
-    SmartCredentialsApiResponse<Boolean> addNewApn(ContentValues apn);
+    SmartCredentialsApiResponse<Boolean> addNewApn(Context context, ContentValues apn);
 
     /**
      * Method used to update the details of an APN.
      *
+     * @param context       {@link Context} the context of the application
      * @param apn           {@link String} is the APN that needs to be updated
      * @param newApnSetting {@link ContentValues} that holds key-value pairs.
      *                      The key is the field that needs to be updated. It can be any value from the {@link android.provider.Telephony.Carriers} class.
@@ -55,39 +59,46 @@ public interface CarrierSettingsApi {
      * @return {@link Integer} with the number of APNs that have been updated. It should be 1 or 0.
      * 1 if the APN has been updated, 0 otherwise
      */
-    SmartCredentialsApiResponse<Integer> updateApn(String apn, ContentValues newApnSetting);
+    SmartCredentialsApiResponse<Integer> updateApn(Context context, String apn, ContentValues newApnSetting);
 
     /**
      * Method used to delete an APN.
      *
-     * @param apn {@link String} is the APN to be deleted.
+     * @param context {@link Context} the context of the application
+     * @param apn     {@link String} is the APN to be deleted.
      * @return {@link Integer} representing the number of APNs that have been deleted. It should be 1 or 0.
      * 1 if the APn has been deleted successfully, 0 otherwise
      */
-    SmartCredentialsApiResponse<Integer> deleteApn(String apn);
+    SmartCredentialsApiResponse<Integer> deleteApn(Context context, String apn);
 
     /**
      * Method used to check the if the Roaming option is enabled or disabled.
      *
+     * @param context {@link Context} the context of the application
      * @return {@link Boolean} true if Roaming is available to the user, false otherwise
      */
-    SmartCredentialsApiResponse<Boolean> isRoamingEnabled();
+    SmartCredentialsApiResponse<Boolean> isRoamingEnabled(Context context);
 
     /**
      * Method used to check if the Mobile Data option is enabled or disabled.
      *
+     * @param context {@link Context} the context of the application
      * @return {@link Boolean} true if Mobile Data is available to the user, false otherwise
      */
-    SmartCredentialsApiResponse<Boolean> isMobileDataEnabled();
+    SmartCredentialsApiResponse<Boolean> isMobileDataEnabled(Context context);
 
     /**
      * Method used to turn on the Mobile Data for the user.
+     *
+     * @param context {@link Context} the context of the application
      */
-    void enableMobileData();
+    void enableMobileData(Context context);
 
     /**
      * Method used to turn off the Mobile Data for the user.
+     *
+     * @param context {@link Context} the context of the application
      */
-    void disableMobileData();
+    void disableMobileData(Context context);
 
 }
