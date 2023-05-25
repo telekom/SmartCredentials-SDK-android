@@ -23,6 +23,7 @@ on:
 jobs:
   analyze:
     name: Analyze
+    environment: Default
     runs-on: ubuntu-latest
     permissions:
       actions: read
@@ -54,6 +55,13 @@ jobs:
     # If this step fails, then you should remove it and run the build manually (see below)
     - name: Autobuild
       uses: github/codeql-action/autobuild@v1
+      env:
+        OCB_CLIENT_ID: ${{ secrets.OCB_CLIENT_ID }}
+        OCB_SCOPE: ${{ secrets.OCB_SCOPE }}
+        OCB_RECOMMENDER_URL: ${{ secrets.OCB_RECOMMENDER_URL }}
+        PARTNER_BE_URL: ${{ secrets.PARTNER_BE_URL }}
+        PARTNER_CREDENTIALS: ${{ secrets.PARTNER_CREDENTIALS }}
+        CLIENT_ID: ${{ secrets.CLIENT_ID }}
 
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 https://git.io/JvXDl

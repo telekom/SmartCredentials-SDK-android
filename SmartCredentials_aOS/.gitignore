@@ -4,6 +4,8 @@
 /.idea/workspace.xml
 /.idea/libraries
 .DS_Store
+**/.DS_Store
+**/._.DS_Store
 /build
 /captures
 .externalNativeBuild
