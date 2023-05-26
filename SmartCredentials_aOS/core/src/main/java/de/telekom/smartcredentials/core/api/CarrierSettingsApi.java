@@ -44,7 +44,7 @@ public interface CarrierSettingsApi {
      * @param context {@link Context} the context of the application
      * @param apn     {@link ContentValues} is the APN to be added. Its details are represented by key-value
      *                pairs, where the keys are attributes from the {@link android.provider.Telephony.Carriers} class
-     * @return true if the APN was successfully inserted into the APN list, false otherwise
+     * @return {@link SmartCredentialsApiResponse} true if the APN was successfully inserted into the APN list, false otherwise
      */
     SmartCredentialsApiResponse<Boolean> addNewApn(Context context, ContentValues apn);
 
@@ -56,7 +56,7 @@ public interface CarrierSettingsApi {
      * @param newApnSetting {@link ContentValues} that holds key-value pairs.
      *                      The key is the field that needs to be updated. It can be any value from the {@link android.provider.Telephony.Carriers} class.
      *                      The value field represents the data that will be updated to the corresponding key.
-     * @return {@link Integer} with the number of APNs that have been updated. It should be 1 or 0.
+     * @return {@link SmartCredentialsApiResponse} an {@link Integer} with the number of APNs that have been updated. It should be 1 or 0.
      * 1 if the APN has been updated, 0 otherwise
      */
     SmartCredentialsApiResponse<Integer> updateApn(Context context, String apn, ContentValues newApnSetting);
@@ -66,7 +66,7 @@ public interface CarrierSettingsApi {
      *
      * @param context {@link Context} the context of the application
      * @param apn     {@link String} is the APN to be deleted.
-     * @return {@link Integer} representing the number of APNs that have been deleted. It should be 1 or 0.
+     * @return {@link SmartCredentialsApiResponse} an {@link Integer} representing the number of APNs that have been deleted. It should be 1 or 0.
      * 1 if the APn has been deleted successfully, 0 otherwise
      */
     SmartCredentialsApiResponse<Integer> deleteApn(Context context, String apn);
@@ -75,7 +75,7 @@ public interface CarrierSettingsApi {
      * Method used to check the if the Roaming option is enabled or disabled.
      *
      * @param context {@link Context} the context of the application
-     * @return {@link Boolean} true if Roaming is available to the user, false otherwise
+     * @return {@link SmartCredentialsApiResponse} true if Roaming is available to the user, false otherwise
      */
     SmartCredentialsApiResponse<Boolean> isRoamingEnabled(Context context);
 
@@ -83,7 +83,7 @@ public interface CarrierSettingsApi {
      * Method used to check if the Mobile Data option is enabled or disabled.
      *
      * @param context {@link Context} the context of the application
-     * @return {@link Boolean} true if Mobile Data is available to the user, false otherwise
+     * @return {@link SmartCredentialsApiResponse} true if Mobile Data is available to the user, false otherwise
      */
     SmartCredentialsApiResponse<Boolean> isMobileDataEnabled(Context context);
 
@@ -91,14 +91,16 @@ public interface CarrierSettingsApi {
      * Method used to turn on the Mobile Data for the user.
      *
      * @param context {@link Context} the context of the application
+     * @return {@link SmartCredentialsApiResponse} a SmartCredentialsResponse
      */
-    void enableMobileData(Context context);
+    SmartCredentialsApiResponse<Void> enableMobileData(Context context);
 
     /**
      * Method used to turn off the Mobile Data for the user.
      *
      * @param context {@link Context} the context of the application
+     * @return {@link SmartCredentialsApiResponse} a SmartCredentialsResponse
      */
-    void disableMobileData(Context context);
+    SmartCredentialsApiResponse<Void> disableMobileData(Context context);
 
 }
