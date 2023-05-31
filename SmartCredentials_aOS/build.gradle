@@ -75,6 +75,7 @@ allprojects {
         ocbClientId = getEnvOrProperty('OCB_CLIENT_ID')
         ocbScope = getEnvOrProperty('OCB_SCOPE')
         ocbRecommenderUrl = getEnvOrProperty('OCB_RECOMMENDER_URL')
+        ocbOfferPortalUrl = getEnvOrProperty('OCB_OFFER_PORTAL_URL')
     }
 }
 
