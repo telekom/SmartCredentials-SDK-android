@@ -21,6 +21,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -47,6 +50,7 @@ public class AuthClientConfiguration {
     private static final String KEY_LAST_HASH = "config_hash";
     private static final String CONFIG_KEY_CLIENT_ID = "client_id";
     private static final String CONFIG_KEY_AUTH_SCOPE = "authorization_scope";
+    private static final String CONFIG_KEY_AUTH_CLAIMS = "claims";
     private static final String CONFIG_KEY_REDIRECT_URI = "redirect_uri";
     private static final String CONFIG_KEY_DISCOVERY_URI = "discovery_uri";
     private static final String CONFIG_KEY_AUTH_ENDPOINT_URI = "authorization_endpoint_uri";
@@ -64,7 +68,12 @@ public class AuthClientConfiguration {
     private final String mIdentityProviderId;
     private String mConfigError;
     private String mClientId;
+
     private String mScope;
+
+    @Nullable
+    private JSONObject mClaims;
+
     private Uri mRedirectUri;
     private Uri mDiscoveryUri;
     private Uri mAuthEndpointUri;
@@ -131,6 +140,10 @@ public class AuthClientConfiguration {
         return mScope;
     }
 
+    public JSONObject getClaims() {
+        return mClaims;
+    }
+
     @SuppressWarnings("unused")
     boolean isHttpsRequired() {
         return mHttpsRequired;
@@ -183,13 +196,14 @@ public class AuthClientConfiguration {
         }
     }
 
-    private void parseJSONConfig(JSONObject jsonConfig) throws InvalidConfigurationException {
+    private void parseJSONConfig(@NonNull JSONObject jsonConfig) throws InvalidConfigurationException {
         mConfigHash = jsonConfig.toString().hashCode();
 
         JsonParser parser = JsonParser.forJson(jsonConfig);
 
         mClientId = parser.getString(CONFIG_KEY_CLIENT_ID);
         mScope = parser.getRequiredString(CONFIG_KEY_AUTH_SCOPE);
+        mClaims = parser.optJSONObject(CONFIG_KEY_AUTH_CLAIMS);
         mRedirectUri = parser.getRequiredUri(CONFIG_KEY_REDIRECT_URI);
 
         if (!isRedirectUriRegistered()) {

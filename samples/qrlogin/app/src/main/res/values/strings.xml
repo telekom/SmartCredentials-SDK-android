@@ -14,4 +14,5 @@
     <string name="scan_qr">Login</string>
     <string name="login_status">Login Status</string>
     <string name="qr_scanning">QR Scanning</string>
+    <string name="qr_scan_failed">QR scan failed</string>
 </resources>

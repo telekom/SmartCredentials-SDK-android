@@ -3,10 +3,7 @@ package de.telekom.camerademo;
 import de.telekom.smartcredentials.core.logger.ApiLogger;
 import timber.log.Timber;
 
-/**
- * Created by Alex.Graur@endava.com at 9/1/2020
- */
-class DemoLogger implements ApiLogger {
+public class DemoLogger implements ApiLogger {
 
     @Override
     public void logError(String className, String errorMessage) {

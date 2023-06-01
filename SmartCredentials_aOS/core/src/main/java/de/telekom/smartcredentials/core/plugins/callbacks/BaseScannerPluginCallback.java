@@ -25,4 +25,6 @@ public abstract class BaseScannerPluginCallback<ScannedResultType, PluginUnavail
     public abstract void onScanned(ScannedResultType result);
 
     public abstract void onPluginUnavailable(PluginUnavailable errorMessage);
+
+    public abstract void onFailed(Exception e);
 }

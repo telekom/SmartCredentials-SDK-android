@@ -18,11 +18,11 @@ package de.telekom.smartcredentials.core.camera;
 
 import java.util.List;
 
-import de.telekom.smartcredentials.core.callback.BaseScannerCallback;
+public interface ScannerCallback {
 
-public abstract class ScannerCallback extends BaseScannerCallback<ScannerPluginUnavailable> {
+    String TAG = "ScannerCallback";
 
-    public static final String TAG = "ScannerCallback";
+    void onDetected(List<String> detectedValues);
 
-    public abstract void onDetected(List<String> detectedValues);
+    void onScanFailed(Exception e);
 }

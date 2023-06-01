@@ -72,7 +72,7 @@ dependencies {
 
     annotationProcessor "androidx.room:room-compiler:2.4.3"
 
-    androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.5.1"
     androidTestImplementation "androidx.room:room-testing:2.4.3"
     androidTestImplementation "org.mockito:mockito-core:${mockitoVersion}"
 

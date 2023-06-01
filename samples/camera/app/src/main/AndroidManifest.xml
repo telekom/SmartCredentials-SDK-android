@@ -20,5 +20,4 @@
         <activity android:name=".ocr.OcrActivity" />
         <activity android:name=".qr.QrActivity" />
     </application>
-
 </manifest>

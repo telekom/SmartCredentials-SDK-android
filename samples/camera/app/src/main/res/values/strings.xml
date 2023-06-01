@@ -11,4 +11,8 @@
     <string name="qr">QR</string>
     <string name="scan_qr">Scan QR code</string>
     <string name="scan_ocr">Scan OCR</string>
+    <string name="failed_camera_provider">Failed to retrieve camera provider</string>
+    <string name="version">Version %s (%d)</string>
+    <string name="ocr_scan_failed">OCR scan failed</string>
+    <string name="qr_scan_failed">QR scan failed</string>
 </resources>

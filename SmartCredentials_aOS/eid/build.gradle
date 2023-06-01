@@ -64,7 +64,7 @@ dependencies {
     implementation "androidx.annotation:annotation:${androidXAnnotation}"
     implementation "com.google.code.gson:gson:${gsonVersion}"
 
-    api 'com.governikus:ausweisapp:1.24.2'
+    api 'com.governikus:ausweisapp:1.26.2'
     implementation "io.reactivex.rxjava2:rxandroid:${rxJavaVersion}"
     implementation "io.reactivex.rxjava3:rxjava:${rx3JavaVersion}"
     testImplementation "org.hamcrest:hamcrest-library:${hamcrestVersion}"
@@ -81,7 +81,7 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-scalars:${retrofitVersion}"
     implementation "com.squareup.retrofit2:adapter-rxjava2:${retrofitVersion}"
 
-    androidTestImplementation "androidx.test.espresso:espresso-core:3.4.0"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.5.1"
     implementation "androidx.core:core-ktx:$kotlin_core_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 

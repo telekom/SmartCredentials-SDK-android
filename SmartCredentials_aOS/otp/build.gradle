@@ -56,6 +56,10 @@ android {
 dependencies {
 
     implementation "androidx.annotation:annotation:${androidXAnnotation}"
+    implementation 'androidx.lifecycle:lifecycle-common:2.5.1'
+    implementation 'androidx.camera:camera-view:1.2.1'
+    def camerax_version = "1.2.1"
+    implementation "androidx.camera:camera-core:${camerax_version}"
 
     testImplementation "junit:junit:${junitVersion}"
     testImplementation "org.mockito:mockito-core:${mockitoVersion}"

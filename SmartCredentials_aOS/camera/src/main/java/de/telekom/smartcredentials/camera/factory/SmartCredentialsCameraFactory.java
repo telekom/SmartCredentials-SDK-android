@@ -17,6 +17,7 @@
 package de.telekom.smartcredentials.camera.factory;
 
 import androidx.annotation.NonNull;
+import androidx.camera.view.PreviewView;
 
 import de.telekom.smartcredentials.camera.controllers.CameraController;
 import de.telekom.smartcredentials.camera.di.ObjectGraphCreatorCamera;
@@ -38,7 +39,7 @@ public class SmartCredentialsCameraFactory {
     }
 
     @NonNull
-    public static synchronized CameraApi initSmartCredentialsCameraModule(@NonNull final CoreApi coreApi) {
+    public static synchronized CameraApi<PreviewView> initSmartCredentialsCameraModule(@NonNull final CoreApi coreApi) {
         CoreController coreController;
 
         if (coreApi instanceof CoreController) {
@@ -52,7 +53,7 @@ public class SmartCredentialsCameraFactory {
 
     @SuppressWarnings("unused")
     @NonNull
-    public static synchronized CameraApi getCameraApi() {
+    public static synchronized CameraApi<PreviewView> getCameraApi() {
         if (sCameraController == null) {
             throw new RuntimeException(MODULE_NOT_INITIALIZED_EXCEPTION);
         }

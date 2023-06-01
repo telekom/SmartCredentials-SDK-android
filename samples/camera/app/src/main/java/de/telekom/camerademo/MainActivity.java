@@ -2,6 +2,7 @@ package de.telekom.camerademo;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -20,5 +21,7 @@ public class MainActivity extends AppCompatActivity {
         qrCardView.setOnClickListener(view -> startActivity(new Intent(this, QrActivity.class)));
         CardView ocrCardView = findViewById(R.id.ocr_card_View);
         ocrCardView.setOnClickListener(view -> startActivity(new Intent(this, OcrActivity.class)));
+        TextView versionTextView = findViewById(R.id.version_text_view);
+        versionTextView.setText(getString(R.string.version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE));
     }
 }
