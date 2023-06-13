@@ -41,12 +41,14 @@ android {
             buildConfigField("String", "CLIENT_ID", "${rootProject.ext.ocbClientId}")
             buildConfigField("String", "SCOPE", "${rootProject.ext.ocbScope}")
             buildConfigField("String", "RECOMMENDER_URL", "${rootProject.ext.ocbRecommenderUrl}")
+            buildConfigField("String", "OFFER_PORTAL_URL", "${rootProject.ext.ocbOfferPortalUrl}")
         }
         release {
             minifyEnabled false
             buildConfigField("String", "CLIENT_ID", "${rootProject.ext.ocbClientId}")
             buildConfigField("String", "SCOPE", "${rootProject.ext.ocbScope}")
             buildConfigField("String", "RECOMMENDER_URL", "${rootProject.ext.ocbRecommenderUrl}")
+            buildConfigField("String", "OFFER_PORTAL_URL", "${rootProject.ext.ocbOfferPortalUrl}")
         }
     }
 	
