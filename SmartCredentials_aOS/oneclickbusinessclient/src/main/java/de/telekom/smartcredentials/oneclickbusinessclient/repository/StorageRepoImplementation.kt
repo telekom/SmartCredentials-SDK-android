@@ -137,10 +137,16 @@ class StorageRepoImplementation(
         }
 
     private fun updateTokenList() {
-        storageTokenList = mStorageApi.getAllItemsByItemType(mTokenFilter).data
+        val response = mStorageApi.getAllItemsByItemType(mTokenFilter)
+        if (response.isSuccessful) {
+            storageTokenList = response.data
+        }
     }
 
     private fun updateRecommendationList() {
-        recommendationList = mStorageApi.getAllItemsByItemType(mRecommendationFilter).data
+        val response = mStorageApi.getAllItemsByItemType(mRecommendationFilter)
+        if (response.isSuccessful) {
+            recommendationList = response.data
+        }
     }
 }

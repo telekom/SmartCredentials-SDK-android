@@ -59,6 +59,7 @@ jobs:
         OCB_CLIENT_ID: ${{ secrets.OCB_CLIENT_ID }}
         OCB_SCOPE: ${{ secrets.OCB_SCOPE }}
         OCB_RECOMMENDER_URL: ${{ secrets.OCB_RECOMMENDER_URL }}
+        OCB_OFFER_PORTAL_URL: ${{ secrets.OCB_OFFER_PORTAL_URL }}
         PARTNER_BE_URL: ${{ secrets.PARTNER_BE_URL }}
         PARTNER_CREDENTIALS: ${{ secrets.PARTNER_CREDENTIALS }}
         CLIENT_ID: ${{ secrets.CLIENT_ID }}

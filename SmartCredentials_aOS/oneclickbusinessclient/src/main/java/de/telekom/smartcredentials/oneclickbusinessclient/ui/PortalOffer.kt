@@ -15,6 +15,7 @@
  */
 package de.telekom.smartcredentials.oneclickbusinessclient.ui
 
+import de.telekom.smartcredentials.oneclickbusinessclient.BuildConfig
 import java.io.Serializable
 
 
@@ -38,7 +39,7 @@ class PortalOffer private constructor(builder: PortalOfferBuilder) : Serializabl
     }
 
     class PortalOfferBuilder {
-        internal var url = "https://one-click-portal.onrender.com/"
+        internal var url = BuildConfig.OFFER_PORTAL_URL
         internal var operatorToken = ""
         internal var recommendationId = ""
         internal var firebaseId = ""

@@ -88,6 +88,8 @@ public enum SmartCredentialsFeatureSet {
             "The Identity Provider feature is not supported on this device model."),
     ONE_CLICK_CLIENT("One Click Client", SmartCredentialsModuleSet.ONE_CLICK_BUSINESS_CLIENT_MODULE,
             "The One Click Client feature is not supported on this device model."),
+    CARRIER_CONFIGURATION("Carrier Configuration", SmartCredentialsModuleSet.CARRIER_CONFIGURATION_MODULE,
+            "The Carrier Configuration feature is not supported on this device model."),
     CARRIER_SETTINGS_MODULE("Check Patch Level", SmartCredentialsModuleSet.CARRIER_SETTINGS_MODULE,
             "The Carrier Settings feature is not supported on this device model.");
 
