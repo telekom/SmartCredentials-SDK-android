@@ -30,7 +30,8 @@ public interface Rx3EidService {
                            @Query("OS") String os,
                            @Query("vendor") String vendor,
                            @Query("model") String model,
-                           @Query("sicv") String sicv);
+                           @Query("sicv") String sicv,
+                           @Query("reason") String reason);
 
     @GET("error")
     Observable<String> getError(@Query("errorCode") String errorCode);
