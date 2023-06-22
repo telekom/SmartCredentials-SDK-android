@@ -41,6 +41,9 @@ public class Result {
     @SerializedName("message")
     @Expose
     private String mMessage;
+    @SerializedName("reason")
+    @Expose
+    private String mReason;
 
     public String getMajor() {
         return mMajor;
@@ -82,6 +85,14 @@ public class Result {
         this.mMessage = message;
     }
 
+    public String getReason() {
+        return mReason;
+    }
+
+    public void setReason(String reason) {
+        this.mReason = reason;
+    }
+
     @NonNull
     @Override
     public String toString() {
@@ -91,6 +102,7 @@ public class Result {
                 ", mLanguage='" + mLanguage + '\'' +
                 ", mDescription='" + mDescription + '\'' +
                 ", mMessage='" + mMessage + '\'' +
+                ", mReason='" + mReason + '\'' +
                 '}';
     }
 }
