@@ -70,10 +70,10 @@ public class Rx3EidController implements Rx3EidApi {
     @Override
     public Completable observeLogFailure(String errorCode, String jwt, String os,
                                          String vendor, String model, String sicv,
-                                         boolean isProduction) {
+                                         String reason, boolean isProduction) {
         RetrofitClient retrofitClient = new RetrofitClient(eidController.getEidConfiguration());
         return retrofitClient.getRx3EidService(isProduction)
-                .logFailure(errorCode, jwt, os, vendor, model, sicv);
+                .logFailure(errorCode, jwt, os, vendor, model, sicv, reason);
     }
 
     @Override
