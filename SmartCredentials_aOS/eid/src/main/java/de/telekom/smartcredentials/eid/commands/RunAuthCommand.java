@@ -119,20 +119,24 @@ public class RunAuthCommand extends SmartEidCommand {
             this.mTokenUrl = tokenUrl;
         }
 
-        public void setDeveloperMode(boolean developerMode) {
+        public Builder setDeveloperMode(boolean developerMode) {
             this.mDeveloperMode = developerMode;
+            return this;
         }
 
-        public void setHandleInterrupt(boolean handleInterrupt) {
+        public Builder setHandleInterrupt(boolean handleInterrupt) {
             this.mHandleInterrupt = handleInterrupt;
+            return this;
         }
 
-        public void setStatus(boolean status) {
+        public Builder setStatus(boolean status) {
             this.mStatus = status;
+            return this;
         }
 
-        public void setMessages(Messages messages) {
+        public Builder setMessages(Messages messages) {
             this.mMessages = messages;
+            return this;
         }
 
         @Override
