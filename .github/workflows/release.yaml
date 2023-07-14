@@ -19,20 +19,12 @@ jobs:
         uses: actions/checkout@v3
       - name: Lint
         env:
-          OCB_CLIENT_ID: ${{ secrets.OCB_CLIENT_ID }}
-          OCB_SCOPE: ${{ secrets.OCB_SCOPE }}
-          OCB_RECOMMENDER_URL: ${{ secrets.OCB_RECOMMENDER_URL }}
-          OCB_OFFER_PORTAL_URL: ${{ secrets.OCB_OFFER_PORTAL_URL }}
           PARTNER_BE_URL: ${{ secrets.PARTNER_BE_URL }}
           PARTNER_CREDENTIALS: ${{ secrets.PARTNER_CREDENTIALS }}
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
         run: cd SmartCredentials_aOS && ./gradlew lint 
       - name: Test
         env:
-          OCB_CLIENT_ID: ${{ secrets.OCB_CLIENT_ID }}
-          OCB_SCOPE: ${{ secrets.OCB_SCOPE }}
-          OCB_RECOMMENDER_URL: ${{ secrets.OCB_RECOMMENDER_URL }}
-          OCB_OFFER_PORTAL_URL: ${{ secrets.OCB_OFFER_PORTAL_URL }}
           PARTNER_BE_URL: ${{ secrets.PARTNER_BE_URL }}
           PARTNER_CREDENTIALS: ${{ secrets.PARTNER_CREDENTIALS }}
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
@@ -97,17 +89,9 @@ jobs:
           cd $GITHUB_WORKSPACE/SmartCredentials_aOS/identityprovider
           echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
           gpg --quiet --output ./release.gpg --dearmor ./release.asc
-          echo 'Create oneclickbusinessclient module signing key'
-          cd $GITHUB_WORKSPACE/SmartCredentials_aOS/oneclickbusinessclient
-          echo $GPG_KEY_CONTENTS | base64 --decode > ./release.asc
-          gpg --quiet --output ./release.gpg --dearmor ./release.asc
       - name: Assemble all subproject aar files
         run: cd SmartCredentials_aOS && ./gradlew assembleRelease
         env:
-          OCB_CLIENT_ID: ${{ secrets.OCB_CLIENT_ID }}
-          OCB_SCOPE: ${{ secrets.OCB_SCOPE }}
-          OCB_RECOMMENDER_URL: ${{ secrets.OCB_RECOMMENDER_URL }}
-          OCB_OFFER_PORTAL_URL: ${{ secrets.OCB_OFFER_PORTAL_URL }}
           PARTNER_BE_URL: ${{ secrets.PARTNER_BE_URL }}
           PARTNER_CREDENTIALS: ${{ secrets.PARTNER_CREDENTIALS }}
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
@@ -184,18 +168,9 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
             name: identityprovider
-            path: SmartCredentials_aOS/identityprovider/build/outputs/aar/ 
-      - name: Upload OneClickBusinessClient AAR
-        uses: actions/upload-artifact@v2
-        with:
-            name: oneclickbusinessclient
-            path: SmartCredentials_aOS/oneclickbusinessclient/build/outputs/aar/ 
+            path: SmartCredentials_aOS/identityprovider/build/outputs/aar/
       - name: Sonatype Upload
         env:
-          OCB_CLIENT_ID: ${{ secrets.OCB_CLIENT_ID }}
-          OCB_SCOPE: ${{ secrets.OCB_SCOPE }}
-          OCB_RECOMMENDER_URL: ${{ secrets.OCB_RECOMMENDER_URL }}
-          OCB_OFFER_PORTAL_URL: ${{ secrets.OCB_OFFER_PORTAL_URL }}
           PARTNER_BE_URL: ${{ secrets.PARTNER_BE_URL }}
           PARTNER_CREDENTIALS: ${{ secrets.PARTNER_CREDENTIALS }}
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
