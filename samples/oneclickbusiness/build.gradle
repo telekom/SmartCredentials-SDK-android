@@ -23,7 +23,7 @@ plugins {
 
 allprojects {
     project.ext {
-        smartCredentialsPublicVersion = "6.5.6"
+        smartCredentialsPublicVersion = "6.5.12"
         partnerBeUrl = getEnvOrProperty('PARTNER_BE_URL')
         partnerCredentials = getEnvOrProperty('PARTNER_CREDENTIALS')
         clientId = getEnvOrProperty('CLIENT_ID')

@@ -82,11 +82,13 @@ class TokenFetchFragment : Fragment(), IdentityProviderCallback {
             binding.operatorTokenDescriptionTextView.text =
                 TransactionTokenDecrypt(requireContext()).getClaimsFromTransactionToken(result.data)
         } else {
+            result.error.printStackTrace()
             if (result.error is HttpException) {
                 Timber.tag(TAG)
                     .e((result.error as HttpException).response()!!.errorBody()!!.string())
             } else {
                 Timber.tag(TAG).e(result.error.toString())
+                Timber.tag(TAG).e(result.error.message)
             }
         }
     }
