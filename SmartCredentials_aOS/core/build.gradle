@@ -20,17 +20,21 @@ apply from: "../gradle/task/maven_push_library.gradle"
 
 android {
 
-    compileSdkVersion rootProject.ext.androidCompileSdkVersion
+    compileSdk rootProject.ext.androidCompileSdkVersion
     ndkVersion rootProject.ext.androidNdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    namespace "de.telekom.smartcredentials.core"
 
     defaultConfig {
-        minSdkVersion rootProject.ext.androidMinSdkVersion
-        targetSdkVersion rootProject.ext.androidTargetSdkVersion
+        minSdk rootProject.ext.androidMinSdkVersion
+        targetSdk rootProject.ext.androidTargetSdkVersion
         versionCode rootProject.ext.androidVersionCode
         versionName rootProject.ext.androidVersionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        aidl true
     }
 
     buildTypes {
@@ -61,16 +65,22 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget=11
+        jvmTarget = JavaVersion.VERSION_17
     }
 
     packagingOptions {
         pickFirst 'protobuf.meta'
+    }
+
+    testOptions {
+        unitTests.all {
+            jvmArgs "--add-opens=java.base/java.lang=ALL-UNNAMED", "--add-opens=java.base/java.util=ALL-UNNAMED"
+        }
     }
 }
 
@@ -78,7 +88,7 @@ dependencies {
 
     implementation "androidx.annotation:annotation:${androidXAnnotation}"
     implementation "androidx.fragment:fragment-ktx:${androidXFragment}"
-    implementation "io.reactivex.rxjava2:rxandroid:${rxJavaVersion}"
+    implementation "io.reactivex.rxjava2:rxandroid:${rxAndroidVersion}"
     implementation "io.reactivex.rxjava3:rxandroid:${rx3AndroidVersion}"
     implementation "io.reactivex.rxjava3:rxjava:${rx3JavaVersion}"
     implementation 'androidx.appcompat:appcompat:1.6.1'
@@ -90,20 +100,20 @@ dependencies {
     testImplementation "org.json:json:${jsonVersion}"
     testImplementation "org.powermock:powermock-api-mockito2:${powermockVersion}"
     testImplementation "org.powermock:powermock-module-junit4:${powermockVersion}"
-    testImplementation "androidx.arch.core:core-testing:2.1.0"
+    testImplementation "androidx.arch.core:core-testing:2.2.0"
 
     androidTestImplementation "androidx.test.espresso:espresso-core:3.5.1"
     implementation "androidx.core:core-ktx:$kotlin_core_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     //compose
-    implementation 'androidx.activity:activity-compose:1.3.1'
+    implementation 'androidx.activity:activity-compose:1.7.2'
     implementation "androidx.compose.ui:ui:$compose_ui_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_ui_version"
-    implementation 'androidx.compose.material:material:1.1.1'
+    implementation 'androidx.compose.material:material:1.4.3'
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
-    implementation 'androidx.compose.runtime:runtime:compose_ui_version'
+    implementation "androidx.compose.runtime:runtime:$compose_ui_version"
 
 }

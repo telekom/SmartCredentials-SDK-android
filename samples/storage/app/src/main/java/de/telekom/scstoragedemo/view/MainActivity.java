@@ -75,18 +75,17 @@ public class MainActivity extends AppCompatActivity implements OnItemInteraction
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.filter_item:
-                Intent typeIntent = new Intent(this, StorageTypeActivity.class);
-                startActivity(typeIntent);
-                return true;
-            case R.id.add_item:
-                Intent addIntent = new Intent(this, AddItemActivity.class);
-                startActivity(addIntent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        int itemId = item.getItemId();
+        if (itemId == R.id.filter_item) {
+            Intent typeIntent = new Intent(this, StorageTypeActivity.class);
+            startActivity(typeIntent);
+            return true;
+        } else if (itemId == R.id.add_item) {
+            Intent addIntent = new Intent(this, AddItemActivity.class);
+            startActivity(addIntent);
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

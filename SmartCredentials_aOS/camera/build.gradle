@@ -19,13 +19,13 @@ apply from: "../gradle/task/maven_push_library.gradle"
 
 android {
 
-    compileSdkVersion rootProject.ext.androidCompileSdkVersion
+    compileSdk rootProject.ext.androidCompileSdkVersion
     ndkVersion rootProject.ext.androidNdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    namespace "de.telekom.smartcredentials.camera"
 
     defaultConfig {
-        minSdkVersion rootProject.ext.androidMinSdkVersion
-        targetSdkVersion rootProject.ext.androidTargetSdkVersion
+        minSdk rootProject.ext.androidMinSdkVersion
+        targetSdk rootProject.ext.androidTargetSdkVersion
         versionCode rootProject.ext.androidVersionCode
         versionName rootProject.ext.androidVersionName
 
@@ -48,8 +48,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     packagingOptions {
@@ -65,8 +65,8 @@ dependencies {
     implementation "androidx.camera:camera-view:${cameraXVersion}"
     implementation "androidx.camera:camera-extensions:${cameraXVersion}"
 
-    implementation 'com.google.mlkit:barcode-scanning:17.0.3'
-    implementation 'com.google.android.gms:play-services-mlkit-text-recognition:18.0.2'
+    implementation 'com.google.mlkit:barcode-scanning:17.2.0'
+    implementation 'com.google.android.gms:play-services-mlkit-text-recognition:19.0.0'
 
     testImplementation "junit:junit:${junitVersion}"
     testImplementation "org.mockito:mockito-core:${mockitoVersion}"
