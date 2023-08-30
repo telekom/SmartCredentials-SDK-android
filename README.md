@@ -35,7 +35,6 @@ implementation("de.telekom.smartcredentials:documentscanner:$smartCredentialsVer
 implementation("de.telekom.smartcredentials:eid:$smartCredentialsVersion")
 implementation("de.telekom.smartcredentials:identityprovider:$smartCredentialsVersion")
 implementation("de.telekom.smartcredentials:networking:$smartCredentialsVersion")
-implementation("de.telekom.smartcredentials:oneclickbusinessclient:$smartCredentialsVersion")
 implementation("de.telekom.smartcredentials:otp:$smartCredentialsVersion")
 implementation("de.telekom.smartcredentials:persistentlogging:$smartCredentialsVersion")
 implementation("de.telekom.smartcredentials:pushnotifications:$smartCredentialsVersion")
@@ -82,11 +81,9 @@ An user guide for the eID module can be found [here](https://github.com/telekom/
 An user guide for the identity provider module can be found [here](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/SmartCredentials_aOS/identityprovider), as well as a [demo application](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/samples/oneclickbusiness).
 8. OTP module
 An user guide for the OTP module can be found [here](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/SmartCredentials_aOS/otp), as well as a [demo application](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/samples/otp).
-9. OneClick Business client module  
-An user guide for the OneClick Business client module can be found [here](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/SmartCredentials_aOS/oneclickbusinessclient), as well as a [demo application](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/samples/oneclickbusiness).
-10. Push notifications module  
+9. Push notifications module  
 An user guide for the Push notifications module can be found [here](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/SmartCredentials_aOS/pushnotifications), as well as a [demo application](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/samples/pushnotifications).
-11. Storage module  
+10. Storage module  
 An user guide for the Storage module can be found [here](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/SmartCredentials_aOS/storage), as well as a [demo application](https://github.com/telekom/SmartCredentials-SDK-android/tree/develop/samples/storage).
  
 ## Support

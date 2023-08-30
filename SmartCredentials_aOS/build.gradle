@@ -41,7 +41,7 @@ allprojects {
         androidMinSdkVersionEid = 24
         buildToolsVersion = "33.0.0"
         androidVersionCode = 5
-        androidVersionName = "6.5.10"
+        androidVersionName = "6.5.11"
         androidNdkVersion = "23.1.7779620"
 
         androidXAppcompat = "1.5.1"
@@ -72,10 +72,6 @@ allprojects {
         kotlin_core_version = "1.9.0"
         compose_ui_version = "1.3.0"
 
-        ocbClientId = getEnvOrProperty('OCB_CLIENT_ID')
-        ocbScope = getEnvOrProperty('OCB_SCOPE')
-        ocbRecommenderUrl = getEnvOrProperty('OCB_RECOMMENDER_URL')
-        ocbOfferPortalUrl = getEnvOrProperty('OCB_OFFER_PORTAL_URL')
     }
 }
 
