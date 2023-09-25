@@ -31,7 +31,7 @@ import de.telekom.smartcredentials.core.exceptions.InvalidCoreApiException
 object SmartCredentialsIdentityProviderFactory {
 
     private const val MODULE_NOT_INITIALIZED_EXCEPTION =
-        "SmartCredentials IdentityProvider Module have not been initialized"
+        "SmartCredentials IdentityProvider Module is not initialized"
     private var sIdentityProviderController: IdentityProviderController? = null
 
     @get:Synchronized
@@ -46,7 +46,8 @@ object SmartCredentialsIdentityProviderFactory {
     @Synchronized
     @JvmStatic
     fun initSmartCredentialsIdentityProviderModule(
-        coreApi: CoreApi
+        coreApi: CoreApi,
+        providerPackageName: String
     ): IdentityProviderApi {
         val coreController: CoreController = if (coreApi is CoreController) {
             coreApi
@@ -54,7 +55,7 @@ object SmartCredentialsIdentityProviderFactory {
             throw InvalidCoreApiException(SmartCredentialsModuleSet.IDENTITY_PROVIDER.moduleName)
         }
         sIdentityProviderController = ObjectGraphCreatorIdentityProvider.getInstance()
-            .provideApiControllerIdentityProvider(coreController)
+            .provideApiControllerIdentityProvider(coreController, providerPackageName)
         return sIdentityProviderController!!
     }
 

@@ -30,9 +30,10 @@ object ObjectGraphCreatorIdentityProvider {
     }
 
     fun provideApiControllerIdentityProvider(
-        coreController: CoreController
+        coreController: CoreController,
+        providerPackageName: String
     ): IdentityProviderController {
-        return IdentityProviderController(coreController)
+        return IdentityProviderController(coreController, providerPackageName)
     }
 
     fun destroy() {

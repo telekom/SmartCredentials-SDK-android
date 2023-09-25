@@ -16,12 +16,19 @@
 package de.telekom.identityprovider.operatortoken
 
 import android.content.Context
-import de.telekom.identityprovider.provider.ContentProviderManager
+import android.content.Intent
+import de.telekom.smartcredentials.core.responses.SmartCredentialsResponse
+import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Created by teodorionut.ganga@endava.com at 23/02/2023
  */
-internal class OperatorTokenManager {
+internal class OperatorTokenManager(private val providerPackageName: String) {
+
+    companion object {
+        const val INTENT_ACTION = "de.telekom.smartcredentials.oneclickbusiness.OPERATOR_TOKEN"
+    }
 
     @Throws(Exception::class)
     fun getOperatorToken(
@@ -29,8 +36,16 @@ internal class OperatorTokenManager {
         bearerToken: String,
         clientId: String,
         scope: String
-    ): String {
-        val contentProviderManager = ContentProviderManager(context)
-        return contentProviderManager.getOperatorToken(bearerToken, clientId, scope)
+    ): Single<SmartCredentialsResponse<String>> {
+        return Single.defer {
+            Single.create(
+                OperatorTokenObservable(
+                    context,
+                    Intent(INTENT_ACTION).apply {
+                        setPackage(providerPackageName)
+                    }, bearerToken, clientId, scope
+                )
+            )
+        }.subscribeOn(Schedulers.io())
     }
 }
