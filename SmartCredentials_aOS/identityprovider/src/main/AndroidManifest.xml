@@ -18,6 +18,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <queries>
-        <provider android:authorities="de.telekom.entitlements" />
+        <package android:name="de.telekom.smartcredentials.entitlements" />
     </queries>
 </manifest>

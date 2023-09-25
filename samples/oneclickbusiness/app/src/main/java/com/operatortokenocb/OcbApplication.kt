@@ -39,7 +39,8 @@ class OcbApplication: Application() {
         SmartCredentialsCoreFactory.initialize(configuration)
         val coreApi = SmartCredentialsCoreFactory.getSmartCredentialsCoreApi()
         SmartCredentialsIdentityProviderFactory.initSmartCredentialsIdentityProviderModule(
-            coreApi
+            coreApi,
+            "de.telekom.smartcredentials.entitlements"
         )
     }
 }

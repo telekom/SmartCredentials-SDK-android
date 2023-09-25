@@ -27,7 +27,6 @@ import de.telekom.smartcredentials.core.identityprovider.IdentityProviderCallbac
 import de.telekom.smartcredentials.core.logger.ApiLoggerResolver
 import de.telekom.smartcredentials.core.responses.FeatureNotSupportedThrowable
 import de.telekom.smartcredentials.core.responses.RootedThrowable
-import de.telekom.smartcredentials.core.responses.SmartCredentialsApiResponse
 import de.telekom.smartcredentials.core.responses.SmartCredentialsResponse
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -38,7 +37,8 @@ import java.lang.ref.WeakReference
  * Created by teodorionut.ganga@endava.com at 23/02/2023
  */
 class IdentityProviderController(
-    private val mCoreController: CoreController
+    private val coreController: CoreController,
+    private val providerPackageName: String
 ) : IdentityProviderApi {
 
     override fun getOperatorToken(
@@ -51,12 +51,12 @@ class IdentityProviderController(
     ) {
         ApiLoggerResolver.logMethodAccess(javaClass.simpleName, "getOperatorToken")
         val callbackReference = WeakReference(callback)
-        if (mCoreController.isSecurityCompromised) {
-            mCoreController.handleSecurityCompromised()
+        if (coreController.isSecurityCompromised) {
+            coreController.handleSecurityCompromised()
             callbackReference.get()?.onResult(SmartCredentialsResponse(RootedThrowable()))
             return
         }
-        if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.IDENTITY_PROVIDER)) {
+        if (coreController.isDeviceRestricted(SmartCredentialsFeatureSet.IDENTITY_PROVIDER)) {
             callbackReference.get()?.onResult(
                 SmartCredentialsResponse(
                     FeatureNotSupportedThrowable(
@@ -73,8 +73,8 @@ class IdentityProviderController(
                     clientId,
                     context.packageName
                 )
-            }.map {
-                return@map getOperatorToken(
+            }.flatMap {
+                return@flatMap getOperatorToken(
                     context,
                     it,
                     clientId,
@@ -102,7 +102,7 @@ class IdentityProviderController(
     ) {
         ApiLoggerResolver.logMethodAccess(javaClass.simpleName, "getOperatorToken")
         val callbackReference = WeakReference(callback)
-        Single.just(getOperatorToken(context, appToken, clientId, scope, false))
+        getOperatorToken(context, appToken, clientId, scope, false)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
@@ -118,33 +118,29 @@ class IdentityProviderController(
         clientId: String,
         scope: String,
         securityCheckPerformed: Boolean
-    ): SmartCredentialsApiResponse<String> {
+    ): Single<SmartCredentialsResponse<String>> {
 
         if (!securityCheckPerformed) {
-            if (mCoreController.isSecurityCompromised) {
-                mCoreController.handleSecurityCompromised()
-                return SmartCredentialsResponse(RootedThrowable())
+            if (coreController.isSecurityCompromised) {
+                coreController.handleSecurityCompromised()
+                return Single.just(SmartCredentialsResponse(RootedThrowable()))
             }
-            if (mCoreController.isDeviceRestricted(SmartCredentialsFeatureSet.IDENTITY_PROVIDER)) {
-                return SmartCredentialsResponse(
-                    FeatureNotSupportedThrowable(
-                        SmartCredentialsFeatureSet.IDENTITY_PROVIDER.notSupportedDesc
+            if (coreController.isDeviceRestricted(SmartCredentialsFeatureSet.IDENTITY_PROVIDER)) {
+                return Single.just(
+                    SmartCredentialsResponse(
+                        FeatureNotSupportedThrowable(
+                            SmartCredentialsFeatureSet.IDENTITY_PROVIDER.notSupportedDesc
+                        )
                     )
                 )
             }
         }
 
-        return try {
-            SmartCredentialsResponse(
-                OperatorTokenManager().getOperatorToken(
-                    context,
-                    appToken,
-                    clientId,
-                    scope
-                )
+        return OperatorTokenManager(providerPackageName).getOperatorToken(
+            context,
+            appToken,
+            clientId,
+            scope
             )
-        } catch (e: Exception) {
-            SmartCredentialsResponse(e)
-        }
     }
 }
