@@ -19,13 +19,13 @@ apply from: "../gradle/task/maven_push_library.gradle"
 
 android {
 
-    compileSdkVersion rootProject.ext.androidCompileSdkVersion
+    compileSdk rootProject.ext.androidCompileSdkVersion
     ndkVersion rootProject.ext.androidNdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    namespace "de.telekom.smartcredentials.otp"
 
     defaultConfig {
-        minSdkVersion rootProject.ext.androidMinSdkVersion
-        targetSdkVersion rootProject.ext.androidTargetSdkVersion
+        minSdk rootProject.ext.androidMinSdkVersion
+        targetSdk rootProject.ext.androidTargetSdkVersion
         versionCode rootProject.ext.androidVersionCode
         versionName rootProject.ext.androidVersionName
 
@@ -48,17 +48,17 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 }
 
 dependencies {
 
     implementation "androidx.annotation:annotation:${androidXAnnotation}"
-    implementation 'androidx.lifecycle:lifecycle-common:2.5.1'
-    implementation 'androidx.camera:camera-view:1.2.1'
-    def camerax_version = "1.2.1"
+    implementation 'androidx.lifecycle:lifecycle-common:2.6.1'
+    def camerax_version = "1.2.3"
+    implementation "androidx.camera:camera-view:${camerax_version}"
     implementation "androidx.camera:camera-core:${camerax_version}"
 
     testImplementation "junit:junit:${junitVersion}"

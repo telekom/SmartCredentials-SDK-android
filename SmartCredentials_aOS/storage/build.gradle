@@ -19,13 +19,13 @@ apply from: "../gradle/task/maven_push_library.gradle"
 
 android {
 
-    compileSdkVersion rootProject.ext.androidCompileSdkVersion
+    compileSdk rootProject.ext.androidCompileSdkVersion
     ndkVersion rootProject.ext.androidNdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    namespace "de.telekom.smartcredentials.storage"
 
     defaultConfig {
-        minSdkVersion rootProject.ext.androidMinSdkVersion
-        targetSdkVersion rootProject.ext.androidTargetSdkVersion
+        minSdk rootProject.ext.androidMinSdkVersion
+        targetSdk rootProject.ext.androidTargetSdkVersion
         versionCode rootProject.ext.androidVersionCode
         versionName rootProject.ext.androidVersionName
 
@@ -54,26 +54,32 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     sourceSets {
         androidTest.assets.srcDirs += files("$projectDir/non-sensitive-repo-schemas".toString())
+    }
+
+    testOptions {
+        unitTests.all {
+            jvmArgs "--add-opens=java.base/java.lang=ALL-UNNAMED", "--add-opens=java.base/java.util=ALL-UNNAMED"
+        }
     }
 }
 
 dependencies {
 
     implementation "androidx.appcompat:appcompat:${androidXAppcompat}"
-    implementation "androidx.room:room-runtime:2.4.3"
+    implementation "androidx.room:room-runtime:2.5.2"
     implementation "com.google.code.gson:gson:${gsonVersion}"
-    implementation "io.reactivex.rxjava2:rxandroid:${rxJavaVersion}"
+    implementation "io.reactivex.rxjava2:rxandroid:${rxAndroidVersion}"
 
-    annotationProcessor "androidx.room:room-compiler:2.4.3"
+    annotationProcessor "androidx.room:room-compiler:2.5.2"
 
     androidTestImplementation "androidx.test.espresso:espresso-core:3.5.1"
-    androidTestImplementation "androidx.room:room-testing:2.4.3"
+    androidTestImplementation "androidx.room:room-testing:2.5.2"
     androidTestImplementation "org.mockito:mockito-core:${mockitoVersion}"
 
     testImplementation "junit:junit:${junitVersion}"

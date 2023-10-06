@@ -71,80 +71,79 @@ public class TokensActivity extends AppCompatActivity {
     @SuppressWarnings("unchecked")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.view_profile_item:
-                startActivity(new Intent(this, ProfileActivity.class));
-                return true;
-            case R.id.perform_action_item:
-                SmartTask.with(this)
-                        .assign(() -> authenticationApi.performActionWithFreshTokens(new OnFreshTokensRetrievedListener() {
-                            @Override
-                            public void onRefreshComplete(@Nullable String accessToken, @Nullable String idToken, @Nullable AuthorizationException exception) {
-                                runOnUiThread(() -> {
-                                    if (exception != null) {
-                                        Toast.makeText(TokensActivity.this,
-                                                R.string.perform_action_failed, Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(TokensActivity.this, R.string.perform_action_success,
-                                                Toast.LENGTH_SHORT).show();
-                                        fetchTokens();
-                                    }
-                                });
-                            }
+        int itemId = item.getItemId();
+        if (itemId == R.id.view_profile_item) {
+            startActivity(new Intent(this, ProfileActivity.class));
+            return true;
+        } else if (itemId == R.id.perform_action_item) {
+            SmartTask.with(this)
+                    .assign(() -> authenticationApi.performActionWithFreshTokens(new OnFreshTokensRetrievedListener() {
+                        @Override
+                        public void onRefreshComplete(@Nullable String accessToken, @Nullable String idToken, @Nullable AuthorizationException exception) {
+                            runOnUiThread(() -> {
+                                if (exception != null) {
+                                    Toast.makeText(TokensActivity.this,
+                                            R.string.perform_action_failed, Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(TokensActivity.this, R.string.perform_action_success,
+                                            Toast.LENGTH_SHORT).show();
+                                    fetchTokens();
+                                }
+                            });
+                        }
 
-                            @Override
-                            public void onFailed(AuthenticationError errorDescription) {
-                                runOnUiThread(() -> Toast.makeText(TokensActivity.this,
-                                        R.string.perform_action_failed, Toast.LENGTH_SHORT).show());
-                            }
-                        }))
-                        .execute();
-                return true;
-            case R.id.refresh_access_item:
-                SmartTask.with(this)
-                        .assign(() -> authenticationApi.refreshAccessToken(new TokenRefreshListener<AuthenticationTokenResponse>() {
-                            @Override
-                            public void onTokenRequestCompleted(@Nullable AuthenticationTokenResponse response, @Nullable AuthorizationException exception) {
-                                runOnUiThread(() -> {
-                                    if (exception != null) {
-                                        Toast.makeText(TokensActivity.this,
-                                                R.string.refresh_access_token_failed, Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        fetchTokens();
-                                        Toast.makeText(TokensActivity.this, R.string.refresh_access_token_success,
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
+                        @Override
+                        public void onFailed(AuthenticationError errorDescription) {
+                            runOnUiThread(() -> Toast.makeText(TokensActivity.this,
+                                    R.string.perform_action_failed, Toast.LENGTH_SHORT).show());
+                        }
+                    }))
+                    .execute();
+            return true;
+        } else if (itemId == R.id.refresh_access_item) {
+            SmartTask.with(this)
+                    .assign(() -> authenticationApi.refreshAccessToken(new TokenRefreshListener<AuthenticationTokenResponse>() {
+                        @Override
+                        public void onTokenRequestCompleted(@Nullable AuthenticationTokenResponse response, @Nullable AuthorizationException exception) {
+                            runOnUiThread(() -> {
+                                if (exception != null) {
+                                    Toast.makeText(TokensActivity.this,
+                                            R.string.refresh_access_token_failed, Toast.LENGTH_SHORT).show();
+                                } else {
+                                    fetchTokens();
+                                    Toast.makeText(TokensActivity.this, R.string.refresh_access_token_success,
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
 
-                            @Override
-                            public void onFailed(AuthenticationError errorDescription) {
-                                runOnUiThread(() -> Toast.makeText(TokensActivity.this,
-                                        R.string.refresh_access_token_failed, Toast.LENGTH_SHORT).show());
-                            }
-                        }))
-                        .execute();
-                return true;
-            case R.id.logout_item:
-                LogoutDialogFragment logoutDialogFragment = new LogoutDialogFragment();
-                logoutDialogFragment.show(getSupportFragmentManager(), LogoutDialogFragment.TAG);
-                SmartTask.with(this)
-                        .assign(() -> authenticationApi.logOut())
-                        .finish(result -> {
-                            SmartCredentialsApiResponse<Boolean> response = (SmartCredentialsApiResponse<Boolean>) result;
-                            logoutDialogFragment.dismiss();
-                            if (response != null && response.isSuccessful() && response.getData()) {
-                                startActivity(new Intent(this, LoginActivity.class));
-                                finish();
-                            } else {
-                                Toast.makeText(this, R.string.logout_failed, Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .execute();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+                        @Override
+                        public void onFailed(AuthenticationError errorDescription) {
+                            runOnUiThread(() -> Toast.makeText(TokensActivity.this,
+                                    R.string.refresh_access_token_failed, Toast.LENGTH_SHORT).show());
+                        }
+                    }))
+                    .execute();
+            return true;
+        } else if (itemId == R.id.logout_item) {
+            LogoutDialogFragment logoutDialogFragment = new LogoutDialogFragment();
+            logoutDialogFragment.show(getSupportFragmentManager(), LogoutDialogFragment.TAG);
+            SmartTask.with(this)
+                    .assign(() -> authenticationApi.logOut())
+                    .finish(result -> {
+                        SmartCredentialsApiResponse<Boolean> response = (SmartCredentialsApiResponse<Boolean>) result;
+                        logoutDialogFragment.dismiss();
+                        if (response != null && response.isSuccessful() && response.getData()) {
+                            startActivity(new Intent(this, LoginActivity.class));
+                            finish();
+                        } else {
+                            Toast.makeText(this, R.string.logout_failed, Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .execute();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("unchecked")
