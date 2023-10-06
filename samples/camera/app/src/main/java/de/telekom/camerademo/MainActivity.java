@@ -7,6 +7,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.google.android.datatransport.backend.cct.BuildConfig;
+
 import de.telekom.camerademo.ocr.OcrActivity;
 import de.telekom.camerademo.qr.QrActivity;
 

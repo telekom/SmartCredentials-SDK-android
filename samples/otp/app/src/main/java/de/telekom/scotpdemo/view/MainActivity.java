@@ -134,16 +134,15 @@ public class MainActivity extends AppCompatActivity implements OtpAdapter.OtpCli
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.filter:
-                startActivity(new Intent(this, OtpTypeActivity.class));
-                return true;
-            case R.id.add:
-                startActivity(new Intent(this, AddOtpActivity.class));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        int itemId = item.getItemId();
+        if (itemId == R.id.filter) {
+            startActivity(new Intent(this, OtpTypeActivity.class));
+            return true;
+        } else if (itemId == R.id.add) {
+            startActivity(new Intent(this, AddOtpActivity.class));
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("unchecked")
