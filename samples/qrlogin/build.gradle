@@ -22,7 +22,7 @@ allprojects {
     }
 
     project.ext {
-        smartCredentialsVersion = "6.5.14"
+        smartCredentialsVersion = "6.6.0"
     }
 }
 
