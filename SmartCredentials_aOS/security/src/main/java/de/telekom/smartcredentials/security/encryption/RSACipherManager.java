@@ -49,7 +49,7 @@ import static de.telekom.smartcredentials.security.utils.Constants.KEY_ALGORITHM
 public class RSACipherManager extends CipherManager {
 
     private static final String CIPHER_ALGORITHM_MODE_ECB = "ECB";
-    private static final String CIPHER_ALGORITHM_PADDING_PKCS1 = "PKCS1Padding";
+    private static final String CIPHER_ALGORITHM_PADDING_PKCS1 = "OAEPWithSHA-1AndMGF1Padding";
     private static final String CIPHER_ALGORITHM = Constants.KEY_ALGORITHM_RSA + "/"
             + CIPHER_ALGORITHM_MODE_ECB + "/" + CIPHER_ALGORITHM_PADDING_PKCS1;
     private static final String X500_NAME = "CN=Sample Name, O=Android Authority";
