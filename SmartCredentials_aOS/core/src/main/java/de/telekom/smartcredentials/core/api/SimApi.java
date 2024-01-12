@@ -37,6 +37,19 @@ public interface SimApi {
     SmartCredentialsApiResponse<String> getDeviceToken();
 
     /**
+     * Returns a device token from the Entitlement Server.
+     *
+     * Using this method without a partner agreement is forbidden.
+     *
+     * This is a privileged operation and in Beta.
+     * Install the privileged application SmartAgent.
+     * Also, 3rd party applications using this API need to be registered.
+     *
+     * @return      the device token. This is opaque.
+     */
+    SmartCredentialsApiResponse<String> getDeviceToken(int subscriptionId);
+
+    /**
      * Returns a temporary token as specified in GSMA TS.43 from the Entitlement Server.
      *
      * This is a privileged operation and in Beta.
@@ -46,6 +59,17 @@ public interface SimApi {
      * @return      the temporary token. This is opaque.
      */
     SmartCredentialsApiResponse<String> getTemporaryToken(String deviceToken);
+
+    /**
+     * Returns a temporary token as specified in GSMA TS.43 from the Entitlement Server.
+     *
+     * This is a privileged operation and in Beta.
+     * Install the privileged application SmartAgent.
+     * Also, 3rd party applications using this API need to be registered.
+     *
+     * @return      the temporary token. This is opaque.
+     */
+    SmartCredentialsApiResponse<String> getTemporaryToken(String deviceToken, int subscriptionId);
 
     /**
      * Returns an operator token from the Entitlement Server.
