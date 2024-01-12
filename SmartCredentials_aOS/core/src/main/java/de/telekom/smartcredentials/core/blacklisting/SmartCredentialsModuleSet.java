@@ -34,6 +34,7 @@ public enum SmartCredentialsModuleSet {
     SIM_MODULE("Sim Module"),
     IDENTITY_PROVIDER("Identity Provider Module"),
     ONE_CLICK_BUSINESS_CLIENT_MODULE("One Click Business Client Module"),
+    OPERATOR_TOKEN_MODULE("Operator Token Module"),
     CARRIER_CONFIGURATION_MODULE("Carrier Configuration Module"),
     CARRIER_SETTINGS_MODULE("Carrier Settings Module");
 
