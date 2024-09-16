@@ -10,7 +10,7 @@ jobs:
           distribution: 'oracle'
           java-version: '17'
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v4
+        uses: android-actions/setup-android@v3
       - name: Checkout the code
         uses: actions/checkout@v4
       - name: Lint
