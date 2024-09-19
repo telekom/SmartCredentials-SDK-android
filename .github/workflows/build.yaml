@@ -105,7 +105,7 @@ jobs:
       - name: Upload Authentication Sample APK
         uses: actions/upload-artifact@v4
         with:
-            name: sampleApplications
+            name: sampleApplicationsAuthentication
             path: samples/authentication/app/build/outputs/apk/release/            
             
       - name: Upload Authorization AAR
@@ -118,7 +118,7 @@ jobs:
       - name: Upload Authorization Sample APK
         uses: actions/upload-artifact@v4
         with:
-            name: sampleApplications
+            name: sampleApplicationsAuthorization
             path: samples/authorization/app/build/outputs/apk/release/ 
             
       - name: Upload Camera AAR
@@ -131,7 +131,7 @@ jobs:
       - name: Upload Camera Sample APK
         uses: actions/upload-artifact@v4
         with:
-            name: sampleApplications
+            name: sampleApplicationsCamera
             path: samples/camera/app/build/outputs/apk/release/        
             
       - name: Upload Core AAR
@@ -144,7 +144,7 @@ jobs:
       - name: Upload Core Sample APK
         uses: actions/upload-artifact@v4
         with:
-            name: sampleApplications
+            name: sampleApplicationsCore
             path: samples/core/app/build/outputs/apk/release/    
             
       - name: Upload Document Scanner AAR
@@ -157,7 +157,7 @@ jobs:
       - name: Upload Document Scanner Sample APK
         uses: actions/upload-artifact@v4
         with:
-            name: sampleApplications
+            name: sampleApplicationsDocumentScanner
             path: samples/documentscanner/app/build/outputs/apk/release/      
             
       - name: Upload eID AAR
@@ -182,7 +182,7 @@ jobs:
       - name: Upload OTP Sample APK
         uses: actions/upload-artifact@v4
         with:
-            name: sampleApplications
+            name: sampleApplicationsOTP
             path: samples/otp/app/build/outputs/apk/release/     
            
       - name: Upload Persistent Logging AAR
@@ -201,7 +201,7 @@ jobs:
       - name: Upload Push Notifications Sample APK
         uses: actions/upload-artifact@v4
         with:
-            name: sampleApplications
+            name: sampleApplicationsPushNotifications
             path: samples/pushnotifications/app/build/outputs/apk/release/        
             
       - name: Upload QR Login AAR
@@ -214,7 +214,7 @@ jobs:
       - name: Upload QR Login Sample APK
         uses: actions/upload-artifact@v4
         with:
-            name: sampleApplications
+            name: sampleApplicationsQRLogin
             path: samples/qrlogin/app/build/outputs/apk/release/     
             
       - name: Upload Security AAR
@@ -233,7 +233,7 @@ jobs:
       - name: Upload Storage Sample APK
         uses: actions/upload-artifact@v4
         with:
-            name: sampleApplications
+            name: sampleApplicationsStorage
             path: samples/storage/app/build/outputs/apk/release/
       - name: Upload Identity Provider AAR
         uses: actions/upload-artifact@v4
@@ -243,5 +243,5 @@ jobs:
       - name: Upload Identity Provider Sample APK
         uses: actions/upload-artifact@v4
         with:
-            name: sampleApplications
+            name: sampleApplicationsIdentityProvider
             path: samples/oneclickbusiness/app/build/outputs/apk/release/
