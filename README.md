@@ -97,7 +97,7 @@ Even more are we looking for partners who have an interest in adding their solut
 
 Pull requests for small improvements or bug fixing are welcomed. For major changes, please open an issue first to discuss what you would like to change.
 
-In case of contributing, please check the [contributing guidelines](https://github.com/kreincke/SmartCredentials-SDK-android/blob/develop/CONTRIBUTING.md) and [coding standards](https://github.com/kreincke/SmartCredentials-SDK-android/blob/develop/CODING-STANDARDS.md).
+In case of contributing, please check the [contributing guidelines](/CONTRIBUTING.md) and [coding standards](./CODING-STANDARDS.md).
 
 ## Extending
 Smart Credentials is an open and easily extendable library. In fact, it is so open and extendable that anyone can come with a parallel implementation of any module, except the core module.

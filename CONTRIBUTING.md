@@ -96,7 +96,7 @@ This section guides you through submitting a bug report for SmartCredentials lib
 
 #### How do I submit a __good__ bug report?
 
-Bugs are tracked as [GitHub issues](https://github.com/kreincke/SmartCredentials-SDK-android/issues). When you are creating a bug report, please follow the best practices listed below and use the required template:
+Bugs are tracked as [GitHub issues](https://github.com/telekom/SmartCredentials-SDK-android/issues). When you are creating a bug report, please follow the best practices listed below and use the required template:
 
 ##### Summary
 
@@ -132,7 +132,7 @@ Take a Screenshot / Video of the instance of failure with proper captioning to h
 
 **Essential to have**:
 
-- First of all, __check if the bug is already known__ (check whether or not the bug you found is already documented in the [issue tracker](https://github.com/kreincke/SmartCredentials-SDK-android/issues). If it has and the issue is still open, add a comment to the existing issue instead of opening a new one. 
+- First of all, __check if the bug is already known__ (check whether or not the bug you found is already documented in the [issue tracker](https://github.com/telekom/SmartCredentials-SDK-android/issues). If it has and the issue is still open, add a comment to the existing issue instead of opening a new one. 
 - Add the bug a __short and precise title__ (e.g. “Unable to log into the system when username contains foreign characters” and __not__ “User cannot work in Chinese”).
 - Reproduce the bug __more than one time__ before reporting it.
 - Offer __a concise but complete description__ of the issue. Include the steps to reproduce, the consequences of the bug and the expected behavior.
@@ -158,11 +158,11 @@ It would be appreciated if you could classify enhancements:
 *  New functionalities for SmartCredentials' core
 *  Enhancements to the environment, to our rules or appearance
 
-Before creating enhancements, please check [this list](https://github.com/kreincke/SmartCredentials-SDK-android/issues) to see if the enhancement has already been suggested. If it has, add a comment to the existing issue instead of opening a new one.
+Before creating enhancements, please check [this list](https://github.com/telekom/SmartCredentials-SDK-android/issues) to see if the enhancement has already been suggested. If it has, add a comment to the existing issue instead of opening a new one.
 
 #### How do I suggest a __good__ enhancement suggestion?
 
-Enhancement suggestions are tracked as [GitHub issues](https://github.com/kreincke/SmartCredentials-SDK-android/issues). When you are suggesting an enhancement, please follow the best practices listed below:
+Enhancement suggestions are tracked as [GitHub issues](https://github.com/telekom/SmartCredentials-SDK-android/issues). When you are suggesting an enhancement, please follow the best practices listed below:
 
 Nothing is that good that it can’t be made better. We very much appreciate your input on how we can make SmartCredentials better. Whether it’s for ease of use, improved functionality or a totally new type of feature, please follow the best practices listed below and use the required template:
 
@@ -214,7 +214,7 @@ Please provide links, documents or illustrations that help to understand your id
 
 ## 3. Coding standards
 
-If you're writing content, see the following [coding standards](https://github.com/kreincke/SmartCredentials-SDK-android/blob/us_195_migrate_library/CODING-STANDARDS.md) to be sure that your content matches with the rest of the code.
+If you're writing content, see the following [coding standards](https://github.com/telekom/SmartCredentials-SDK-android/blob/us_195_migrate_library/CODING-STANDARDS.md) to be sure that your content matches with the rest of the code.
 
 ## 4. Community
 
