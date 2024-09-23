@@ -103,6 +103,7 @@ jobs:
         with:
             name: authentication
             path: SmartCredentials_aOS/authentication/build/outputs/aar/        
+            if-no-files-found: error
       - name: Upload Authorization AAR
         uses: actions/upload-artifact@v4
         with:
